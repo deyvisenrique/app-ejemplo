@@ -66,10 +66,22 @@
                 <div class="item-inner">
                   <div class="item-title text-color-blue" style="font-size: .9em">
                     {{ item.full_description }}
-                    <div class="item-footer text-color-blue">S/. {{ item.sale_unit_price }}</div>
+                    <!-- <div class="item-footer text-color-blue">
+                      <label>S/. <input required validate v-model="item.item.sale_unit_price" type="number" /></label>
+                    </div> -->
+                    
+                    <div class = "item-content">
+                        <div class = "item-media">S/.</div>
+                        <!-- <div class = "item-inner">
+                          <div class = "item-input"> -->
+                            <input required validate v-model="item.item.sale_unit_price" type="number" />
+                          <!-- </div>
+                        </div> -->
+                    </div>
                   </div>
-
+ 
                   <div class="item-after" style="width: 101px;">
+                    
                     <div class="stepper stepper-raised stepper-init stepper-small bg-color-white">
                       <div class="stepper-button-minus"
                         @click="calculate(-1, index)"></div>
@@ -447,12 +459,12 @@ export default {
       const self = this;
       self.sheetConfirm = false;
       let send_items = this.items_car
-        .filter(x => x.quantity > 0)
+        .filter(x => x.quantity > 0 && x.item.sale_unit_price > 0)
         .map(o => {
           let obj = self.initFormItem();
           obj.quantity = o.quantity;
           (obj.item = o.item), //_.find(self.items, { id: o.id });
-            (obj.unit_price_value = obj.item.sale_unit_price);
+          (obj.unit_price_value = obj.item.sale_unit_price);
           obj.has_igv = obj.item.has_igv;
           obj.affectation_igv_type_id = obj.item.sale_affectation_igv_type_id;
 

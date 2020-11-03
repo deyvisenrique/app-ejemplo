@@ -334,7 +334,7 @@ export default {
         numero_documento: row.number,
         apellidos_y_nombres_o_razon_social: row.name,
         codigo_pais: row.country_id,
-        ubigeo: row.district_id ? row.district_id : '150101',
+        ubigeo: row.district_id ? row.district_id : '',
         direccion: row.address,
         correo_electronico: row.email,
         telefono: row.telephone
