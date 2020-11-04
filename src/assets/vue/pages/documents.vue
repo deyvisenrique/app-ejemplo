@@ -122,7 +122,7 @@
                           </f7-col>
 
                           <f7-col width="33">
-                            <f7-button @click="email(item.id)" color="red" style="padding-left: 0px;">
+                            <f7-button @click="email(item.id, 'document')" color="red" style="padding-left: 0px;">
                               <f7-icon material="email"></f7-icon>
                             </f7-button>
                           </f7-col>
@@ -187,7 +187,7 @@
                           </f7-col>
 
                           <f7-col width="33">
-                            <f7-button @click="email(item.id)" color="red" style="padding-left: 0px;">
+                            <f7-button @click="email(item.id, 'document')" color="red" style="padding-left: 0px;">
                               <f7-icon material="email"></f7-icon>
                             </f7-button>
                           </f7-col>
@@ -220,7 +220,7 @@
                   RUC: {{ item.customer_number }}
                 </span>
                 <span slot="after">
-                  {{item.identifier}}
+                  {{item.number_full}}
                 </span>
                 <span slot="subtitle">
                   <f7-block class="no-padding">
@@ -246,13 +246,13 @@
                           </f7-col>
 
                           <f7-col width="33">
-                            <f7-button @click="whatsap(item.customer_telephone, item.external_id)" class="block" color="red">
+                            <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_a4)" class="block" color="red">
                               <f7-icon style="font-size: 1.5em;" class="icon fab fa-whatsapp"></f7-icon>
                             </f7-button>
                           </f7-col>
 
                           <f7-col width="33">
-                            <f7-button @click="email(item.id)" color="red" style="padding-left: 0px;">
+                            <f7-button @click="email(item.id, 'sale-note')" color="red" style="padding-left: 0px;">
                               <f7-icon material="email"></f7-icon>
                             </f7-button>
                           </f7-col>
@@ -311,13 +311,13 @@
                           </f7-col>
 
                           <f7-col width="33">
-                            <f7-button @click="whatsap(item.customer_telephone, item.external_id)" class="block" color="red">
+                            <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_a4)" class="block" color="red">
                               <f7-icon style="font-size: 1.5em;" class="icon fab fa-whatsapp"></f7-icon>
                             </f7-button>
                           </f7-col>
 
                           <f7-col width="33">
-                            <f7-button @click="email(item.id)" color="red" style="padding-left: 0px;">
+                            <f7-button @click="email(item.id, 'order-note')" color="red" style="padding-left: 0px;">
                               <f7-icon material="email"></f7-icon>
                             </f7-button>
                           </f7-col>
@@ -378,13 +378,13 @@
                           </f7-col> -->
 
                           <f7-col width="50">
-                            <f7-button @click="whatsap(item.customer_telephone, item.external_id)" class="block" color="red">
+                            <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_a4)" class="block" color="red">
                               <f7-icon style="font-size: 1.5em;" class="icon fab fa-whatsapp"></f7-icon>
                             </f7-button>
                           </f7-col>
 
                           <f7-col width="50">
-                            <f7-button @click="email(item.id)" color="red" style="padding-left: 0px;">
+                            <f7-button @click="email(item.id, 'purchase')" color="red" style="padding-left: 0px;">
                               <f7-icon material="email"></f7-icon>
                             </f7-button>
                           </f7-col>
@@ -515,7 +515,7 @@ export default {
         id: null
       };
     },
-    whatsap(phone, external_id) {
+    whatsap(phone, external_id, print_a4 = null) {
       const self = this;
 
       self.$f7.dialog
@@ -547,7 +547,7 @@ export default {
               let number = (dialog.$el.find('.dialog-wasap').val()).toString()
 
               if (number.length == 9) {
-                let link_pdf = `${localStorage.api_url}/print/document/${external_id}/a4`;
+                let link_pdf = (print_a4) ? print_a4 : `${localStorage.api_url}/print/document/${external_id}/a4`;
                 let message = `Hola, revisa tu comprobante ingresando a este link ${link_pdf}`;
                 let message_ = message.split(" ").join("%20");
                 window.open(`https://wa.me/51${number}/?text=${message_}`, "_system");
@@ -568,7 +568,7 @@ export default {
       var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(email);
     },
-    sendEmail() {
+    sendEmail(type) {
       if (!this.form_email.email) {
         alert("Ingrese Email.");
         return false;
@@ -584,7 +584,7 @@ export default {
 
       this.$http
         .post(
-          `${this.returnBaseUrl()}/document/email`,
+          `${this.returnBaseUrl()}/${type}/email`,
           this.form_email,
           this.getHeaderConfig()
         )
@@ -602,7 +602,7 @@ export default {
           self.sendMailOpen = false;
         });
     },
-    email(id) {
+    email(id, type) {
       const self = this;
       self.initformEmail();
       self.form_email.id = id;
@@ -610,7 +610,7 @@ export default {
       self.$f7.dialog.prompt("Ingresa el Email", "", function(value) {
         if (value) {
           self.form_email.email = value;
-          self.sendEmail();
+          self.sendEmail(type);
         } else {
           alert("Ingrese el Email.");
         }
