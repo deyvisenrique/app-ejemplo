@@ -86,13 +86,19 @@
                       <div class="stepper-button-minus"
                         @click="calculate(-1, index)"></div>
                       <div class="stepper-input-wrap">
-                        <input
+                        <!-- <input
                           type="text"
                           :value="item.quantity"
                           min="0"
                           max="100"
                           step="1"
                           readonly
+                        /> -->
+                        <input
+                          type="number"
+                          v-model="item.quantity"
+                          min="0"
+                          step="1"
                         />
                       </div>
                       <div
@@ -304,6 +310,12 @@ export default {
   },
 
   methods: {
+    blurQuantity(index, quantity){
+      // console.log(quantity)
+      // // this.calculate(quantity, index)
+      // console.log(this.items_car[index])
+      // this.add(index, quantity)
+    },
     cancel() {
       this.items_car.forEach(element => (element.quantity = 0));
     },
@@ -492,16 +504,17 @@ export default {
 
       this.initItems();
     },
-    add(index) {
+    add(index, quantity = 1) {
       if (this.items_car[index].quantity > 0) {
         this.items_car[index].quantity = 0;
       } else {
-        this.items_car[index].quantity = 1;
+        this.items_car[index].quantity = quantity;
+        // this.items_car[index].quantity = 1;
       }
     },
     calculate(value, index) {
-      let q = this.items_car[index].quantity;
-      let resul = (q += value);
+      let q = parseFloat(this.items_car[index].quantity);
+      let resul = (q += parseFloat(value));
       this.items_car[index].quantity = resul < 0 ? 0 : resul;
     },
 
