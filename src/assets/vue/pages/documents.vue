@@ -629,19 +629,19 @@ export default {
     download(external_id, type = "document") {
       if (type == "document") {
         cordova.InAppBrowser.open(
-          `${localStorage.api_url}/print/${type}/${external_id}/a4`,
+          `${localStorage.api_url}/print/${type}/${external_id}/ticket_50`,
           "_system",
           "location=yes"
         );
       } else if (type == "sale-notes") {
         cordova.InAppBrowser.open(
-          `${localStorage.api_url}/${type}/print/${external_id}/a4`,
+          `${localStorage.api_url}/${type}/print/${external_id}/ticket`,
           "_system",
           "location=yes"
         );
       } else if (type == "order-notes") {
         cordova.InAppBrowser.open(
-          `${localStorage.api_url}/${type}/print/${external_id}/a4`,
+          `${localStorage.api_url}/${type}/print/${external_id}/ticket`,
           "_system",
           "location=yes"
         );
