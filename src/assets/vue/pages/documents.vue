@@ -629,7 +629,7 @@ export default {
     download(external_id, type = "document") {
       if (type == "document") {
         cordova.InAppBrowser.open(
-          `${localStorage.api_url}/print/${type}/${external_id}/ticket_50`,
+          `${localStorage.api_url}/print/${type}/${external_id}/ticket`,
           "_system",
           "location=yes"
         );
