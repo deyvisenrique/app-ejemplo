@@ -84,46 +84,48 @@
                 v-for="item in source_invoice"
                 :key="item.id"
                 class="list-documents margin-bottom">
-                <span slot="title" style="font-size: 11px;">
-                  <strong>{{ item.customer_name }}</strong>
-                  <br>
-                  RUC: {{ item.customer_number }}
-                </span>
-                <span slot="after">
-                  {{item.number}}
-                </span>
                 <span slot="subtitle">
                   <f7-block class="no-padding">
                     <f7-row>
-                      <f7-col width="60" class="text-align-left" style="border-right: 1px solid #ccc">
+                      <f7-col width="60" class="text-align-left">
+                        <div style="word-break: break-all !important; white-space: pre-line !important; margin-top: -25px;">
+                          {{ item.customer_name }}
+                        </div>
+                        RUC: {{ item.customer_number }}
                         <p><f7-icon icon="fas fa-fw fa-calendar-alt" color="red"></f7-icon>{{ item.created_at }}</p>
                         <span style="font-size: 16px; font-weight: bold">
                             Total:
                             {{ item.total }}
                         </span>
                       </f7-col>
-                      <f7-col width="40" class="text-align-right" style="padding-top: 15px;">
+                      <f7-col width="40" class="text-align-right" >
                         <f7-row>
+                          <f7-col width="100">
+                            {{item.number}}
+                          </f7-col>
                           <f7-col width="100">
                             <f7-badge :color="statusColor(item.state_type_description)" style="width: 100%">
                               {{ item.state_type_description }}
                             </f7-badge>
                           </f7-col>
-                          <f7-col width="33">
-                            <f7-button @click="download(item.external_id)" color="red">
-                              <f7-icon material="cloud_download"></f7-icon>
-                            </f7-button>
-                          </f7-col>
-
-                          <f7-col width="33">
-                            <f7-button @click="whatsap(item.customer_telephone, item.external_id)" class="block" color="red">
+                          <f7-col width="50">
+                            <f7-button @click="whatsap(item.customer_telephone, item.external_id)" color="red">
                               <f7-icon style="font-size: 1.5em;" class="icon fab fa-whatsapp"></f7-icon>
                             </f7-button>
                           </f7-col>
-
-                          <f7-col width="33">
-                            <f7-button @click="email(item.id, 'document')" color="red" style="padding-left: 0px;">
-                              <f7-icon material="email"></f7-icon>
+                          <f7-col width="50">
+                            <f7-button @click="email(item.id, 'document')" color="red">
+                              <f7-icon style="font-size: 1.5em;" class="icon fas fa-envelope"></f7-icon>
+                            </f7-button>
+                          </f7-col>
+                          <f7-col width="50">
+                            <f7-button @click="download(item.external_id, 'document', 'a4')" color="red">
+                              <f7-icon style="font-size: 1.5em;" class="icon fas fa-file-pdf"></f7-icon>
+                            </f7-button>
+                          </f7-col>
+                          <f7-col width="50">
+                            <f7-button @click="download(item.external_id, 'document')" color="red">
+                              <f7-icon style="font-size: 1.5em;" class="icon fas fa-receipt"></f7-icon>
                             </f7-button>
                           </f7-col>
                         </f7-row>
@@ -149,46 +151,49 @@
                 v-for="item in source_ticket"
                 :key="item.id"
                 class="list-documents margin-bottom">
-                <span slot="title" style="font-size: 11px;">
-                  <strong>{{ item.customer_name }}</strong>
-                  <br>
-                  RUC: {{ item.customer_number }}
-                </span>
-                <span slot="after">
-                  {{item.number}}
-                </span>
                 <span slot="subtitle">
                   <f7-block class="no-padding">
                     <f7-row>
-                      <f7-col width="60" class="text-align-left" style="border-right: 1px solid #ccc">
+                      <f7-col width="60" class="text-align-left">
+                        <div style="word-break: break-all !important; white-space: pre-line !important; margin-top: -25px;">
+                          {{ item.customer_name }}
+                        </div>
+                        RUC: {{ item.customer_number }}
                         <p><f7-icon icon="fas fa-fw fa-calendar-alt" color="red"></f7-icon>{{ item.created_at }}</p>
                         <span style="font-size: 16px; font-weight: bold">
                             Total:
                             {{ item.total }}
                         </span>
                       </f7-col>
-                      <f7-col width="40" class="text-align-right" style="padding-top: 15px;">
+                      <f7-col width="40" class="text-align-right">
                         <f7-row>
+                          <f7-col width="100">
+                            {{item.number}}
+                          </f7-col>
                           <f7-col width="100">
                             <f7-badge :color="statusColor(item.state_type_description)" style="width: 100%">
                               {{ item.state_type_description }}
                             </f7-badge>
                           </f7-col>
-                          <f7-col width="33">
-                            <f7-button @click="download(item.external_id)" color="red">
-                              <f7-icon material="cloud_download"></f7-icon>
-                            </f7-button>
-                          </f7-col>
 
-                          <f7-col width="33">
-                            <f7-button @click="whatsap(item.customer_telephone, item.external_id)" class="block" color="red">
+                          <f7-col width="50">
+                            <f7-button @click="whatsap(item.customer_telephone, item.external_id)" color="red">
                               <f7-icon style="font-size: 1.5em;" class="icon fab fa-whatsapp"></f7-icon>
                             </f7-button>
                           </f7-col>
-
-                          <f7-col width="33">
-                            <f7-button @click="email(item.id, 'document')" color="red" style="padding-left: 0px;">
-                              <f7-icon material="email"></f7-icon>
+                          <f7-col width="50">
+                            <f7-button @click="email(item.id, 'document')" color="red">
+                              <f7-icon style="font-size: 1.5em;" class="icon fas fa-envelope"></f7-icon>
+                            </f7-button>
+                          </f7-col>
+                          <f7-col width="50">
+                            <f7-button @click="download(item.external_id, 'document', 'a4')" color="red">
+                              <f7-icon style="font-size: 1.5em;" class="icon fas fa-file-pdf"></f7-icon>
+                            </f7-button>
+                          </f7-col>
+                          <f7-col width="50">
+                            <f7-button @click="download(item.external_id, 'document')" color="red">
+                              <f7-icon style="font-size: 1.5em;" class="icon fas fa-receipt"></f7-icon>
                             </f7-button>
                           </f7-col>
                         </f7-row>
@@ -214,46 +219,49 @@
                 v-for="item in source_note"
                 :key="item.id"
                 class="list-documents margin-bottom">
-                <span slot="title" style="font-size: 11px;">
-                  <strong>{{ item.customer_name }}</strong>
-                  <br>
-                  RUC: {{ item.customer_number }}
-                </span>
-                <span slot="after">
-                  {{item.number_full}}
-                </span>
                 <span slot="subtitle">
                   <f7-block class="no-padding">
                     <f7-row>
-                      <f7-col width="60" class="text-align-left" style="border-right: 1px solid #ccc">
+                      <f7-col width="60" class="text-align-left">
+                        <div style="word-break: break-all !important; white-space: pre-line !important; margin-top: -25px;">
+                          {{ item.customer_name }}
+                        </div>
+                        RUC: {{ item.customer_number }}
                         <p><f7-icon icon="fas fa-fw fa-calendar-alt" color="red"></f7-icon>{{ item.created_at }}</p>
                         <span style="font-size: 16px; font-weight: bold">
                             Total:
                             {{ item.total }}
                         </span>
                       </f7-col>
-                      <f7-col width="40" class="text-align-right" style="padding-top: 15px;">
+                      <f7-col width="40" class="text-align-right">
                         <f7-row>
+                          <f7-col width="100">
+                            {{item.number_full}}
+                          </f7-col>
                           <f7-col width="100">
                             <f7-badge :color="statusColor(item.state_type_description)" style="width: 100%">
                               {{ item.state_type_description }}
                             </f7-badge>
                           </f7-col>
-                          <f7-col width="33">
-                            <f7-button @click="download(item.external_id, 'sale-notes')" color="red">
-                              <f7-icon material="cloud_download"></f7-icon>
-                            </f7-button>
-                          </f7-col>
 
-                          <f7-col width="33">
-                            <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_a4)" class="block" color="red">
+                          <f7-col width="50">
+                            <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_a4)" color="red">
                               <f7-icon style="font-size: 1.5em;" class="icon fab fa-whatsapp"></f7-icon>
                             </f7-button>
                           </f7-col>
-
-                          <f7-col width="33">
-                            <f7-button @click="email(item.id, 'sale-note')" color="red" style="padding-left: 0px;">
-                              <f7-icon material="email"></f7-icon>
+                          <f7-col width="50">
+                            <f7-button @click="email(item.id, 'sale-note')" color="red">
+                              <f7-icon style="font-size: 1.5em;" class="icon fas fa-envelope"></f7-icon>
+                            </f7-button>
+                          </f7-col>
+                          <f7-col width="50">
+                            <f7-button @click="download(item.external_id, 'sale-notes', 'a4')" color="red">
+                              <f7-icon style="font-size: 1.5em;" class="icon fas fa-file-pdf"></f7-icon>
+                            </f7-button>
+                          </f7-col>
+                          <f7-col width="50">
+                            <f7-button @click="download(item.external_id, 'sale-notes')" color="red">
+                              <f7-icon style="font-size: 1.5em;" class="icon fas fa-receipt"></f7-icon>
                             </f7-button>
                           </f7-col>
                         </f7-row>
@@ -279,46 +287,49 @@
                 v-for="item in source_order_note"
                 :key="item.id"
                 class="list-documents margin-bottom">
-                <span slot="title" style="font-size: 11px;">
-                  <strong>{{ item.customer_name }}</strong>
-                  <br>
-                  RUC: {{ item.customer_number }}
-                </span>
-                <span slot="after">
-                  {{item.identifier}}
-                </span>
                 <span slot="subtitle">
                   <f7-block class="no-padding">
                     <f7-row>
-                      <f7-col width="60" class="text-align-left" style="border-right: 1px solid #ccc">
+                      <f7-col width="60" class="text-align-left">
+                        <div style="word-break: break-all !important; white-space: pre-line !important; margin-top: -25px;">
+                          {{ item.customer_name }}
+                        </div>
+                        RUC: {{ item.customer_number }}
                         <p><f7-icon icon="fas fa-fw fa-calendar-alt" color="red"></f7-icon>{{ item.created_at }}</p>
                         <span style="font-size: 16px; font-weight: bold">
                             Total:
                             {{ item.total }}
                         </span>
                       </f7-col>
-                      <f7-col width="40" class="text-align-right" style="padding-top: 15px;">
+                      <f7-col width="40" class="text-align-right">
                         <f7-row>
+                          <f7-col width="100">
+                            {{item.identifier}}
+                          </f7-col>
                           <f7-col width="100">
                             <f7-badge :color="statusColor(item.state_type_description)" style="width: 100%">
                               {{ item.state_type_description }}
                             </f7-badge>
                           </f7-col>
-                          <f7-col width="33">
-                            <f7-button @click="download(item.external_id, 'order-notes')" color="red">
-                              <f7-icon material="cloud_download"></f7-icon>
-                            </f7-button>
-                          </f7-col>
 
-                          <f7-col width="33">
-                            <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_a4)" class="block" color="red">
+                          <f7-col width="50">
+                            <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_a4)" color="red">
                               <f7-icon style="font-size: 1.5em;" class="icon fab fa-whatsapp"></f7-icon>
                             </f7-button>
                           </f7-col>
-
-                          <f7-col width="33">
-                            <f7-button @click="email(item.id, 'order-note')" color="red" style="padding-left: 0px;">
-                              <f7-icon material="email"></f7-icon>
+                          <f7-col width="50">
+                            <f7-button @click="email(item.id, 'order-note')" color="red">
+                              <f7-icon style="font-size: 1.5em;" class="icon fas fa-envelope"></f7-icon>
+                            </f7-button>
+                          </f7-col>
+                          <f7-col width="50">
+                            <f7-button @click="download(item.external_id, 'order-notes', 'a4')" color="red">
+                              <f7-icon style="font-size: 1.5em;" class="icon fas fa-file-pdf"></f7-icon>
+                            </f7-button>
+                          </f7-col>
+                          <f7-col width="50">
+                            <f7-button @click="download(item.external_id, 'order-notes')" color="red">
+                              <f7-icon style="font-size: 1.5em;" class="icon fas fa-receipt"></f7-icon>
                             </f7-button>
                           </f7-col>
                         </f7-row>
@@ -626,20 +637,41 @@ export default {
     go() {
       this.$f7router.navigate("/form-document/");
     },
-    download(external_id, type = "document") {
+    download(external_id, type = "document", format = null) {
       if (type == "document") {
+        if (format == "a4") {
+          cordova.InAppBrowser.open(
+            `${localStorage.api_url}/print/${type}/${external_id}/a4`,
+            "_system",
+            "location=yes"
+          );
+        }
         cordova.InAppBrowser.open(
           `${localStorage.api_url}/print/${type}/${external_id}/ticket`,
           "_system",
           "location=yes"
         );
       } else if (type == "sale-notes") {
+        if (format == "a4") {
+          cordova.InAppBrowser.open(
+            `${localStorage.api_url}/${type}/print/${external_id}/a4`,
+            "_system",
+            "location=yes"
+          );
+        }
         cordova.InAppBrowser.open(
           `${localStorage.api_url}/${type}/print/${external_id}/ticket`,
           "_system",
           "location=yes"
         );
       } else if (type == "order-notes") {
+        if (format == "a4") {
+          cordova.InAppBrowser.open(
+            `${localStorage.api_url}/${type}/print/${external_id}/a4`,
+            "_system",
+            "location=yes"
+          );
+        }
         cordova.InAppBrowser.open(
           `${localStorage.api_url}/${type}/print/${external_id}/ticket`,
           "_system",
