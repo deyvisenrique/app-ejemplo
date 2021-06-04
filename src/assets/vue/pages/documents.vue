@@ -645,12 +645,13 @@ export default {
             "_system",
             "location=yes"
           );
+        } else {
+          cordova.InAppBrowser.open(
+            `${localStorage.api_url}/print/${type}/${external_id}/ticket`,
+            "_system",
+            "location=yes"
+          );
         }
-        cordova.InAppBrowser.open(
-          `${localStorage.api_url}/print/${type}/${external_id}/ticket`,
-          "_system",
-          "location=yes"
-        );
       } else if (type == "sale-notes") {
         if (format == "a4") {
           cordova.InAppBrowser.open(
@@ -658,12 +659,13 @@ export default {
             "_system",
             "location=yes"
           );
+        } else {
+          cordova.InAppBrowser.open(
+            `${localStorage.api_url}/${type}/print/${external_id}/ticket`,
+            "_system",
+            "location=yes"
+          );
         }
-        cordova.InAppBrowser.open(
-          `${localStorage.api_url}/${type}/print/${external_id}/ticket`,
-          "_system",
-          "location=yes"
-        );
       } else if (type == "order-notes") {
         if (format == "a4") {
           cordova.InAppBrowser.open(
@@ -671,12 +673,13 @@ export default {
             "_system",
             "location=yes"
           );
+        } else {
+          cordova.InAppBrowser.open(
+            `${localStorage.api_url}/${type}/print/${external_id}/ticket`,
+            "_system",
+            "location=yes"
+          );
         }
-        cordova.InAppBrowser.open(
-          `${localStorage.api_url}/${type}/print/${external_id}/ticket`,
-          "_system",
-          "location=yes"
-        );
       }
     },
 
