@@ -432,11 +432,52 @@ export default {
           if (data.success) {
             this.initForm();
 
-            self.$f7.dialog.alert(
-              `Comprobante registrado:<br> ${data.data.number}`,
-              "Mensaje"
-            );
-            self.$f7router.navigate("/documents/");
+            self.$f7.dialog.create({
+              title: 'Comprobante registrado',
+              text: data.data.number,
+              buttons: [
+                {
+                  text: 'Descargar A4',
+                  cssClass: 'text-center',
+                  close: false
+                },
+                {
+                  text: 'Descargar Ticket',
+                  cssClass: 'text-center',
+                  close: false
+                },
+                {
+                  text: 'Continuar',
+                  cssClass: 'text-center'
+                },
+              ],
+              onClick: function (dialog, index) {
+                if(index === 0){
+                  cordova.InAppBrowser.open(
+                    `${localStorage.api_url}/print/document/${data.data.external_id}/a4`,
+                    "_system",
+                    "location=yes"
+                  );
+                }
+                else if(index === 1){
+                  cordova.InAppBrowser.open(
+                    `${localStorage.api_url}/print/document/${data.data.external_id}/ticket`,
+                    "_system",
+                    "location=yes"
+                  );
+                }
+                else if(index === 2){
+                  self.$f7router.navigate("/documents/");
+                }
+              },
+              verticalButtons: true,
+            }).open();
+
+            // self.$f7.dialog.alert(
+            //   `Comprobante registrado:<br> ${data.data.number} <br><a href="google.com" target="blank"><i class="fas fa-file"></i></a>`,
+            //   "Mensaje"
+            // );
+
           } else {
             alert("No se registro la Compra");
           }
