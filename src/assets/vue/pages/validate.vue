@@ -121,7 +121,7 @@ export default {
 
       this.$http
         .post(
-          `http://35.222.4.229/api/validar-cpe`,
+          `${this.returnBaseUrl()}/services/validate_cpe`,
           this.getFormatter(data),
           this.getHeaderConfig()
         )
