@@ -108,13 +108,78 @@
                   </div>
                 </div>
               </f7-col>
+              <f7-col width="50">
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">Condición de pago</div>
+                    <div class="item-input-wrap input-dropdown-wrap">
+                      <select v-model="data.codigo_condicion_de_pago"  @change="changePaymentCondition">
+                          <option value="01" selected>Contado</option>
+                          <option value="02">Crédito</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </f7-col>
+              <template>
+              <f7-col width="50">
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">Metodo de pago</div>
+                    <div class="item-input-wrap input-dropdown-wrap">
+                      <select v-model="data.paymentmethodtype">
+                        <template v-for="(row, index) in payment_method_types">
+                          <option :value="row.id" :key="index">{{row.description}}</option>
+                        </template>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </f7-col>
+              <f7-col width="50" v-if="data.codigo_condicion_de_pago=='01'">
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">Referencia</div>
+                    <div class="item-input-wrap">
+                      <input v-model="data.referencia" type="text" />
+                      <span class="input-clear-button"></span>
+                    </div>
+                  </div>
+                </div>
+              </f7-col>
+              <f7-col width="50" v-if="data.codigo_condicion_de_pago=='01'">
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">Monto</div>
+                    <div class="item-input-wrap">
+                      <input required validate  v-model="form.total" type="number"  />
+                      <span class="input-clear-button"></span>
+                    </div>
+                  </div>
+                </div>
+              </f7-col>
+              <f7-col width="100">
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">Destino</div>
+                    <div class="item-input-wrap input-dropdown-wrap">
+                      <select v-model="data.paymentdestination">
+                        <template v-for="(row, index) in payment_destinations">
+                          <option :value="row.id" :key="index">{{row.description}}</option>
+                        </template>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </f7-col>
+              </template>
             </f7-row>
 
             <li>
               <f7-col>
                 <f7-card style="font-weight:bold;color:#0f233c;background:#ddd;border-radius: 15px;">
                   <f7-card-content>
-                    <f7-row>
+                    <f7-row @click="popupCustomerOpened = true">
                       <f7-col width="15" class="align-self-center">
                         <div class="badge bg-color-white">
                           <f7-icon icon="fas fa-user" size="24" color="blue"></f7-icon>
@@ -126,7 +191,7 @@
                       </f7-col>
                       <f7-col width="10" class="align-self-center">
                         <div class="badge bg-color-white text-align-right color-blue">
-                          <f7-link @click="popupCustomerOpened = true" style="color:#0f233c;" icon="fas fa-arrow-right"></f7-link>
+                          <f7-link style="color:#0f233c;" icon="fas fa-arrow-right"></f7-link>
                         </div>
                       </f7-col>
                     </f7-row>
@@ -154,11 +219,13 @@
                   <tbody>
                     <tr v-for="(row, index) in form.items" :key="index">
                       <td class="numeric-cell">
-                        <f7-icon
-                          @click.native="deleteItem(row.item_id, index)"
-                          color="red"
-                          material="cancel"
-                        ></f7-icon>
+                        <f7-button @click.native="deleteItem(row.item_id, index)">
+                          <f7-icon
+
+                            color="red"
+                            material="cancel"
+                          ></f7-icon>
+                        </f7-button>
                       </td>
                       <td class="label-cell text-color-blue">{{index + 1 }}</td>
                       <td class="numeric-cell text-color-blue">{{row.item.description}}</td>
@@ -276,10 +343,18 @@ export default {
       codeType: "",
       isBottom: true,
       search_item: "",
+      data: {
+        codigo_condicion_de_pago: "01",
+        paymentmethodtype: "01",
+        paymentdestination: "cash"
+      },
       form: {},
       popupOpened: false,
       popupCustomerOpened: false,
       title: "",
+      payment_method_type: [],
+      payment_method_types: [],
+      payment_destinations: [],
       series:[]
     };
   },
@@ -290,6 +365,7 @@ export default {
     //this.getTables();
     await this.selectDocumentType();
     await this.getSeries()
+    await this.getPaymentMethodType()
   },
   methods: {
     async getSeries() {
@@ -302,6 +378,23 @@ export default {
           this.series = _.filter(all_series, {document_type_id:this.form.codigo_tipo_documento})
           this.initSeries()
 
+        })
+        .catch(err => {})
+        .then(() => {
+          self.$f7.preloader.hide();
+        })
+
+    },
+    async getPaymentMethodType() {
+
+      const self = this;
+      self.$f7.preloader.show();
+      await this.$http.get(`${this.returnBaseUrl()}/document/paymentmethod`, this.getHeaderConfig()).then(response => {
+          //mostrar metodos de pagos
+          this.payment_method_type = response.data.payment_method_type;
+          this.payment_method_types = this.payment_method_type.filter(row => { return row.is_credit == false})
+          //mostrar destino de caja en venta
+          this.payment_destinations = response.data.payment_destinations;
         })
         .catch(err => {})
         .then(() => {
@@ -344,8 +437,24 @@ export default {
       this.initForm();
       this.$f7router.navigate("/");
     },
-
+    //formas de pago
+    changePaymentCondition() {
+        if(this.data.codigo_condicion_de_pago === '01') {
+            this.payment_method_types = this.payment_method_type.filter(row => { return row.is_credit == false})
+        }
+        if(this.data.codigo_condicion_de_pago === '02') {
+            this.payment_method_types = this.payment_method_type.filter(row => { return row.is_credit == true})
+        }
+    },
+    calculatePaymentAmount(){
+      if (this.data.codigo_condicion_de_pago === '01') {
+        return this.form.total;
+      } else {
+        return 0;
+      }
+    },
     getFormatter() {
+      var combo_serie = document.getElementById("serie");
       return {
         serie_documento: this.form.serie_documento,
         numero_documento: this.form.numero_documento,
@@ -356,6 +465,7 @@ export default {
         codigo_tipo_moneda: "PEN",
         fecha_de_vencimiento: this.form.fecha_de_vencimiento,
         datos_del_cliente_o_receptor: this.form.datos_del_cliente_o_receptor,
+        codigo_condicion_de_pago: this.data.codigo_condicion_de_pago,
         totales: {
           total_exportacion: this.form.total_exportation,
           total_operaciones_gravadas: this.form.total_taxed,
@@ -387,7 +497,13 @@ export default {
             total_valor_item: x.total_value,
             total_item: x.total
           };
-        })
+        }),
+        pagos: [{
+            codigo_destino_pago: this.data.paymentdestination,
+            codigo_metodo_pago: this.data.paymentmethodtype,
+            referencia: this.data.referencia,
+            monto: this.calculatePaymentAmount()
+        }],
       };
     },
 
@@ -479,7 +595,7 @@ export default {
             // );
 
           } else {
-            alert("No se registro la Compra");
+            alert("No se registro la Venta");
           }
         })
         .catch(err => {
