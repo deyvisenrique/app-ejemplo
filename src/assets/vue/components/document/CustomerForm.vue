@@ -374,25 +374,22 @@ export default {
 
           if(identity_document_type_name == 'ruc')
           {
-            this.form.name = resource.nombre_o_razon_social;
-            this.form.trade_name = resource.nombre_o_razon_social;
-            this.form.address = resource.direccion_completa;
-
-            const [dept, province, distr] = resource.ubigeo
-
-            this.form.department_id = dept;
-            this.form.province_id = province;
-            this.form.district_id = distr;
+            this.form.name = resource.name;
+            this.form.trade_name = resource.trade_name;
+            this.form.address = resource.address;
+            this.form.department_id = resource.department_id;
+            this.form.province_id = resource.province_id;
+            this.form.district_id = resource.district_id;
             this.form.phone = null;
           }
           else if(identity_document_type_name == 'dni')
           {
-            this.form.name = resource.nombre_completo;
+            this.form.name = resource.name;
             this.form.trade_name = null;
-            this.form.address = null;
-            this.form.department_id = null;
-            this.form.province_id = null;
-            this.form.district_id = null;
+            this.form.address = resource.address;
+            this.form.department_id = resource.department_id;
+            this.form.province_id = resource.province_id;
+            this.form.district_id = resource.district_id;
             this.form.phone = null;
           }
           this.$f7.dialog.alert(`Datos encontrados.`, "Facturador PRO APP");
@@ -408,7 +405,7 @@ export default {
       finally{
         this.$f7.preloader.hide();
       }
-      
+
     },
     async searchCustomers()
     {
