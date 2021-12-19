@@ -86,6 +86,56 @@
                   </div>
                 </div>
               </f7-col>
+              <f7-col width="50">
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">Metodo de pago</div>
+                    <div class="item-input-wrap input-dropdown-wrap">
+                      <select v-model="data.paymentmethodtype">
+                        <template v-for="(row, index) in payment_method_types">
+                          <option :value="row.id" :key="index">{{row.description}}</option>
+                        </template>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </f7-col>
+              <f7-col width="50">
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">Referencia</div>
+                    <div class="item-input-wrap">
+                      <input v-model="data.referencia" type="text" />
+                      <span class="input-clear-button"></span>
+                    </div>
+                  </div>
+                </div>
+              </f7-col>
+              <f7-col width="50">
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">Monto</div>
+                    <div class="item-input-wrap">
+                      <input required validate  v-model="form.total" type="number"  />
+                      <span class="input-clear-button"></span>
+                    </div>
+                  </div>
+                </div>
+              </f7-col>
+              <f7-col width="50">
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label">Destino</div>
+                    <div class="item-input-wrap input-dropdown-wrap">
+                      <select v-model="data.paymentdestination">
+                        <template v-for="(row, index) in payment_destinations">
+                          <option :value="row.id" :key="index">{{row.description}}</option>
+                        </template>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </f7-col>
             </f7-row>
 
             <li>
@@ -251,9 +301,16 @@ export default {
       popupCustomerOpened: false,
       search_item: "",
       customers: [],
+      data: {
+        paymentmethodtype: "01",
+        paymentdestination: "cash"
+      },
       form: {},
       popupOpened: false,
-      series:[]
+      series:[],
+      payment_method_type: [],
+      payment_method_types: [],
+      payment_destinations: [],
     };
   },
   computed: {},
@@ -261,6 +318,7 @@ export default {
     await this.initForm();
     await this.getTables();
     await this.getSeries()
+    await this.getPaymentMethodType()
   },
 
   methods: {
@@ -341,6 +399,8 @@ export default {
 
       self.$f7.preloader.show();
 
+      this.calculateTotal();
+
       this.$http
         .post(`${this.returnBaseUrl()}/sale-note`, this.form, this.getHeaderConfig())
         .then(response => {
@@ -349,7 +409,7 @@ export default {
             this.initForm();
 
             self.$f7.dialog.alert(
-              `Nota de venta registrada`,
+              `Nota de venta registrada `+data.data.number,
               "Mensaje"
             );
             self.$f7router.navigate("/documents/");
@@ -412,6 +472,17 @@ export default {
       this.form.total_value = _.round(total_value, 2);
       this.form.total_taxes = _.round(total_igv, 2);
       this.form.total = _.round(total, 2);
+      this.form.payments = [
+        {
+          date_of_payment: this.form.date_of_issue,
+          document_id: null,
+          id: null,
+          payment: _.round(total, 2),
+          payment_destination_id: this.data.paymentdestination,
+          payment_method_type_id: this.data.paymentmethodtype,
+          reference: this.data.referencia,
+        }
+      ];
     },
 
     initForm() {
@@ -480,7 +551,24 @@ export default {
         .then(() => {
           self.$f7.preloader.hide();
         });
-    }
+    },
+    async getPaymentMethodType() {
+
+      const self = this;
+      self.$f7.preloader.show();
+      await this.$http.get(`${this.returnBaseUrl()}/document/paymentmethod`, this.getHeaderConfig()).then(response => {
+          //mostrar metodos de pagos
+          this.payment_method_type = response.data.payment_method_type;
+          this.payment_method_types = this.payment_method_type.filter(row => { return row.is_credit == false})
+          //mostrar destino de caja en venta
+          this.payment_destinations = response.data.payment_destinations;
+        })
+        .catch(err => {})
+        .then(() => {
+          self.$f7.preloader.hide();
+        })
+
+    },
   }
 };
 </script>
