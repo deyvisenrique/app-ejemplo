@@ -407,6 +407,8 @@ export default {
     },
     deleteItem(id, index) {
       this.form.items.splice(index, 1);
+      this.calculateTotal()
+      console.log(this.$refs.form_items_car.length);
       this.$refs.form_items_car.delete_parent(id);
       this.calculateTotal()
     },
