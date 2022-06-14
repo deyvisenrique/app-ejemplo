@@ -5,6 +5,8 @@ import FormSaleNote from './assets/vue/pages/sale-notes/form.vue';
 import FormOrderNote from './assets/vue/pages/order-notes/form.vue';
 import FormPurchase from './assets/vue/pages/purchases/form.vue';
 
+import IndexItems from './assets/vue/pages/items/index.vue';
+
 import Validate from './assets/vue/pages/validate.vue';
 import Report from './assets/vue/pages/report.vue';
 import Documents from './assets/vue/pages/documents.vue';
@@ -58,5 +60,9 @@ export default [
   {
     path: '/form-purchase/',
     component: FormPurchase
+  },
+  {
+    path: '/items/',
+    component: IndexItems
   },
 ];

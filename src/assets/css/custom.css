@@ -107,3 +107,11 @@ a {
   margin-top: -25px !important;
   width: 97%;
 }
+
+.image-max-width{
+  max-width: 100%;
+}
+
+.custom-h-300{
+  height: 300px;
+}

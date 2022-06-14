@@ -116,6 +116,16 @@
             </f7-card-content>
           </f7-card>
         </f7-col>
+        <f7-col width="100">
+          <f7-card @click.native="go('items')" class="">
+            <f7-card-content>
+              <p class="no-padding-vertical">
+                <f7-icon size="20px" color="blue" material="shopping_cart" class=" fa-fw padding-left padding-right"></f7-icon>
+                PRODUCTOS
+              </p>
+            </f7-card-content>
+          </f7-card>
+        </f7-col>
       </f7-row>
     </f7-block>
   </f7-page>
@@ -194,6 +204,9 @@
             break;
           case "purchase":
             self.$f7router.navigate("/form-purchase/");
+            break;
+          case "items":
+            self.$f7router.navigate("/items/");
             break;
         }
       },
