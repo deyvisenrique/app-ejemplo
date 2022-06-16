@@ -15,22 +15,22 @@
             </f7-row>
         </f7-block>
 
-        <f7-card class="card-100 padding-top no-shadow" color="red">
+        <f7-card class="card-100 padding-top no-shadow" color="red" style="min-height: 90%">
             
-            <f7-block style="padding:0px">
+            <f7-block class="">
                 <f7-row>
                     <f7-col width="75">
                         <div class="searchbar searchbar-inline" style="margin:4%">
                             <div class="searchbar-input-wrap">
                                 <input type="search" placeholder="Buscar" style="font-size:12px" v-model="form.input" @input="searchRecords"/>
                                 <i class="searchbar-icon"></i>
-                                <span class="input-clear-button"></span>
+                                <button  class="input-clear-button" @click="clickClearInput"></button>
                             </div>
                         </div>
                     </f7-col>
                     <f7-col width="15" class="text-align-center">
-                        <!-- <f7-button @click="addForm = !addForm" color="blue" fill small open-panel="right" icon="fas fa-plus"></f7-button>
-                        <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span> -->
+                        <f7-button @click="clickCreate()" color="blue" fill small open-panel="right" icon="fas fa-plus"></f7-button>
+                        <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
                     </f7-col>
                 </f7-row>
             </f7-block>
@@ -45,27 +45,29 @@
                                         <img :src="row.image_url" class="image-max-width">
                                         <span class="text-align-center"><b>{{row.description}}</b></span><br>
                                         <span class="text-align-center">{{row.internal_id}}</span><br>
-                                        <span class="float-right"><b>{{row.sale_unit_price}}</b></span><br>
+                                        <span class="float-right"><b>{{row.show_sale_unit_price}}</b></span><br>
                                     </div>
                                 </div>
                                 <div class="card-footer">
                                     
-                                    <a href="#" class="link">
+                                    <a href="#" class="link" @click="clickCreate(row.id)">
                                         <span class="material-icons">edit</span>
                                     </a>
                                     <a href="#" class="link">
                                         <span class="material-icons">check_circle</span>
                                     </a>
-                                    <a href="#" class="link">
-                                        <span class="material-icons">delete</span>
+                                    <a href="#" class="link" @click="clickDelete(row.id)">
+                                        <span class="material-icons icon-color-danger">delete</span>
                                     </a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row" v-else>
-                        <div class="col-100 custom-h-300">
-                            <h3 class="text-align-center">Sin datos</h3>
+                        <div class="col-100">
+                            <h3 class="text-align-center">
+                                {{ loading_text }}
+                            </h3>
                         </div>
                     </div>
 
@@ -73,18 +75,25 @@
             </f7-block>
         </f7-card>
 
+        <item-form :showDialog.sync="showDialog"
+                    :recordId="recordId"></item-form>
+
     </f7-page>
 </template>
 
 <script>
 
     import _ from "lodash";
-    import {auth } from "mixins_/auth";
+    import { auth } from "mixins_/auth";
+    import { deletable } from "mixins_/deletable";
+    import {general_functions} from "mixins_/general_functions"
     import queryString from "query-string";
+    import ItemForm from './partials/form.vue'
 
     export default {
         name: "IndexItems",
-        mixins: [auth],
+        components: { ItemForm },
+        mixins: [auth, deletable, general_functions],
         data: function () {
             return {
                 resource: 'items',
@@ -101,15 +110,45 @@
                     total: 0
                 },
                 show_preloader: true,
+                loading_text: null,
+                showDialog: false,
+                recordId: null,
             }
         },
         computed: {
         },
         async created() {
             await this.initForm()
+            await this.initLoadingText()
             await this.getRecords()
+            await this.events()
         },
         methods: {
+            clickDelete(id){
+                
+                this.destroy(`${this.returnBaseUrl()}/items/${id}`).then(() =>
+                    this.$eventHub.$emit('reloadData')
+                )
+
+            },
+            events(){
+
+                this.$eventHub.$on('reloadData', ()=>{
+                    this.initData()
+                })
+
+            },
+            clickCreate(recordId = null){
+                this.recordId = recordId
+                this.showDialog = true
+            },
+            clickClearInput(){
+                this.form.input = null
+                this.initData()
+            },
+            initLoadingText(){
+                this.loading_text = 'Sin datos'
+            },
             async searchRecords(){
 
                 if(this.form.input.length > 2)
@@ -134,7 +173,6 @@
                 this.current_page = 1
                 this.records = []
                 await this.getRecords()
-                this.show_preloader = false
 
             },
             async loadMoreRecords(){
@@ -147,21 +185,30 @@
                     return
                 }
                 
-                self.show_preloader = true
                 this.current_page++
                 await this.getRecords()
 
             }, 
-            getRecords() {
+            async getRecords() {
 
-                this.$http.get(`${this.returnBaseUrl()}/items/records?${this.getQueryParameters()}`, this.getHeaderConfig())
+                this.show_preloader = true
+                this.loading_text = 'Cargando...'
+
+                await this.$http.get(`${this.returnBaseUrl()}/items/records?${this.getQueryParameters()}`, this.getHeaderConfig())
                         .then(response => {
                             this.records.push(...response.data.data)
                             this.pagination = response.data.meta
                             this.pagination.per_page = parseInt(response.data.meta.per_page)
+                            this.loading_text = 'Sin datos'
                         })
                         .catch(error => {
                             console.log(error)
+                        })
+                        .then(()=>{
+
+                            this.show_preloader = false
+                            if(this.records.length == 0) this.initLoadingText()
+                            
                         })
 
             },

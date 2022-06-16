@@ -5,6 +5,8 @@ import Axios from 'axios'
 
 Vue.prototype.$http = Axios
 
+Vue.prototype.$eventHub = new Vue()
+
 // Import Framework7
 import Framework7 from 'framework7/framework7.esm.bundle';
 

@@ -235,10 +235,11 @@ import _ from "lodash";
 import {
     calculateRowItem
 } from "js_/helpers/functions";
+import {upload_image} from "mixins_/upload_image"
 
 export default {
     //props: ["search_item"],
-    mixins: [auth],
+    mixins: [auth, upload_image],
     name: "ItemsForm",
     components: {},
     props: ["showDialog"],
@@ -302,38 +303,6 @@ export default {
     },
 
     methods: {
-        changeUploadImage(){
-
-            const input_image = document.getElementById('input_image').files[0] 
-
-            if(input_image)
-            {
-                const formData = new FormData()
-                formData.append("file", input_image)
-                
-                this.$f7.preloader.show()
-    
-                this.$http.post(`${this.returnBaseUrl()}/items/upload-temp-image`, formData, this.getHeaderConfig())
-                        .then(response => {
-                            const data = response.data.data
-                            this.form.temp_path = data.temp_image
-                            this.form.image = data.filename
-                        })
-                        .catch(err => {
-                            console.log(err)
-                        })
-                        .then(() => {
-                            this.$f7.preloader.hide()
-                        })
-            }
-            else
-            {
-                this.form.temp_path = null
-                this.form.image = null
-            }
-
-        },
-
         blurQuantity(index, quantity) {
             // console.log(quantity)
             // // this.calculate(quantity, index)
@@ -389,12 +358,6 @@ export default {
 
             this.cleanInputImage()
             
-        },
-        cleanInputImage(){
-            
-            const input_image = document.getElementById('input_image')
-            if(input_image) input_image.value = null
-
         },
         submit() {
 

@@ -115,3 +115,12 @@ a {
 .custom-h-300{
   height: 300px;
 }
+
+
+.default-h-modal{
+  height:55%;
+}
+
+.icon-color-danger{
+  color: red;
+}
