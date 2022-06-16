@@ -14,6 +14,7 @@ import Documents from './assets/vue/pages/documents.vue';
 import Login from './assets/vue/pages/login.vue';
 import PanelRightPage from './assets/vue/pages/panels/right.vue';
 import Configuration from './assets/vue/pages/panels/configuration.vue';
+import AdvancedConfiguration from './assets/vue/pages/panels/advanced_configuration.vue';
 
 
 export default [
@@ -65,4 +66,9 @@ export default [
     path: '/items/',
     component: IndexItems
   },
+  {
+    path: '/advanced-configuration/',
+    component: AdvancedConfiguration
+  },
+  
 ];

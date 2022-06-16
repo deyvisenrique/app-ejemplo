@@ -19,7 +19,7 @@
             
             <f7-block class="">
                 <f7-row>
-                    <f7-col width="75">
+                    <f7-col width="70">
                         <div class="searchbar searchbar-inline" style="margin:4%">
                             <div class="searchbar-input-wrap">
                                 <input type="search" placeholder="Buscar" style="font-size:12px" v-model="form.input" @input="searchRecords"/>
@@ -28,6 +28,12 @@
                             </div>
                         </div>
                     </f7-col>
+                    
+                    <f7-col width="15" class="text-align-center">
+                        <f7-button @click="clickSearchBarcode" color="blue" fill small open-panel="right" icon="fas fa-camera"></f7-button>
+                        <span class="" style="font-size: 10px;line-height: 10px !important;">BUSCAR</span>
+                    </f7-col>
+
                     <f7-col width="15" class="text-align-center">
                         <f7-button @click="clickCreate()" color="blue" fill small open-panel="right" icon="fas fa-plus"></f7-button>
                         <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
@@ -38,11 +44,15 @@
             <f7-block>
                 <div>
                     <div class="row" v-if="records.length > 0">
+
                         <div class="col-50" v-for="(row, index) in records" :key="index">
-                            <div class="card">
+                            <div class="card" :class="!row.active ? 'border-disabled':''">
                                 <div class="card-content card-content-padding">
                                     <div class="item-input-wrap">
-                                        <img :src="row.image_url" class="image-max-width">
+                                        <template v-if="configuration.show_image_item">
+                                            <img :src="row.image_url" class="image-max-width">
+                                        </template>
+
                                         <span class="text-align-center"><b>{{row.description}}</b></span><br>
                                         <span class="text-align-center">{{row.internal_id}}</span><br>
                                         <span class="float-right"><b>{{row.show_sale_unit_price}}</b></span><br>
@@ -53,8 +63,13 @@
                                     <a href="#" class="link" @click="clickCreate(row.id)">
                                         <span class="material-icons">edit</span>
                                     </a>
-                                    <a href="#" class="link">
-                                        <span class="material-icons">check_circle</span>
+                                    <a href="#" class="link" @click="clickChangeActive(row.id, row.active)">
+                                        <template v-if="row.active">
+                                            <span class="material-icons icon-color-danger">highlight_off</span>
+                                        </template>
+                                        <template v-else>
+                                            <span class="material-icons icon-color-success">check_circle</span>
+                                        </template>
                                     </a>
                                     <a href="#" class="link" @click="clickDelete(row.id)">
                                         <span class="material-icons icon-color-danger">delete</span>
@@ -75,6 +90,10 @@
             </f7-block>
         </f7-card>
 
+        <!-- <f7-fab position="right-bottom" color="red" @click="pullToRefresh(this, ()=>{})">
+            <f7-icon f7="arrow_upward"></f7-icon>
+        </f7-fab> -->
+
         <item-form :showDialog.sync="showDialog"
                     :recordId="recordId"></item-form>
 
@@ -83,17 +102,17 @@
 
 <script>
 
-    import _ from "lodash";
-    import { auth } from "mixins_/auth";
-    import { deletable } from "mixins_/deletable";
+    import _ from "lodash"
+    import { auth } from "mixins_/auth"
     import {general_functions} from "mixins_/general_functions"
-    import queryString from "query-string";
+    import {deletable} from "mixins_/deletable"
+    import queryString from "query-string"
     import ItemForm from './partials/form.vue'
 
     export default {
         name: "IndexItems",
         components: { ItemForm },
-        mixins: [auth, deletable, general_functions],
+        mixins: [auth, general_functions, deletable],
         data: function () {
             return {
                 resource: 'items',
@@ -113,17 +132,48 @@
                 loading_text: null,
                 showDialog: false,
                 recordId: null,
+                configuration: {}
             }
         },
         computed: {
         },
         async created() {
+            await this.loadConfiguration()
             await this.initForm()
             await this.initLoadingText()
             await this.getRecords()
             await this.events()
         },
         methods: {
+            
+            clickSearchBarcode(){
+                
+                cordova.plugins.barcodeScanner.scan(
+                    function(result) {
+                        console.log(result)
+                        if(result.text) {
+
+                        this.showAlert(result.text)
+
+                        }
+                    },
+                    function(error) {
+
+                    }
+                )
+            },
+            loadConfiguration(){
+                this.configuration = this.getInitialConfiguration()
+            },
+            clickChangeActive(id, active){
+
+                const active_param = active ? 0 : 1
+
+                this.changeActive(`${this.returnBaseUrl()}/items/change-active/${id}/${active_param}`, active_param).then(() =>
+                    this.$eventHub.$emit('reloadData')
+                )
+
+            },
             clickDelete(id){
                 
                 this.destroy(`${this.returnBaseUrl()}/items/${id}`).then(() =>
@@ -136,6 +186,10 @@
                 this.$eventHub.$on('reloadData', ()=>{
                     this.initData()
                 })
+
+                // this.$eventHub.$on('reloadPageItem', ()=>{
+                //     this.$f7router.refreshPage()
+                // })
 
             },
             clickCreate(recordId = null){

@@ -109,18 +109,54 @@ a {
 }
 
 .image-max-width{
-  max-width: 100%;
+    max-width: 100%;
 }
 
 .custom-h-300{
-  height: 300px;
+    height: 300px;
 }
 
 
 .default-h-modal{
-  height:55%;
+    height:55%;
 }
 
 .icon-color-danger{
-  color: red;
+    color: red;
+}
+
+
+.icon-color-success{
+    color: #4cd964;
+}
+
+.border-disabled{
+    border-color:red;
+    border-width: 1px;
+    border-style: solid;
+}
+
+
+.configuration-footer {
+    text-align: center;
+    z-index: 9999;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    color: white;
+    text-align: center;
+}
+
+
+.full-width{
+  max-width: 100%;
+}
+
+.c-text-bold{
+  font-weight: bold;
+}
+
+.c-dblock{
+    display: block;
 }
