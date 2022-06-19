@@ -71,8 +71,7 @@
 
 <script>
     import {auth} from "mixins_/auth";
-    import FpLogoDark from "assets/images/facturaloperu.png";
-    import FpLogoWhite from "assets/images/tulogo.png";
+    import logo from "assets/images/tulogo.png";
     import {general_functions} from "mixins_/general_functions"
 
     export default {
@@ -83,8 +82,7 @@
                 email: "demo@gmail.com",
                 password: "123456",
                 url: "https://demo.facturalo.pro",
-                fp_logo_dark: FpLogoDark,
-                fp_logo_white: FpLogoWhite,
+                fp_logo_white: logo,
             };
         },
         created() {

@@ -1,10 +1,17 @@
 <template>
-  <f7-page class="page-red" color="white">
+  <f7-page color="red">
 
+    <!-- logo de cambio de pagina -->
     <f7-popup class="demo-popup" :opened="splash" @popup:closed="popupOpened = false">
-      <f7-page style="background:#676666">
-        <f7-block>
-          <img v-if="fp_logo_white" :width="width_img" :height="height_img" class="center" :src="fp_logo_white" alt />
+      <f7-page class="bg-blue-magenta">
+        <f7-block class="padding-vertical bg-color-white no-margin-vertical">
+          <br><br><br>
+        </f7-block>
+        <f7-block class="padding-vertical display-flex justify-content-center bg-color-white no-margin-vertical">
+          <img v-if="fp_logo_white" :width="width_img" :height="height_img" class="center padding-vertical margin-vertical" :src="fp_logo_white" alt />
+        </f7-block>
+        <f7-block class=" display-flex justify-content-center no-margin bg-color-white">
+          <img :src="img_icons" alt="icons" width="70%"  class="center">
         </f7-block>
       </f7-page>
     </f7-popup>
@@ -132,24 +139,22 @@
 </template>
 
 <script>
-  import logo from "assets/images/logo9_b.png";
-  import FpLogoDark from "assets/images/facturaloperu.png";
-  //import FpLogoWhite from "assets/images/fp_logo_white.png";
+  import logo from "assets/images/tulogo.png";
+  import icons from "assets/images/icons-01.svg";
 
   export default {
     components: {},
     data: function() {
       // Must return an object
       return {
-        fp_logo_dark: FpLogoDark,
-        fp_logo_white: null,
+        fp_logo_white: logo,
         user: "",
         password: "",
         splash: true,
         isOffline: false,
         width_img: '',
         height_img: '',
-
+        img_icons: icons
       };
     },
     created() {
