@@ -1,0 +1,15 @@
+@import 'variables.scss';
+
+//tema
+.page-blue-magenta,
+.bg-blue-magenta {
+  background-color: $blue-magenta;
+}
+
+// botones
+.color-pink {
+  background-color: $magenta;
+  // --f7-theme-color-rgb: 230, 30, 173;
+  // --f7-theme-color-shade: #bb158c;
+  // --f7-theme-color-tint: #ec59c2;
+}
