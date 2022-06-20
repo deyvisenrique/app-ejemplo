@@ -276,11 +276,11 @@
     import _ from "lodash";
     import {calculateRowItem} from "js_/helpers/functions";
     import {upload_image} from "mixins_/upload_image"
-    import {general_functions} from "mixins_/general_functions"
+    import {general_functions, scanner} from "mixins_/general_functions"
 
     export default {
         //props: ["search_item"],
-        mixins: [auth, upload_image, general_functions],
+        mixins: [auth, upload_image, general_functions, scanner],
         name: "ItemsForm",
         components: {},
         props: ["showDialog"],
@@ -347,19 +347,21 @@
         methods: {
             clickSearchBarcode(){
                 
-                cordova.plugins.barcodeScanner.scan(
-                    function(result) {
-                        console.log(result)
-                        if(result.text) {
+                const context = this
 
-                        this.showAlert(result.text)
-
+                cordova.plugins.barcodeScanner.scan( 
+                    (result) => { 
+                        if(result.text)
+                        {
+                            this.searchItems(result.text)
                         }
-                    },
-                    function(error) {
-
-                    }
+                    }, 
+                    (error) => { 
+                        context.showAlert(`Error al escanear: ${error}`)
+                    }, 
+                    context.scanner_configuration
                 )
+
             },
             loadConfiguration(){
                 this.configuration = this.getInitialConfiguration()
@@ -606,12 +608,19 @@
                     });
             },
 
-            async searchItems() {
-                if (this.search_item.length > 1) {
+            async searchItems(input_barcode = null) {
+
+                if (this.search_item.length > 1 || input_barcode) 
+                {
                     const self = this;
                     self.$f7.preloader.show();
 
-                    let parameters = `input=${this.search_item}`;
+                    let parameters = `input=${this.search_item}`
+
+                    if(input_barcode)
+                    {
+                        parameters = `input=${input_barcode}&search_by_barcode=1`
+                    }
 
                     await this.$http
                         .get(

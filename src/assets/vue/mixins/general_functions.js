@@ -61,3 +61,21 @@ export const general_functions = {
 
     }
 }
+
+ 
+export const scanner = {
+    data: function () {
+        return {
+            scanner_configuration: {  
+                showTorchButton: true, 
+                torchOn: false, 
+                saveHistory: true, 
+                prompt: 'Coloque un código de barras/qr dentro del área de escaneo', 
+                disableAnimations: false, 
+                disableSuccessBeep: false 
+            } 
+        }
+    },
+    methods: { 
+    }
+}

@@ -73,7 +73,6 @@
   "displayName": "facturalo",
   "cordova": {
     "plugins": {
-      "cordova-plugin-barcodescanner": {},
       "cordova-plugin-android-permissions": {},
       "cordova-plugin-file-downloader": {},
       "cordova-plugin-downloadmanager": {},
