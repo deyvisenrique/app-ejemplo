@@ -92,16 +92,16 @@ export default {
       this.init = false;
 
       const self = this;
-      cordova.plugins.barcodeScanner.scan(
-        function(result) {
-           if(result.text) {
-             self.sendApi(result.text);
-           }
-        },
-        function(error) {
+      // cordova.plugins.barcodeScanner.scan(
+      //   function(result) {
+      //      if(result.text) {
+      //        self.sendApi(result.text);
+      //      }
+      //   },
+      //   function(error) {
 
-        }
-      );
+      //   }
+      // );
     },
     getFormatter(data) {
       let arr = data.split("|");

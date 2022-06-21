@@ -33,7 +33,7 @@
                 <f7-col width="70">
                     <div class="searchbar searchbar-inline" style="margin:4%">
                         <div class="searchbar-input-wrap">
-                            <input type="search" placeholder="Buscar" style="font-size:12px" v-model="search_item" />
+                            <input type="search" placeholder="Buscar" style="font-size:12px" v-model="search_item" @input="inputSearchItem"/>
                             <i class="searchbar-icon"></i>
                             <span class="input-clear-button"></span>
                         </div>
@@ -160,6 +160,22 @@
                                 </div>
                             </div>
                         </li>
+                        <li class="item-content item-input">
+                            <f7-row class="full-width-95">
+                                <f7-col width="90">
+                                    <div class="item-inner" style="width:100% !important">
+                                        <div class="item-title item-label">Código de barras</div>
+                                        <div class="item-input-wrap">
+                                            <input v-model="form.barcode" type="text"/>
+                                            <span class="input-clear-button"></span>
+                                        </div>
+                                    </div>
+                                </f7-col>
+                                <f7-col width="10" class="text-align-center padding-top">
+                                    <f7-button @click="clickGetBarcode" color="blue" fill small open-panel="right" icon="fas fa-camera"></f7-button>
+                                </f7-col>
+                            </f7-row>
+                        </li>
 
                         <li class="item-content item-input">
                             <div class="item-inner">
@@ -279,7 +295,6 @@
     import {general_functions, scanner} from "mixins_/general_functions"
 
     export default {
-        //props: ["search_item"],
         mixins: [auth, upload_image, general_functions, scanner],
         name: "ItemsForm",
         components: {},
@@ -326,13 +341,15 @@
             this.getTables();
         },
         watch: {
-            search_item: function (val) {
-                if (val.length > 1) {
-                    this.searchItems();
-                } else if (val.length == 0) {
-                    this.initItems();
-                }
-            }
+            // search_item: function (val) {
+            //     if (val.length > 1) {
+            //         this.searchItems();
+            //         console.log("bus")
+            //     } else if (val.length == 0) {
+            //         this.initItems();
+            //         console.log("en 0")
+            //     }
+            // }
             /*filteCart_b: function(val) {
             if (val) {
                 this.items_car = _.filter(this.items_car_base, function(o) {
@@ -345,6 +362,30 @@
         },
 
         methods: {
+            clickGetBarcode(){
+                
+                const context = this
+                cordova.plugins.barcodeScanner.scan( 
+                    (result) => { 
+                        if(result.text) this.form.barcode = result.text
+                    }, 
+                    (error) => context.showAlert(`Error al escanear: ${error}`), 
+                    context.scanner_configuration
+                )
+
+            },
+            inputSearchItem(){
+
+                if (this.search_item.length > 1) 
+                {
+                    this.searchItems()
+                } 
+                else if (this.search_item.length == 0) 
+                {
+                    this.initItems()
+                }
+
+            },
             clickSearchBarcode(){
                 
                 const context = this
@@ -353,7 +394,8 @@
                     (result) => { 
                         if(result.text)
                         {
-                            this.searchItems(result.text)
+                            this.search_item = result.text
+                            this.searchItems(1)
                         }
                     }, 
                     (error) => { 
@@ -417,6 +459,7 @@
                     lots: [],
                     image: null,
                     temp_path: null,
+                    barcode: null,
                 };
 
                 this.cleanInputImage()
@@ -525,7 +568,6 @@
                     has_igv: null
                 };
             },
-
             send() {
                 const self = this;
                 self.sheetConfirm = false;
@@ -608,47 +650,49 @@
                     });
             },
 
-            async searchItems(input_barcode = null) {
+            async searchItems(search_by_barcode = 0) {
 
-                if (this.search_item.length > 1 || input_barcode) 
+                if (this.search_item.length > 1) 
                 {
                     const self = this;
                     self.$f7.preloader.show();
+                    const parameters = `input=${this.search_item}&search_by_barcode=${search_by_barcode}`
 
-                    let parameters = `input=${this.search_item}`
-
-                    if(input_barcode)
-                    {
-                        parameters = `input=${input_barcode}&search_by_barcode=1`
-                    }
-
-                    await this.$http
-                        .get(
-                            `${this.returnBaseUrl()}/document/search-items?${parameters}`,
-                            this.getHeaderConfig()
-                        )
-                        .then(response => {
-                            this.items_car = response.data.data.items.map(x => {
-                                return {
-                                    full_description: x.full_description,
-                                    description: x.description,
-                                    id: x.id,
-                                    quantity: 0,
-                                    sale_unit_price: x.sale_unit_price,
-                                    item: x
-                                };
-                            });
-                        })
-                        .catch(err => {
-                            alert("Error");
-                        })
-                        .then(() => {
-                            self.$f7.preloader.hide();
-                        });
-                } else {
-                    // this.initItems()
+                    await this.$http.get(`${this.returnBaseUrl()}/document/search-items?${parameters}`, this.getHeaderConfig())
+                                .then(response => {
+                                    this.items_car = this.getItemsCar(response.data.data.items)
+                                    this.setItemSearchBarcode(search_by_barcode)
+                                })
+                                .catch(err => {
+                                    alert("Error");
+                                })
+                                .then(() => {
+                                    self.$f7.preloader.hide();
+                                })
                 }
-            }
+            },
+            setItemSearchBarcode(search_by_barcode){
+
+                if(this.items_car.length == 1 && search_by_barcode)
+                {
+                    this.calculate(1, 0) 
+                }
+
+            },
+            getItemsCar(items){
+
+                return items.map(x => {
+                    return {
+                        full_description: x.full_description,
+                        description: x.description,
+                        id: x.id,
+                        quantity: 0,
+                        sale_unit_price: x.sale_unit_price,
+                        item: x
+                    }
+                })
+
+            },
         }
     };
 </script>

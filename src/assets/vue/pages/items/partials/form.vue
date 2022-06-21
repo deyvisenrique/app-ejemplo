@@ -18,6 +18,22 @@
                                 </div>
                             </div>
                         </li>
+                        <li class="item-content item-input">
+                            <f7-row class="full-width-95">
+                                <f7-col width="90">
+                                    <div class="item-inner" style="width:100% !important">
+                                        <div class="item-title item-label">Código de barras</div>
+                                        <div class="item-input-wrap">
+                                            <input v-model="form.barcode" type="text"/>
+                                            <span class="input-clear-button"></span>
+                                        </div>
+                                    </div>
+                                </f7-col>
+                                <f7-col width="10" class="text-align-center padding-top">
+                                    <f7-button @click="clickGetBarcode" color="blue" fill small open-panel="right" icon="fas fa-camera"></f7-button>
+                                </f7-col>
+                            </f7-row>
+                        </li>
 
                         <li class="item-content item-input">
                             <div class="item-inner">
@@ -118,6 +134,18 @@
             await this.initForm()
         },
         methods: {
+            clickGetBarcode(){
+                
+                const context = this
+                cordova.plugins.barcodeScanner.scan( 
+                    (result) => { 
+                        if(result.text) this.form.barcode = result.text
+                    }, 
+                    (error) => context.showAlert(`Error al escanear: ${error}`), 
+                    context.scanner_configuration
+                )
+
+            },
             open(){
                 this.getRecord()
             },
@@ -184,6 +212,7 @@
                     lots: [],
                     image: null,
                     temp_path: null,
+                    barcode: null,
                 }
 
                 this.cleanInputImage()
