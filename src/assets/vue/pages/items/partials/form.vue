@@ -108,10 +108,11 @@
     import {auth} from "mixins_/auth"
     import {upload_image} from "mixins_/upload_image"
     import {general_functions} from "mixins_/general_functions"
+    import {common} from "../mixins/common"
 
     export default {
         props: ['showDialog', 'recordId'],
-        mixins: [auth, upload_image, general_functions],
+        mixins: [auth, upload_image, general_functions, common],
         data: function () {
             return {
                 resource: 'items',
@@ -132,6 +133,7 @@
         },
         async created() {
             await this.initForm()
+            await this.getTables()
         },
         methods: {
             clickGetBarcode(){

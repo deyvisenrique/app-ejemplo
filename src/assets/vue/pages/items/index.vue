@@ -149,7 +149,6 @@
             clickSearchBarcode(){
 
                 const context = this 
-                console.log(context.scanner_configuration)
                 cordova.plugins.barcodeScanner.scan( 
                     (result) => { 
                         if(result.text)
