@@ -1,5 +1,5 @@
 <template>
-  <f7-page class="panel-dark">
+  <f7-page class="bg-blue-magenta">
     <f7-block>
       <p center class="text-color-white">
         <f7-icon material="settings" class="padding-right padding-left"></f7-icon>

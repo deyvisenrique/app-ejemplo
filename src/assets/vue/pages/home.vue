@@ -1,5 +1,5 @@
 <template>
-  <f7-page color="red">
+  <f7-page>
 
     <!-- logo de cambio de pagina -->
     <f7-popup class="demo-popup" :opened="splash" @popup:closed="popupOpened = false">
@@ -16,22 +16,11 @@
       </f7-page>
     </f7-popup>
 
-    <f7-block>
-      <f7-row>
-        <f7-col width="70">
-          <p class="text-align-center">
-            <img v-if="fp_logo_white" :src="fp_logo_white" alt="FacturaloPeru" width="60%" />
-          </p>
-        </f7-col>
-        <f7-col width="20">
-          <f7-link class="panel-open text-color-white padding-top margin-top text-align-right" open-panel="right" icon="fas fa-bars"></f7-link>
-        </f7-col>
-      </f7-row>
-    </f7-block>
+    <header-layout></header-layout>
 
     <f7-block>
       <f7-row v-if="isOffline">
-        <p style="color:red;">SIN ACCESO A INTERNET, VERIFICA TU CONEXION.</p>
+        <p style="color:red;">SIN ACCESO A INTERNET, VERIFICA TU CONEXIÓN.</p>
       </f7-row>
       <f7-row>
         <f7-col width="33">
@@ -141,9 +130,10 @@
 <script>
   import logo from "assets/images/tulogo.png";
   import icons from "assets/images/icons-01.svg";
+  import HeaderLayout from "components/layout/Header";
 
   export default {
-    components: {},
+    components: {HeaderLayout},
     data: function() {
       // Must return an object
       return {

@@ -1,5 +1,5 @@
 <template>
-    <f7-page class="panel-dark">
+    <f7-page class="bg-blue-magenta">
         <f7-block>
             <p center class="text-color-white">
                 <f7-icon material="settings" class="padding-right padding-left"></f7-icon>
@@ -78,7 +78,7 @@
                     .then(response => {
 
                         this.showAlert(response.data.message)
-                        
+
                         if(response.data.success)
                         {
                             this.setStorage(this.key_storage, response.data.data, true)
@@ -90,7 +90,7 @@
 
                         console.log(error)
                         alert(`Ocurrió un error al guardar: ${error}`)
-                        
+
                     })
                     .then(() => {
                         this.hideLoading()
