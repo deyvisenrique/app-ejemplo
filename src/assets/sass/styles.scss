@@ -1,9 +1,29 @@
 @import 'variables.scss';
 
+//font family
+:root.md {
+  --f7-font-family: Roboto, system-ui, Noto, Helvetica, Arial, sans-serif;
+}
+:root.ios {
+  --f7-font-family: -apple-system, SF Pro Text, SF UI Text, system-ui, Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+:root.aurora {
+  --f7-font-family: -apple-system, system-ui, Helvetica, Arial, sans-serif;
+}
+
 //tema
 .page-blue-magenta,
 .bg-blue-magenta {
   background-color: $blue-magenta;
+}
+.bg-blue {
+  background-color: $blue;
+}
+.bg-dark-blue {
+  background-color: $dark-blue;
+}
+.bg-purple {
+  background-color: $purple;
 }
 
 // botones
