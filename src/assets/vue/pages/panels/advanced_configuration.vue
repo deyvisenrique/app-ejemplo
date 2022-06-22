@@ -1,28 +1,31 @@
 <template>
-    <f7-page class="bg-blue-magenta">
-        <f7-block>
-            <p center class="text-color-white">
-                <f7-icon material="settings" class="padding-right padding-left"></f7-icon>
-                Configuración
-            </p>
+    <f7-page class="">
+        <f7-block class="bg-blue-magenta no-margin-top elevation-9">
+            <f7-block class="text-align-right no-margin-top padding-top">
+                <f7-link class="transparent panel-previous" color="white" @click="back">
+                <i class="fas fa-times"></i>
+                </f7-link>
+            </f7-block>
+            <f7-block class="no-margin-vertical">
+                <p class="text-color-white">
+                <f7-icon material="settings" size="44px" class="padding-right"></f7-icon>
+                </p>
+            </f7-block>
+            <f7-block class="no-margin-top padding-bottom">
+                <p class="text-color-white">Configuración</p>
+            </f7-block>
         </f7-block>
-        <hr>
-        <f7-block>
-            <f7-card color="red">
-                <f7-card-content>
-                    <f7-row no-gap>
-                        <f7-col>
-                            <div>
-                                <p>Mostrar imágen en productos</p>
-                                <label class="toggle toggle-init color-blue">
-                                    <input type="checkbox" v-model="form.show_image_item" @change="submit"/>
-                                    <span class="toggle-icon"></span>
-                                </label>
-                            </div>
-                        </f7-col>
-                    </f7-row>
-                </f7-card-content>
-            </f7-card>
+        <f7-block class="no-padding-horizontal">
+            <f7-list>
+                <f7-list-item title="Imagen en productos">
+                    <template #after>
+                        <label class="toggle toggle-init color-blue">
+                            <input type="checkbox" v-model="form.show_image_item" @change="submit"/>
+                            <span class="toggle-icon"></span>
+                        </label>
+                    </template>
+                </f7-list-item>
+            </f7-list>
         </f7-block>
         <div class="configuration-footer">
             <f7-block>

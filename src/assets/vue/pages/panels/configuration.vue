@@ -1,75 +1,70 @@
 <template>
-  <f7-page class="bg-blue-magenta">
-    <f7-block>
-      <p center class="text-color-white">
-        <f7-icon material="settings" class="padding-right padding-left"></f7-icon>
-        Configuración
-      </p>
+  <f7-page>
+    <f7-block class="bg-blue-magenta no-margin-top elevation-9">
+      <f7-block class="text-align-right no-margin-top padding-top">
+        <f7-link class="transparent panel-previous" color="white" @click="back">
+          <i class="fas fa-times"></i>
+        </f7-link>
+      </f7-block>
+      <f7-block class="no-margin-vertical">
+        <p class="text-color-white">
+          <f7-icon material="verified_user" size="44px" class="padding-right"></f7-icon>
+        </p>
+      </f7-block>
+      <f7-block class="no-margin-top padding-bottom">
+        <p class="text-color-white">Cuenta</p>
+      </f7-block>
     </f7-block>
-    <hr>
-    <f7-block>
-      <f7-card color="red">
-        <f7-card-content>
-          <f7-row no-gap>
-            <f7-col>
-              <form class="form-store-data" id="demo-form">
-                <f7-list no-hairlines-md>
-                  <f7-list-input
-                    outline
-                    floating-label
-                    type="text"
-                    clear-button
-                    label="Correo"
-                    placeholder="Correo"
-                    name="name"
-                    required
-                    validate
-                    :value="form.email"
-                    @input="form.email = $event.target.value"
-                  >
-                  </f7-list-input>
-                  <f7-list-input
-                    outline
-                    floating-label
-                    type="password"
-                    clear-button
-                    label="Contraseña"
-                    placeholder="Contraseña"
-                    name="password"
-                    required
-                    :value="form.password"
-                    @input="form.password = $event.target.value"
-                  >
-                  </f7-list-input>
-                  <f7-list-input
-                    outline
-                    floating-label
-                    type="url"
-                    clear-button
-                    label="URL"
-                    placeholder="https://demo.facturador.pro"
-                    required
-                    validate
-                    :value="form.url"
-                    @input="form.url = $event.target.value"
-                  >
-                  </f7-list-input>
-                </f7-list>
-              </form>
-            </f7-col>
-          </f7-row>
-        </f7-card-content>
-      </f7-card>
+    <f7-block class="no-padding-top">
+      <form class="form-store-data" id="demo-form">
+        <f7-list no-hairlines-md>
+          <f7-list-input
+            outline
+            floating-label
+            type="url"
+            clear-button
+            label="URL"
+            placeholder="https://demo.facturador.pro"
+            required
+            validate
+            :value="form.url"
+            @input="form.url = $event.target.value"
+          >
+          </f7-list-input>
+          <f7-list-input
+            outline
+            floating-label
+            type="text"
+            clear-button
+            label="Correo"
+            placeholder="Correo"
+            name="name"
+            required
+            validate
+            :value="form.email"
+            @input="form.email = $event.target.value"
+          >
+          </f7-list-input>
+          <f7-list-input
+            outline
+            floating-label
+            type="password"
+            clear-button
+            label="Contraseña"
+            placeholder="Contraseña"
+            name="password"
+            required
+            :value="form.password"
+            @input="form.password = $event.target.value"
+          >
+          </f7-list-input>
+        </f7-list>
+      </form>
     </f7-block>
     <div class="footer">
       <f7-block>
-        <f7-button class="trasnparent" color="white" @click="submit">
-          <f7-icon material="save" size="20"></f7-icon>
+        <f7-button class="padding-horizontal" color="pink" @click="submit" fill round>
           Guardar
-        </f7-button>
-        <f7-button class="trasnparent panel-previous" color="white" @click="back">
-          <f7-icon material="keyboard_arrow_left" size="20"></f7-icon>
-          Volver
         </f7-button>
       </f7-block>
     </div>
@@ -105,7 +100,7 @@ export default {
     initForm() {
       this.form = {
         email: localStorage.user_email,
-        password: "",
+        password: localStorage.user_password,
         url: localStorage.api_url
       };
     },
