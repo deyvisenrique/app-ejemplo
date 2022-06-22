@@ -50,6 +50,44 @@
                 </f7-col>
             </f7-row>
 
+
+
+            <f7-row class="padding-horizontal">
+                <f7-col>
+                    <f7-list accordion-list>
+                        <f7-list-item accordion-item title="Filtrar por categoría">
+                            <f7-accordion-content>
+                                <f7-block>
+
+                                <f7-list class="search-list searchbar-found">
+                                    <f7-list-item-cell   v-for="(category, index) in categories" :key="index">
+                                    <!-- <div class="card" style="display:inline !important">
+                                        <div class="card-content card-content-padding">
+                                            <div class="item-input-wrap">
+                                                <span class="float-right"><b>{{category.name}}</b></span>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                                <span class="card float-right"><b>{{category.name}}</b></span>
+
+                                    </f7-list-item-cell >
+                                </f7-list>
+
+
+
+                                </f7-block>
+                            </f7-accordion-content>
+                        </f7-list-item>
+                    </f7-list>
+                </f7-col>
+            </f7-row>
+
+
+
+
+
+
+
             <div class="list inset ">
                 <p v-if="items_car.length == 0">
                     No tienes productos agregados
@@ -209,6 +247,19 @@
                             </div>
                         </li>
 
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">
+                                    Categoría
+                                </div>
+                                <div class="item-input-wrap">
+                                    <select v-model="form.category_id">
+                                        <option v-for="(option, index) in categories" :value="option.id" :key="index">{{ option.name }}</option>
+                                    </select>
+                                    <button class="input-clear-button" @click.prevent="clearCategories"></button>
+                                </div>
+                            </div>
+                        </li>
 
                         <li class="item-content item-input">
                             <div class="item-inner">
@@ -310,6 +361,7 @@
                 addForm: false,
                 items: [],
                 affectation_igv_types: [],
+                categories: [],
                 form: {},
                 configuration: {},
             };
@@ -340,28 +392,10 @@
             this.initForm();
             this.getTables();
         },
-        watch: {
-            // search_item: function (val) {
-            //     if (val.length > 1) {
-            //         this.searchItems();
-            //         console.log("bus")
-            //     } else if (val.length == 0) {
-            //         this.initItems();
-            //         console.log("en 0")
-            //     }
-            // }
-            /*filteCart_b: function(val) {
-            if (val) {
-                this.items_car = _.filter(this.items_car_base, function(o) {
-                return o.quantity > 0;
-                });
-            } else {
-                this.items_car = this.items_car_base;
-            }
-            }*/
-        },
-
         methods: {
+            clearCategories(){
+                this.form.category_id = null
+            },
             clickGetBarcode(){
                 
                 const context = this
@@ -642,6 +676,8 @@
                         let source = response.data.data;
                         self.items_car_base = source.items;
                         self.affectation_igv_types = source.affectation_types;
+                        self.categories = source.categories;
+                        
                         self.initItems();
                     })
                     .catch(err => {})

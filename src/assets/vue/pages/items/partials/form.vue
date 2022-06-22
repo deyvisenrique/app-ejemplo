@@ -67,6 +67,19 @@
                             </div>
                         </li>
 
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">
+                                    Categoría
+                                </div>
+                                <div class="item-input-wrap">
+                                    <select v-model="form.category_id">
+                                        <option v-for="(option, index) in categories" :value="option.id" :key="index">{{ option.name }}</option>
+                                    </select>
+                                    <button class="input-clear-button" @click.prevent="clearCategories"></button>
+                                </div>
+                            </div>
+                        </li>
 
                         <li class="item-content item-input">
                             <div class="item-inner">
@@ -136,6 +149,9 @@
             await this.getTables()
         },
         methods: {
+            clearCategories(){
+                this.form.category_id = null
+            },
             clickGetBarcode(){
                 
                 const context = this
