@@ -15,7 +15,7 @@
                     <i class="icon material-icons if-md">info_outline</i>
                 </a>
             </f7-col>
-            <f7-col width="10">
+            <!-- <f7-col width="10">
                 <a href="#" class="link" @click="sheetConfirm = !sheetConfirm">
                     <f7-icon color="white" material="shopping_cart">
                         <f7-badge color="blue">
@@ -23,7 +23,7 @@
                         </f7-badge>
                     </f7-icon>
                 </a>
-            </f7-col>
+            </f7-col> -->
         </f7-row>
     </f7-block>
 
@@ -49,45 +49,28 @@
                     <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
                 </f7-col>
             </f7-row>
-
-
-
+ 
             <f7-row class="padding-horizontal">
-                <f7-col>
+                <f7-col >
                     <f7-list accordion-list>
                         <f7-list-item accordion-item title="Filtrar por categoría">
                             <f7-accordion-content>
                                 <f7-block>
 
-                                <f7-list class="search-list searchbar-found">
-                                    <f7-list-item-cell   v-for="(category, index) in categories" :key="index">
-                                    <!-- <div class="card" style="display:inline !important">
-                                        <div class="card-content card-content-padding">
-                                            <div class="item-input-wrap">
-                                                <span class="float-right"><b>{{category.name}}</b></span>
-                                            </div>
-                                        </div>
-                                    </div> -->
-                                                <span class="card float-right"><b>{{category.name}}</b></span>
-
-                                    </f7-list-item-cell >
-                                </f7-list>
-
-
+                                    <div class="c-horizontal-scroll c-h-50 mp-div-category">
+                                        <template v-for="(category, index) in categories">
+                                            <span class="padding c-span-card" :key="index" @click="clickSearchByCategory(category.id)"><b>{{ getCategoryName(category) }}</b></span>
+                                        </template>
+                                    </div>
 
                                 </f7-block>
+
                             </f7-accordion-content>
                         </f7-list-item>
                     </f7-list>
                 </f7-col>
             </f7-row>
-
-
-
-
-
-
-
+ 
             <div class="list inset ">
                 <p v-if="items_car.length == 0">
                     No tienes productos agregados
@@ -327,6 +310,15 @@
             </f7-block>
         </f7-page-content>
     </f7-sheet>
+
+    <f7-fab position="right-bottom" color="red" v-if="countCar > 0" @click="send">
+        <f7-icon ios="f7:plus" aurora="f7:plus" md="material:shopping_cart" >
+            <f7-badge color="blue">
+                {{ countCar }}
+            </f7-badge>
+        </f7-icon>
+    </f7-fab>
+
 </f7-page>
 </template>
 
@@ -364,6 +356,7 @@
                 categories: [],
                 form: {},
                 configuration: {},
+                search_category_id: null,
             };
         },
         computed: {
@@ -393,8 +386,16 @@
             this.getTables();
         },
         methods: {
+            getCategoryName(category){
+                return category.name.toUpperCase()
+            },
             clearCategories(){
                 this.form.category_id = null
+            },
+            clickSearchByCategory(category_id){
+                console.log(category_id)
+                this.search_category_id = category_id
+                this.searchItems()
             },
             clickGetBarcode(){
                 
@@ -688,16 +689,19 @@
 
             async searchItems(search_by_barcode = 0) {
 
-                if (this.search_item.length > 1) 
+                if (this.search_item.length > 1 || this.search_category_id) 
                 {
                     const self = this;
-                    self.$f7.preloader.show();
-                    const parameters = `input=${this.search_item}&search_by_barcode=${search_by_barcode}`
+                    self.$f7.preloader.show()
+
+                    let parameters = `input=${this.search_item}&search_by_barcode=${search_by_barcode}`
+                    if(this.search_category_id) parameters += `&category_id=${this.search_category_id}`
 
                     await this.$http.get(`${this.returnBaseUrl()}/document/search-items?${parameters}`, this.getHeaderConfig())
                                 .then(response => {
                                     this.items_car = this.getItemsCar(response.data.data.items)
                                     this.setItemSearchBarcode(search_by_barcode)
+                                    this.search_category_id = null
                                 })
                                 .catch(err => {
                                     alert("Error");
