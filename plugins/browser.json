@@ -24,6 +24,9 @@
     },
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.example.facturalo"
+    },
+    "cordova-plugin-printer": {
+      "PACKAGE_NAME": "com.example.facturalo"
     }
   },
   "dependent_plugins": {

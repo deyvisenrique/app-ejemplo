@@ -21,6 +21,22 @@
                             </div>
                         </f7-col>
                     </f7-row>
+                    
+                    <f7-row no-gap>
+                        <f7-col>
+                            <div>
+                                <p>Formato de impresión (CPE)</p>
+                                <select v-model="form.print_format_pdf" @change="submit" class="full-width custom-select-bgcolor">
+                                    <option value="ticket">Ticket 80mm</option>
+                                    <option value="ticket_58">Ticket 58mm</option>
+                                    <option value="ticket_50">Ticket 50mm</option>
+                                    <option value="a4">A4</option>
+                                </select>
+                            </div>
+
+                        </f7-col>
+                    </f7-row>
+
                 </f7-card-content>
             </f7-card>
         </f7-block>
@@ -69,6 +85,7 @@
             initForm() {
                 this.form = {
                     show_image_item: false,
+                    print_format_pdf: 'ticket',
                 }
             },
             submit() {

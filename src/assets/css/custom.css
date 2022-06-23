@@ -149,8 +149,13 @@ a {
 }
 
 
-.full-width{
+.full-max-width{
   max-width: 100%;
+}
+
+
+.full-width{
+  width: 100%;
 }
 
 .c-text-bold{
@@ -190,4 +195,11 @@ a {
 
 .c-h-50{
     height: 50px;
+}
+
+.custom-select-bgcolor{
+    background-color:#17365d;
+    color:#FFF;
+    border-radius: 5px;
+    padding: 6px;
 }

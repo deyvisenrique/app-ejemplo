@@ -22,6 +22,10 @@
     "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "com.example.facturalo"
     },
+    "cordova-plugin-printer": {
+      "ANDROID_SUPPORT_V4_VERSION": "28.+",
+      "PACKAGE_NAME": "com.example.facturalo"
+    },
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.example.facturalo"
     },

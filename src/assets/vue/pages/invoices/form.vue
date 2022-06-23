@@ -357,6 +357,7 @@
                 form_fee: {},
                 cash_payment_method_types: [],
                 credit_payment_method_types: [],
+                configuration: {},
             };
         },
         computed: {
@@ -368,14 +369,22 @@
             },
         },
         async created() {
+            await this.loadConfiguration()
             this.codeType = this.$f7route.params.cod;
             await this.initForm();
             //this.getTables();
             await this.selectDocumentType()
             await this.getSeries()
             await this.getPaymentMethodType()
+
+            console.log(window.plugins)
+            console.log(cordova.plugins)
+            console.log(cordova.plugins.printer)
         },
         methods: {
+            loadConfiguration(){
+                this.configuration = this.getInitialConfiguration()
+            },
             inputPayment(){
                 this.payment_change = parseFloat(this.form_payment.payment) - parseFloat(this.form.total)
             },
@@ -679,74 +688,110 @@
                 return true
             },
             send() {
-                const self = this;
+                const self = this
+                let valid = this.validate()
+                if (!valid) return
 
-                let valid = this.validate();
-
-                if (!valid) return;
-
-                self.$f7.preloader.show();
+                this.showLoading()
 
                 this.$http
                     .post(`${this.returnBaseUrl()}/documents`, this.getFormatter(), this.getHeaderConfig())
                     .then(response => {
-                        let data = response.data;
+                        let data = response.data
                         if (data.success) {
-                            this.initForm();
+                            this.initForm()
 
                             self.$f7.dialog.create({
                                 title: 'Comprobante registrado',
                                 text: data.data.number,
-                                buttons: [{
-                                        text: 'Descargar A4',
-                                        cssClass: 'text-center',
-                                        close: false
-                                    },
-                                    {
-                                        text: 'Descargar Ticket',
-                                        cssClass: 'text-center',
-                                        close: false
-                                    },
-                                    {
-                                        text: 'Continuar',
-                                        cssClass: 'text-center'
-                                    },
-                                ],
-                                onClick: function (dialog, index) {
-                                    if (index === 0) {
-                                        cordova.InAppBrowser.open(
-                                            `${localStorage.api_url}/print/document/${data.data.external_id}/a4`,
-                                            "_system",
-                                            "location=yes"
-                                        );
-                                    } else if (index === 1) {
-                                        cordova.InAppBrowser.open(
-                                            `${localStorage.api_url}/print/document/${data.data.external_id}/ticket`,
-                                            "_system",
-                                            "location=yes"
-                                        );
-                                    } else if (index === 2) {
-                                        // self.$f7router.navigate("/documents/");
-                                    }
-                                },
+                                buttons: self.getOptionsButtons(), 
+                                onClick: self.clickOptionsButtons(dialog, index),
                                 verticalButtons: true,
-                            }).open();
-
-                            // self.$f7.dialog.alert(
-                            //   `Comprobante registrado:<br> ${data.data.number} <br><a href="google.com" target="blank"><i class="fas fa-file"></i></a>`,
-                            //   "Mensaje"
-                            // );
+                            }).open()
 
                         } else {
-                            alert("No se registro la Venta");
+                            alert("No se registro la Venta")
                         }
                     })
                     .catch(err => {
-                        alert(`${err.message}`);
+                        alert(`${err.message}`)
                     })
                     .then(() => {
-                        self.$f7.preloader.hide();
-                    });
+                        this.hideLoading()
+                    })
+            },
+            clickOptionsButtons(dialog, index){
+
+                // Imprimir
+                if(index === 0) 
+                {
+                    this.toPrint(data)
+                }
+                // Descargar A4
+                else if (index === 1) 
+                {
+                    cordova.InAppBrowser.open(
+                        `${localStorage.api_url}/print/document/${data.data.external_id}/a4`,
+                        "_system",
+                        "location=yes"
+                    )
+                } 
+                // Descargar Ticket
+                else if (index === 2) 
+                {
+                    cordova.InAppBrowser.open(
+                        `${localStorage.api_url}/print/document/${data.data.external_id}/ticket`,
+                        "_system",
+                        "location=yes"
+                    )
+                }
+                // Continuar
+                else if (index === 3) 
+                {
+                    // self.$f7router.navigate("/documents/");
+                }
+            },
+            getOptionsButtons(){
+                return [
+                    {
+                        text: 'Imprimir',
+                        cssClass: 'text-center',
+                        close: false
+                    },
+                    {
+                        text: 'Descargar A4',
+                        cssClass: 'text-center',
+                        close: false
+                    },
+                    {
+                        text: 'Descargar Ticket',
+                        cssClass: 'text-center',
+                        close: false
+                    },
+                    {
+                        text: 'Continuar',
+                        cssClass: 'text-center'
+                    },
+                ]
+            },
+            async toPrint(data){
+
+                let html_pdf = null 
+                const print_format_pdf = (this.configuration.print_format_pdf) ? this.configuration.print_format_pdf : 'ticket'
+                this.showLoading()
+
+                await this.$http.get(`${this.returnBaseUrl()}/document-print-pdf/document/${data.data.external_id}/${print_format_pdf}`, this.getHeaderConfig())
+                            .then((response)=>{
+                                html_pdf=response.data
+                            })
+                            .catch((error)=>{
+                                console.log(error)
+                            })
+
+                cordova.plugins.printer.print(html_pdf)
+
+                this.hideLoading()
+ 
             },
             selectDocumentType() {
                 if (this.form.codigo_tipo_documento == "01") {

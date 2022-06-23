@@ -109,7 +109,7 @@
                                     <div class="block text-align-center">
                                         <div class="row">
                                             <div class="col">
-                                                <div class="stepper stepper-raised stepper-init stepper-small bg-color-white full-width">
+                                                <div class="stepper stepper-raised stepper-init stepper-small bg-color-white full-max-width">
                                                     <div class="stepper-button-minus" @click="calculate(-1, index)"></div>
                                                     <div class="stepper-input-wrap">
                                                         <input type="number" v-model="item.quantity" min="0" step="1" />
