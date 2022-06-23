@@ -377,8 +377,6 @@
             await this.getSeries()
             await this.getPaymentMethodType()
 
-            console.log(window.plugins)
-            console.log(cordova.plugins)
             console.log(cordova.plugins.printer)
         },
         methods: {
@@ -705,7 +703,37 @@
                                 title: 'Comprobante registrado',
                                 text: data.data.number,
                                 buttons: self.getOptionsButtons(), 
-                                onClick: self.clickOptionsButtons(dialog, index),
+                                onClick: function(dialog, index){
+
+                // Imprimir
+                if(index === 0) 
+                {
+                    self.toPrint(data)
+                }
+                // Descargar A4
+                else if (index === 1) 
+                {
+                    cordova.InAppBrowser.open(
+                        `${localStorage.api_url}/print/document/${data.data.external_id}/a4`,
+                        "_system",
+                        "location=yes"
+                    )
+                } 
+                // Descargar Ticket
+                else if (index === 2) 
+                {
+                    cordova.InAppBrowser.open(
+                        `${localStorage.api_url}/print/document/${data.data.external_id}/ticket`,
+                        "_system",
+                        "location=yes"
+                    )
+                }
+                // Continuar
+                else if (index === 3) 
+                {
+                    // self.$f7router.navigate("/documents/");
+                }
+            },
                                 verticalButtons: true,
                             }).open()
 

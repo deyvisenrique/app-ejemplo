@@ -203,3 +203,8 @@ a {
     border-radius: 5px;
     padding: 6px;
 }
+
+
+.default-h80-modal{
+  height: 80%;
+}

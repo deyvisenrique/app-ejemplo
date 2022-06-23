@@ -27,6 +27,9 @@
     },
     "cordova-plugin-printer": {
       "PACKAGE_NAME": "com.example.facturalo"
+    },
+    "cordova-plugin-file-opener2": {
+      "PACKAGE_NAME": "com.example.facturalo"
     }
   },
   "dependent_plugins": {

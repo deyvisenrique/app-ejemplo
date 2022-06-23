@@ -58,7 +58,10 @@ export const general_functions = {
                 print_format_pdf: 'ticket',
             }
 
-        }
+        },
+        getBaseUrl(){
+            return this.getStorage('api_url')
+        },
 
     }
 }

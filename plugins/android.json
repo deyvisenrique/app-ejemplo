@@ -16,6 +16,10 @@
     "cordova-plugin-file-downloader": {
       "PACKAGE_NAME": "com.example.facturalo"
     },
+    "cordova-plugin-file-opener2": {
+      "ANDROID_SUPPORT_V4_VERSION": "27.+",
+      "PACKAGE_NAME": "com.example.facturalo"
+    },
     "cordova-plugin-file-transfer": {
       "PACKAGE_NAME": "com.example.facturalo"
     },
