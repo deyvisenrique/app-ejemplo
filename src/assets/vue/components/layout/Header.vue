@@ -1,5 +1,5 @@
 <template>
-  <f7-block class="bg-blue-magenta no-margin-top padding-vertical">
+  <f7-block class="bg-blue-magenta no-margin-vertical padding-vertical elevation-9">
     <f7-row class="display-flex align-items-center">
       <f7-col width="33">
         <f7-link href="/">
