@@ -27,14 +27,16 @@
         <f7-col>
           <f7-card @click.native="go('report')" class="bg-purple">
             <f7-card-content class="">
-              <p class="padding-top text-color-white"><br>Reportes</p>
+              <base-icon nameIcon="bars" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+              <p class="text-color-white"><br>Reportes</p>
             </f7-card-content>
           </f7-card>
         </f7-col>
         <f7-col>
           <f7-card @click.native="go('ls_doc')" class="bg-blue">
             <f7-card-content class="">
-              <p class="padding-top text-color-white">Lista de comprobantes</p>
+              <base-icon nameIcon="file-list" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+              <p class="text-color-white">Lista de <br> comprobantes</p>
             </f7-card-content>
           </f7-card>
         </f7-col>
@@ -43,14 +45,16 @@
         <f7-col>
           <f7-card @click.native="go('cpe')" class="bg-dark-blue">
             <f7-card-content class="">
-              <p class="padding-top text-color-white"><br> Validar cpe</p>
+              <base-icon nameIcon="qr-code" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+              <p class="text-color-white"><br> Validar cpe</p>
             </f7-card-content>
           </f7-card>
         </f7-col>
         <f7-col>
           <f7-card @click.native="go('nw_doc')" class="bg-purple">
             <f7-card-content class="">
-              <p class="padding-top text-color-white">Factura electrónica</p>
+              <base-icon nameIcon="file-invoice" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+              <p class="text-color-white">Factura <br> electrónica</p>
             </f7-card-content>
           </f7-card>
         </f7-col>
@@ -59,14 +63,16 @@
         <f7-col>
           <f7-card @click.native="go('nw_docb')" class="bg-blue">
             <f7-card-content class="">
-              <p class="padding-top text-color-white">Boleta electrónica</p>
+              <base-icon nameIcon="file-invoice" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+              <p class="text-color-white">Boleta <br> electrónica</p>
             </f7-card-content>
           </f7-card>
         </f7-col>
         <f7-col>
           <f7-card @click.native="go('sale_note')" class="bg-dark-blue">
             <f7-card-content class="">
-              <p class="padding-top text-color-white"><br> Nota de venta</p>
+              <base-icon nameIcon="file-sale" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+              <p class="text-color-white"><br> Nota de venta</p>
             </f7-card-content>
           </f7-card>
         </f7-col>
@@ -75,14 +81,16 @@
         <f7-col>
           <f7-card @click.native="go('order_note')" class="bg-purple">
             <f7-card-content class="">
-              <p class="padding-top text-color-white"><br> Pedido</p>
+              <base-icon nameIcon="file" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+              <p class="text-color-white"><br> Pedido</p>
             </f7-card-content>
           </f7-card>
         </f7-col>
         <f7-col>
           <f7-card @click.native="go('purchase')" class="bg-blue">
             <f7-card-content class="">
-              <p class="padding-top text-color-white"><br> Compras</p>
+              <base-icon nameIcon="car-sale" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+              <p class="text-color-white"><br> Compras</p>
             </f7-card-content>
           </f7-card>
         </f7-col>
@@ -95,9 +103,10 @@
   import logo from "assets/images/tulogo.png";
   import icons from "assets/images/icons-01.svg";
   import HeaderLayout from "components/layout/Header";
+  import BaseIcon from 'components/layout/BaseIcon.vue';
 
   export default {
-    components: {HeaderLayout},
+    components: {HeaderLayout,BaseIcon},
     data: function() {
       // Must return an object
       return {
