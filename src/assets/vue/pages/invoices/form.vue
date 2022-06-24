@@ -704,36 +704,8 @@
                                 text: data.data.number,
                                 buttons: self.getOptionsButtons(), 
                                 onClick: function(dialog, index){
-
-                // Imprimir
-                if(index === 0) 
-                {
-                    self.toPrint(data)
-                }
-                // Descargar A4
-                else if (index === 1) 
-                {
-                    cordova.InAppBrowser.open(
-                        `${localStorage.api_url}/print/document/${data.data.external_id}/a4`,
-                        "_system",
-                        "location=yes"
-                    )
-                } 
-                // Descargar Ticket
-                else if (index === 2) 
-                {
-                    cordova.InAppBrowser.open(
-                        `${localStorage.api_url}/print/document/${data.data.external_id}/ticket`,
-                        "_system",
-                        "location=yes"
-                    )
-                }
-                // Continuar
-                else if (index === 3) 
-                {
-                    // self.$f7router.navigate("/documents/");
-                }
-            },
+                                    self.clickOptionsButtons(dialog, index, data)
+                                },
                                 verticalButtons: true,
                             }).open()
 
@@ -748,7 +720,7 @@
                         this.hideLoading()
                     })
             },
-            clickOptionsButtons(dialog, index){
+            clickOptionsButtons(dialog, index, data){
 
                 // Imprimir
                 if(index === 0) 

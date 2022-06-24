@@ -93,13 +93,13 @@
                                                 </f7-col>
 
                                                 <f7-col width="50">
-                                                    <f7-button @click="clickPreviewPdf(item.external_id, 'document')" color="red">
+                                                    <f7-button @click="clickPreviewPdf(item, 'document')" color="red">
                                                         <f7-icon style="font-size: 1.5em;" class="icon fas fa-search"></f7-icon>
                                                     </f7-button>
                                                 </f7-col>
 
                                                 <f7-col width="50">
-                                                    <f7-button @click="clickDownloadPdf(item.external_id, 'document')" color="red">
+                                                    <f7-button @click="clickDownloadPdf(item, 'document')" color="red">
                                                         <f7-icon style="font-size: 1.5em;" class="icon fas fa-download"></f7-icon>
                                                     </f7-button>
                                                 </f7-col>
@@ -167,6 +167,18 @@
                                                 </f7-col>
 
                                                 <f7-col width="50">
+                                                    <f7-button @click="clickPreviewPdf(item, 'document')" color="red">
+                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-search"></f7-icon>
+                                                    </f7-button>
+                                                </f7-col>
+
+                                                <f7-col width="50">
+                                                    <f7-button @click="clickDownloadPdf(item, 'document')" color="red">
+                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-download"></f7-icon>
+                                                    </f7-button>
+                                                </f7-col>
+
+                                                <f7-col width="50">
                                                     <f7-button @click="whatsap(item.customer_telephone, item.external_id)" color="red">
                                                         <f7-icon style="font-size: 1.5em;" class="icon fab fa-whatsapp"></f7-icon>
                                                     </f7-button>
@@ -226,6 +238,19 @@
                                                     <f7-badge :color="statusColor(item.state_type_description)" style="width: 100%">
                                                         {{ item.state_type_description }}
                                                     </f7-badge>
+                                                </f7-col>
+
+                                                
+                                                <f7-col width="50">
+                                                    <f7-button @click="clickPreviewPdf(item, 'sale_note')" color="red">
+                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-search"></f7-icon>
+                                                    </f7-button>
+                                                </f7-col>
+
+                                                <f7-col width="50">
+                                                    <f7-button @click="clickDownloadPdf(item, 'sale_note')" color="red">
+                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-download"></f7-icon>
+                                                    </f7-button>
                                                 </f7-col>
 
                                                 <f7-col width="50">
@@ -288,6 +313,18 @@
                                                     <f7-badge :color="statusColor(item.state_type_description)" style="width: 100%">
                                                         {{ item.state_type_description }}
                                                     </f7-badge>
+                                                </f7-col>
+
+                                                <f7-col width="50">
+                                                    <f7-button @click="clickPreviewPdf(item, 'order_note')" color="red">
+                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-search"></f7-icon>
+                                                    </f7-button>
+                                                </f7-col>
+
+                                                <f7-col width="50">
+                                                    <f7-button @click="clickDownloadPdf(item, 'order_note')" color="red">
+                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-download"></f7-icon>
+                                                    </f7-button>
                                                 </f7-col>
 
                                                 <f7-col width="50">
@@ -354,11 +391,18 @@
                                                         {{ item.state_type_description }}
                                                     </f7-badge>
                                                 </f7-col>
-                                                <!-- <f7-col width="33">
-                            <f7-button @click="download(item.external_id)" color="red">
-                              <f7-icon material="cloud_download"></f7-icon>
-                            </f7-button>
-                          </f7-col> -->
+                                                
+                                                <f7-col width="50">
+                                                    <f7-button @click="clickPreviewPdf(item, 'purchase')" color="red">
+                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-search"></f7-icon>
+                                                    </f7-button>
+                                                </f7-col>
+
+                                                <f7-col width="50">
+                                                    <f7-button @click="clickDownloadPdf(item, 'purchase')" color="red">
+                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-download"></f7-icon>
+                                                    </f7-button>
+                                                </f7-col>
 
                                                 <f7-col width="50">
                                                     <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_a4)" class="block" color="red">
@@ -418,7 +462,7 @@
                 </f7-block>
                 
                 <preview-pdf :showDialog.sync="showDialogPreviewPdf"
-                            :externalId="externalId"
+                            :record="record"
                             :documentType="documentType"></preview-pdf>
 
             </f7-page-content>
@@ -433,10 +477,11 @@
     import {auth} from "mixins_/auth";
     import PreviewPdf from 'components/document/PreviewPdf'
     import {general_functions} from "mixins_/general_functions"
+    import {download_file} from "mixins_/download_file"
 
     export default {
         name: "documents",
-        mixins: [auth, general_functions],
+        mixins: [auth, general_functions, download_file],
         components: {
             PreviewPdf
         },
@@ -455,9 +500,10 @@
                 source_purchases: [],
                 form_email: {},
                 count: 0,
-                externalId: null,
                 documentType: null,
                 showDialogPreviewPdf: false,
+                configuration: {},
+                record: {},
             };
         },
         computed: {
@@ -466,52 +512,30 @@
             }
         },
         created() {
-            this.initformEmail();
-            this.getDataPurchases();
-            this.getData();
-            this.getDataSaleNote();
-            this.getDataOrderNote();
+            this.loadConfiguration()
+            this.initformEmail()
+            this.getDataPurchases()
+            this.getData()
+            this.getDataSaleNote()
+            this.getDataOrderNote()
         },
-
         methods: {
-            clickPreviewPdf(externalId, documentType){
+            loadConfiguration(){
+                this.configuration = this.getInitialConfiguration()
+            },
+            clickPreviewPdf(record, documentType){
 
-                this.externalId = externalId
+                this.record = record
                 this.documentType = documentType
                 this.showDialogPreviewPdf = true
 
             },
-            async clickDownloadPdf(externalId, documentType){
+            async clickDownloadPdf(row, documentType){
 
-                const self = this
-                const url = `${this.getBaseUrl()}/print/${documentType}/${externalId}/ticket`
-
-                const fileTransfer = new FileTransfer();
-                const uri = encodeURI(url)
-                const fileURL = cordova.file.externalRootDirectory + 'Download/' + externalId + ".pdf";
-                this.showLoading()
-
-                await fileTransfer.download(uri, fileURL, function (entry) {
-                    cordova.plugins.fileOpener2.showOpenWithDialog(
-                        fileURL,
-                        'application/pdf',
-                        {
-                            error : function(e) {
-                                console.log('Error status: ' + e.status + ' - Error message: ' + e.message);
-                            },
-                            success : function () {
-                                console.log('file opened successfully');
-                            },
-                            position : [0, 0]
-                        }
-                    );
-                }
-                , function (error) {
-                        self.$f7.dialog.alert("Error al descargar "+JSON.stringify(error), "Mensaje");
-                        console.log('Error status: '+ JSON.stringify(error));
-                }, false, {});
-
-                this.hideLoading()
+                await this.showLoading()
+                const url =  this.getUrlDownload(row, documentType)
+                await this.downloadOpenFile(url, row.filename)
+                await this.hideLoading()
 
             },
             show(type) {

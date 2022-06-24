@@ -19,9 +19,9 @@
                                 scrolling="no" 
                                 width="100%" 
                                 height="800px"
+                                SameSite="None"
                                 >
                             </iframe>
-                            
                         </div>
                     </div>
                 </div>
@@ -36,13 +36,13 @@
     import {general_functions} from "mixins_/general_functions"
 
     export default {
-        props: ['showDialog', 'externalId', 'documentType'],
+        props: ['showDialog', 'record', 'documentType'],
         mixins: [general_functions],
         data: function () {
             return {
                 configuration: {},
                 url_preview: null,
-                gview: 'https://docs.google.com/gview?url='
+                gview: 'https://docs.google.com/gview?embedded=true&url='
             }
         },
         watch: {
@@ -58,16 +58,41 @@
             this.loadConfiguration()
         },
         methods: {
+            initUrl(){
+                this.url_preview = null
+            },
             loadConfiguration(){
                 this.configuration = this.getInitialConfiguration()
             },
-            setUrlPreview(){
+            async setUrlPreview(){
+
 
                 this.showLoading()
-                const print_format_pdf = (this.configuration.print_format_pdf) ? this.configuration.print_format_pdf : 'ticket'
-                
-                this.url_preview = `${this.gview}${this.getBaseUrl()}/print/${this.documentType}/${this.externalId}/${print_format_pdf}&embedded=true`
+                // this.url_preview = `${this.gview}https://demo.facturalo.pro/print/document/bf096fd0-c9be-4905-b654-9e30bbc27373/ticket&embedded=true`
+                this.url_preview = await this.getUrlPreview()
                 this.hideLoading()
+
+            },
+            getUrlPreview(){
+
+                let url = null
+
+                switch (this.documentType) {
+                    case 'document':
+                        url = `${this.gview}${this.getBaseUrl()}/print/${this.documentType}/${this.record.external_id}/${this.getPrintFormatPdf()}`
+                        break
+                
+                    case 'sale_note':
+                    case 'order_note':
+                        url = `${this.gview}${this.record.print_ticket}`
+                        break
+
+                    case 'purchase':
+                        url = `${this.gview}${this.record.print_a4}`
+                        break
+                }
+
+                return url
 
             },
             async open(){
@@ -75,6 +100,7 @@
             },
             close() {
                 this.$emit('update:showDialog', false)
+                this.initUrl()
             } 
         }
     }

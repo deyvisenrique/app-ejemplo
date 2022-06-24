@@ -16,6 +16,9 @@ import PanelRightPage from './assets/vue/pages/panels/right.vue';
 import Configuration from './assets/vue/pages/panels/configuration.vue';
 import AdvancedConfiguration from './assets/vue/pages/panels/advanced_configuration.vue';
 
+// import PreviewPdf2 from './assets/vue/components/document/PreviewPdf2';
+
+
 
 export default [
   {
@@ -70,5 +73,9 @@ export default [
     path: '/advanced-configuration/',
     component: AdvancedConfiguration
   },
+  // {
+  //   path: '/pdf2/',
+  //   component: PreviewPdf2
+  // },
   
 ];
