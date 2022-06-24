@@ -93,7 +93,7 @@
                                                 </f7-col>
 
                                                 <f7-col width="50">
-                                                    <f7-button @click="clickPreviewPdf(item.external_id, 'document')" color="red">
+                                                    <f7-button @click="clickPreviewPdf(item, 'document')" color="red">
                                                         <f7-icon style="font-size: 1.5em;" class="icon fas fa-search"></f7-icon>
                                                     </f7-button>
                                                 </f7-col>
@@ -167,7 +167,7 @@
                                                 </f7-col>
 
                                                 <f7-col width="50">
-                                                    <f7-button @click="clickPreviewPdf(item.external_id, 'document')" color="red">
+                                                    <f7-button @click="clickPreviewPdf(item, 'document')" color="red">
                                                         <f7-icon style="font-size: 1.5em;" class="icon fas fa-search"></f7-icon>
                                                     </f7-button>
                                                 </f7-col>
@@ -242,13 +242,13 @@
 
                                                 
                                                 <f7-col width="50">
-                                                    <f7-button @click="clickPreviewPdf(item.external_id, 'salenote')" color="red">
+                                                    <f7-button @click="clickPreviewPdf(item, 'sale_note')" color="red">
                                                         <f7-icon style="font-size: 1.5em;" class="icon fas fa-search"></f7-icon>
                                                     </f7-button>
                                                 </f7-col>
 
                                                 <f7-col width="50">
-                                                    <f7-button @click="clickDownloadPdf(item, 'salenote')" color="red">
+                                                    <f7-button @click="clickDownloadPdf(item, 'sale_note')" color="red">
                                                         <f7-icon style="font-size: 1.5em;" class="icon fas fa-download"></f7-icon>
                                                     </f7-button>
                                                 </f7-col>
@@ -316,6 +316,18 @@
                                                 </f7-col>
 
                                                 <f7-col width="50">
+                                                    <f7-button @click="clickPreviewPdf(item, 'order_note')" color="red">
+                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-search"></f7-icon>
+                                                    </f7-button>
+                                                </f7-col>
+
+                                                <f7-col width="50">
+                                                    <f7-button @click="clickDownloadPdf(item, 'order_note')" color="red">
+                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-download"></f7-icon>
+                                                    </f7-button>
+                                                </f7-col>
+
+                                                <f7-col width="50">
                                                     <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_a4)" color="red">
                                                         <f7-icon style="font-size: 1.5em;" class="icon fab fa-whatsapp"></f7-icon>
                                                     </f7-button>
@@ -379,11 +391,18 @@
                                                         {{ item.state_type_description }}
                                                     </f7-badge>
                                                 </f7-col>
-                                                <!-- <f7-col width="33">
-                            <f7-button @click="download(item.external_id)" color="red">
-                              <f7-icon material="cloud_download"></f7-icon>
-                            </f7-button>
-                          </f7-col> -->
+                                                
+                                                <f7-col width="50">
+                                                    <f7-button @click="clickPreviewPdf(item, 'purchase')" color="red">
+                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-search"></f7-icon>
+                                                    </f7-button>
+                                                </f7-col>
+
+                                                <f7-col width="50">
+                                                    <f7-button @click="clickDownloadPdf(item, 'purchase')" color="red">
+                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-download"></f7-icon>
+                                                    </f7-button>
+                                                </f7-col>
 
                                                 <f7-col width="50">
                                                     <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_a4)" class="block" color="red">
@@ -443,7 +462,7 @@
                 </f7-block>
                 
                 <preview-pdf :showDialog.sync="showDialogPreviewPdf"
-                            :externalId="externalId"
+                            :record="record"
                             :documentType="documentType"></preview-pdf>
 
             </f7-page-content>
@@ -481,10 +500,10 @@
                 source_purchases: [],
                 form_email: {},
                 count: 0,
-                externalId: null,
                 documentType: null,
                 showDialogPreviewPdf: false,
                 configuration: {},
+                record: {},
             };
         },
         computed: {
@@ -504,9 +523,9 @@
             loadConfiguration(){
                 this.configuration = this.getInitialConfiguration()
             },
-            clickPreviewPdf(externalId, documentType){
+            clickPreviewPdf(record, documentType){
 
-                this.externalId = externalId
+                this.record = record
                 this.documentType = documentType
                 this.showDialogPreviewPdf = true
 
@@ -514,7 +533,7 @@
             async clickDownloadPdf(row, documentType){
 
                 await this.showLoading()
-                const url =  this.getUrlDownload(row.external_id, documentType)
+                const url =  this.getUrlDownload(row, documentType)
                 await this.downloadOpenFile(url, row.filename)
                 await this.hideLoading()
 

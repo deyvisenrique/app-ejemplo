@@ -1,8 +1,24 @@
 export const download_file = {
     methods: { 
-        getUrlDownload(external_id, documentType){
+        getUrlDownload(record, documentType){
 
-            let url = `${this.getBaseUrl()}/print/${documentType}/${external_id}/${this.getPrintFormatPdf()}`
+            let url = null
+
+            switch (documentType)
+            {
+                case 'document':
+                    url = `${this.getBaseUrl()}/print/${documentType}/${record.external_id}/${this.getPrintFormatPdf()}`
+                    break
+            
+                case 'sale_note':
+                case 'order_note':
+                    url = record.print_ticket
+                    break
+
+                case 'purchase':
+                    url = record.print_a4
+                    break
+            }
 
             return url
 
