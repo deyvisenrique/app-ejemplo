@@ -1,21 +1,24 @@
 <template>
-  <f7-page class="page-red" color="white">
-    <f7-block>
-      <div class="left">
-        <a class="link back text-color-white">
-          <i class="icon icon-back"></i>
-          <span class="if-not-md">Back</span>
-        </a>
-      </div>
+  <f7-page class="" color="">
+    <header-layout></header-layout>
+    <f7-block class="bg-blue-magenta padding-vertical no-margin-vertical">
+      <f7-row class="display-flex align-items-center">
+        <f7-col width="10">
+          <a class="link back text-color-white">
+            <i class="fas fa-angle-left"></i>
+          </a>
+        </f7-col>
+        <f7-col width="80" class="text-color-white text-align-center">
+          Coloque el código Qr <br> dentro del área
+        </f7-col>
+        <f7-col width="10"></f7-col>
+      </f7-row>
     </f7-block>
-    <f7-block-title class="text-align-center text-color-white">
-      <p>Escanea Qr y Código de Barras.</p>
-    </f7-block-title>
 
     <f7-block>
       <f7-row>
         <f7-col>
-          <f7-button class="button-fill" @click="scan" color="blue">Escanear</f7-button>
+          <f7-button class="padding-horizontal" @click="scan" color="pink" large fill round>Escanear</f7-button>
         </f7-col>
       </f7-row>
     </f7-block>
@@ -59,9 +62,10 @@
 <script>
 
 import { auth } from "mixins_/auth";
+import HeaderLayout from "components/layout/Header";
 export default {
   name: 'Cpe',
-  components: {},
+  components: {HeaderLayout},
   mixins: [auth],
 
   data() {

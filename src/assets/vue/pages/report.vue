@@ -1,5 +1,5 @@
 <template>
-  <f7-page class="page-red" color="white">
+  <f7-page class="" color="white">
     <header-layout></header-layout>
 
     <f7-block class="bg-blue-magenta padding-vertical no-margin-vertical">
