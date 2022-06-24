@@ -59,6 +59,9 @@ export const general_functions = {
             }
 
         },
+        getPrintFormatPdf(){
+            return (this.configuration.print_format_pdf) ? this.configuration.print_format_pdf : 'ticket'
+        },
         getBaseUrl(){
             return this.getStorage('api_url')
         },

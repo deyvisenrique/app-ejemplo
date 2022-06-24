@@ -64,9 +64,8 @@
             setUrlPreview(){
 
                 this.showLoading()
-                const print_format_pdf = (this.configuration.print_format_pdf) ? this.configuration.print_format_pdf : 'ticket'
-                
-                this.url_preview = `${this.gview}${this.getBaseUrl()}/print/${this.documentType}/${this.externalId}/${print_format_pdf}&embedded=true`
+                // this.url_preview = `${this.gview}https://demo.facturalo.pro/print/document/bf096fd0-c9be-4905-b654-9e30bbc27373/ticket&embedded=true`
+                this.url_preview = `${this.gview}${this.getBaseUrl()}/print/${this.documentType}/${this.externalId}/${this.getPrintFormatPdf()}&embedded=true`
                 this.hideLoading()
 
             },
