@@ -332,6 +332,7 @@
     import CustomerForm from "components/document/CustomerForm"
     import {auth } from "mixins_/auth"
     import {general_functions} from "mixins_/general_functions"
+    import {findGeneralDefaultSerie} from "js_/helpers/functions"
 
     export default {
         name: "FormDocument",
@@ -358,6 +359,7 @@
                 cash_payment_method_types: [],
                 credit_payment_method_types: [],
                 configuration: {},
+                default_customer: null,
             };
         },
         computed: {
@@ -375,11 +377,51 @@
             //this.getTables();
             await this.selectDocumentType()
             await this.getSeries()
-            await this.getPaymentMethodType()
+            await this.getPaymentMethodType() 
 
-            console.log(cordova.plugins.printer)
         },
         methods: {
+            setDefaultCustomer(){
+
+                if(!this.default_customer)
+                {
+                    this.showLoading()
+                    this.findGeneralDefaultCustomer()
+                        .then((response)=>{
+    
+                            if(response.data.success)
+                            {
+                                if(this.allowSetCustomer(response.data.data))
+                                {
+                                    this.default_customer = response.data.data
+                                    this.addCustomer(this.default_customer)
+                                }
+                            }
+    
+                            this.hideLoading()
+    
+                        })
+                        .catch((error)=>{
+                            console.log(error)
+                        })
+                }
+                else
+                {
+                    this.addCustomer(this.default_customer)
+                }
+
+            },
+            allowSetCustomer(customer){
+
+                let allow = true
+
+                if(this.form.codigo_tipo_documento == '01' && customer.identity_document_type_id != '6')
+                {
+                    allow = false
+                }
+
+                return allow
+            },
             loadConfiguration(){
                 this.configuration = this.getInitialConfiguration()
             },
@@ -444,7 +486,18 @@
                 this.credit_payment_method_types = this.filterPaymentMethodTypes(true)
             },
             initSeries() {
-                this.form.serie_documento = (this.series.length > 0) ? this.series[0].number : null
+
+                const default_series = findGeneralDefaultSerie(this.series, this.form.codigo_tipo_documento)
+
+                if(default_series)
+                {
+                    this.form.serie_documento = default_series.number
+                }
+                else
+                {
+                    this.form.serie_documento = (this.series.length > 0) ? this.series[0].number : null
+                }
+
             },
             deleteItem(id, index) {
                 this.form.items.splice(index, 1);
@@ -880,6 +933,8 @@
                 this.initFormPayment()
                 this.initFormFee()
                 this.setPaymentDestinations()
+
+                this.setDefaultCustomer()
 
             },
             initFormPayment(){

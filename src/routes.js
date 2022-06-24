@@ -6,6 +6,7 @@ import FormOrderNote from './assets/vue/pages/order-notes/form.vue';
 import FormPurchase from './assets/vue/pages/purchases/form.vue';
 
 import IndexItems from './assets/vue/pages/items/index.vue';
+import IndexCustomers from './assets/vue/pages/customers/index.vue';
 
 import Validate from './assets/vue/pages/validate.vue';
 import Report from './assets/vue/pages/report.vue';
@@ -72,6 +73,10 @@ export default [
   {
     path: '/advanced-configuration/',
     component: AdvancedConfiguration
+  },
+  {
+    path: '/customers/',
+    component: IndexCustomers
   },
   // {
   //   path: '/pdf2/',

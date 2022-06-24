@@ -59,12 +59,19 @@ export const general_functions = {
             }
 
         },
-        getPrintFormatPdf(){
+        getPrintFormatPdf()
+        {
             return (this.configuration.print_format_pdf) ? this.configuration.print_format_pdf : 'ticket'
         },
-        getBaseUrl(){
+        getBaseUrl()
+        {
             return this.getStorage('api_url')
         },
+        async findGeneralDefaultCustomer()
+        {
+            return await this.$http.get(`${this.returnBaseUrl()}/persons/default-customer`, this.getHeaderConfig())
+        }
+
 
     }
 }
