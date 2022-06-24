@@ -25,19 +25,24 @@
                         </label>
                     </template>
                 </f7-list-item>
+                <f7-list-item smart-select :smart-select-params="{openIn: 'popover'}">
+                    <template #title>
+                        Formato PDF (CPE)
+                        <span class="badge" v-if="form.print_format_pdf == 'ticket'">80mm</span>
+                        <span class="badge" v-if="form.print_format_pdf == 'ticket_58'">58mm</span>
+                        <span class="badge" v-if="form.print_format_pdf == 'ticket_50'">50mm</span>
+                        <span class="badge" v-if="form.print_format_pdf == 'a4'">A4</span>
+                    </template>
+                    <select v-model="form.print_format_pdf" @change="submit" class="full-width bg-color-blue">
+                        <option value="ticket">Ticket 80mm</option>
+                        <option value="ticket_58">Ticket 58mm</option>
+                        <option value="ticket_50">Ticket 50mm</option>
+                        <option value="a4">A4</option>
+                    </select>
+                </f7-list-item>
             </f7-list>
         </f7-block>
         <div class="configuration-footer">
-            <f7-block>
-                <!-- <f7-button class="trasnparent" color="white" @click="submit">
-                    <f7-icon material="save" size="20"></f7-icon>
-                    Guardar
-                </f7-button> -->
-                <f7-button class="trasnparent panel-previous" color="white" @click="back">
-                    <f7-icon material="keyboard_arrow_left" size="20"></f7-icon>
-                    Volver
-                </f7-button>
-            </f7-block>
         </div>
     </f7-page>
 </template>
@@ -72,6 +77,7 @@
             initForm() {
                 this.form = {
                     show_image_item: false,
+                    print_format_pdf: 'ticket',
                 }
             },
             submit() {

@@ -15,7 +15,7 @@
                     <i class="icon material-icons if-md">info_outline</i>
                 </a>
             </f7-col>
-            <f7-col width="10">
+            <!-- <f7-col width="10">
                 <a href="#" class="link" @click="sheetConfirm = !sheetConfirm">
                     <f7-icon color="white" material="shopping_cart">
                         <f7-badge color="blue">
@@ -23,7 +23,7 @@
                         </f7-badge>
                     </f7-icon>
                 </a>
-            </f7-col>
+            </f7-col> -->
         </f7-row>
     </f7-block>
 
@@ -33,7 +33,7 @@
                 <f7-col width="70">
                     <div class="searchbar searchbar-inline" style="margin:4%">
                         <div class="searchbar-input-wrap">
-                            <input type="search" placeholder="Buscar" style="font-size:12px" v-model="search_item" />
+                            <input type="search" placeholder="Buscar" style="font-size:12px" v-model="search_item" @input="inputSearchItem"/>
                             <i class="searchbar-icon"></i>
                             <span class="input-clear-button"></span>
                         </div>
@@ -49,7 +49,28 @@
                     <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
                 </f7-col>
             </f7-row>
+ 
+            <f7-row class="padding-horizontal">
+                <f7-col >
+                    <f7-list accordion-list>
+                        <f7-list-item accordion-item title="Filtrar por categoría">
+                            <f7-accordion-content>
+                                <f7-block>
 
+                                    <div class="c-horizontal-scroll c-h-50 mp-div-category">
+                                        <template v-for="(category, index) in categories">
+                                            <span class="padding c-span-card" :key="index" @click="clickSearchByCategory(category.id)"><b>{{ getCategoryName(category) }}</b></span>
+                                        </template>
+                                    </div>
+
+                                </f7-block>
+
+                            </f7-accordion-content>
+                        </f7-list-item>
+                    </f7-list>
+                </f7-col>
+            </f7-row>
+ 
             <div class="list inset ">
                 <p v-if="items_car.length == 0">
                     No tienes productos agregados
@@ -88,7 +109,7 @@
                                     <div class="block text-align-center">
                                         <div class="row">
                                             <div class="col">
-                                                <div class="stepper stepper-raised stepper-init stepper-small bg-color-white full-width">
+                                                <div class="stepper stepper-raised stepper-init stepper-small bg-color-white full-max-width">
                                                     <div class="stepper-button-minus" @click="calculate(-1, index)"></div>
                                                     <div class="stepper-input-wrap">
                                                         <input type="number" v-model="item.quantity" min="0" step="1" />
@@ -160,6 +181,22 @@
                                 </div>
                             </div>
                         </li>
+                        <li class="item-content item-input">
+                            <f7-row class="full-width-95">
+                                <f7-col width="90">
+                                    <div class="item-inner" style="width:100% !important">
+                                        <div class="item-title item-label">Código de barras</div>
+                                        <div class="item-input-wrap">
+                                            <input v-model="form.barcode" type="text"/>
+                                            <span class="input-clear-button"></span>
+                                        </div>
+                                    </div>
+                                </f7-col>
+                                <f7-col width="10" class="text-align-center padding-top">
+                                    <f7-button @click="clickGetBarcode" color="blue" fill small open-panel="right" icon="fas fa-camera"></f7-button>
+                                </f7-col>
+                            </f7-row>
+                        </li>
 
                         <li class="item-content item-input">
                             <div class="item-inner">
@@ -193,6 +230,19 @@
                             </div>
                         </li>
 
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">
+                                    Categoría
+                                </div>
+                                <div class="item-input-wrap">
+                                    <select v-model="form.category_id">
+                                        <option v-for="(option, index) in categories" :value="option.id" :key="index">{{ option.name }}</option>
+                                    </select>
+                                    <button class="input-clear-button" @click.prevent="clearCategories"></button>
+                                </div>
+                            </div>
+                        </li>
 
                         <li class="item-content item-input">
                             <div class="item-inner">
@@ -260,6 +310,15 @@
             </f7-block>
         </f7-page-content>
     </f7-sheet>
+
+    <f7-fab position="right-bottom" color="red" v-if="countCar > 0" @click="send">
+        <f7-icon ios="f7:plus" aurora="f7:plus" md="material:shopping_cart" >
+            <f7-badge color="blue">
+                {{ countCar }}
+            </f7-badge>
+        </f7-icon>
+    </f7-fab>
+
 </f7-page>
 </template>
 
@@ -276,11 +335,10 @@
     import _ from "lodash";
     import {calculateRowItem} from "js_/helpers/functions";
     import {upload_image} from "mixins_/upload_image"
-    import {general_functions} from "mixins_/general_functions"
+    import {general_functions, scanner} from "mixins_/general_functions"
 
     export default {
-        //props: ["search_item"],
-        mixins: [auth, upload_image, general_functions],
+        mixins: [auth, upload_image, general_functions, scanner],
         name: "ItemsForm",
         components: {},
         props: ["showDialog"],
@@ -295,8 +353,10 @@
                 addForm: false,
                 items: [],
                 affectation_igv_types: [],
+                categories: [],
                 form: {},
                 configuration: {},
+                search_category_id: null,
             };
         },
         computed: {
@@ -325,41 +385,60 @@
             this.initForm();
             this.getTables();
         },
-        watch: {
-            search_item: function (val) {
-                if (val.length > 1) {
-                    this.searchItems();
-                } else if (val.length == 0) {
-                    this.initItems();
-                }
-            }
-            /*filteCart_b: function(val) {
-            if (val) {
-                this.items_car = _.filter(this.items_car_base, function(o) {
-                return o.quantity > 0;
-                });
-            } else {
-                this.items_car = this.items_car_base;
-            }
-            }*/
-        },
-
         methods: {
+            getCategoryName(category){
+                return category.name.toUpperCase()
+            },
+            clearCategories(){
+                this.form.category_id = null
+            },
+            clickSearchByCategory(category_id){
+                console.log(category_id)
+                this.search_category_id = category_id
+                this.searchItems()
+            },
+            clickGetBarcode(){
+                
+                const context = this
+                cordova.plugins.barcodeScanner.scan( 
+                    (result) => { 
+                        if(result.text) this.form.barcode = result.text
+                    }, 
+                    (error) => context.showAlert(`Error al escanear: ${error}`), 
+                    context.scanner_configuration
+                )
+
+            },
+            inputSearchItem(){
+
+                if (this.search_item.length > 1) 
+                {
+                    this.searchItems()
+                } 
+                else if (this.search_item.length == 0) 
+                {
+                    this.initItems()
+                }
+
+            },
             clickSearchBarcode(){
                 
-                cordova.plugins.barcodeScanner.scan(
-                    function(result) {
-                        console.log(result)
-                        if(result.text) {
+                const context = this
 
-                        this.showAlert(result.text)
-
+                cordova.plugins.barcodeScanner.scan( 
+                    (result) => { 
+                        if(result.text)
+                        {
+                            this.search_item = result.text
+                            this.searchItems(1)
                         }
-                    },
-                    function(error) {
-
-                    }
+                    }, 
+                    (error) => { 
+                        context.showAlert(`Error al escanear: ${error}`)
+                    }, 
+                    context.scanner_configuration
                 )
+
             },
             loadConfiguration(){
                 this.configuration = this.getInitialConfiguration()
@@ -415,6 +494,7 @@
                     lots: [],
                     image: null,
                     temp_path: null,
+                    barcode: null,
                 };
 
                 this.cleanInputImage()
@@ -523,7 +603,6 @@
                     has_igv: null
                 };
             },
-
             send() {
                 const self = this;
                 self.sheetConfirm = false;
@@ -598,6 +677,8 @@
                         let source = response.data.data;
                         self.items_car_base = source.items;
                         self.affectation_igv_types = source.affectation_types;
+                        self.categories = source.categories;
+                        
                         self.initItems();
                     })
                     .catch(err => {})
@@ -606,40 +687,52 @@
                     });
             },
 
-            async searchItems() {
-                if (this.search_item.length > 1) {
+            async searchItems(search_by_barcode = 0) {
+
+                if (this.search_item.length > 1 || this.search_category_id) 
+                {
                     const self = this;
-                    self.$f7.preloader.show();
+                    self.$f7.preloader.show()
 
-                    let parameters = `input=${this.search_item}`;
+                    let parameters = `input=${this.search_item}&search_by_barcode=${search_by_barcode}`
+                    if(this.search_category_id) parameters += `&category_id=${this.search_category_id}`
 
-                    await this.$http
-                        .get(
-                            `${this.returnBaseUrl()}/document/search-items?${parameters}`,
-                            this.getHeaderConfig()
-                        )
-                        .then(response => {
-                            this.items_car = response.data.data.items.map(x => {
-                                return {
-                                    full_description: x.full_description,
-                                    description: x.description,
-                                    id: x.id,
-                                    quantity: 0,
-                                    sale_unit_price: x.sale_unit_price,
-                                    item: x
-                                };
-                            });
-                        })
-                        .catch(err => {
-                            alert("Error");
-                        })
-                        .then(() => {
-                            self.$f7.preloader.hide();
-                        });
-                } else {
-                    // this.initItems()
+                    await this.$http.get(`${this.returnBaseUrl()}/document/search-items?${parameters}`, this.getHeaderConfig())
+                                .then(response => {
+                                    this.items_car = this.getItemsCar(response.data.data.items)
+                                    this.setItemSearchBarcode(search_by_barcode)
+                                    this.search_category_id = null
+                                })
+                                .catch(err => {
+                                    alert("Error");
+                                })
+                                .then(() => {
+                                    self.$f7.preloader.hide();
+                                })
                 }
-            }
+            },
+            setItemSearchBarcode(search_by_barcode){
+
+                if(this.items_car.length == 1 && search_by_barcode)
+                {
+                    this.calculate(1, 0) 
+                }
+
+            },
+            getItemsCar(items){
+
+                return items.map(x => {
+                    return {
+                        full_description: x.full_description,
+                        description: x.description,
+                        id: x.id,
+                        quantity: 0,
+                        sale_unit_price: x.sale_unit_price,
+                        item: x
+                    }
+                })
+
+            },
         }
     };
 </script>

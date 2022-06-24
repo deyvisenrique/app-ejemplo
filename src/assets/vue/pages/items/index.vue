@@ -42,6 +42,7 @@
             </f7-block>
 
             <f7-block>
+
                 <div>
                     <div class="row" v-if="records.length > 0">
 
@@ -104,7 +105,7 @@
 
     import _ from "lodash"
     import { auth } from "mixins_/auth"
-    import {general_functions} from "mixins_/general_functions"
+    import {general_functions, scanner} from "mixins_/general_functions"
     import {deletable} from "mixins_/deletable"
     import queryString from "query-string"
     import ItemForm from './partials/form.vue'
@@ -112,7 +113,7 @@
     export default {
         name: "IndexItems",
         components: { ItemForm },
-        mixins: [auth, general_functions, deletable],
+        mixins: [auth, general_functions, deletable, scanner],
         data: function () {
             return {
                 resource: 'items',
@@ -145,22 +146,25 @@
             await this.events()
         },
         methods: {
-            
             clickSearchBarcode(){
-                
-                cordova.plugins.barcodeScanner.scan(
-                    function(result) {
-                        console.log(result)
-                        if(result.text) {
 
-                        this.showAlert(result.text)
-
+                const context = this 
+                cordova.plugins.barcodeScanner.scan( 
+                    (result) => { 
+                        if(result.text)
+                        {
+                            context.form.input = result.text
+                            context.form.search_by_barcode = 1
+                            context.initData()
+                            context.form.search_by_barcode = 0
                         }
-                    },
-                    function(error) {
-
-                    }
+                    }, 
+                    (error) => { 
+                        context.showAlert(`Error al escanear: ${error}`)
+                    }, 
+                    context.scanner_configuration
                 )
+
             },
             loadConfiguration(){
                 this.configuration = this.getInitialConfiguration()
@@ -213,7 +217,8 @@
             },
             initForm(){
                 this.form = {
-                    input : null
+                    input : null,
+                    search_by_barcode : 0,
                 }
             },
             async pullToRefresh(e, done){

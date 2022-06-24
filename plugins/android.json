@@ -10,13 +10,14 @@
     "cordova-plugin-android-permissions": {
       "PACKAGE_NAME": "com.example.facturalo"
     },
-    "cordova-plugin-barcodescanner": {
-      "PACKAGE_NAME": "com.example.facturalo"
-    },
     "cordova-plugin-downloadmanager": {
       "PACKAGE_NAME": "com.example.facturalo"
     },
     "cordova-plugin-file-downloader": {
+      "PACKAGE_NAME": "com.example.facturalo"
+    },
+    "cordova-plugin-file-opener2": {
+      "ANDROID_SUPPORT_V4_VERSION": "27.+",
       "PACKAGE_NAME": "com.example.facturalo"
     },
     "cordova-plugin-file-transfer": {
@@ -25,7 +26,15 @@
     "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "com.example.facturalo"
     },
+    "cordova-plugin-printer": {
+      "ANDROID_SUPPORT_V4_VERSION": "28.+",
+      "PACKAGE_NAME": "com.example.facturalo"
+    },
     "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.example.facturalo"
+    },
+    "phonegap-plugin-barcodescanner": {
+      "ANDROID_SUPPORT_V4_VERSION": "27.+",
       "PACKAGE_NAME": "com.example.facturalo"
     }
   },

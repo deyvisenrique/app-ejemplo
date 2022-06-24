@@ -55,9 +55,31 @@ export const general_functions = {
 
             return {
                 show_image_item: true,
+                print_format_pdf: 'ticket',
             }
 
-        }
+        },
+        getBaseUrl(){
+            return this.getStorage('api_url')
+        },
 
+    }
+}
+
+ 
+export const scanner = {
+    data: function () {
+        return {
+            scanner_configuration: {  
+                showTorchButton: true, 
+                torchOn: false, 
+                saveHistory: true, 
+                prompt: 'Coloque un código de barras/qr dentro del área de escaneo', 
+                disableAnimations: false, 
+                disableSuccessBeep: false 
+            } 
+        }
+    },
+    methods: { 
     }
 }

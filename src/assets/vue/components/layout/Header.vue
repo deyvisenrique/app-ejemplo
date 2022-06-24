@@ -24,6 +24,9 @@
       };
     },
     created() {
+      if(localStorage.url_logo){
+        this.fp_logo_white = localStorage.url_logo
+      }
     },
     mounted() {
     },
