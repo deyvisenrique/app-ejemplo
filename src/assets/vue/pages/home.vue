@@ -136,6 +136,16 @@
                     </f7-card-content>
                 </f7-card>
             </f7-col>
+            <f7-col width="100">
+                <f7-card @click.native="go('cash')" class="">
+                    <f7-card-content>
+                        <p class="no-padding-vertical">
+                            <f7-icon size="20px" color="blue" material="monetization_on" class=" fa-fw padding-left padding-right"></f7-icon>
+                            CAJA
+                        </p>
+                    </f7-card-content>
+                </f7-card>
+            </f7-col>
         </f7-row>
     </f7-block>
 </f7-page>
@@ -220,6 +230,9 @@ export default {
                     break
                 case "customers":
                     self.$f7router.navigate("/customers/")
+                    break
+                case "cash":
+                    self.$f7router.navigate("/cash/")
                     break
             }
         },

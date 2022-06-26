@@ -208,3 +208,16 @@ a {
 .default-h80-modal{
   height: 80%;
 }
+
+.d-block{
+  display: block;
+}
+
+.c-padding-2{
+  padding: 2px;
+}
+
+
+.default-h40-modal{
+  height:40%;
+}
