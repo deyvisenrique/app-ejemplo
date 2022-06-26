@@ -90,13 +90,37 @@
           <f7-card @click.native="go('purchase')" class="bg-blue">
             <f7-card-content class="">
               <base-icon nameIcon="car-sale" widthIcon="35" clases="text-align-right padding-top"></base-icon>
-              <p class="text-color-white"><br> Compras</p>
+              <p class="text-color-white">
+                <br> Compras
+              </p>
             </f7-card-content>
           </f7-card>
         </f7-col>
       </f7-row>
+      <f7-row>
+        <f7-col>
+          <f7-card @click.native="go('customers')" class="bg-dark-blue">
+              <f7-card-content>
+                <base-icon nameIcon="car-sale" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+                  <p class="text-color-white">
+                    <br>Clientes
+                  </p>
+              </f7-card-content>
+          </f7-card>
+        </f7-col>
+        <f7-col>
+          <f7-card @click.native="go('items')" class="bg-purple">
+              <f7-card-content>
+                <base-icon nameIcon="car-sale" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+                  <p class="text-color-white">
+                    <br>Productos
+                  </p>
+              </f7-card-content>
+          </f7-card>
+        </f7-col>
+      </f7-row>
     </f7-block>
-  </f7-page>
+</f7-page>
 </template>
 
 <script>
@@ -121,72 +145,75 @@
       };
     },
     created() {
-      // this.verifytoken();
+        // this.verifytoken();
 
-      if(localStorage.url_logo){
-        this.fp_logo_white = localStorage.url_logo
-        this.width_img = 100
-        this.height_img = 100
-      }
+        if (localStorage.url_logo) {
+            this.fp_logo_white = localStorage.url_logo
+            this.width_img = 100
+            this.height_img = 100
+        }
 
-      var self = this;
-      window.addEventListener("online", function() {
-        self.isOffline = false;
-      });
-      window.addEventListener("offline", function() {
-        self.isOffline = true;
-      });
+        var self = this;
+        window.addEventListener("online", function () {
+            self.isOffline = false;
+        });
+        window.addEventListener("offline", function () {
+            self.isOffline = true;
+        });
     },
     mounted() {
-      setTimeout(this.verifytoken, 1000); // 2500);
+        setTimeout(this.verifytoken, 1000); // 2500);
     },
     methods: {
-      go(name) {
-        const self = this;
+        go(name) {
+            const self = this;
 
-        if (self.isOffline) {
-          return false;
-        }
+            if (self.isOffline) {
+                return false;
+            }
 
-        switch (name) {
-          case "ls_doc":
-            self.$f7router.navigate("/documents/");
-            break;
-          case "nw_doc":
-            self.$f7router.navigate("/form-document/01");
-            break;
-          case "nw_docb":
-            self.$f7router.navigate("/form-document/03");
-            break;
-          case "report":
-            self.$f7router.navigate("/report/");
-            break;
-          case "cpe":
-            self.$f7router.navigate("/cpe/");
-            break;
-          case "sale_note":
-            self.$f7router.navigate("/form-sale-note/");
-            break;
-          case "order_note":
-            self.$f7router.navigate("/form-order-note/");
-            break;
-          case "purchase":
-            self.$f7router.navigate("/form-purchase/");
-            break;
-          case "items":
-            self.$f7router.navigate("/items/");
-            break;
+            switch (name) {
+                case "ls_doc":
+                    self.$f7router.navigate("/documents/");
+                    break;
+                case "nw_doc":
+                    self.$f7router.navigate("/form-document/01");
+                    break;
+                case "nw_docb":
+                    self.$f7router.navigate("/form-document/03");
+                    break;
+                case "report":
+                    self.$f7router.navigate("/report/");
+                    break;
+                case "cpe":
+                    self.$f7router.navigate("/cpe/");
+                    break;
+                case "sale_note":
+                    self.$f7router.navigate("/form-sale-note/");
+                    break;
+                case "order_note":
+                    self.$f7router.navigate("/form-order-note/");
+                    break;
+                case "purchase":
+                    self.$f7router.navigate("/form-purchase/");
+                    break;
+                case "items":
+                    self.$f7router.navigate("/items/")
+                    break
+                case "customers":
+                    self.$f7router.navigate("/customers/")
+                    break
+            }
+        },
+        verifytoken() {
+            const self = this;
+            if (!localStorage.api_token) {
+                this.splash = false;
+                self.$f7router.navigate("/login/");
+            } else {
+                this.splash = false;
+            }
         }
-      },
-      verifytoken() {
-        const self = this;
-        if (!localStorage.api_token) {
-          this.splash = false;
-          self.$f7router.navigate("/login/");
-        } else {
-          this.splash = false;
-        }
-      }
     }
-  };
+};
 </script>

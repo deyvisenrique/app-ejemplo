@@ -222,4 +222,14 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
     return row
 }
 
-export {calculateRowItem}
+
+function findGeneralDefaultSerie(series, document_type_id)
+{
+    return _.find(series, {document_type_id : document_type_id, is_default : true }) 
+}
+
+
+export {
+    calculateRowItem,
+    findGeneralDefaultSerie,
+}

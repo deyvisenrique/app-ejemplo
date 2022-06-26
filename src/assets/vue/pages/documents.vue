@@ -1,130 +1,142 @@
 <template>
-<f7-page class="page-red" color="white">
-
-    <f7-toolbar tabbar :position="isBottom ? 'bottom' : 'top'" bg-color="white" color="red" class="no-shadow">
-        <f7-link href="/" icon-md="material:home">
-            Inicio
-        </f7-link>
-        <f7-link href="/form-document/01" icon-md="material:insert_drive_file" class="text-align-center">
-            Crear <br> comprobantes
-        </f7-link>
-        <f7-link tab-link-active tab-link="#" icon-md="material:view_stream" class="text-align-center">
-            Listado de <br> comprobantes
-        </f7-link>
-        <f7-link href="/report/" icon-md="material:equalizer">
-            Reportes
-        </f7-link>
-    </f7-toolbar>
-
-    <f7-block>
-        <f7-row>
-            <f7-col width="90">
-                <a href="/" class="link text-color-white">
-                    <i class="icon icon-back"></i>
-                    <span class="">Listado de comprobantes</span>
-                </a>
-            </f7-col>
-            <f7-col width="10">
-                <f7-link class="panel-open text-color-white text-align-right" open-panel="right" icon="fas fa-bars"></f7-link>
-            </f7-col>
-        </f7-row>
+<f7-page>
+    <header-layout></header-layout>
+    <f7-block class="bg-blue-magenta padding-vertical no-margin-vertical">
+      <f7-row>
+        <f7-col width="10">
+          <a class="link back text-color-white">
+            <i class="fas fa-angle-left"></i>
+          </a>
+        </f7-col>
+        <f7-col width="80" class="text-color-white text-align-center">
+          Listado de comprobantes
+        </f7-col>
+        <f7-col width="10"></f7-col>
+      </f7-row>
     </f7-block>
 
-    <f7-card class="card-100 padding-top padding-horizontal">
+    <f7-block class="display-flex justify-content-space-around no-margin-horizontal no-padding-horizontal">
+        <f7-button
+            :outline="!activeClass.invoices"
+            small
+            :color="activeClass.invoices ? 'pink text-color-white' : 'gray'"
+            href="#tab-invoices"
+            class="tab-link"
+            @click="show('invoices')"
+            style="text-transform:capitalize; font-weight: 400;">
+            Factura
+        </f7-button>
+        <f7-button
+            :outline="!activeClass.tickets"
+            small
+            :color="activeClass.tickets ? 'pink text-color-white' : 'gray'"
+            href="#tab-tickets"
+            class="tab-link"
+            @click="show('tickets')"
+            style="text-transform:capitalize; font-weight: 400;">
+            Boleta
+        </f7-button>
+        <f7-button
+            :outline="!activeClass.notes"
+            small
+            :color="activeClass.notes ? 'pink text-color-white' : 'gray'"
+            href="#tab-notes"
+            class="tab-link"
+            @click="show('notes')"
+            style="text-transform:capitalize; font-weight: 400;">
+            Nota
+        </f7-button>
+        <f7-button
+            :outline="!activeClass.orderNotes"
+            small
+            :color="activeClass.orderNotes ? 'pink text-color-white' : 'gray'"
+            href="#tab-order-notes"
+            class="tab-link"
+            @click="show('order_notes')"
+            style="text-transform:capitalize; font-weight: 400;">
+            Pedidos
+        </f7-button>
+        <f7-button
+            :outline="!activeClass.purchases"
+            small
+            :color="activeClass.purchases ? 'pink text-color-white' : 'gray'"
+            href="#tab-purchases"
+            class="tab-link"
+            @click="show('purchases')"
+            style="text-transform:capitalize; font-weight: 400;">
+            Compras
+        </f7-button>
+    </f7-block>
 
-        <div class="toolbar tabbar tabbar-labels no-shadow bg-color-white color-blue" style="z-index: auto;">
-            <div class="toolbar-inner toolbar-docs">
-                <a href="#tab-invoices" @click="show('invoices')" class="tab-link bg-color-white tab-link-active">
-                    <f7-icon class="fas fa-file" size="12"></f7-icon>
-                    Factura
-                </a>
-                <a href="#tab-tickets" @click="show('tickets')" class="tab-link bg-color-white">
-                    <f7-icon class="fas fa-file text-color-white" size="12"></f7-icon>
-                    Boleta
-                </a>
-                <a href="#tab-notes" @click="show('notes')" class="tab-link bg-color-white">
-                    <f7-icon class="fas fa-file" size="12"></f7-icon>
-                    Nota
-                </a>
-                <a href="#tab-order-notes" @click="show('order_notes')" class="tab-link bg-color-white">
-                    <f7-icon class="fas fa-file" size="12"></f7-icon>
-                    Pedidos
-                </a>
-                <a href="#tab-purchases" @click="show('purchases')" class="tab-link bg-color-white">
-                    <f7-icon class="fas fa-file" size="12"></f7-icon>
-                    Compras
-                </a>
-            </div>
-        </div>
+    <f7-block class="no-padding">
         <div class="tabs-animated-wrap">
             <div class="tabs">
                 <div id="tab-invoices" class="page-content tab tab-active">
-                    <f7-searchbar placeholder="Buscar" :clear-button="true" search-container=".search-list" search-in=".item-title, .item-after"></f7-searchbar>
+                    <f7-searchbar placeholder="Buscar" :clear-button="true" search-container=".search-list" search-in=".invoice-customer, .invoice-number, .invoice-customer-number"></f7-searchbar>
                     <f7-list class="searchbar-not-found">
                         <f7-list-item title="No se encontraron resultados" class="padding-left margin-left"></f7-list-item>
                     </f7-list>
-                    <f7-list media-list class="search-list margin-horizontal">
+                    <f7-list media-list class="search-list">
                         <f7-list-item v-for="item in source_invoice" :key="item.id" class="list-documents margin-bottom">
                             <span slot="subtitle">
-                                <f7-block class="no-padding">
+                                <f7-block class="no-padding no-margin-vertical">
                                     <f7-row>
                                         <f7-col width="60" class="text-align-left">
-                                            <div style="word-break: break-all !important; white-space: pre-line !important; margin-top: -25px;">
+                                            <div style="word-break: break-all !important; white-space: pre-line !important; margin-top: -25px; font-size: 16px; font-weight: bold" class="invoice-customer">
                                                 {{ item.customer_name }}
                                             </div>
-                                            RUC: {{ item.customer_number }}
-                                            <p>
-                                                <f7-icon icon="fas fa-fw fa-calendar-alt" color="red"></f7-icon>{{ item.created_at }}
-                                            </p>
-                                            <span style="font-size: 16px; font-weight: bold">
-                                                Total:
-                                                {{ item.total }}
+                                            <span class="text-color-gray">
+                                                RUC: <span class="invoice-customer-number">{{ item.customer_number }}</span><br>
+                                                {{ item.created_at }}
                                             </span>
                                         </f7-col>
                                         <f7-col width="40" class="text-align-right">
                                             <f7-row>
                                                 <f7-col width="100">
-                                                    {{item.number}}
+                                                    <span class="invoice-number">{{item.number}}</span>
                                                 </f7-col>
                                                 <f7-col width="100">
                                                     <f7-badge :color="statusColor(item.state_type_description)" style="width: 100%">
                                                         {{ item.state_type_description }}
                                                     </f7-badge>
-                                                </f7-col>
-
-                                                <f7-col width="50">
-                                                    <f7-button @click="clickPreviewPdf(item, 'document')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-search"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-
-                                                <f7-col width="50">
-                                                    <f7-button @click="clickDownloadPdf(item, 'document')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-download"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-
-                                                <f7-col width="50">
-                                                    <f7-button @click="whatsap(item.customer_telephone, item.external_id)" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fab fa-whatsapp"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-                                                <f7-col width="50">
-                                                    <f7-button @click="email(item.id, 'document')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-envelope"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-                                                <f7-col width="50">
-                                                    <f7-button @click="download(item.external_id, 'document', 'a4')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-file-pdf"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-                                                <f7-col width="50">
-                                                    <f7-button @click="download(item.external_id, 'document')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-receipt"></f7-icon>
-                                                    </f7-button>
+                                                    <div style="font-size: 16px; font-weight: bold">
+                                                        Total:
+                                                        {{ item.total }}
+                                                    </div>
                                                 </f7-col>
                                             </f7-row>
+                                        </f7-col>
+                                    </f7-row>
+                                    <f7-row>
+                                        <f7-col>
+                                            <f7-button small icon @click="clickPreviewPdf(item, 'document')" color="blue">
+                                                <f7-icon class="icon fas fa-search"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button small icon @click="clickDownloadPdf(item, 'document')" color="blue-shade">
+                                                <f7-icon class="icon fas fa-download"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button small icon @click="whatsap(item.customer_telephone, item.external_id)" color="green">
+                                                <f7-icon class="icon fab fa-whatsapp"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button small icon @click="email(item.id, 'document')" color="purple">
+                                                <f7-icon class="icon fas fa-envelope"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button small icon @click="download(item.external_id, 'document', 'a4')" color="lightblue">
+                                                <f7-icon class="icon fas fa-file-pdf"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button small icon @click="download(item.external_id, 'document')" color="deeppurple">
+                                                <f7-icon class="icon fas fa-receipt"></f7-icon>
+                                            </f7-button>
                                         </f7-col>
                                     </f7-row>
                                 </f7-block>
@@ -133,72 +145,71 @@
                     </f7-list>
                 </div>
                 <div id="tab-tickets" class="page-content tab">
-                    <f7-searchbar placeholder="Buscar" :clear-button="true" search-container=".search-list" search-in=".item-title, .item-after"></f7-searchbar>
+                    <f7-searchbar placeholder="Buscar" :clear-button="true" search-container=".search-list" search-in=".ticket-customer, .ticket-customer-number, .ticket-number"></f7-searchbar>
                     <f7-list class="searchbar-not-found">
                         <f7-list-item title="No se encontraron resultados" class="padding-left margin-left"></f7-list-item>
                     </f7-list>
-                    <f7-list media-list class="search-list margin-horizontal">
+                    <f7-list media-list class="search-list">
                         <f7-list-item v-for="item in source_ticket" :key="item.id" class="list-documents margin-bottom">
                             <span slot="subtitle">
-                                <f7-block class="no-padding">
+                                <f7-block class="no-padding no-margin-vertical">
                                     <f7-row>
                                         <f7-col width="60" class="text-align-left">
-                                            <div style="word-break: break-all !important; white-space: pre-line !important; margin-top: -25px;">
+                                            <div style="word-break: break-all !important; white-space: pre-line !important; margin-top: -25px; font-size: 16px; font-weight: bold" class="ticket-customer">
                                                 {{ item.customer_name }}
                                             </div>
-                                            RUC: {{ item.customer_number }}
-                                            <p>
-                                                <f7-icon icon="fas fa-fw fa-calendar-alt" color="red"></f7-icon>{{ item.created_at }}
-                                            </p>
-                                            <span style="font-size: 16px; font-weight: bold">
-                                                Total:
-                                                {{ item.total }}
+                                            <span class="text-color-gray">
+                                                RUC: <span class="ticket-customer-number">{{ item.customer_number }}</span><br>
+                                                {{ item.created_at }}
                                             </span>
                                         </f7-col>
                                         <f7-col width="40" class="text-align-right">
                                             <f7-row>
                                                 <f7-col width="100">
-                                                    {{item.number}}
+                                                    <span class="ticket-number">{{item.number}}</span>
                                                 </f7-col>
                                                 <f7-col width="100">
                                                     <f7-badge :color="statusColor(item.state_type_description)" style="width: 100%">
                                                         {{ item.state_type_description }}
                                                     </f7-badge>
-                                                </f7-col>
-
-                                                <f7-col width="50">
-                                                    <f7-button @click="clickPreviewPdf(item, 'document')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-search"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-
-                                                <f7-col width="50">
-                                                    <f7-button @click="clickDownloadPdf(item, 'document')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-download"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-
-                                                <f7-col width="50">
-                                                    <f7-button @click="whatsap(item.customer_telephone, item.external_id)" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fab fa-whatsapp"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-                                                <f7-col width="50">
-                                                    <f7-button @click="email(item.id, 'document')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-envelope"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-                                                <f7-col width="50">
-                                                    <f7-button @click="download(item.external_id, 'document', 'a4')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-file-pdf"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-                                                <f7-col width="50">
-                                                    <f7-button @click="download(item.external_id, 'document')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-receipt"></f7-icon>
-                                                    </f7-button>
+                                                    <div style="font-size: 16px; font-weight: bold">
+                                                        Total:
+                                                        {{ item.total }}
+                                                    </div>
                                                 </f7-col>
                                             </f7-row>
+                                        </f7-col>
+                                    </f7-row>
+                                    <f7-row>
+                                        <f7-col>
+                                            <f7-button @click="clickPreviewPdf(item, 'document')" color="blue">
+                                                <f7-icon class="icon fas fa-search"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button @click="clickDownloadPdf(item, 'document')" color="blue-shade">
+                                                <f7-icon class="icon fas fa-download"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button @click="whatsap(item.customer_telephone, item.external_id)" color="green">
+                                                <f7-icon class="icon fab fa-whatsapp"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button @click="email(item.id, 'document')" color="purple">
+                                                <f7-icon class="icon fas fa-envelope"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button @click="download(item.external_id, 'document', 'a4')" color="lightblue">
+                                                <f7-icon class="icon fas fa-file-pdf"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button @click="download(item.external_id, 'document')" color="deeppurple">
+                                                <f7-icon class="icon fas fa-receipt"></f7-icon>
+                                            </f7-button>
                                         </f7-col>
                                     </f7-row>
                                 </f7-block>
@@ -207,73 +218,72 @@
                     </f7-list>
                 </div>
                 <div id="tab-notes" class="page-content tab">
-                    <f7-searchbar placeholder="Buscar" :clear-button="true" search-container=".search-list" search-in=".item-title, .item-after"></f7-searchbar>
+                    <f7-searchbar placeholder="Buscar" :clear-button="true" search-container=".search-list" search-in=".note-customer, .note-customer-number, .note-number"></f7-searchbar>
                     <f7-list class="searchbar-not-found">
                         <f7-list-item title="No se encontraron resultados" class="padding-left margin-left"></f7-list-item>
                     </f7-list>
-                    <f7-list media-list class="search-list margin-horizontal">
+                    <f7-list media-list class="search-list">
                         <f7-list-item v-for="item in source_note" :key="item.id" class="list-documents margin-bottom">
                             <span slot="subtitle">
-                                <f7-block class="no-padding">
+                                <f7-block class="no-padding no-margin-vertical">
                                     <f7-row>
                                         <f7-col width="60" class="text-align-left">
-                                            <div style="word-break: break-all !important; white-space: pre-line !important; margin-top: -25px;">
+                                            <div style="word-break: break-all !important; white-space: pre-line !important; margin-top: -25px;" class="note-customer">
                                                 {{ item.customer_name }}
                                             </div>
-                                            RUC: {{ item.customer_number }}
-                                            <p>
-                                                <f7-icon icon="fas fa-fw fa-calendar-alt" color="red"></f7-icon>{{ item.created_at }}
-                                            </p>
-                                            <span style="font-size: 16px; font-weight: bold">
-                                                Total:
-                                                {{ item.total }}
+                                            <span class="text-color-gray">
+                                                RUC: <span class="note-customer-number">{{ item.customer_number }}</span><br>
+                                                {{ item.created_at }}
                                             </span>
                                         </f7-col>
                                         <f7-col width="40" class="text-align-right">
                                             <f7-row>
                                                 <f7-col width="100">
-                                                    {{item.number_full}}
+                                                    <span class="note-number">{{item.number_full}}</span>
                                                 </f7-col>
                                                 <f7-col width="100">
                                                     <f7-badge :color="statusColor(item.state_type_description)" style="width: 100%">
                                                         {{ item.state_type_description }}
                                                     </f7-badge>
-                                                </f7-col>
-
-                                                
-                                                <f7-col width="50">
-                                                    <f7-button @click="clickPreviewPdf(item, 'sale_note')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-search"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-
-                                                <f7-col width="50">
-                                                    <f7-button @click="clickDownloadPdf(item, 'sale_note')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-download"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-
-                                                <f7-col width="50">
-                                                    <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_a4)" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fab fa-whatsapp"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-                                                <f7-col width="50">
-                                                    <f7-button @click="email(item.id, 'sale-note')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-envelope"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-                                                <f7-col width="50">
-                                                    <f7-button @click="download(item.external_id, 'sale-notes', 'a4')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-file-pdf"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-                                                <f7-col width="50">
-                                                    <f7-button @click="download(item.external_id, 'sale-notes')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-receipt"></f7-icon>
-                                                    </f7-button>
+                                                    <br>
+                                                    <span style="font-size: 16px; font-weight: bold">
+                                                        Total:
+                                                        {{ item.total }}
+                                                    </span>
                                                 </f7-col>
                                             </f7-row>
+                                        </f7-col>
+                                    </f7-row>
+                                    <f7-row>
+                                        <f7-col>
+                                            <f7-button @click="clickPreviewPdf(item, 'sale_note')" color="blue">
+                                                <f7-icon class="icon fas fa-search"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button @click="clickDownloadPdf(item, 'sale_note')" color="blue-shade">
+                                                <f7-icon class="icon fas fa-download"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_a4)" color="green">
+                                                <f7-icon class="icon fab fa-whatsapp"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button @click="email(item.id, 'sale-note')" color="purple">
+                                                <f7-icon class="icon fas fa-envelope"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button @click="download(item.external_id, 'sale-notes', 'a4')" color="lightblue">
+                                                <f7-icon class="icon fas fa-file-pdf"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button @click="download(item.external_id, 'sale-notes')" color="deeppurple">
+                                                <f7-icon class="icon fas fa-receipt"></f7-icon>
+                                            </f7-button>
                                         </f7-col>
                                     </f7-row>
                                 </f7-block>
@@ -282,72 +292,69 @@
                     </f7-list>
                 </div>
                 <div id="tab-order-notes" class="page-content tab">
-                    <f7-searchbar placeholder="Buscar" :clear-button="true" search-container=".search-list" search-in=".item-title, .item-after"></f7-searchbar>
+                    <f7-searchbar placeholder="Buscar" :clear-button="true" search-container=".search-list" search-in=".order-notes-customer, .order-notes-customer-number, .order-notes-number"></f7-searchbar>
                     <f7-list class="searchbar-not-found">
                         <f7-list-item title="No se encontraron resultados" class="padding-left margin-left"></f7-list-item>
                     </f7-list>
-                    <f7-list media-list class="search-list margin-horizontal">
+                    <f7-list media-list class="search-list">
                         <f7-list-item v-for="item in source_order_note" :key="item.id" class="list-documents margin-bottom">
                             <span slot="subtitle">
-                                <f7-block class="no-padding">
+                                <f7-block class="no-padding no-margin-vertical">
                                     <f7-row>
                                         <f7-col width="60" class="text-align-left">
-                                            <div style="word-break: break-all !important; white-space: pre-line !important; margin-top: -25px;">
+                                            <div style="word-break: break-all !important; white-space: pre-line !important; margin-top: -25px;" class="order-notes-customer">
                                                 {{ item.customer_name }}
                                             </div>
-                                            RUC: {{ item.customer_number }}
-                                            <p>
-                                                <f7-icon icon="fas fa-fw fa-calendar-alt" color="red"></f7-icon>{{ item.created_at }}
-                                            </p>
-                                            <span style="font-size: 16px; font-weight: bold">
-                                                Total:
-                                                {{ item.total }}
-                                            </span>
+                                            RUC: <span class="order-notes-customer-number"></span>{{ item.customer_number }} <br>
+                                            {{ item.created_at }}
                                         </f7-col>
                                         <f7-col width="40" class="text-align-right">
                                             <f7-row>
                                                 <f7-col width="100">
-                                                    {{item.identifier}}
+                                                    <span class="order-notes-number">{{item.identifier}}</span>
                                                 </f7-col>
                                                 <f7-col width="100">
                                                     <f7-badge :color="statusColor(item.state_type_description)" style="width: 100%">
                                                         {{ item.state_type_description }}
-                                                    </f7-badge>
-                                                </f7-col>
-
-                                                <f7-col width="50">
-                                                    <f7-button @click="clickPreviewPdf(item, 'order_note')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-search"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-
-                                                <f7-col width="50">
-                                                    <f7-button @click="clickDownloadPdf(item, 'order_note')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-download"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-
-                                                <f7-col width="50">
-                                                    <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_a4)" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fab fa-whatsapp"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-                                                <f7-col width="50">
-                                                    <f7-button @click="email(item.id, 'order-note')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-envelope"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-                                                <f7-col width="50">
-                                                    <f7-button @click="download(item.external_id, 'order-notes', 'a4')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-file-pdf"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-                                                <f7-col width="50">
-                                                    <f7-button @click="download(item.external_id, 'order-notes')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-receipt"></f7-icon>
-                                                    </f7-button>
+                                                    </f7-badge> <br>
+                                                    <span style="font-size: 16px; font-weight: bold">
+                                                        Total:
+                                                        {{ item.total }}
+                                                    </span>
                                                 </f7-col>
                                             </f7-row>
+                                        </f7-col>
+                                    </f7-row>
+                                    <f7-row>
+                                        <f7-col>
+                                            <f7-button @click="clickPreviewPdf(item, 'order_note')" color="blue">
+                                                <f7-icon class="icon fas fa-search"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button @click="clickDownloadPdf(item, 'order_note')" color="blue-shade">
+                                                <f7-icon class="icon fas fa-download"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_a4)" color="green">
+                                                <f7-icon class="icon fab fa-whatsapp"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button @click="email(item.id, 'order-note')" color="purple">
+                                                <f7-icon class="icon fas fa-envelope"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button @click="download(item.external_id, 'order-notes', 'a4')" color="lightblue">
+                                                <f7-icon class="icon fas fa-file-pdf"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button @click="download(item.external_id, 'order-notes')" color="deeppurple">
+                                                <f7-icon class="icon fas fa-receipt"></f7-icon>
+                                            </f7-button>
                                         </f7-col>
                                     </f7-row>
                                 </f7-block>
@@ -356,66 +363,61 @@
                     </f7-list>
                 </div>
                 <div id="tab-purchases" class="page-content tab">
-                    <f7-searchbar placeholder="Buscar" :clear-button="true" search-container=".search-list" search-in=".item-title, .item-after"></f7-searchbar>
+                    <f7-searchbar placeholder="Buscar" :clear-button="true" search-container=".search-list" search-in=".purchases-customer, .purchases-customer-number, .purchases-number"></f7-searchbar>
                     <f7-list class="searchbar-not-found">
                         <f7-list-item title="No se encontraron resultados" class="padding-left margin-left"></f7-list-item>
                     </f7-list>
-                    <f7-list media-list class="search-list margin-horizontal">
+                    <f7-list media-list class="search-list">
                         <f7-list-item v-for="item in source_purchases" :key="item.id" class="list-documents margin-bottom">
-                            <span slot="title" style="font-size: 11px;">
-                                <strong>{{ item.supplier_name }}</strong>
-                                <br>
-                                RUC: {{ item.supplier_number }}
-                            </span>
-                            <span slot="after">
-                                {{item.number}}
-                            </span>
                             <span slot="subtitle">
-                                <f7-block class="no-padding">
+                                <f7-block class="no-padding no-margin-vertical">
                                     <f7-row>
-                                        <f7-col width="60" class="text-align-left" style="border-right: 1px solid #ccc">
-                                            <p>
-                                                <f7-icon icon="fas fa-fw fa-calendar-alt" color="red"></f7-icon>{{ item.created_at }}
-                                            </p>
-                                            <span style="font-size: 16px; font-weight: bold">
-                                                Total:
-                                                {{ item.total }}
-                                                <span v-if="item.currency_type_id == 'PEN'">./S</span>
-                                                <span v-if="item.currency_type_id == 'USD'">$</span>
-                                            </span>
+                                        <f7-col width="60" class="text-align-left">
+                                            <div style="word-break: break-all !important; white-space: pre-line !important; margin-top: -25px;" class="purchases-customer">
+                                                {{ item.supplier_name }}
+                                            </div>
+                                            RUC: <span class="purchases-customer-number"></span>{{ item.supplier_number }} <br>
+                                            {{ item.created_at }}
                                         </f7-col>
-                                        <f7-col width="40" class="text-align-right" style="padding-top: 15px;">
+                                        <f7-col width="40" class="text-align-right">
                                             <f7-row>
+                                                <f7-col width="100">
+                                                    <span class="purchases-number">{{item.number}}</span>
+                                                </f7-col>
                                                 <f7-col width="100">
                                                     <f7-badge :color="statusColor(item.state_type_description)" style="width: 100%">
                                                         {{ item.state_type_description }}
-                                                    </f7-badge>
-                                                </f7-col>
-                                                
-                                                <f7-col width="50">
-                                                    <f7-button @click="clickPreviewPdf(item, 'purchase')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-search"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-
-                                                <f7-col width="50">
-                                                    <f7-button @click="clickDownloadPdf(item, 'purchase')" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fas fa-download"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-
-                                                <f7-col width="50">
-                                                    <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_a4)" class="block" color="red">
-                                                        <f7-icon style="font-size: 1.5em;" class="icon fab fa-whatsapp"></f7-icon>
-                                                    </f7-button>
-                                                </f7-col>
-
-                                                <f7-col width="50">
-                                                    <f7-button @click="email(item.id, 'purchase')" color="red" style="padding-left: 0px;">
-                                                        <f7-icon material="email"></f7-icon>
-                                                    </f7-button>
+                                                    </f7-badge> <br>
+                                                    <span style="font-size: 15px; font-weight: bold">
+                                                        Total:
+                                                        {{ item.total }}
+                                                        <span v-if="item.currency_type_id == 'PEN'">./S</span>
+                                                        <span v-if="item.currency_type_id == 'USD'">$</span>
+                                                    </span>
                                                 </f7-col>
                                             </f7-row>
+                                        </f7-col>
+                                    </f7-row>
+                                    <f7-row>
+                                        <f7-col>
+                                            <f7-button @click="clickPreviewPdf(item, 'purchase')" color="blue">
+                                                <f7-icon class="icon fas fa-search"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button @click="clickDownloadPdf(item, 'purchase')" color="blue-shade">
+                                                <f7-icon class="icon fas fa-download"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_a4)" class="block" color="green">
+                                                <f7-icon class="icon fab fa-whatsapp"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button @click="email(item.id, 'purchase')" color="purple">
+                                                <f7-icon class="icon fas fa-envelope"></f7-icon>
+                                            </f7-button>
                                         </f7-col>
                                     </f7-row>
                                 </f7-block>
@@ -428,7 +430,7 @@
 
         <f7-sheet class="demo-sheet" :opened="sendMailOpen" @sheet:closed="
           sendMailOpen = false;
-          initformEmail();
+          initFormEmail();
         ">
             <f7-toolbar>
                 <div class="left"></div>
@@ -460,14 +462,14 @@
                         </ul>
                     </div>
                 </f7-block>
-                
+
                 <preview-pdf :showDialog.sync="showDialogPreviewPdf"
                             :record="record"
                             :documentType="documentType"></preview-pdf>
 
             </f7-page-content>
         </f7-sheet>
-    </f7-card>
+    </f7-block>
 </f7-page>
 </template>
 
@@ -478,12 +480,14 @@
     import PreviewPdf from 'components/document/PreviewPdf'
     import {general_functions} from "mixins_/general_functions"
     import {download_file} from "mixins_/download_file"
+    import HeaderLayout from "components/layout/Header"
 
     export default {
         name: "documents",
         mixins: [auth, general_functions, download_file],
         components: {
-            PreviewPdf
+            PreviewPdf,
+            HeaderLayout
         },
         data: function () {
             // Must return an object
@@ -504,6 +508,13 @@
                 showDialogPreviewPdf: false,
                 configuration: {},
                 record: {},
+                activeClass: {
+                    invoices: true,
+                    tickets: false,
+                    notes: false,
+                    orderNotes: false,
+                    purchases: false,
+                },
             };
         },
         computed: {
@@ -513,7 +524,7 @@
         },
         created() {
             this.loadConfiguration()
-            this.initformEmail()
+            this.initFormEmail()
             this.getDataPurchases()
             this.getData()
             this.getDataSaleNote()
@@ -543,22 +554,39 @@
                 switch (type) {
                     case 'invoices':
                         self.count = self.source_invoice.length;
+                        this.resetActiveClass();
+                        this.activeClass.invoices = true;
                         break;
                     case 'tickets':
                         self.count = self.source_ticket.length;
+                        this.resetActiveClass();
+                        this.activeClass.tickets = true;
                         break;
                     case 'notes':
                         self.count = self.source_note.length;
+                        this.resetActiveClass();
+                        this.activeClass.notes = true;
                         break;
                     case 'purchases':
                         self.count = self.source_purchases.length;
+                        this.resetActiveClass();
+                        this.activeClass.purchases = true;
                         break;
                     case 'order_notes':
                         self.count = self.source_order_note.length;
+                        this.resetActiveClass();
+                        this.activeClass.orderNotes = true;
                         break;
                 }
             },
-            initformEmail() {
+            resetActiveClass(){
+                this.activeClass.invoices = false;
+                this.activeClass.tickets = false;
+                this.activeClass.notes = false;
+                this.activeClass.orderNotes = false;
+                this.activeClass.purchases = false;
+            },
+            initFormEmail() {
                 this.form_email = {
                     email: null,
                     id: null
@@ -637,7 +665,7 @@
                     .then(response => {
                         if (response.data.success) {
                             alert(`${response.data.message}`);
-                            this.initformEmail();
+                            this.initFormEmail();
                         }
                     })
                     .catch(err => {
@@ -650,7 +678,7 @@
             },
             email(id, type) {
                 const self = this;
-                self.initformEmail();
+                self.initFormEmail();
                 self.form_email.id = id;
                 //  this.sendMailOpen = true;
                 self.$f7.dialog.prompt("Ingresa el Email", "", function (value) {
