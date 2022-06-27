@@ -95,7 +95,7 @@
                                 </div>
 
                                 <div class="card-footer">
-                                    <a href="#" class="link" >
+                                    <a href="#" class="link" @click="clickReports(row.id)">
                                         <span class="material-icons icon-color-danger">picture_as_pdf</span>
                                     </a>
                                     <a href="#" class="link" >
@@ -128,6 +128,8 @@
                     :recordId="recordId"
                     ></email-form>
 
+        <cash-reports :showDialog.sync="showDialogReports"
+                    :recordId="recordId"></cash-reports>
     </f7-page>
 </template>
 
@@ -140,12 +142,12 @@
     import queryString from "query-string"
     import CashForm from './partials/form.vue'
     import EmailForm from 'components/document/EmailForm.vue'
-
+    import CashReports from './partials/reports.vue'
     
 
     export default {
         name: "IndexCash",
-        components: { CashForm, EmailForm },
+        components: { CashForm, EmailForm, CashReports },
         mixins: [auth, general_functions, deletable],
         data: function () {
             return {
@@ -166,6 +168,7 @@
                 loading_text: null,
                 showDialog: false,
                 showDialogEmail: false,
+                showDialogReports: false,
                 recordId: null,
                 configuration: {},
                 locked_query: false,
@@ -183,6 +186,10 @@
             await this.events()
         },
         methods: {
+            clickReports(recordId){
+                this.recordId = recordId
+                this.showDialogReports = true
+            },
             clickEmail(id){
 
                 this.url_email = `${this.returnBaseUrl()}/${this.resource}/email`
