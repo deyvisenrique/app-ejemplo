@@ -1,325 +1,290 @@
 <template>
-    <f7-page class="page-red-white" color="white">
-        <f7-toolbar tabbar :position="isBottom ? 'bottom' : 'top'" bg-color="white" color="red" class="no-shadow">
-            <f7-link href="/" icon-md="material:home">
-                Inicio
-            </f7-link>
-            <f7-link tab-link-active tab-link="#" icon-md="material:insert_drive_file" class="text-align-center">
-                Crear <br> comprobantes
-            </f7-link>
-            <f7-link href="/documents/" icon-md="material:view_stream" class="text-align-center">
-                Listado de <br> comprobantes
-            </f7-link>
-            <f7-link href="/report/" icon-md="material:equalizer">
-                Reportes
-            </f7-link>
-        </f7-toolbar>
-
-        <f7-block>
+    <f7-page class="" color="">
+        <header-layout></header-layout>
+        <f7-block class="bg-blue-magenta padding-vertical no-margin-vertical">
             <f7-row>
-                <f7-col width="90">
-                    <a class="link back text-color-white">
-                        <i class="icon icon-back"></i>
-                        <span class="">{{ title }}</span>
-                    </a>
-                </f7-col>
                 <f7-col width="10">
-                    <f7-link class="panel-open text-color-white text-align-right" open-panel="right" icon="fas fa-bars"></f7-link>
+                <a class="link back text-color-white" href="/">
+                    <i class="fas fa-angle-left"></i>
+                </a>
                 </f7-col>
+                <f7-col width="80" class="text-color-white text-align-center">
+                    {{ title }}
+                </f7-col>
+                <f7-col width="10"></f7-col>
             </f7-row>
         </f7-block>
 
-        <f7-card class="card-100 padding-top padding-horizontal no-shadow" color="red">
-
-            <f7-popup class="demo-popup" :opened="popupOpened" @popup:closed="popupOpened = false">
-                <items-form :showDialog.sync="popupOpened" ref="form_items_car" @addItemsCar="addItems"></items-form>
-            </f7-popup>
-
-            <f7-popup class="demo-popup" :opened="popupCustomerOpened" @popup:closed="popupCustomerOpened = false">
-                <customer-form :codeType="codeType" :customerId="form.customer_id" :showDialog.sync="popupCustomerOpened" ref="form_customer_car" @addCustomerCar="addCustomer"></customer-form>
-            </f7-popup>
-
-            <f7-block>
-                <form class="list no-hairlines-md" id="demo-form">
-                    <ul style="margin-bottom: 25% !important;">
-                        <f7-row>
-                            <f7-col width="50">
-                                <div class="item-content item-input">
-                                    <div class="item-inner">
-                                        <div class="item-title item-label">Serie</div>
-                                        <div class="item-input-wrap input-dropdown-wrap">
-                                            <select v-model="form.serie_documento" placeholder="Please choose...">
-                                                <template v-for="(row, index) in series">
-                                                    <option :value="row.number" :key="index">{{row.number}}</option>
-                                                </template>
-                                            </select>
-                                        </div>
+        <f7-block>
+            <form class="list no-hairlines-md" id="demo-form">
+                <ul>
+                    <f7-row>
+                        <f7-col width="50">
+                            <div class="item-content item-input no-padding-horizontal">
+                                <div class="item-inner no-padding-horizontal">
+                                    <div class="item-title item-label">Serie</div>
+                                    <div class="item-input-wrap input-dropdown-wrap">
+                                        <select v-model="form.serie_documento" placeholder="Please choose...">
+                                            <template v-for="(row, index) in series">
+                                                <option :value="row.number" :key="index">{{row.number}}</option>
+                                            </template>
+                                        </select>
                                     </div>
                                 </div>
-                            </f7-col>
-                            <f7-col width="50">
-                                <div class="item-content item-input">
-                                    <div class="item-inner">
-                                        <div class="item-title item-label">Fecha Emisión</div>
-                                        <div class="item-input-wrap">
-                                            <input name="date" v-model="form.fecha_de_emision" type="date" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </f7-col>
-                            <f7-col width="50">
-                                <div class="item-content item-input">
-                                    <div class="item-inner">
-                                        <div class="item-title item-label">Orden de Compra</div>
-                                        <div class="item-input-wrap">
-                                            <input required validate v-model="form.numero_orden_de_compra" type="text" />
-                                            <span class="input-clear-button"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </f7-col>
-                            <f7-col width="50">
-                                <div class="item-content item-input">
-                                    <div class="item-inner">
-                                        <div class="item-title item-label">Fecha Vencimiento</div>
-                                        <div class="item-input-wrap">
-                                            <input name="date" v-model="form.fecha_de_vencimiento" type="date" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </f7-col>
-                            <f7-col width="50">
-                                <div class="item-content item-input">
-                                    <div class="item-inner">
-                                        <div class="item-title item-label">Condición de pago</div>
-                                        <div class="item-input-wrap input-dropdown-wrap">
-                                            <select v-model="form.payment_condition_id" @change="changePaymentCondition">
-                                                <option value="01" selected>Contado</option>
-                                                <option value="02">Crédito</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </f7-col>
-                            <template>
-
-                                <template v-if="isCashPayment">
-
-                                    <f7-col width="50">
-                                        <div class="item-content item-input">
-                                            <div class="item-inner">
-                                                <div class="item-title item-label">Metodo de pago</div>
-                                                <div class="item-input-wrap input-dropdown-wrap">
-                                                    <select v-model="form_payment.payment_method_type_id">
-                                                        <template v-for="(row, index) in cash_payment_method_types">
-                                                            <option :value="row.id" :key="index">{{row.description}}</option>
-                                                        </template>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </f7-col>
-
-                                    <f7-col width="50">
-                                        <div class="item-content item-input">
-                                            <div class="item-inner">
-                                                <div class="item-title item-label">Referencia</div>
-                                                <div class="item-input-wrap">
-                                                    <input v-model="form_payment.reference" type="text" />
-                                                    <span class="input-clear-button"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </f7-col>
-                                    <f7-col width="50">
-                                        <div class="item-content item-input">
-                                            <div class="item-inner">
-                                                <div class="item-title item-label">Monto</div>
-                                                <div class="item-input-wrap">
-                                                    <input required validate v-model="form_payment.payment" type="number" @input="inputPayment" min="0"/>
-                                                    <span class="input-clear-button"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </f7-col>
-                                    <f7-col width="100">
-                                        <div class="item-content item-input">
-                                            <div class="item-inner">
-                                                <div class="item-title item-label">Destino</div>
-                                                <div class="item-input-wrap input-dropdown-wrap">
-                                                    <select v-model="form_payment.payment_destination_id">
-                                                        <template v-for="(row, index) in payment_destinations">
-                                                            <option :value="row.id" :key="index">{{row.description}}</option>
-                                                        </template>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </f7-col>
-                                </template>
-
-                                <template v-if="isCreditPayment">
-                                    
-                                    <f7-col width="50">
-                                        <div class="item-content item-input">
-                                            <div class="item-inner">
-                                                <div class="item-title item-label">Metodo de pago</div>
-                                                <div class="item-input-wrap input-dropdown-wrap">
-                                                    <select v-model="form_fee.payment_method_type_id" @change="changePaymentMethodTypeFee">
-                                                        <template v-for="(row, index) in credit_payment_method_types">
-                                                            <option :value="row.id" :key="index">{{row.description}}</option>
-                                                        </template>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </f7-col>
-
-                                    <f7-col width="50">
-                                        <div class="item-content item-input">
-                                            <div class="item-inner">
-                                                <div class="item-title item-label">Fecha pago</div>
-                                                <div class="item-input-wrap">
-                                                    <input name="date" v-model="form_fee.date" type="date" disabled/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </f7-col>
-                                    <f7-col width="50">
-                                        <div class="item-content item-input">
-                                            <div class="item-inner">
-                                                <div class="item-title item-label">Monto</div>
-                                                <div class="item-input-wrap">
-                                                    <input required validate v-model="form_fee.amount" type="number" min="0"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </f7-col>
-                                </template>
-
-                            </template>
-                        </f7-row>
-
-                        <li>
-                            <f7-col>
-                                <f7-card style="font-weight:bold;color:#0f233c;background:#ddd;border-radius: 15px;">
-                                    <f7-card-content>
-                                        <f7-row @click="popupCustomerOpened = true">
-                                            <f7-col width="15" class="align-self-center">
-                                                <div class="badge bg-color-white">
-                                                    <f7-icon icon="fas fa-user" size="24" color="blue"></f7-icon>
-                                                </div>
-                                            </f7-col>
-                                            <f7-col width="75" class="text-align-left">
-                                                <small>CLIENTE</small><br>
-                                                <small class="no-margin">{{this.form.datos_del_cliente_o_receptor ? this.form.datos_del_cliente_o_receptor.apellidos_y_nombres_o_razon_social : ''}}</small>
-                                            </f7-col>
-                                            <f7-col width="10" class="align-self-center">
-                                                <div class="badge bg-color-white text-align-right color-blue">
-                                                    <f7-link style="color:#0f233c;" icon="fas fa-arrow-right"></f7-link>
-                                                </div>
-                                            </f7-col>
-                                        </f7-row>
-                                    </f7-card-content>
-                                </f7-card>
-                            </f7-col>
-                        </li>
-
-                        <li style="margin-bottom: 5%;" class="item-content item-input">
-                            <br />
-                            <div class="data-table">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th class="numeric-cell"></th>
-                                            <th class="label-cell">#</th>
-                                            <th class="medium-cell">Descripcion</th>
-                                            <th class="medium-only">Cantidad</th>
-
-                                            <th class="medium-only text-align-right">Precio</th>
-                                            <th class="medium-only text-align-right">Subtotal</th>
-                                            <th class="medium-only text-align-right">Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="(row, index) in form.items" :key="index">
-                                            <td class="numeric-cell">
-                                                <f7-button @click.native="deleteItem(row.item_id, index)">
-                                                    <f7-icon color="red" material="cancel"></f7-icon>
-                                                </f7-button>
-                                            </td>
-                                            <td class="label-cell text-color-blue">{{index + 1 }}</td>
-                                            <td class="numeric-cell text-color-blue">{{row.item.description}}</td>
-                                            <td class="numeric-cell text-color-blue">{{row.quantity}}</td>
-
-                                            <td class="numeric-cell text-color-blue">S/.&nbsp;{{ Number(row.unit_price).toFixed(2)}}</td>
-                                            <td class="numeric-cell text-color-blue">S/.&nbsp;{{row.total_value}}</td>
-                                            <td class="numeric-cell text-color-blue">S/.&nbsp;{{row.total}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
                             </div>
-                        </li>
+                        </f7-col>
+                        <f7-col width="50">
+                            <div class="item-content item-input no-padding-horizontal">
+                                <div class="item-inner no-padding-horizontal">
+                                    <div class="item-title item-label">Fecha Emisión</div>
+                                    <div class="item-input-wrap">
+                                        <input name="date" v-model="form.fecha_de_emision" type="date" />
+                                    </div>
+                                </div>
+                            </div>
+                        </f7-col>
+                        <f7-col width="50">
+                            <div class="item-content item-input no-padding-horizontal">
+                                <div class="item-inner no-padding-horizontal">
+                                    <div class="item-title item-label">Orden de Compra</div>
+                                    <div class="item-input-wrap">
+                                        <input required validate v-model="form.numero_orden_de_compra" type="text" />
+                                        <span class="input-clear-button"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </f7-col>
+                        <f7-col width="50">
+                            <div class="item-content item-input no-padding-horizontal">
+                                <div class="item-inner no-padding-horizontal">
+                                    <div class="item-title item-label">Fecha Vencimiento</div>
+                                    <div class="item-input-wrap">
+                                        <input name="date" v-model="form.fecha_de_vencimiento" type="date" />
+                                    </div>
+                                </div>
+                            </div>
+                        </f7-col>
+                        <f7-col width="50">
+                            <div class="item-content item-input no-padding-horizontal">
+                                <div class="item-inner no-padding-horizontal">
+                                    <div class="item-title item-label">Condición de pago</div>
+                                    <div class="item-input-wrap input-dropdown-wrap">
+                                        <select v-model="form.payment_condition_id" @change="changePaymentCondition">
+                                            <option value="01" selected>Contado</option>
+                                            <option value="02">Crédito</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </f7-col>
+                        <template>
+                            <template v-if="isCashPayment">
+                                <f7-col width="50">
+                                    <div class="item-content item-input no-padding-horizontal">
+                                        <div class="item-inner no-padding-horizontal">
+                                            <div class="item-title item-label">Metodo de pago</div>
+                                            <div class="item-input-wrap input-dropdown-wrap">
+                                                <select v-model="form_payment.payment_method_type_id">
+                                                    <template v-for="(row, index) in cash_payment_method_types">
+                                                        <option :value="row.id" :key="index">{{row.description}}</option>
+                                                    </template>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </f7-col>
+                                <f7-col width="50">
+                                    <div class="item-content item-input no-padding-horizontal">
+                                        <div class="item-inner no-padding-horizontal">
+                                            <div class="item-title item-label">Referencia</div>
+                                            <div class="item-input-wrap">
+                                                <input v-model="form_payment.reference" type="text" />
+                                                <span class="input-clear-button"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </f7-col>
+                                <f7-col width="50">
+                                    <div class="item-content item-input no-padding-horizontal">
+                                        <div class="item-inner no-padding-horizontal">
+                                            <div class="item-title item-label">Monto</div>
+                                            <div class="item-input-wrap">
+                                                <input required validate v-model="form_payment.payment" type="number" @input="inputPayment" min="0"/>
+                                                <span class="input-clear-button"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </f7-col>
+                                <f7-col width="100">
+                                    <div class="item-content item-input no-padding-horizontal">
+                                        <div class="item-inner no-padding-horizontal">
+                                            <div class="item-title item-label">Destino</div>
+                                            <div class="item-input-wrap input-dropdown-wrap">
+                                                <select v-model="form_payment.payment_destination_id">
+                                                    <template v-for="(row, index) in payment_destinations">
+                                                        <option :value="row.id" :key="index">{{row.description}}</option>
+                                                    </template>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </f7-col>
+                            </template>
 
-                        <li class="padding-vertical">
-                            <f7-button @click="popupOpened = true" fill color="blue" class="text-align-left padding-left">
-                                <small>
-                                    <f7-icon icon="fas fa-plus"></f7-icon>
-                                    Añadir producto
-                                </small>
-                            </f7-button>
-                        </li>
+                            <template v-if="isCreditPayment">
+                                <f7-col width="50">
+                                    <div class="item-content item-input no-padding-horizontal">
+                                        <div class="item-inner no-padding-horizontal">
+                                            <div class="item-title item-label">Metodo de pago</div>
+                                            <div class="item-input-wrap input-dropdown-wrap">
+                                                <select v-model="form_fee.payment_method_type_id" @change="changePaymentMethodTypeFee">
+                                                    <template v-for="(row, index) in credit_payment_method_types">
+                                                        <option :value="row.id" :key="index">{{row.description}}</option>
+                                                    </template>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </f7-col>
+                                <f7-col width="50">
+                                    <div class="item-content item-input no-padding-horizontal">
+                                        <div class="item-inner no-padding-horizontal">
+                                            <div class="item-title item-label">Fecha pago</div>
+                                            <div class="item-input-wrap">
+                                                <input name="date" v-model="form_fee.date" type="date" disabled/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </f7-col>
+                                <f7-col width="50">
+                                    <div class="item-content item-input no-padding-horizontal">
+                                        <div class="item-inner no-padding-horizontal">
+                                            <div class="item-title item-label">Monto</div>
+                                            <div class="item-input-wrap">
+                                                <input required validate v-model="form_fee.amount" type="number" min="0"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </f7-col>
+                            </template>
+                        </template>
+                    </f7-row>
 
-                        <li class="padding-bottom">
-                            <f7-card style="font-weight:bold;background:#d61a0c;border-radius: 15px;font-size: 12px;">
-                                <f7-card-content class="text-color-white">
-                                    <f7-row>
-                                        <f7-col width="50" class="padding-left">
-                                            <h2 class="no-padding no-margin-top" style="margin-bottom: -10px;">{{form.total_taxed}}</h2>
-                                            <small>OP.GRAVADA</small> <br><br>
-                                            <h2 class="no-padding no-margin-top" style="margin-bottom: -10px;">{{form.total_igv}}</h2>
-                                            <small>IGV</small>
-                                        </f7-col>
+                    <li class="no-padding-horizontal margin-top">
+                        <f7-block class="bg-white-shade block-strong inset no-margin">
+                            <f7-row @click="popupCustomerOpened = true">
+                                <f7-col width="15" class="align-self-center">
+                                    <f7-icon icon="fas fa-user" size="24" color="deeppurple"></f7-icon>
+                                </f7-col>
+                                <f7-col width="75" class="text-align-left">
+                                    <small>CLIENTE</small><br>
+                                    <small class="no-margin">{{this.form.datos_del_cliente_o_receptor ? this.form.datos_del_cliente_o_receptor.apellidos_y_nombres_o_razon_social : ''}}</small>
+                                </f7-col>
+                                <f7-col width="10" class="align-self-center">
+                                    <div class="badge bg-color-white text-align-right color-blue">
+                                        <f7-link style="color:#0f233c;" icon="fas fa-arrow-right"></f7-link>
+                                    </div>
+                                </f7-col>
+                            </f7-row>
+                        </f7-block>
+                    </li>
 
-                                        <template v-if="payment_change > 0 && isCashPayment">
-                                            <f7-col width="25" class="align-self-center">
-                                                <h1 class="no-padding no-margin">{{form.total}}</h1>
-                                                TOTAL
-                                            </f7-col>
-                                            <f7-col width="25" class="align-self-center" >
-                                                <h1 class="no-padding no-margin">{{ payment_change }}</h1>
-                                                VUELTO
-                                            </f7-col>
-                                        </template>
-                                        <template v-else>
-                                            <f7-col width="50" class="align-self-center">
-                                                <h1 class="no-padding no-margin">{{form.total}}</h1>
-                                                TOTAL
-                                            </f7-col>
-                                        </template>
+                    <li class="item-content item-input no-padding-horizontal">
+                        <br />
+                        <div class="data-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th class="numeric-cell" width="5%"></th>
+                                        <th class="label-cell">#</th>
+                                        <th class="medium-cell">Descripción</th>
+                                        <th class="medium-only">Cantidad</th>
 
-                                    </f7-row>
-                                </f7-card-content>
-                            </f7-card>
-                            <f7-row class="btn-actions">
-                                <f7-col width="10" class="">
-                                    <f7-button raised fill color="gray" @click="cancel">
-                                        <f7-icon icon="fas fa-trash"></f7-icon>
+                                        <th class="medium-only text-align-right">Precio</th>
+                                        <th class="medium-only text-align-right">Subtotal</th>
+                                        <th class="medium-only text-align-right">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(row, index) in form.items" :key="index">
+                                        <td class="no-padding numeric-cell">
+                                            <f7-button @click.native="deleteItem(row.item_id, index)">
+                                                <f7-icon color="red" material="cancel"></f7-icon>
+                                            </f7-button>
+                                        </td>
+                                        <td class="no-padding label-cell text-align-center">{{index + 1 }}</td>
+                                        <td class="no-padding numeric-cell">{{row.item.description}}</td>
+                                        <td class="no-padding numeric-cell">{{row.quantity}}</td>
+
+                                        <td class="no-padding numeric-cell">S/.&nbsp;{{ Number(row.unit_price).toFixed(2)}}</td>
+                                        <td class="no-padding numeric-cell">S/.&nbsp;{{row.total_value}}</td>
+                                        <td class="no-padding numeric-cell">S/.&nbsp;{{row.total}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+
+                    <li class="padding-vertical">
+                        <f7-button @click="popupOpened = true" fill color="blue" class="text-align-left padding-left">
+                            <small>
+                                <f7-icon icon="fas fa-plus"></f7-icon>
+                                Añadir producto
+                            </small>
+                        </f7-button>
+                    </li>
+
+                    <li class="no-padding-horizontal">
+                        <f7-block class="bg-white-shade block-strong inset no-margin">
+                            <f7-row>
+                                <f7-col>
+                                    <p>OP. Gravada</p>
+                                    <p>IGV</p>
+                                    <template v-if="payment_change > 0 && isCashPayment">
+                                        <h3>Total</h3>
+                                        <p>Vuelto</p>
+                                    </template>
+                                    <template v-else>
+                                        <h3>Total</h3>
+                                    </template>
+                                </f7-col>
+                                <f7-col class="text-align-right">
+                                    <p>{{form.total_taxed}}</p>
+                                    <p>{{form.total_igv}}</p>
+                                    <template v-if="payment_change > 0 && isCashPayment">
+                                        <h3>{{form.total}}</h3>
+                                        <p>{{payment_change}}</p>
+                                    </template>
+                                    <template v-else>
+                                        <h3>{{form.total}}</h3>
+                                    </template>
+                                </f7-col>
+                            </f7-row>
+                            <f7-row>
+                                <f7-col>
+                                    <f7-button fill round small color="gray" @click="cancel">
+                                        Cancelar
                                     </f7-button>
                                 </f7-col>
-                                <f7-col width="80" class="">
-                                </f7-col>
-                                <f7-col width="10" class="">
-                                    <f7-button raised fill color="green" @click="send">
-                                        <f7-icon icon="fas fa-check"></f7-icon>
+                                <f7-col>
+                                    <f7-button fill round small color="pink" @click="send">
+                                        Aceptar
                                     </f7-button>
                                 </f7-col>
                             </f7-row>
-                        </li>
-                    </ul>
-                </form>
-            </f7-block>
-        </f7-card>
+                        </f7-block>
+                    </li>
+                </ul>
+            </form>
+        </f7-block>
+
+        <f7-popup class="demo-popup" :opened="popupOpened" @popup:closed="popupOpened = false">
+            <items-form :showDialog.sync="popupOpened" ref="form_items_car" @addItemsCar="addItems"></items-form>
+        </f7-popup>
+
+        <f7-popup class="demo-popup" :opened="popupCustomerOpened" @popup:closed="popupCustomerOpened = false">
+            <customer-form :codeType="codeType" :customerId="form.customer_id" :showDialog.sync="popupCustomerOpened" ref="form_customer_car" @addCustomerCar="addCustomer"></customer-form>
+        </f7-popup>
     </f7-page>
 </template>
 
@@ -334,12 +299,14 @@
     import {general_functions} from "mixins_/general_functions"
     import {findGeneralDefaultSerie} from "js_/helpers/functions"
     import {store_cash} from "../cash/mixins/cash"
+    import HeaderLayout from "components/layout/Header"
 
     export default {
         name: "FormDocument",
         components: {
             ItemsForm,
-            CustomerForm
+            CustomerForm,
+            HeaderLayout
         },
         mixins: [auth, general_functions, store_cash],
         data: function () {
@@ -378,7 +345,7 @@
             //this.getTables();
             await this.selectDocumentType()
             await this.getSeries()
-            await this.getPaymentMethodType() 
+            await this.getPaymentMethodType()
 
         },
         methods: {
@@ -389,7 +356,7 @@
                     this.showLoading()
                     this.findGeneralDefaultCustomer()
                         .then((response)=>{
-    
+
                             if(response.data.success)
                             {
                                 if(this.allowSetCustomer(response.data.data))
@@ -398,9 +365,9 @@
                                     this.addCustomer(this.default_customer)
                                 }
                             }
-    
+
                             this.hideLoading()
-    
+
                         })
                         .catch((error)=>{
                             console.log(error)
@@ -480,7 +447,7 @@
                 {
                     this.form_payment.payment_destination_id = this.payment_destinations.length > 0 ? this.payment_destinations[0].id : null
                 }
-                
+
             },
             setPaymentMethodTypes(){
                 this.cash_payment_method_types = this.filterPaymentMethodTypes(false)
@@ -551,7 +518,7 @@
             },
             setDataPayment(){
 
-                if (this.isCashPayment) 
+                if (this.isCashPayment)
                 {
                     this.initFormPayment()
                     this.form_payment.payment_method_type_id = (this.cash_payment_method_types.length > 0) ? this.cash_payment_method_types[0].id:null
@@ -560,7 +527,7 @@
             },
             setDataPaymentFee(){
 
-                if (this.isCreditPayment) 
+                if (this.isCreditPayment)
                 {
                     this.initFormFee()
                     this.form_fee.payment_method_type_id = (this.credit_payment_method_types.length > 0) ? this.credit_payment_method_types[0].id:null
@@ -569,7 +536,7 @@
 
             },
             changePaymentMethodTypeFee(){
-               
+
                 const payment_method_type = _.find(this.credit_payment_method_types, {id : this.form_fee.payment_method_type_id})
 
                 if(payment_method_type)
@@ -580,7 +547,7 @@
 
             },
             calculatePaymentFeeAmount() {
-                
+
                 if(this.isCashPayment)
                 {
                     this.form_payment.payment = this.form.total
@@ -592,7 +559,7 @@
                 }
             },
             getFormatter() {
-                
+
                 return {
                     serie_documento: this.form.serie_documento,
                     numero_documento: this.form.numero_documento,
@@ -708,7 +675,7 @@
                 return true
             },
             validateCashPayment(){
-               
+
                 if(this.isCashPayment)
                 {
                     if(!this.form_payment.payment_destination_id)
@@ -717,11 +684,11 @@
                         return false
                     }
                 }
-                
+
                 return true
             },
             validateCreditPayment(){
-               
+
                 if(this.isCreditPayment)
                 {
                     if(!this.form_fee.amount || this.form_fee.amount <= 0)
@@ -730,13 +697,13 @@
                         return false
                     }
 
-                    if(parseFloat(this.form_fee.amount) > parseFloat(this.form.total)) 
+                    if(parseFloat(this.form_fee.amount) > parseFloat(this.form.total))
                     {
                         this.showAlert('El monto neto pendiente de pago debe ser menor o igual al importe total del comprobante')
                         return false
                     }
                 }
-                
+
                 return true
             },
             send() {
@@ -756,7 +723,7 @@
                             self.$f7.dialog.create({
                                 title: 'Comprobante registrado',
                                 text: data.data.number,
-                                buttons: self.getOptionsButtons(), 
+                                buttons: self.getOptionsButtons(),
                                 onClick: function(dialog, index){
                                     self.clickOptionsButtons(dialog, index, data)
                                 },
@@ -779,21 +746,21 @@
             clickOptionsButtons(dialog, index, data){
 
                 // Imprimir
-                if(index === 0) 
+                if(index === 0)
                 {
                     this.toPrint(data)
                 }
                 // Descargar A4
-                else if (index === 1) 
+                else if (index === 1)
                 {
                     cordova.InAppBrowser.open(
                         `${localStorage.api_url}/print/document/${data.data.external_id}/a4`,
                         "_system",
                         "location=yes"
                     )
-                } 
+                }
                 // Descargar Ticket
-                else if (index === 2) 
+                else if (index === 2)
                 {
                     cordova.InAppBrowser.open(
                         `${localStorage.api_url}/print/document/${data.data.external_id}/ticket`,
@@ -802,7 +769,7 @@
                     )
                 }
                 // Continuar
-                else if (index === 3) 
+                else if (index === 3)
                 {
                     // self.$f7router.navigate("/documents/");
                 }
@@ -832,7 +799,7 @@
             },
             async toPrint(data){
 
-                let html_pdf = null 
+                let html_pdf = null
                 const print_format_pdf = (this.configuration.print_format_pdf) ? this.configuration.print_format_pdf : 'ticket'
                 this.showLoading()
 
@@ -847,7 +814,7 @@
                 cordova.plugins.printer.print(html_pdf)
 
                 this.hideLoading()
- 
+
             },
             selectDocumentType() {
                 if (this.form.codigo_tipo_documento == "01") {
@@ -942,7 +909,7 @@
             },
             initFormPayment(){
 
-                this.form_payment = { 
+                this.form_payment = {
                     payment_method_type_id: '01',
                     payment_destination_id: null,
                     reference: null,

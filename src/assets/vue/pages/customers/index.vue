@@ -1,22 +1,23 @@
 <template>
-    <f7-page class="page-red-white" color="white"  infinite :infinite-distance="50" :infinite-preloader="show_preloader" @infinite="loadMoreRecords" ptr  @ptr:refresh="pullToRefresh">
+    <f7-page class=""  infinite :infinite-distance="50" :infinite-preloader="show_preloader" @infinite="loadMoreRecords" ptr  @ptr:refresh="pullToRefresh">
 
-        <f7-block>
+        <header-layout></header-layout>
+        <f7-block class="bg-blue-magenta padding-vertical no-margin-vertical">
             <f7-row>
-                <f7-col width="90">
-                    <a class="link back text-color-white">
-                        <i class="icon icon-back"></i>
-                        <span class="">Clientes</span>
+                <f7-col width="10">
+                    <a class="link back text-color-white" href="/">
+                        <i class="fas fa-angle-left"></i>
                     </a>
                 </f7-col>
-                <f7-col width="10">
-                    <f7-link class="panel-open text-color-white text-align-right" open-panel="right" icon="fas fa-bars"></f7-link>
+                <f7-col width="80" class="text-color-white text-align-center">
+                    Clientes
                 </f7-col>
+                <f7-col width="10"></f7-col>
             </f7-row>
         </f7-block>
 
         <f7-card class="card-100 padding-top no-shadow" color="red" style="min-height: 90%">
-            
+
             <f7-block class="">
                 <f7-row>
                     <f7-col width="85">
@@ -30,50 +31,49 @@
                     </f7-col>
 
                     <f7-col width="15" class="text-align-center">
-                        <f7-button @click="clickCreate()" color="blue" fill small open-panel="right" icon="fas fa-plus"></f7-button>
+                        <f7-button @click="clickCreate()" color="bluemagenta" fill small open-panel="right" icon="fas fa-plus"></f7-button>
                         <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
                     </f7-col>
                 </f7-row>
             </f7-block>
 
             <f7-block>
-
                 <div>
                     <div class="row" v-if="records.length > 0">
-
                         <div class="col-100" v-for="(row, index) in records" :key="index">
                             <div class="card" :class="!row.enabled ? 'border-disabled':''">
                                 <div class="card-content card-content-padding">
                                     <div class="item-input-wrap">
-
                                         <div class="row">
-
-                                            <div class="col-90">
-
+                                            <div>
                                                 <span class="text-align-center"><b>{{row.name}}</b></span><br>
                                                 <span class="text-align-center"><b> {{row.identity_document_type_description}}</b>: {{row.number}}</span><br>
                                                 <span class="text-align-center" v-if="row.address"> <b>Dirección:</b> {{row.address}}</span><br>
                                                 <span class="text-align-center" v-if="row.telephone"> <b>Teléfono:</b> {{row.telephone}}</span><br>
-
                                             </div>
-                                            <div class="col-10">
-                                                <a href="#" class="link" @click="clickCreate(row.id)">
+                                        </div>
+                                        <f7-row class="display-flex justify-content-center padding-top">
+                                            <f7-col class="text-align-center">
+                                                <a href="#" class="link text-color-blue" @click="clickCreate(row.id)">
                                                     <span class="material-icons">edit</span>
                                                 </a>
+                                            </f7-col>
+                                            <f7-col class="text-align-center">
                                                 <a href="#" class="link" @click="clickChangeEnabled(row.id, row.enabled)">
                                                     <template v-if="row.enabled">
                                                         <span class="material-icons icon-color-danger">highlight_off</span>
                                                     </template>
                                                     <template v-else>
-                                                        <span class="material-icons icon-color-success">check_circle</span>
+                                                        <span class="material-icons text-color-green">check_circle</span>
                                                     </template>
                                                 </a>
+                                            </f7-col>
+                                            <f7-col class="text-align-center">
                                                 <a href="#" class="link" @click="clickDelete(row.id)">
                                                     <span class="material-icons icon-color-danger">delete</span>
                                                 </a>
-                                            </div>
-
-                                        </div>
+                                            </f7-col>
+                                        </f7-row>
                                     </div>
                                 </div>
                             </div>
@@ -104,11 +104,12 @@
     import {deletable} from "mixins_/deletable"
     import queryString from "query-string"
     import PersonForm from './partials/form.vue'
+    import HeaderLayout from "components/layout/Header"
 
     export default {
         name: "IndexCustomers",
-        components: { PersonForm },
-        mixins: [auth, general_functions, deletable],
+        components: { PersonForm, HeaderLayout },
+        mixins: [auth, general_functions, deletable ],
         data: function () {
             return {
                 resource: 'persons',
@@ -154,7 +155,7 @@
 
             },
             clickDelete(id){
-                
+
                 this.destroy(`${this.returnBaseUrl()}/${this.resource}/${id}`).then(() =>
                     this.$eventHub.$emit('reloadData')
                 )
@@ -213,11 +214,11 @@
                     self.show_preloader = false
                     return
                 }
-                
+
                 this.current_page++
                 await this.getRecords()
 
-            }, 
+            },
             async getRecords() {
 
                 this.show_preloader = true
@@ -237,7 +238,7 @@
 
                             this.show_preloader = false
                             if(this.records.length == 0) this.initLoadingText()
-                            
+
                         })
 
             },

@@ -2,11 +2,11 @@
 <f7-sheet class="demo-sheet default-h-modal padding-top" :opened="showDialog" @sheet:closed="close">
     <f7-page-content>
         <f7-block class="text-align-right no-margin-vertical no-padding-vertical">
-            <f7-link small sheet-close class="no-margin no-padding text-color-red">
+            <f7-link small sheet-close class="no-margin no-padding text-color-gray">
                 <f7-icon material="close"></f7-icon>
             </f7-link>
         </f7-block>
-        <f7-block style="margin-top: 0px !important" color="red">
+        <f7-block style="margin-top: 0px !important" color="bluemagenta">
             <form class="list no-hairlines-md" id="demo-form-customer">
                 <ul>
                     <li class="item-content item-input">
@@ -34,7 +34,7 @@
                                     </div>
                                 </div>
                                 <div class="col-25">
-                                    <f7-button style="font-size: 12px;" @click="generalSearchServiceNumber" class="col" icon="fas fa-search fa-fw" fill color="red">
+                                    <f7-button style="font-size: 12px;" @click="generalSearchServiceNumber" class="col" icon="fas fa-search fa-fw" fill color="deeppurple">
                                         <template v-if="form.identity_document_type_id === '6'">SUNAT</template>
                                         <template v-if="form.identity_document_type_id === '1'">RENIEC</template>
                                     </f7-button>
@@ -94,7 +94,7 @@
                     </li>
 
                     <li class="item-content item-input">
-                        <f7-button style="width: 40%;" fill @click="submit">Guardar</f7-button>
+                        <f7-button style="width: 40%;" fill round color="pink" @click="submit">Guardar</f7-button>
                     </li>
                 </ul>
             </form>
@@ -185,14 +185,14 @@
                     return false
                 }
 
-                if (!this.form.name) 
+                if (!this.form.name)
                 {
                     this.showAlert(`Ingresar el nombre`)
                     return false
                 }
 
                 return true
-            }, 
+            },
             submit() {
                 if (!this.validate()) return
 

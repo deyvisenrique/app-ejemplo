@@ -1,22 +1,23 @@
 <template>
-    <f7-page class="page-red-white" color="white"  infinite :infinite-distance="50" :infinite-preloader="show_preloader" @infinite="loadMoreRecords" ptr  @ptr:refresh="pullToRefresh">
+    <f7-page infinite :infinite-distance="50" :infinite-preloader="show_preloader" @infinite="loadMoreRecords" ptr  @ptr:refresh="pullToRefresh">
 
-        <f7-block>
+        <header-layout></header-layout>
+        <f7-block class="bg-blue-magenta padding-vertical no-margin-vertical">
             <f7-row>
-                <f7-col width="90">
-                    <a class="link back text-color-white">
-                        <i class="icon icon-back"></i>
-                        <span class="">Caja</span>
-                    </a>
-                </f7-col>
                 <f7-col width="10">
-                    <f7-link class="panel-open text-color-white text-align-right" open-panel="right" icon="fas fa-bars"></f7-link>
+                <a class="link back text-color-white" href="/">
+                    <i class="fas fa-angle-left"></i>
+                </a>
                 </f7-col>
+                <f7-col width="80" class="text-color-white text-align-center">
+                Caja
+                </f7-col>
+                <f7-col width="10"></f7-col>
             </f7-row>
         </f7-block>
 
         <f7-card class="card-100 padding-top no-shadow" color="red" style="min-height: 90%">
-            
+
             <f7-block class="">
                 <f7-row>
                     <f7-col width="85">
@@ -30,7 +31,7 @@
                     </f7-col>
 
                     <f7-col width="15" class="text-align-center">
-                        <f7-button @click="clickCreate()" color="blue" fill small open-panel="right" icon="fas fa-plus"></f7-button>
+                        <f7-button @click="clickCreate()" color="bluemagenta" fill small open-panel="right" icon="fas fa-plus"></f7-button>
                         <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
                     </f7-col>
                 </f7-row>
@@ -56,18 +57,18 @@
                                                 <span class="d-block c-padding-2" v-if="row.reference_number"> <b>Referencia:</b> {{row.reference_number}}</span>
                                                 <span class="d-block c-padding-2" v-if="!row.state"><b> Ingreso</b>: S/ {{row.income}}</span>
 
-                                                <span class="d-block c-padding-2"> 
+                                                <span class="d-block c-padding-2">
                                                     <div class="row">
                                                         <div class="col-40">
-                                                            <b>Estado:</b> 
+                                                            <b>Estado:</b>
                                                             {{row.state_description}}
                                                         </div>
                                                         <div class="col-60">
                                                             <template v-if="row.state">
-                                                                <span class="material-icons icon-color-success">check_circle</span>
+                                                                <span class="material-icons text-color-green">check_circle</span>
                                                             </template>
                                                             <template v-else>
-                                                                <span class="material-icons icon-color-danger">highlight_off</span>
+                                                                <span class="material-icons text-color-red">highlight_off</span>
                                                             </template>
                                                         </div>
                                                     </div>
@@ -77,12 +78,11 @@
                                             <div class="col-10 padding-top">
 
                                                 <a href="#" class="link" @click="clickReports(row.id)">
-                                                    <span class="material-icons icon-color-danger">picture_as_pdf</span>
+                                                    <span class="material-icons text-color-bluemagenta">picture_as_pdf</span>
                                                 </a>
-                                                <a href="#" class="link mt-15" @click="clickEmail(row.id)">
+                                                <a href="#" class="link text-color-teal mt-15" @click="clickEmail(row.id)">
                                                     <span class="material-icons">mail</span>
                                                 </a>
-
                                             </div>
                                         </div>
                                     </div>
@@ -90,16 +90,16 @@
 
                                 <div class="card-footer" v-if="row.state">
                                     
-                                    <a href="#" class="link" @click="clickCreate(row.id)">
+                                    <a href="#" class="link text-color-blue" @click="clickCreate(row.id)">
                                         <span class="material-icons">edit</span>
                                     </a>
                                     <template>
                                         <a href="#" class="link" @click="clickClose(row.id)">
-                                            <span class="material-icons icon-color-danger">highlight_off</span>
+                                            <span class="material-icons text-color-red">highlight_off</span>
                                         </a>
                                     </template>
                                     <a href="#" class="link" @click="clickDelete(row.id)">
-                                        <span class="material-icons icon-color-danger">delete</span>
+                                        <span class="material-icons text-color-red">delete</span>
                                     </a>
 
                                 </div>
@@ -132,7 +132,6 @@
 </template>
 
 <script>
-
     import _ from "lodash"
     import { auth } from "mixins_/auth"
     import {general_functions} from "mixins_/general_functions"
@@ -141,11 +140,11 @@
     import CashForm from './partials/form.vue'
     import EmailForm from 'components/document/EmailForm.vue'
     import CashReports from './partials/reports.vue'
-    
+    import HeaderLayout from "components/layout/Header"
 
     export default {
         name: "IndexCash",
-        components: { CashForm, EmailForm, CashReports },
+        components: { CashForm, EmailForm, HeaderLayout, CashReports },
         mixins: [auth, general_functions, deletable],
         data: function () {
             return {
@@ -207,7 +206,7 @@
 
             },
             clickDelete(id){
-                
+
                 this.destroy(`${this.returnBaseUrl()}/${this.resource}/${id}`).then(() =>
                     this.$eventHub.$emit('reloadData')
                 )
@@ -232,10 +231,10 @@
                 {
                     this.showDialog = true
                 }
-                
+
             },
             async checkOpenCash(){
-                
+
                 this.showLoading()
                 await this.$http.get(`${this.returnBaseUrl()}/${this.resource}/check-open-cash`, this.getHeaderConfig())
                         .then(response => {
@@ -299,11 +298,11 @@
                     self.show_preloader = false
                     return
                 }
-                
+
                 this.current_page++
                 await this.getRecords()
 
-            }, 
+            },
             async getRecords() {
 
                 if(this.locked_query) return
@@ -328,7 +327,7 @@
                             if(this.records.length == 0) this.initLoadingText()
 
                             this.locked_query = false
-                            
+
                         })
 
             },

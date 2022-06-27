@@ -1,51 +1,77 @@
 <template>
-<f7-page class="page-red" color="white">
-    <f7-block>
-        <f7-row>
-            <f7-col width="100">
-                <p class="text-align-center">
-                    <img v-if="fp_logo_white" :src="fp_logo_white" alt="FacturaloPeru" width="60%" />
-                </p>
-                <p class="text-align-center text-color-white padding-top">BIENVENIDO</p>
-            </f7-col>
-        </f7-row>
-    </f7-block>
+    <f7-page>
+        <f7-block class="bg-blue-magenta no-margin-vertical padding-vertical">
+            <f7-row>
+                <f7-col width="100">
+                    <p class="text-align-center">
+                        <img v-if="fp_logo_white" :src="fp_logo_white" alt="FacturaloPeru" width="40%" />
+                    </p>
+                </f7-col>
+            </f7-row>
+        </f7-block>
 
-    <f7-card color="red">
-        <f7-card-content>
+        <f7-block>
             <f7-row no-gap>
                 <f7-col>
                     <form class="form-store-data" id="demo-form">
                         <f7-list no-hairlines-md>
-                            <f7-list-input outline floating-label type="text" clear-button label="Correo" placeholder="Correo" name="name" required validate :value="email" @input="email = $event.target.value">
+                            <f7-list-input
+                                floating-label
+                                type="url"
+                                clear-button
+                                label="URL"
+                                placeholder="https://demo.facturalo.pro"
+                                required
+                                validate
+                                :value="url"
+                                @input="url = $event.target.value">
                             </f7-list-input>
-                            <f7-list-input outline floating-label type="password" clear-button label="Contraseña" placeholder="Contraseña" name="password" required validate :value="password" @input="password = $event.target.value">
+                            <f7-list-input
+                                floating-label
+                                type="text"
+                                clear-button
+                                label="Correo electrónico"
+                                placeholder="Correo electrónico"
+                                name="name"
+                                required
+                                validate
+                                :value="email"
+                                @input="email = $event.target.value">
                             </f7-list-input>
-                            <f7-list-input outline floating-label type="url" clear-button label="URL" placeholder="https://demo.facturador.pro" required validate :value="url" @input="url = $event.target.value">
+                            <f7-list-input
+                                floating-label
+                                type="password"
+                                clear-button
+                                label="Contraseña"
+                                placeholder="Contraseña"
+                                name="password"
+                                required
+                                validate
+                                :value="password"
+                                @input="password = $event.target.value">
+                                <span slot="info">
+                                    <f7-link class="link external" color="gray" :href="url+'/password/reset'" target="BLANK">¿olvidaste la contraseña?</f7-link>
+                                </span>
                             </f7-list-input>
                         </f7-list>
                     </form>
                 </f7-col>
             </f7-row>
-        </f7-card-content>
-    </f7-card>
+        </f7-block>
 
-    <f7-block>
-        <f7-row>
-            <f7-col width="20"></f7-col>
-            <f7-col width="60">
-                <f7-button @click="login" color="red-secondary" fill raised>Ingresar</f7-button>
-            </f7-col>
-            <f7-col width="20"></f7-col>
-        </f7-row>
-    </f7-block>
-</f7-page>
+        <f7-block class="display-flex justify-content-center">
+            <f7-row tag="p">
+                <f7-col>
+                    <f7-button class="padding-horizontal" @click="login" color="pink" large fill round>Iniciar sesión</f7-button>
+                </f7-col>
+            </f7-row>
+        </f7-block>
+    </f7-page>
 </template>
 
 <script>
     import {auth} from "mixins_/auth";
-    import FpLogoDark from "assets/images/facturaloperu.png";
-    //import FpLogoWhite from "assets/images/fp_logo_white.png";
+    import logo from "assets/images/tulogo.png";
     import {general_functions} from "mixins_/general_functions"
 
     export default {
@@ -56,8 +82,7 @@
                 email: "demo@gmail.com",
                 password: "123456",
                 url: "https://demo.facturalo.pro",
-                fp_logo_dark: FpLogoDark,
-                fp_logo_white: null,
+                fp_logo_white: logo,
             };
         },
         created() {
@@ -102,13 +127,13 @@
                     .then(response => {
                         let data = response.data;
 
-                        if (data.success) 
+                        if (data.success)
                         {
                             self.saveToken(data.token, data.name, data.email, data.ruc, data.logo);
                             if (data.app_configuration) self.setStorage('app_configuration', data.app_configuration, true)
                             self.$f7router.navigate("/");
-                        } 
-                        else 
+                        }
+                        else
                         {
                             alert("Usuario o Password incorrectos.");
                         }

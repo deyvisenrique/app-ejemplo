@@ -1,32 +1,33 @@
 <template>
-<f7-page class="panel-dark">
-    <f7-block>
-        <f7-row>
-            <f7-col width="30">
-                <p class="text-color-white text-align-right">
-                    <f7-icon material="check_circle" size="44px"></f7-icon>
-                </p>
-            </f7-col>
-            <f7-col width="70">
-                <p class="text-color-white text-align-right">{{user}} <br> {{email}}</p>
-            </f7-col>
-        </f7-row>
+<f7-page class="">
+    <f7-block class="bg-blue-magenta no-margin-top elevation-9">
+        <f7-block class="text-align-right no-margin-top padding-top">
+            <f7-link panel-close class="text-color-white"><i class="fas fa-times"></i></f7-link>
+        </f7-block>
+        <f7-block class="no-margin-vertical">
+            <p class="text-color-white">
+                <f7-icon material="check_circle" size="44px"></f7-icon>
+            </p>
+        </f7-block>
+        <f7-block class="no-margin-top padding-bottom">
+            <p class="text-color-white">{{user}} <br> {{email}}</p>
+        </f7-block>
     </f7-block>
-    <hr>
+    <f7-block class="bg-color-white margin-left">
+        <f7-link @click="go('configuration')" color="black" class="display-block margin-vertical">
+            <f7-icon material="settings" size="18"> </f7-icon>
+            &nbsp;Configuración
+        </f7-link>
+        <f7-link @click="go('login')" color="black" class="display-block margin-vertical">
+            <f7-icon material="verified_user" size="18"> </f7-icon>
+            &nbsp;cuenta
+        </f7-link>
+    </f7-block>
 
-    <div class="footer">
+    <div class="footer bg-color-white">
         <f7-block>
-            <f7-button transparent color="white" @click="go('configuration')">
-                <f7-icon material="settings" size="20"></f7-icon>
-                Configuración
-            </f7-button>
-            <f7-button transparent color="white" @click="go('login')">
-                <f7-icon material="verified_user" size="20"></f7-icon>
-                Accesos
-            </f7-button>
-            <f7-button transparent color="white" @click="logout">
-                <f7-icon material="timer_off" size="20"></f7-icon>
-                Cerrar Sesión
+            <f7-button class="padding-horizontal" @click="logout" color="pink" fill round>
+                Cerrar sesión
             </f7-button>
         </f7-block>
     </div>
@@ -65,7 +66,7 @@ export default {
                 case 'configuration':
                     this.$f7router.navigate("/advanced-configuration/");
                     break;
-                    
+
             }
         },
         logout() {

@@ -1,5 +1,5 @@
 <template>
-<f7-page class="page-red" color="white">
+<f7-page class="bg-blue-magenta" color="">
 
     <f7-block>
         <f7-row>
@@ -27,7 +27,7 @@
         </f7-row>
     </f7-block>
 
-    <f7-card class="card-100 padding no-shadow" color="red" style="min-height: 90%">
+    <f7-card class="card-100 padding no-shadow" color="bluemagenta" style="min-height: 90%">
         <f7-block style="padding:0px">
             <f7-row>
                 <f7-col width="70">
@@ -40,16 +40,16 @@
                     </div>
                 </f7-col>
                 <f7-col width="15" class="text-align-center">
-                    <f7-button @click="clickSearchBarcode" color="blue" fill small open-panel="right" icon="fas fa-camera"></f7-button>
+                    <f7-button @click="clickSearchBarcode" color="bluemagenta" fill small open-panel="right" icon="fas fa-camera"></f7-button>
                     <span class="" style="font-size: 10px;line-height: 10px !important;">BUSCAR</span>
                 </f7-col>
 
                 <f7-col width="15" class="text-align-center">
-                    <f7-button @click="addForm = !addForm" color="blue" fill small open-panel="right" icon="fas fa-plus"></f7-button>
+                    <f7-button @click="addForm = !addForm" color="bluemagenta" fill small open-panel="right" icon="fas fa-plus"></f7-button>
                     <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
                 </f7-col>
             </f7-row>
- 
+
             <f7-row class="padding-horizontal">
                 <f7-col >
                     <f7-list accordion-list>
@@ -70,7 +70,7 @@
                     </f7-list>
                 </f7-col>
             </f7-row>
- 
+
             <div class="list inset ">
                 <p v-if="items_car.length == 0">
                     No tienes productos agregados
@@ -81,43 +81,35 @@
                     <div class="row" v-if="items_car.length > 0">
 
                         <div class="col-50" v-for="(item, index) in items_car" :key="index">
-                            <div class="card">
+                            <div class="card no-margin-horizontal no-padding-horizontal">
+                                <div :style="'background-image:url('+item.item.image+')'" class="card-header align-items-flex-end image-max-width"></div>
                                 <div class="card-content card-content-padding">
-                                    
+
                                     <div class="item-input-wrap">
-                                        <img :src="item.item.image" class="image-max-width">
-                                        
+
                                         <div @click="add(index)" class="item-media" style="min-width: 0px !important;">
-                                            <f7-icon :material="item.quantity > 0 ? 'check_box' : 'check_box_outline_blank'" class="text-color-blue"></f7-icon>
+                                            <f7-icon :material="item.quantity > 0 ? 'check_box' : 'check_box_outline_blank'" class="text-color-bluemagenta"></f7-icon>
                                             <!-- <span>{{ item.quantity > 0 ? 'Agregado' : 'Agregar'}}</span> -->
                                         </div>
 
-                                        <span class="text-align-center"><b>{{ item.full_description }}</b></span><br>
-                                        <span class="float-right">
-                                            <b>
-                                                <div class="item-content">
-                                                    <div class="item-media">{{ item.item.currency_type_symbol }}</div>
-                                                    <input required validate v-model="item.item.sale_unit_price" type="number" />
-                                                </div>
-                                            </b>
+                                        <span class="text-align-center"><b>{{ item.full_description }}</b></span>
+                                        <span class="">
+                                            <div class="item-content no-padding-left">
+                                                <div class="item-media">{{ item.item.currency_type_symbol }}</div>
+                                                <input required validate v-model="item.item.sale_unit_price" type="number" />
+                                            </div>
                                         </span>
                                         <br>
 
                                     </div>
                                 </div>
-                                <div class="card-footer">
-                                    <div class="block text-align-center">
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="stepper stepper-raised stepper-init stepper-small bg-color-white full-max-width">
-                                                    <div class="stepper-button-minus" @click="calculate(-1, index)"></div>
-                                                    <div class="stepper-input-wrap">
-                                                        <input type="number" v-model="item.quantity" min="0" step="1" />
-                                                    </div>
-                                                    <div @click="calculate(1, index)" class="stepper-button-plus"></div>
-                                                </div>
-                                            </div>
+                                <div class="card-footer display-flex justify-content-center">
+                                    <div class="stepper stepper-raised stepper-init full-max-width">
+                                        <div class="stepper-button-minus" @click="calculate(-1, index)"></div>
+                                        <div class="stepper-input-wrap">
+                                            <input type="number" v-model="item.quantity" min="0" step="1" />
                                         </div>
+                                        <div @click="calculate(1, index)" class="stepper-button-plus"></div>
                                     </div>
                                 </div>
                             </div>
@@ -130,7 +122,7 @@
                         <li v-for="(item, index) in items_car" :key="index" class="list-documents">
                             <div class="item-content padding-horizontal margin-vertical">
                                 <div @click="add(index)" class="item-media" style="min-width: 0px !important;">
-                                    <f7-icon :material="item.quantity > 0 ? 'check_box' : 'check_box_outline_blank'" class="text-color-blue"></f7-icon>
+                                    <f7-icon :material="item.quantity > 0 ? 'check_box' : 'check_box_outline_blank'" class="text-color-bluemagenta"></f7-icon>
                                 </div>
                                 <div class="item-inner">
                                     <div class="item-title text-color-blue" style="font-size: .9em">
@@ -165,11 +157,11 @@
     <f7-sheet style="height:55%;" class="demo-sheet" :opened="addForm" @sheet:closed="addForm = false">
         <f7-page-content>
             <f7-block class="text-align-right no-margin-vertical no-padding-vertical">
-                <f7-link small sheet-close class="no-margin no-padding text-color-red">
+                <f7-link small sheet-close class="no-margin no-padding text-color-gray">
                     <f7-icon material="close"></f7-icon>
                 </f7-link>
             </f7-block>
-            <f7-block style="margin-top: 0px !important;" color="red">
+            <f7-block style="margin-top: 0px !important;" color="bluemagenta">
                 <form class="list no-hairlines-md" id="demo-form-item">
                     <ul>
                         <li class="item-content item-input">
@@ -182,8 +174,8 @@
                             </div>
                         </li>
                         <li class="item-content item-input">
-                            <f7-row class="full-width-95">
-                                <f7-col width="90">
+                            <f7-row class="">
+                                <f7-col width="75">
                                     <div class="item-inner" style="width:100% !important">
                                         <div class="item-title item-label">Código de barras</div>
                                         <div class="item-input-wrap">
@@ -192,8 +184,8 @@
                                         </div>
                                     </div>
                                 </f7-col>
-                                <f7-col width="10" class="text-align-center padding-top">
-                                    <f7-button @click="clickGetBarcode" color="blue" fill small open-panel="right" icon="fas fa-camera"></f7-button>
+                                <f7-col width="25" class="text-align-right padding-top">
+                                    <f7-button @click="clickGetBarcode" color="deeppurple" fill open-panel="right" icon="fas fa-camera"></f7-button>
                                 </f7-col>
                             </f7-row>
                         </li>
@@ -269,7 +261,7 @@
 
                         <li class="item-content item-input">
                             <div class="item-inner">
-                                <f7-button fill @click="submit">Guardar</f7-button>
+                                <f7-button fill round color="pink" @click="submit" class="padding-horizontal">Guardar</f7-button>
                             </div>
                         </li>
                     </ul>
@@ -311,9 +303,9 @@
         </f7-page-content>
     </f7-sheet>
 
-    <f7-fab position="right-bottom" color="red" v-if="countCar > 0" @click="send">
+    <f7-fab position="right-bottom" class="margin-right" color="bluemagenta" v-if="countCar > 0" @click="send">
         <f7-icon ios="f7:plus" aurora="f7:plus" md="material:shopping_cart" >
-            <f7-badge color="blue">
+            <f7-badge color="pink">
                 {{ countCar }}
             </f7-badge>
         </f7-icon>
@@ -398,44 +390,44 @@
                 this.searchItems()
             },
             clickGetBarcode(){
-                
+
                 const context = this
-                cordova.plugins.barcodeScanner.scan( 
-                    (result) => { 
+                cordova.plugins.barcodeScanner.scan(
+                    (result) => {
                         if(result.text) this.form.barcode = result.text
-                    }, 
-                    (error) => context.showAlert(`Error al escanear: ${error}`), 
+                    },
+                    (error) => context.showAlert(`Error al escanear: ${error}`),
                     context.scanner_configuration
                 )
 
             },
             inputSearchItem(){
 
-                if (this.search_item.length > 1) 
+                if (this.search_item.length > 1)
                 {
                     this.searchItems()
-                } 
-                else if (this.search_item.length == 0) 
+                }
+                else if (this.search_item.length == 0)
                 {
                     this.initItems()
                 }
 
             },
             clickSearchBarcode(){
-                
+
                 const context = this
 
-                cordova.plugins.barcodeScanner.scan( 
-                    (result) => { 
+                cordova.plugins.barcodeScanner.scan(
+                    (result) => {
                         if(result.text)
                         {
                             this.search_item = result.text
                             this.searchItems(1)
                         }
-                    }, 
-                    (error) => { 
+                    },
+                    (error) => {
                         context.showAlert(`Error al escanear: ${error}`)
-                    }, 
+                    },
                     context.scanner_configuration
                 )
 
@@ -498,7 +490,7 @@
                 };
 
                 this.cleanInputImage()
-                
+
             },
             submit() {
 
@@ -678,7 +670,7 @@
                         self.items_car_base = source.items;
                         self.affectation_igv_types = source.affectation_types;
                         self.categories = source.categories;
-                        
+
                         self.initItems();
                     })
                     .catch(err => {})
@@ -689,7 +681,7 @@
 
             async searchItems(search_by_barcode = 0) {
 
-                if (this.search_item.length > 1 || this.search_category_id) 
+                if (this.search_item.length > 1 || this.search_category_id)
                 {
                     const self = this;
                     self.$f7.preloader.show()
@@ -715,7 +707,7 @@
 
                 if(this.items_car.length == 1 && search_by_barcode)
                 {
-                    this.calculate(1, 0) 
+                    this.calculate(1, 0)
                 }
 
             },

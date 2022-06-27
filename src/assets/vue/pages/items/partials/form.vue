@@ -1,12 +1,12 @@
-<template> 
+<template>
     <f7-sheet class="demo-sheet default-h-modal padding-top" :opened="showDialog" @sheet:closed="close">
         <f7-page-content>
             <f7-block class="text-align-right no-margin-vertical no-padding-vertical">
-                <f7-link small sheet-close class="no-margin no-padding text-color-red">
+                <f7-link small sheet-close class="no-margin no-padding text-color-gray">
                     <f7-icon material="close"></f7-icon>
                 </f7-link>
             </f7-block>
-            <f7-block style="margin-top: 0px !important;" color="red">
+            <f7-block style="margin-top: 0px !important;" color="bluemagenta">
                 <form class="list no-hairlines-md" id="demo-form-item">
                     <ul>
                         <li class="item-content item-input">
@@ -30,7 +30,7 @@
                                     </div>
                                 </f7-col>
                                 <f7-col width="10" class="text-align-center padding-top">
-                                    <f7-button @click="clickGetBarcode" color="blue" fill small open-panel="right" icon="fas fa-camera"></f7-button>
+                                    <f7-button @click="clickGetBarcode" color="deeppurple" fill open-panel="right" icon="fas fa-camera"></f7-button>
                                 </f7-col>
                             </f7-row>
                         </li>
@@ -105,7 +105,7 @@
 
                         <li class="item-content item-input">
                             <div class="item-inner">
-                                <f7-button fill @click="submit">Guardar</f7-button>
+                                <f7-button fill round color="pink" class="padding-horizontal" @click="submit">Guardar</f7-button>
                             </div>
                         </li>
                     </ul>
@@ -153,13 +153,13 @@
                 this.form.category_id = null
             },
             clickGetBarcode(){
-                
+
                 const context = this
-                cordova.plugins.barcodeScanner.scan( 
-                    (result) => { 
+                cordova.plugins.barcodeScanner.scan(
+                    (result) => {
                         if(result.text) this.form.barcode = result.text
-                    }, 
-                    (error) => context.showAlert(`Error al escanear: ${error}`), 
+                    },
+                    (error) => context.showAlert(`Error al escanear: ${error}`),
                     context.scanner_configuration
                 )
 
@@ -173,7 +173,7 @@
                 {
 
                     this.showLoading()
-                    
+
                     await this.$http.get(`${this.returnBaseUrl()}/items/record/${this.recordId}`, this.getHeaderConfig())
                             .then(response => {
 
@@ -245,16 +245,16 @@
 
                         this.showAlert(`${response.data.msg ? response.data.msg : response.data.message}`)
 
-                        if (response.data.success) 
+                        if (response.data.success)
                         {
-                            this.$eventHub.$emit('reloadData')                                                      
+                            this.$eventHub.$emit('reloadData')
                             this.close()
                         }
 
                     })
                     .catch(error => {
 
-                        if (error.response.status === 422) 
+                        if (error.response.status === 422)
                         {
                             const errors = error.response.data.message
                             let validator = this.validationErros(errors)
@@ -263,20 +263,20 @@
                                 this.showAlert(`Validaciones: <br>${validator.message}`)
                             }
 
-                        } 
-                        else 
+                        }
+                        else
                         {
                             console.log(error)
                             alert(`Ocurrió un error al guardar: ${error}`)
                         }
-                        
+
                     })
                     .then(() => {
                         this.$f7.preloader.hide()
                     })
 
             },
-            
+
             validationErros(errors) {
 
                 let message = ''
@@ -309,7 +309,7 @@
             close() {
                 this.$emit('update:showDialog', false)
                 this.initForm()
-            } 
+            }
         }
     }
 </script>

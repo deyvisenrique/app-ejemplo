@@ -1,0 +1,120 @@
+@import 'variables.scss';
+
+//font family
+:root.md {
+  --f7-font-family: Roboto, system-ui, Noto, Helvetica, Arial, sans-serif;
+}
+:root.ios {
+  --f7-font-family: -apple-system, SF Pro Text, SF UI Text, system-ui, Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+:root.aurora {
+  --f7-font-family: -apple-system, system-ui, Helvetica, Arial, sans-serif;
+}
+:root {
+  --f7-color-bluemagenta: #4A2CB3;
+}
+/*====================
+  Color Overrides
+  ==================== */
+  .color-bluemagenta {
+    --f7-theme-color: #4A2CB3;
+    --f7-theme-color-rgb: 74, 44, 179;
+    --f7-theme-color-shade: #4A2CB3;
+    --f7-theme-color-tint: #6E28C9;
+  }
+  .text-color-bluemagenta {
+    --f7-theme-color-text-color: #4A2CB3;
+  }
+  .bg-color-bluemagenta {
+    --f7-theme-color-bg-color: #4A2CB3;
+  }
+  .border-color-bluemagenta {
+    --f7-theme-color-border-color: #4A2CB3;
+  }
+  .ripple-color-bluemagenta,
+  .ripple-bluemagenta {
+    --f7-theme-color-ripple-color: rgba(255, 59, 48, 0.3);
+  }
+
+//tema
+.page-blue-magenta,
+.bg-blue-magenta {
+  background-color: $blue-magenta;
+}
+.bg-blue {
+  background-color: $blue;
+}
+.bg-dark-blue {
+  background-color: $dark-blue;
+}
+.bg-purple {
+  background-color: $purple;
+}
+.bg-white-shade {
+  background-color: $white-shade;
+}
+
+// botones
+.color-pink {
+  background-color: $magenta;
+  // --f7-theme-color-rgb: 230, 30, 173;
+  // --f7-theme-color-shade: #bb158c;
+  // --f7-theme-color-tint: #ec59c2;
+}
+
+//panels
+
+.panel {
+  min-width: 100px;
+  max-width: 60vw;
+}
+
+.image-max-width{
+  background-size: cover;
+  min-height: 125px;
+}
+
+
+
+.full-max-width{
+  max-width: 100%;
+}
+
+
+.full-width{
+  width: 100%;
+}
+
+.c-text-bold{
+  font-weight: bold;
+}
+
+.d-block{
+  display: block;
+}
+
+.c-padding-2{
+  padding: 2px;
+}
+
+
+.default-h80-modal{
+  height: 80%;
+}
+
+.default-h70-modal{
+  height: 70%;
+}
+
+.default-h40-modal{
+  height:40%;
+}
+
+.mt-15{
+  margin-top:15px
+}
+
+
+.default-h30-modal{
+  height:30%;
+}
