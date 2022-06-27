@@ -56,15 +56,12 @@
                         <f7-list-item accordion-item title="Filtrar por categoría">
                             <f7-accordion-content>
                                 <f7-block>
-
                                     <div class="c-horizontal-scroll c-h-50 mp-div-category">
                                         <template v-for="(category, index) in categories">
-                                            <span class="padding c-span-card" :key="index" @click="clickSearchByCategory(category.id)"><b>{{ getCategoryName(category) }}</b></span>
+                                            <span class="padding margin c-span-card" :key="index" @click="clickSearchByCategory(category.id)"><b>{{ getCategoryName(category) }}</b></span>
                                         </template>
                                     </div>
-
                                 </f7-block>
-
                             </f7-accordion-content>
                         </f7-list-item>
                     </f7-list>

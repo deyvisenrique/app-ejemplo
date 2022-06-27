@@ -25,7 +25,7 @@
     <f7-block>
       <f7-row>
         <f7-col>
-          <f7-card @click.native="go('report')" class="bg-purple">
+          <f7-card @click.native="go('report-sales')" class="bg-purple">
             <f7-card-content class="">
               <base-icon nameIcon="bars" widthIcon="35" clases="text-align-right padding-top"></base-icon>
               <p class="text-color-white"><br>Reportes</p>
@@ -192,8 +192,8 @@
                 case "nw_docb":
                     self.$f7router.navigate("/form-document/03");
                     break;
-                case "report":
-                    self.$f7router.navigate("/report/");
+                case "report-sales":
+                    self.$f7router.navigate("/report-sales/");
                     break;
                 case "cpe":
                     self.$f7router.navigate("/cpe/");
