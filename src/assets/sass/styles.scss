@@ -10,6 +10,31 @@
 :root.aurora {
   --f7-font-family: -apple-system, system-ui, Helvetica, Arial, sans-serif;
 }
+:root {
+  --f7-color-bluemagenta: #4A2CB3;
+}
+/*====================
+  Color Overrides
+  ==================== */
+  .color-bluemagenta {
+    --f7-theme-color: #4A2CB3;
+    --f7-theme-color-rgb: 74, 44, 179;
+    --f7-theme-color-shade: #4A2CB3;
+    --f7-theme-color-tint: #6E28C9;
+  }
+  .text-color-bluemagenta {
+    --f7-theme-color-text-color: #4A2CB3;
+  }
+  .bg-color-bluemagenta {
+    --f7-theme-color-bg-color: #4A2CB3;
+  }
+  .border-color-bluemagenta {
+    --f7-theme-color-border-color: #4A2CB3;
+  }
+  .ripple-color-bluemagenta,
+  .ripple-bluemagenta {
+    --f7-theme-color-ripple-color: rgba(255, 59, 48, 0.3);
+  }
 
 //tema
 .page-blue-magenta,
@@ -42,4 +67,9 @@
 .panel {
   min-width: 100px;
   max-width: 60vw;
+}
+
+.image-max-width{
+  background-size: cover;
+  min-height: 125px;
 }

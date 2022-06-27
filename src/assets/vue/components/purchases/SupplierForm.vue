@@ -1,5 +1,5 @@
 <template>
-  <f7-page class="page-red-white" color="white">
+  <f7-page class="bg-blue-magenta">
     <f7-block>
       <f7-row>
         <f7-col width="90">
@@ -41,13 +41,13 @@
     </f7-card>
 
     <f7-sheet
-      style="height:85%;"
+      style="height:75%;"
       class="demo-sheet"
       :opened="addForm"
       @sheet:closed="addForm = false">
       <f7-page-content>
         <f7-block class="text-align-right no-margin-vertical no-padding-vertical">
-          <f7-link sheet-close class="no-padding text-color-red"><f7-icon material="close"></f7-icon></f7-link>
+          <f7-link sheet-close class="no-padding text-color-gray"><f7-icon material="close"></f7-icon></f7-link>
         </f7-block>
         <f7-block style="margin-top: 0px !important;" color="red">
           <form class="list no-hairlines-md" id="demo-form-customer">
@@ -82,10 +82,10 @@
                       </div>
                     </div>
                     <div class="col-25">
-                      <button @click="searchServiceNumberByType" class="col button button-outline">
+                      <f7-button @click="searchServiceNumberByType" fill color="deeppurple">
                         <template v-if="form.identity_document_type_id === '6'">SUNAT</template>
                         <template v-if="form.identity_document_type_id === '1'">RENIEC</template>
-                      </button>
+                      </f7-button>
                     </div>
                   </div>
                 </div>
@@ -142,7 +142,7 @@
               </li>
 
               <li class="item-content item-input">
-                <f7-button style="width: 40%;" fill @click="submit">Guardar</f7-button>
+                <f7-button style="width: 40%;" fill round color="pink" @click="submit">Guardar</f7-button>
               </li>
             </ul>
           </form>

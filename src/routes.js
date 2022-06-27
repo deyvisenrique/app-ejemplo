@@ -7,6 +7,7 @@ import FormPurchase from './assets/vue/pages/purchases/form.vue';
 
 import IndexItems from './assets/vue/pages/items/index.vue';
 import IndexCustomers from './assets/vue/pages/customers/index.vue';
+import IndexCash from './assets/vue/pages/cash/index.vue';
 
 import Validate from './assets/vue/pages/validate.vue';
 import Report from './assets/vue/pages/report.vue';
@@ -77,6 +78,10 @@ export default [
   {
     path: '/customers/',
     component: IndexCustomers
+  },
+  {
+    path: '/cash/',
+    component: IndexCash
   },
   // {
   //   path: '/pdf2/',

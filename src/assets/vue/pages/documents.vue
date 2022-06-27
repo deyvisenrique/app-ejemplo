@@ -4,7 +4,7 @@
     <f7-block class="bg-blue-magenta padding-vertical no-margin-vertical">
       <f7-row>
         <f7-col width="10">
-          <a class="link back text-color-white">
+          <a class="link back text-color-white" href="/">
             <i class="fas fa-angle-left"></i>
           </a>
         </f7-col>

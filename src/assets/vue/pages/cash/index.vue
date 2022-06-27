@@ -6,7 +6,7 @@
                 <f7-col width="90">
                     <a class="link back text-color-white">
                         <i class="icon icon-back"></i>
-                        <span class="">Clientes</span>
+                        <span class="">Caja</span>
                     </a>
                 </f7-col>
                 <f7-col width="10">
@@ -16,7 +16,7 @@
         </f7-block>
 
         <f7-card class="card-100 padding-top no-shadow" color="red" style="min-height: 90%">
-
+            
             <f7-block class="">
                 <f7-row>
                     <f7-col width="85">
@@ -37,12 +37,11 @@
             </f7-block>
 
             <f7-block>
-
                 <div>
                     <div class="row" v-if="records.length > 0">
 
                         <div class="col-100" v-for="(row, index) in records" :key="index">
-                            <div class="card" :class="!row.enabled ? 'border-disabled':''">
+                            <div class="card">
                                 <div class="card-content card-content-padding">
                                     <div class="item-input-wrap">
 
@@ -50,32 +49,63 @@
 
                                             <div class="col-90">
 
-                                                <span class="text-align-center"><b>{{row.name}}</b></span><br>
-                                                <span class="text-align-center"><b> {{row.identity_document_type_description}}</b>: {{row.number}}</span><br>
-                                                <span class="text-align-center" v-if="row.address"> <b>Dirección:</b> {{row.address}}</span><br>
-                                                <span class="text-align-center" v-if="row.telephone"> <b>Teléfono:</b> {{row.telephone}}</span><br>
+                                                <span class="d-block c-padding-2"><b>Apertura:</b> {{row.opening}}</span>
+                                                <span class="d-block c-padding-2" v-if="!row.state"><b> Cierre</b>: {{row.closed}}</span>
+                                                <span class="d-block c-padding-2"><b> Saldo inicial</b>: S/ {{row.beginning_balance}}</span>
+                                                <span class="d-block c-padding-2" v-if="!row.state"><b> Saldo final</b>: S/ {{row.final_balance}}</span>
+                                                <span class="d-block c-padding-2" v-if="row.reference_number"> <b>Referencia:</b> {{row.reference_number}}</span>
+                                                <span class="d-block c-padding-2" v-if="!row.state"><b> Ingreso</b>: S/ {{row.income}}</span>
+
+                                                <span class="d-block c-padding-2"> 
+                                                    <div class="row">
+                                                        <div class="col-40">
+                                                            <b>Estado:</b> 
+                                                            {{row.state_description}}
+                                                        </div>
+                                                        <div class="col-60">
+                                                            <template v-if="row.state">
+                                                                <span class="material-icons icon-color-success">check_circle</span>
+                                                            </template>
+                                                            <template v-else>
+                                                                <span class="material-icons icon-color-danger">highlight_off</span>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+                                                </span>
 
                                             </div>
-                                            <div class="col-10">
-                                                <a href="#" class="link" @click="clickCreate(row.id)">
-                                                    <span class="material-icons">edit</span>
-                                                </a>
-                                                <a href="#" class="link" @click="clickChangeEnabled(row.id, row.enabled)">
-                                                    <template v-if="row.enabled">
-                                                        <span class="material-icons icon-color-danger">highlight_off</span>
-                                                    </template>
-                                                    <template v-else>
-                                                        <span class="material-icons icon-color-success">check_circle</span>
-                                                    </template>
-                                                </a>
-                                                <a href="#" class="link" @click="clickDelete(row.id)">
-                                                    <span class="material-icons icon-color-danger">delete</span>
-                                                </a>
-                                            </div>
+                                            <div class="col-10 padding-top">
 
+                                                <template v-if="row.state">
+                                                    <a href="#" class="link" @click="clickCreate(row.id)">
+                                                        <span class="material-icons">edit</span>
+                                                    </a>
+                                                    <template v-if="row.state">
+                                                        <a href="#" class="link" @click="clickClose(row.id)">
+                                                            <span class="material-icons icon-color-danger">highlight_off</span>
+                                                        </a>
+                                                    </template>
+                                                    <a href="#" class="link" @click="clickDelete(row.id)">
+                                                        <span class="material-icons icon-color-danger">delete</span>
+                                                    </a>
+                                                </template>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="card-footer">
+                                    <a href="#" class="link" >
+                                        <span class="material-icons icon-color-danger">picture_as_pdf</span>
+                                    </a>
+                                    <a href="#" class="link" >
+                                        <span class="material-icons icon-color-success">description</span>
+                                    </a>
+                                    <a href="#" class="link" @click="clickEmail(row.id)">
+                                        <span class="material-icons">mail</span>
+                                    </a>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -90,8 +120,13 @@
             </f7-block>
         </f7-card>
 
-        <person-form :showDialog.sync="showDialog"
-                    :recordId="recordId"></person-form>
+        <cash-form :showDialog.sync="showDialog"
+                    :recordId="recordId"></cash-form>
+
+        <email-form :showDialog.sync="showDialogEmail"
+                    :url="url_email"
+                    :recordId="recordId"
+                    ></email-form>
 
     </f7-page>
 </template>
@@ -103,15 +138,18 @@
     import {general_functions} from "mixins_/general_functions"
     import {deletable} from "mixins_/deletable"
     import queryString from "query-string"
-    import PersonForm from './partials/form.vue'
+    import CashForm from './partials/form.vue'
+    import EmailForm from 'components/document/EmailForm.vue'
+
+    
 
     export default {
-        name: "IndexCustomers",
-        components: { PersonForm },
+        name: "IndexCash",
+        components: { CashForm, EmailForm },
         mixins: [auth, general_functions, deletable],
         data: function () {
             return {
-                resource: 'persons',
+                resource: 'cash',
                 records: [],
                 form: {},
                 current_page: 1,
@@ -127,8 +165,12 @@
                 show_preloader: true,
                 loading_text: null,
                 showDialog: false,
+                showDialogEmail: false,
                 recordId: null,
-                configuration: {}
+                configuration: {},
+                locked_query: false,
+                url_email:null,
+                params_email: null,
             }
         },
         computed: {
@@ -141,20 +183,25 @@
             await this.events()
         },
         methods: {
+            clickEmail(id){
+
+                this.url_email = `${this.returnBaseUrl()}/${this.resource}/email`
+                this.recordId = id
+                this.showDialogEmail = true
+
+            },
             loadConfiguration(){
                 this.configuration = this.getInitialConfiguration()
             },
-            clickChangeEnabled(id, enabled){
+            clickClose(id){
 
-                const enabled_param = enabled ? 0 : 1
-
-                this.changeActive(`${this.returnBaseUrl()}/${this.resource}/change-enabled/${id}/${enabled_param}`, enabled_param).then(() =>
+                this.closeCash(`${this.returnBaseUrl()}/${this.resource}/close/${id}`).then(() =>
                     this.$eventHub.$emit('reloadData')
                 )
 
             },
             clickDelete(id){
-
+                
                 this.destroy(`${this.returnBaseUrl()}/${this.resource}/${id}`).then(() =>
                     this.$eventHub.$emit('reloadData')
                 )
@@ -168,8 +215,41 @@
 
             },
             clickCreate(recordId = null){
+
                 this.recordId = recordId
-                this.showDialog = true
+
+                if(!recordId)
+                {
+                    this.checkOpenCash()
+                }
+                else
+                {
+                    this.showDialog = true
+                }
+                
+            },
+            async checkOpenCash(){
+                
+                this.showLoading()
+                await this.$http.get(`${this.returnBaseUrl()}/${this.resource}/check-open-cash`, this.getHeaderConfig())
+                        .then(response => {
+
+                            if(response.data.success)
+                            {
+                                this.showAlert(response.data.message)
+                            }
+                            else
+                            {
+                                this.showDialog = true
+                            }
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        })
+                        .then(() => {
+                            this.hideLoading()
+                        })
+
             },
             clickClearInput(){
                 this.form.input = null
@@ -180,7 +260,7 @@
             },
             async searchRecords(){
 
-                if(this.form.input.length > 2)
+                if(this.form.input.length > 1)
                 {
                     await this.initData()
                 }
@@ -213,17 +293,20 @@
                     self.show_preloader = false
                     return
                 }
-
+                
                 this.current_page++
                 await this.getRecords()
 
-            },
+            }, 
             async getRecords() {
+
+                if(this.locked_query) return
 
                 this.show_preloader = true
                 this.loading_text = 'Cargando...'
+                this.locked_query = true
 
-                await this.$http.get(`${this.returnBaseUrl()}/${this.resource}/customers/records?${this.getQueryParameters()}`, this.getHeaderConfig())
+                await this.$http.get(`${this.returnBaseUrl()}/${this.resource}/records?${this.getQueryParameters()}`, this.getHeaderConfig())
                         .then(response => {
                             this.records.push(...response.data.data)
                             this.pagination = response.data.meta
@@ -238,6 +321,8 @@
                             this.show_preloader = false
                             if(this.records.length == 0) this.initLoadingText()
 
+                            this.locked_query = false
+                            
                         })
 
             },

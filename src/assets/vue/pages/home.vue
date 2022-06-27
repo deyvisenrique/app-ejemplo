@@ -118,6 +118,16 @@
               </f7-card-content>
           </f7-card>
         </f7-col>
+        <f7-col>
+          <f7-card @click.native="go('cash')" class="bg-blue">
+            <f7-card-content>
+              <base-icon nameIcon="car-sale" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+              <p class="text-color-white">
+                <br>Caja
+              </p>
+            </f7-card-content>
+          </f7-card>
+        </f7-col>
       </f7-row>
     </f7-block>
 </f7-page>
@@ -202,6 +212,9 @@
                     break
                 case "customers":
                     self.$f7router.navigate("/customers/")
+                    break
+                case "cash":
+                    self.$f7router.navigate("/cash/")
                     break
             }
         },

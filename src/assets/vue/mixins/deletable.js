@@ -54,6 +54,25 @@ export const deletable = {
                 })
             })
         },
+        closeCash(url)
+        {
+            return new Promise((resolve) => {
+                
+                this.showDialogConfirm({
+                    title: 'Cerrar caja',
+                    text: '¿Está seguro de cerrar la caja?',
+                    buttons: [
+                        {
+                            text: 'Cancelar',
+                        },
+                        {
+                            text: 'Cerrar',
+                            onClick: () => this.httpGet(url, resolve)
+                        },
+                    ]
+                })
+            })
+        },
         httpGet(url, resolve)
         {
             this.showLoading()
@@ -92,7 +111,7 @@ export const deletable = {
                     this.hideLoading()
                 })
 
-        }
+        },
 
     }
 }

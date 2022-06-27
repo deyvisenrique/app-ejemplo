@@ -1,6 +1,6 @@
 <template>
-  <f7-page class="page-red" color="white">
-    <f7-block>
+  <f7-page class="bg-blue-magenta" color="">
+    <f7-block class="">
       <f7-row>
         <f7-col width="90">
           <a @click="closePopup" class="link text-color-white">
@@ -51,9 +51,9 @@
       <!-- Scrollable sheet content -->
       <f7-page-content>
         <f7-block class="text-align-right no-margin-vertical no-padding-vertical">
-          <f7-link sheet-close class="no-padding text-color-red"><f7-icon material="close"></f7-icon></f7-link>
+          <f7-link sheet-close class="no-padding text-color-gray"><f7-icon material="close"></f7-icon></f7-link>
         </f7-block>
-        <f7-block style="margin-top: 0px !important; " color="red">
+        <f7-block style="margin-top: 0px !important; ">
           <form class="list no-hairlines-md" id="demo-form-customer">
             <ul>
               <li class="item-content item-input">
@@ -86,7 +86,7 @@
                       </div>
                     </div>
                     <div class="col-25">
-                      <f7-button style="font-size: 12px;" @click="searchServiceNumberByType" class="col" icon="fas fa-search fa-fw" fill color="red">
+                      <f7-button style="font-size: 12px;" @click="searchServiceNumberByType" class="col" icon="fas fa-search fa-fw" fill color="deeppurple">
                           <template v-if="form.identity_document_type_id === '6'">SUNAT</template>
                           <template v-if="form.identity_document_type_id === '1'">RENIEC</template>
                       </f7-button>
@@ -146,7 +146,7 @@
               </li>
 
               <li class="item-content item-input">
-                <f7-button style="width: 40%;" fill @click="submit">Guardar</f7-button>
+                <f7-button fill round color="pink" class="padding-horizontal" @click="submit">Guardar</f7-button>
               </li>
             </ul>
           </form>
