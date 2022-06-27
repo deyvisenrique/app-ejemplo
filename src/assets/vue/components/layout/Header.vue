@@ -18,6 +18,7 @@
   import logo from "assets/images/tulogo.png";
 
   export default {
+    name: "HeaderLayout",
     data: function() {
       return {
         fp_logo_white: logo,

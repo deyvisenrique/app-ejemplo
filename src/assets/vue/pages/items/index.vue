@@ -1,5 +1,5 @@
 <template>
-    <f7-page class="page-red-white" color="white"  infinite :infinite-distance="50" :infinite-preloader="show_preloader" @infinite="loadMoreRecords" ptr  @ptr:refresh="pullToRefresh">
+    <f7-page infinite :infinite-distance="50" :infinite-preloader="show_preloader" @infinite="loadMoreRecords" ptr  @ptr:refresh="pullToRefresh">
 
         <f7-block>
             <f7-row>
@@ -16,7 +16,7 @@
         </f7-block>
 
         <f7-card class="card-100 padding-top no-shadow" color="red" style="min-height: 90%">
-            
+
             <f7-block class="">
                 <f7-row>
                     <f7-col width="70">
@@ -28,7 +28,7 @@
                             </div>
                         </div>
                     </f7-col>
-                    
+
                     <f7-col width="15" class="text-align-center">
                         <f7-button @click="clickSearchBarcode" color="blue" fill small open-panel="right" icon="fas fa-camera"></f7-button>
                         <span class="" style="font-size: 10px;line-height: 10px !important;">BUSCAR</span>
@@ -60,7 +60,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    
+
                                     <a href="#" class="link" @click="clickCreate(row.id)">
                                         <span class="material-icons">edit</span>
                                     </a>
@@ -148,9 +148,9 @@
         methods: {
             clickSearchBarcode(){
 
-                const context = this 
-                cordova.plugins.barcodeScanner.scan( 
-                    (result) => { 
+                const context = this
+                cordova.plugins.barcodeScanner.scan(
+                    (result) => {
                         if(result.text)
                         {
                             context.form.input = result.text
@@ -158,10 +158,10 @@
                             context.initData()
                             context.form.search_by_barcode = 0
                         }
-                    }, 
-                    (error) => { 
+                    },
+                    (error) => {
                         context.showAlert(`Error al escanear: ${error}`)
-                    }, 
+                    },
                     context.scanner_configuration
                 )
 
@@ -179,7 +179,7 @@
 
             },
             clickDelete(id){
-                
+
                 this.destroy(`${this.returnBaseUrl()}/items/${id}`).then(() =>
                     this.$eventHub.$emit('reloadData')
                 )
@@ -243,11 +243,11 @@
                     self.show_preloader = false
                     return
                 }
-                
+
                 this.current_page++
                 await this.getRecords()
 
-            }, 
+            },
             async getRecords() {
 
                 this.show_preloader = true
@@ -267,7 +267,7 @@
 
                             this.show_preloader = false
                             if(this.records.length == 0) this.initLoadingText()
-                            
+
                         })
 
             },
