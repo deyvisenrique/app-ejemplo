@@ -1,22 +1,22 @@
 <template>
     <f7-page infinite :infinite-distance="50" :infinite-preloader="show_preloader" @infinite="loadMoreRecords" ptr  @ptr:refresh="pullToRefresh">
 
-        <f7-block>
+        <header-layout></header-layout>
+        <f7-block class="bg-blue-magenta padding-vertical no-margin-vertical">
             <f7-row>
-                <f7-col width="90">
-                    <a class="link back text-color-white">
-                        <i class="icon icon-back"></i>
-                        <span class="">Productos</span>
-                    </a>
-                </f7-col>
                 <f7-col width="10">
-                    <f7-link class="panel-open text-color-white text-align-right" open-panel="right" icon="fas fa-bars"></f7-link>
+                <a class="link back text-color-white" href="/">
+                    <i class="fas fa-angle-left"></i>
+                </a>
                 </f7-col>
+                <f7-col width="80" class="text-color-white text-align-center">
+                Prodcutos
+                </f7-col>
+                <f7-col width="10"></f7-col>
             </f7-row>
         </f7-block>
 
         <f7-card class="card-100 padding-top no-shadow" color="red" style="min-height: 90%">
-
             <f7-block class="">
                 <f7-row>
                     <f7-col width="70">
@@ -28,48 +28,42 @@
                             </div>
                         </div>
                     </f7-col>
-
                     <f7-col width="15" class="text-align-center">
-                        <f7-button @click="clickSearchBarcode" color="blue" fill small open-panel="right" icon="fas fa-camera"></f7-button>
+                        <f7-button @click="clickSearchBarcode" color="bluemagenta" fill small open-panel="right" icon="fas fa-camera"></f7-button>
                         <span class="" style="font-size: 10px;line-height: 10px !important;">BUSCAR</span>
                     </f7-col>
-
                     <f7-col width="15" class="text-align-center">
-                        <f7-button @click="clickCreate()" color="blue" fill small open-panel="right" icon="fas fa-plus"></f7-button>
+                        <f7-button @click="clickCreate()" color="bluemagenta" fill small open-panel="right" icon="fas fa-plus"></f7-button>
                         <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
                     </f7-col>
                 </f7-row>
             </f7-block>
 
             <f7-block>
-
                 <div>
                     <div class="row" v-if="records.length > 0">
-
                         <div class="col-50" v-for="(row, index) in records" :key="index">
-                            <div class="card" :class="!row.active ? 'border-disabled':''">
+                            <div class="card no-margin-horizontal no-padding-horizontal" :class="!row.active ? 'border-disabled':''">
+                                <template v-if="configuration.show_image_item">
+                                    <div :style="'background-image:url('+row.image_url+')'" class="card-header align-items-flex-end image-max-width"></div>
+                                </template>
                                 <div class="card-content card-content-padding">
                                     <div class="item-input-wrap">
-                                        <template v-if="configuration.show_image_item">
-                                            <img :src="row.image_url" class="image-max-width">
-                                        </template>
-
                                         <span class="text-align-center"><b>{{row.description}}</b></span><br>
                                         <span class="text-align-center">{{row.internal_id}}</span><br>
                                         <span class="float-right"><b>{{row.show_sale_unit_price}}</b></span><br>
                                     </div>
                                 </div>
                                 <div class="card-footer">
-
                                     <a href="#" class="link" @click="clickCreate(row.id)">
-                                        <span class="material-icons">edit</span>
+                                        <span class="material-icons text-color-blue">edit</span>
                                     </a>
                                     <a href="#" class="link" @click="clickChangeActive(row.id, row.active)">
                                         <template v-if="row.active">
                                             <span class="material-icons icon-color-danger">highlight_off</span>
                                         </template>
                                         <template v-else>
-                                            <span class="material-icons icon-color-success">check_circle</span>
+                                            <span class="material-icons text-color-success">check_circle</span>
                                         </template>
                                     </a>
                                     <a href="#" class="link" @click="clickDelete(row.id)">
@@ -86,7 +80,6 @@
                             </h3>
                         </div>
                     </div>
-
                 </div>
             </f7-block>
         </f7-card>
@@ -109,10 +102,11 @@
     import {deletable} from "mixins_/deletable"
     import queryString from "query-string"
     import ItemForm from './partials/form.vue'
+    import HeaderLayout from "components/layout/Header"
 
     export default {
         name: "IndexItems",
-        components: { ItemForm },
+        components: { ItemForm, HeaderLayout },
         mixins: [auth, general_functions, deletable, scanner],
         data: function () {
             return {

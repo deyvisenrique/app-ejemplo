@@ -82,8 +82,7 @@
 
                         <div class="col-50" v-for="(item, index) in items_car" :key="index">
                             <div class="card no-margin-horizontal no-padding-horizontal">
-                                <div :style="'background-image:url('+item.item.image+')'"
-          class="card-header align-items-flex-end image-max-width"></div>
+                                <div :style="'background-image:url('+item.item.image+')'" class="card-header align-items-flex-end image-max-width"></div>
                                 <div class="card-content card-content-padding">
 
                                     <div class="item-input-wrap">
