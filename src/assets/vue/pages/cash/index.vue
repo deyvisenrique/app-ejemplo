@@ -76,34 +76,32 @@
                                             </div>
                                             <div class="col-10 padding-top">
 
-                                                <template v-if="row.state">
-                                                    <a href="#" class="link" @click="clickCreate(row.id)">
-                                                        <span class="material-icons">edit</span>
-                                                    </a>
-                                                    <template v-if="row.state">
-                                                        <a href="#" class="link" @click="clickClose(row.id)">
-                                                            <span class="material-icons icon-color-danger">highlight_off</span>
-                                                        </a>
-                                                    </template>
-                                                    <a href="#" class="link" @click="clickDelete(row.id)">
-                                                        <span class="material-icons icon-color-danger">delete</span>
-                                                    </a>
-                                                </template>
+                                                <a href="#" class="link" @click="clickReports(row.id)">
+                                                    <span class="material-icons icon-color-danger">picture_as_pdf</span>
+                                                </a>
+                                                <a href="#" class="link mt-15" @click="clickEmail(row.id)">
+                                                    <span class="material-icons">mail</span>
+                                                </a>
+
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="card-footer">
-                                    <a href="#" class="link" @click="clickReports(row.id)">
-                                        <span class="material-icons icon-color-danger">picture_as_pdf</span>
+                                <div class="card-footer" v-if="row.state">
+                                    
+                                    <a href="#" class="link" @click="clickCreate(row.id)">
+                                        <span class="material-icons">edit</span>
                                     </a>
-                                    <a href="#" class="link" >
-                                        <span class="material-icons icon-color-success">description</span>
+                                    <template>
+                                        <a href="#" class="link" @click="clickClose(row.id)">
+                                            <span class="material-icons icon-color-danger">highlight_off</span>
+                                        </a>
+                                    </template>
+                                    <a href="#" class="link" @click="clickDelete(row.id)">
+                                        <span class="material-icons icon-color-danger">delete</span>
                                     </a>
-                                    <a href="#" class="link" @click="clickEmail(row.id)">
-                                        <span class="material-icons">mail</span>
-                                    </a>
+
                                 </div>
 
                             </div>
@@ -187,6 +185,7 @@
         },
         methods: {
             clickReports(recordId){
+                console.log(recordId)
                 this.recordId = recordId
                 this.showDialogReports = true
             },

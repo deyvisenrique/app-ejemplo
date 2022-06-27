@@ -1,63 +1,33 @@
 <template>
-<f7-sheet class="demo-sheet default-h40-modal padding-top" :opened="showDialog" @sheet:closed="close">
+<f7-sheet class="demo-sheet default-h70-modal padding-top" :opened="showDialog" @sheet:closed="close">
     <f7-page-content>
         <f7-block class="text-align-right no-margin-vertical no-padding-vertical">
             <f7-link small sheet-close class="no-margin no-padding text-color-red">
                 <f7-icon material="close"></f7-icon>
             </f7-link>
         </f7-block>
-        <f7-block style="margin-top: 0px !important" color="red"> 
+        <f7-block  color="red"> 
             
-            <!-- <f7-block-title>Reporte general</f7-block-title>
-            <f7-list simple-list>
-                <f7-list-item title="Item 1">
-                    <label class="radio"><input type="radio" name="demo-radio-inline" /><i class="icon-radio"></i></label> 
-                </f7-list-item>
-                <f7-list-item title="Item 2"></f7-list-item>
-                <f7-list-item title="Item 3"></f7-list-item>
-            </f7-list> -->
-<div class="block-title">Radio Group</div>
-    <div class="block-header">Icon in the beginning of the list item</div>
-    <div class="list">
-      <ul>
-        <li>
-          <label class="item-radio item-radio-icon-start item-content">
-            <input type="radio" name="demo-radio-start" value="Books" checked />
-            <i class="icon icon-radio"></i>
-            <div class="item-inner">
-              <div class="item-title">Books</div>
-            </div>
-          </label>
-        </li>
-        <li>
-          <label class="item-radio item-radio-icon-start item-content">
-            <input type="radio" name="demo-radio-start" value="Movies" />
-            <i class="icon icon-radio"></i>
-            <div class="item-inner">
-              <div class="item-title">Movies</div>
-            </div>
-          </label>
-        </li>
-        <li>
-          <label class="item-radio item-radio-icon-start item-content">
-            <input type="radio" name="demo-radio-start" value="Food" />
-            <i class="icon icon-radio"></i>
-            <div class="item-inner">
-              <div class="item-title">Food</div>
-            </div>
-          </label>
-        </li>
-        <li>
-          <label class="item-radio item-radio-icon-start item-content">
-            <input type="radio" name="demo-radio-start" value="Drinks" />
-            <i class="icon icon-radio"></i>
-            <div class="item-inner">
-              <div class="item-title">Drinks</div>
-            </div>
-          </label>
-        </li>
-      </ul>
-    </div>
+            <template v-for="(row, index) in data">
+
+                <div :key="index">
+                    <div class="block-title" >{{row.title}}</div>
+                    <div class="list">
+                        <ul>
+                            <li v-for="(option, index) in row.options" :key="index">
+                                <label class="item-radio item-radio-icon-start item-content">
+                                    <input type="radio" name="demo-radio-start" @change="changeOption(option)"/>
+                                    <i class="icon icon-radio"></i>
+                                        <div class="item-inner">
+                                        <div class="item-title">{{option.title}}</div>
+                                    </div>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </template>
         </f7-block>
         
     </f7-page-content>
@@ -68,14 +38,15 @@
 
     import {auth} from "mixins_/auth"
     import {general_functions} from "mixins_/general_functions"
+    import {download_file} from "mixins_/download_file"
 
     export default {
         props: ['showDialog', 'recordId'],
-        mixins: [auth, general_functions],
+        mixins: [auth, general_functions, download_file],
         data: function () {
             return {
                 resource: 'cash',
-                form: {},
+                data: [],
             }
         },
         watch: {
@@ -86,110 +57,74 @@
             }
         },
         async created() {
-            await this.initForm()
+            await this.initData()
         },
         methods: {
-            open() {
-                // this.getRecord()
+            initData(){
+                this.data = []
             },
-            async getRecord() {
-
-                if (this.recordId) {
-
-                    this.showLoading()
-
-                    await this.$http.get(`${this.returnBaseUrl()}/${this.resource}/record/${this.recordId}`, this.getHeaderConfig())
-                        .then(response => {
-                            this.form = response.data.data
-                        })
-                        .catch(error => {
-                            console.log(error)
-                        })
-                        .then(() => {
-                            this.hideLoading()
-                        })
-
-                }
+            async open() {
+                await this.setData()
+            },
+            async changeOption(option){
+                
+                await this.showLoading()
+                await this.downloadOpenFile(option.url, option.filename, true)
+                await this.hideLoading()
 
             },
-            initForm() {
+            setData() {
 
-                this.form = {
-                    id: null,
-                    user_id: null,
-                    date_opening: null,
-                    time_opening: null,
-                    date_closed: null,
-                    time_closed: null,
-                    beginning_balance: 0,
-                    final_balance: 0,
-                    income: 0, 
-                    state: true,
-                    reference_number: null
-                }
+                const base_url = `${this.returnBaseUrl()}/${this.resource}`
+                const extension = 'pdf'
 
-            },
-            submit() {
-
-                this.showLoading()
-
-                this.$http.post(`${this.returnBaseUrl()}/${this.resource}`, this.form, this.getHeaderConfig())
-                    .then(response => {
-
-                        this.showAlert(`${response.data.msg ? response.data.msg : response.data.message}`)
-
-                        if (response.data.success) {
-                            this.$eventHub.$emit('reloadData')
-                            this.close()
-                        }
-
-                    })
-                    .catch(error => {
-
-                        if (error.response.status === 422) {
-                            const errors = error.response.data.message
-                            let validator = this.validationErros(errors)
-
-                            if (!validator.success) {
-                                this.showAlert(`Validaciones: <br>${validator.message}`)
+                this.data = [
+                    {
+                        title: 'Reporte general',
+                        options: [
+                            {
+                                title: 'PDF A4',
+                                url: `${base_url}/general-report/${this.recordId}`,
+                                filename: `${this.recordId}-general-report-a4.${extension}`
+                            },
+                            {
+                                title: 'PDF Ticket',
+                                url: `${base_url}/general-report/${this.recordId}/ticket`,
+                                filename: `${this.recordId}-general-report-ticket.${extension}`
                             }
-
-                        } else {
-                            console.log(error)
-                            alert(`Ocurrió un error al guardar: ${error}`)
-                        }
-
-                    })
-                    .then(() => {
-                        this.hideLoading()
-                    })
-
-            },
-
-            validationErros(errors) {
-
-                let message = ''
-                let error = {
-                    success: true
-                }
-
-                if (errors.beginning_balance) {
-                    message += `${errors.beginning_balance[0]} <br>`
-                }
-
-                if (message != '') {
-                    error = {
-                        success: false,
-                        message: message
-                    }
-                }
-
-                return error
+                        ]
+                    },
+                    {
+                        title: 'Reporte productos',
+                        options: [
+                            {
+                                title: 'PDF A4',
+                                url: `${base_url}/product-report/${this.recordId}`,
+                                filename: `${this.recordId}-product-report.${extension}`
+                            },
+                        ]
+                    },
+                    {
+                        title: 'Reporte efectivo' ,
+                        options: [
+                            {
+                                title: 'Ingresos',
+                                url: `${base_url}/income-summary-report/${this.recordId}`,
+                                filename: `${this.recordId}-income-summary-report.${extension}`
+                            },
+                            {
+                                title: 'Ingresos y egresos',
+                                url: `${base_url}/income-egress-report/${this.recordId}`,
+                                filename: `${this.recordId}-income-egress-report.${extension}`
+                            },
+                        ]
+                    },
+                ]
 
             },
             close() {
                 this.$emit('update:showDialog', false)
-                this.initForm()
+                this.initData()
             }
         }
     }

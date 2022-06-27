@@ -23,7 +23,19 @@ export const download_file = {
             return url
 
         },
-        async downloadOpenFile(url, filename){
+        getDownloadAuthorization(authorization){
+
+            let options = {}
+            
+            if(authorization)
+            {
+                options.headers = {'Authorization': `Bearer ${this.getStorage('api_token')}`}
+            }
+
+            return options
+
+        },
+        async downloadOpenFile(url, filename, authorization = false){
 
             const context = this
             const file_transfer = new FileTransfer()
@@ -41,7 +53,7 @@ export const download_file = {
                     console.log('Error status: '+ JSON.stringify(error))
                 }, 
                 false,
-                {}
+                this.getDownloadAuthorization(authorization)
             )
 
         },
