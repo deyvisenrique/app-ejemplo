@@ -53,14 +53,14 @@
         <f7-block class="text-align-right no-margin-vertical no-padding-vertical">
           <f7-link sheet-close class="no-padding text-color-gray"><f7-icon material="close"></f7-icon></f7-link>
         </f7-block>
-        <f7-block style="margin-top: 0px !important; ">
+        <f7-block style="margin-top: 0px !important;" color="bluemagenta">>
           <form class="list no-hairlines-md" id="demo-form-customer">
             <ul>
               <li class="item-content item-input">
                 <div class="item-inner">
                   <div class="item-title item-label">Tipo Doc. Identidad</div>
                   <div class="item-input-wrap input-dropdown-wrap">
-                    <select v-model="form.identity_document_type_id" placeholder="Please choose...">
+                    <select v-model="form.identity_document_type_id" placeholder="Seleccione">
                       <option value="1">DNI</option>
                       <option value="6">RUC</option>
                     </select>

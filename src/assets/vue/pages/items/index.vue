@@ -10,7 +10,7 @@
                 </a>
                 </f7-col>
                 <f7-col width="80" class="text-color-white text-align-center">
-                Prodcutos
+                Productos
                 </f7-col>
                 <f7-col width="10"></f7-col>
             </f7-row>

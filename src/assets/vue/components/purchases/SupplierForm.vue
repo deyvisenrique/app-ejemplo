@@ -49,7 +49,7 @@
         <f7-block class="text-align-right no-margin-vertical no-padding-vertical">
           <f7-link sheet-close class="no-padding text-color-gray"><f7-icon material="close"></f7-icon></f7-link>
         </f7-block>
-        <f7-block style="margin-top: 0px !important;" color="red">
+        <f7-block style="margin-top: 0px !important;" color="bluemagenta">
           <form class="list no-hairlines-md" id="demo-form-customer">
             <ul>
               <li class="item-content item-input">

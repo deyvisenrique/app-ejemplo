@@ -2,11 +2,11 @@
 <f7-sheet class="demo-sheet default-h40-modal padding-top" :opened="showDialog" @sheet:closed="close">
     <f7-page-content>
         <f7-block class="text-align-right no-margin-vertical no-padding-vertical">
-            <f7-link small sheet-close class="no-margin no-padding text-color-red">
+            <f7-link small sheet-close class="no-margin no-padding text-color-gray">
                 <f7-icon material="close"></f7-icon>
             </f7-link>
         </f7-block>
-        <f7-block style="margin-top: 0px !important" color="red">
+        <f7-block style="margin-top: 0px !important" color="bluemagenta">
             <form class="list no-hairlines-md" id="demo-form-customer">
                 <ul>
 
@@ -31,7 +31,7 @@
                     </li>
 
                     <li class="item-content item-input">
-                        <f7-button style="width: 40%;" fill @click="submit">Guardar</f7-button>
+                        <f7-button style="width: 40%;" fill round color="pink" @click="submit">Guardar</f7-button>
                     </li>
                 </ul>
             </form>
@@ -99,7 +99,7 @@
                     time_closed: null,
                     beginning_balance: 0,
                     final_balance: 0,
-                    income: 0, 
+                    income: 0,
                     state: true,
                     reference_number: null
                 }
