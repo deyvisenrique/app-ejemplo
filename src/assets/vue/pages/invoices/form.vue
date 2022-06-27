@@ -333,6 +333,7 @@
     import {auth } from "mixins_/auth"
     import {general_functions} from "mixins_/general_functions"
     import {findGeneralDefaultSerie} from "js_/helpers/functions"
+    import {store_cash} from "../cash/mixins/cash"
 
     export default {
         name: "FormDocument",
@@ -340,7 +341,7 @@
             ItemsForm,
             CustomerForm
         },
-        mixins: [auth, general_functions],
+        mixins: [auth, general_functions, store_cash],
         data: function () {
             return {
                 codeType: "",
@@ -761,6 +762,8 @@
                                 },
                                 verticalButtons: true,
                             }).open()
+
+                            self.storeCashDocument(data.data.id)
 
                         } else {
                             alert("No se registro la Venta")

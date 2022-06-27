@@ -275,6 +275,7 @@
     import {auth} from "mixins_/auth"
     import {findGeneralDefaultSerie} from "js_/helpers/functions"
     import {general_functions} from "mixins_/general_functions"
+    import {store_cash} from "../cash/mixins/cash"
 
     export default {
         name: "FormSaleNote",
@@ -282,7 +283,7 @@
             ItemsForm,
             CustomerForm
         },
-        mixins: [auth, general_functions],
+        mixins: [auth, general_functions, store_cash],
         data: function () {
             // Must return an object
             return {
@@ -425,6 +426,8 @@
                         let data = response.data;
                         if (data.success) {
                             this.initForm();
+
+                            self.storeCashDocument(null, data.data.id)
 
                             self.$f7.dialog.alert(
                                 `Nota de venta registrada ` + data.data.number,
