@@ -2,7 +2,7 @@
     <!-- App -->
     <f7-app :params="f7params">
         <f7-statusbar></f7-statusbar>
-        <f7-panel right cover>
+        <f7-panel right cover class="custom-width-panel-right">
             <f7-view url="/panel-right/" links-view=".view-main" />
         </f7-panel>
         <f7-view url="/" :main="true" class="ios-edges"></f7-view>

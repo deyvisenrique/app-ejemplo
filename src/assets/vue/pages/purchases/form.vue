@@ -5,10 +5,10 @@
         <f7-row>
             <f7-col width="10">
                 <a class="link back text-color-white" href="/">
-                    <i class="fas fa-angle-left"></i>
+                    <i class="fas fa-angle-left custom-icon-back-form"></i>
                 </a>
             </f7-col>
-            <f7-col width="80" class="text-color-white text-align-center">
+            <f7-col width="80" class="text-color-white text-align-center custom-title-form">
                 Compra
             </f7-col>
             <f7-col width="10"></f7-col>

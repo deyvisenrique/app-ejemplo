@@ -21,15 +21,19 @@
           <f7-list-input
             outline
             floating-label
-            type="url"
+            type="text"
             clear-button
             label="URL"
-            placeholder="https://demo.facturador.pro"
+            placeholder="demo.facturador.pro"
             required
             validate
             :value="form.url"
             @input="form.url = $event.target.value"
           >
+          <template v-slot:media>
+              <f7-icon icon="demo-list-icon">{{ internet_protocol }}</f7-icon>
+          </template>
+
           </f7-list-input>
           <f7-list-input
             outline
@@ -85,32 +89,58 @@
 </style>
 
 <script>
+
+import {general_functions} from "mixins_/general_functions"
+
 export default {
+  mixins: [general_functions],
   name: "Configuration",
   components: {},
   data: function() {
     return {
-      form: {}
+      form: {},
+      internet_protocol: 'https://'
     };
   },
   created() {
     this.initForm();
   },
   methods: {
+    getStorageApiUrl(){
+
+        const storage_api_url = localStorage.api_url
+
+        if (storage_api_url) 
+        {
+            if(storage_api_url.includes(this.internet_protocol))
+            {
+                const parse_url = storage_api_url.split('//')
+                if(parse_url.length == 2) return parse_url[1]
+            }
+            else
+            {
+                return storage_api_url
+            }
+        }
+
+    },
     initForm() {
+      
       this.form = {
         email: localStorage.user_email,
         password: localStorage.user_password,
-        url: localStorage.api_url
+        url: this.getStorageApiUrl()
+        // url: localStorage.api_url
       };
     },
     submit() {
       if (!this.form.email || !this.form.password || !this.form.url) {
-        return;
+          return this.showAlert('Los campos son obligatorios.')
       }
 
+      this.showLoading()
       this.$http
-        .post(`${this.form.url}/api/login`, {
+        .post(`${this.internet_protocol}${this.form.url}/api/login`, {
           email: this.form.email,
           password: this.form.password
         })
@@ -129,7 +159,7 @@ export default {
           alert("No se logro conexion con la URL, verifique la URL.");
         })
         .then(() => {
-          self.$f7.preloader.hide();
+            this.hideLoading()
         });
     },
     saveToken(token, name, email) {
@@ -137,7 +167,7 @@ export default {
       localStorage.user_name = name;
       localStorage.user_email = email;
 
-      localStorage.api_url = this.form.url;
+      localStorage.api_url = `${this.internet_protocol}${this.form.url}`;
     },
     back() {
       this.$f7router.navigate("/panel-right/");

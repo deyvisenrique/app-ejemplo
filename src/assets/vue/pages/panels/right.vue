@@ -95,6 +95,8 @@
         },
         methods: {
             getNotifications(){
+
+                if(!this.getStorage('api_token')) return
                 
                 this.showLoading()
                 this.$http.get(`${this.returnBaseUrl()}/documents/notifications`, this.getHeaderConfig())
