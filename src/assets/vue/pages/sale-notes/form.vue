@@ -5,10 +5,10 @@
         <f7-row>
             <f7-col width="10">
             <a class="link back text-color-white" href="/">
-                <i class="fas fa-angle-left"></i>
+                <i class="fas fa-angle-left custom-icon-back-form"></i>
             </a>
             </f7-col>
-            <f7-col width="80" class="text-color-white text-align-center">
+            <f7-col width="80" class="text-color-white text-align-center custom-title-form">
                 Nota de Venta
             </f7-col>
             <f7-col width="10"></f7-col>
@@ -242,6 +242,7 @@
 </style>
 
 <script>
+
     import moment from "moment"
     import _ from "lodash"
     import ItemsForm from "components/document/ItemsForm"
@@ -249,6 +250,8 @@
     import {auth} from "mixins_/auth"
     import {findGeneralDefaultSerie} from "js_/helpers/functions"
     import {general_functions} from "mixins_/general_functions"
+    import {download_file} from "mixins_/download_file"
+    import {store_cash} from "../cash/mixins/cash"
     import HeaderLayout from "components/layout/Header"
 
     export default {
@@ -258,7 +261,7 @@
             CustomerForm,
             HeaderLayout
         },
-        mixins: [auth, general_functions],
+        mixins: [auth, general_functions, store_cash, download_file],
         data: function () {
             // Must return an object
             return {
@@ -400,72 +403,123 @@
                     .then(response => {
                         let data = response.data;
                         if (data.success) {
-                            this.initForm();
 
-                            self.$f7.dialog.alert(
-                                `Nota de venta registrada ` + data.data.number,
-                                "Mensaje"
-                            );
-                            self.$f7router.navigate("/documents/");
+                            this.initForm()
+                            self.storeCashDocument(null, data.data.id)
+                            this.showDialogOptions(data)
+
                         } else {
-                            alert("No se registro la Nota de venta");
+                            alert("No se registro la Nota de venta")
                         }
                     })
                     .catch(err => {
-                        alert(`${err.message}`);
+                        alert(`${err.message}`)
                     })
                     .then(() => {
-                        self.$f7.preloader.hide();
-                    });
+                        self.$f7.preloader.hide()
+                    })
+            },
+            async toPrint(data){
+
+                await this.showLoading()
+                await this.downloaFileToPrint(data.data.print_ticket, data.data.filename) //definido en mixin download_file
+                await this.hideLoading()
+
+            },
+            showDialogOptions(data){
+                
+                const context = this
+
+                context.showDialogConfirm({
+                    title: 'Nota de venta registrada',
+                    text: data.data.number,
+                    buttons: context.getOptionsButtons(),
+                    onClick: function(dialog, index){
+                        context.clickOptionsButtons(dialog, index, data)
+                    },
+                    verticalButtons: true,
+                })
+                
+            },
+            clickOptionsButtons(dialog, index, data){
+
+                // Imprimir
+                if(index === 0)
+                {
+                    this.toPrint(data)
+                }
+                // Ir listado
+                else if (index === 1)
+                {
+                    this.$f7router.navigate("/documents/")
+                }
+
+            },
+            getOptionsButtons(){
+                return [
+                    {
+                        text: 'Imprimir',
+                        cssClass: 'text-center',
+                        close: false
+                    },
+                    {
+                        text: 'Ir al listado',
+                        cssClass: 'text-center',
+                    },
+                    {
+                        text: 'Continuar',
+                        cssClass: 'text-center'
+                    },
+                ]
             },
 
             calculateTotal() {
-                let total_discount = 0;
-                let total_charge = 0;
-                let total_exportation = 0;
-                let total_taxed = 0;
-                let total_exonerated = 0;
-                let total_unaffected = 0;
-                let total_free = 0;
-                let total_igv = 0;
-                let total_value = 0;
-                let total = 0;
-                let total_plastic_bag_taxes = 0;
+                let total_discount = 0
+                let total_charge = 0
+                let total_exportation = 0
+                let total_taxed = 0
+                let total_exonerated = 0
+                let total_unaffected = 0
+                let total_free = 0
+                let total_igv = 0
+                let total_value = 0
+                let total = 0
+                let total_plastic_bag_taxes = 0
                 this.form.items.forEach(row => {
                     if (row.affectation_igv_type_id === "10") {
-                        total_taxed += parseFloat(row.total_value);
+                        total_taxed += parseFloat(row.total_value)
                     }
                     if (row.affectation_igv_type_id === "20") {
-                        total_exonerated += parseFloat(row.total_value);
+                        total_exonerated += parseFloat(row.total_value)
                     }
                     if (row.affectation_igv_type_id === "30") {
-                        total_unaffected += parseFloat(row.total_value);
+                        total_unaffected += parseFloat(row.total_value)
                     }
                     if (row.affectation_igv_type_id === "40") {
-                        total_exportation += parseFloat(row.total_value);
+                        total_exportation += parseFloat(row.total_value)
                     }
                     if (["10", "20", "30", "40"].indexOf(row.affectation_igv_type_id) < 0) {
-                        total_free += parseFloat(row.total_value);
+                        total_free += parseFloat(row.total_value)
                     }
                     if (
                         ["10", "20", "30", "40"].indexOf(row.affectation_igv_type_id) > -1
                     ) {
-                        total_igv += parseFloat(row.total_igv);
-                        total += parseFloat(row.total);
+                        total_igv += parseFloat(row.total_igv)
+                        total += parseFloat(row.total)
                     }
-                    total_value += parseFloat(row.total_value);
-                    total_plastic_bag_taxes += parseFloat(row.total_plastic_bag_taxes);
-                });
+                    total_value += parseFloat(row.total_value)
+                    total_plastic_bag_taxes += parseFloat(row.total_plastic_bag_taxes)
+                })
 
-                this.form.total_exportation = _.round(total_exportation, 2);
-                this.form.total_taxed = _.round(total_taxed, 2);
-                this.form.total_exonerated = _.round(total_exonerated, 2);
-                this.form.total_unaffected = _.round(total_unaffected, 2);
-                this.form.total_free = _.round(total_free, 2);
-                this.form.total_igv = _.round(total_igv, 2);
-                this.form.total_value = _.round(total_value, 2);
-                this.form.total_taxes = _.round(total_igv, 2);
-                this.form.total = _.round(total, 2);
+                this.form.total_exportation = _.round(total_exportation, 2)
+                this.form.total_taxed = _.round(total_taxed, 2)
+                this.form.total_exonerated = _.round(total_exonerated, 2)
+                this.form.total_unaffected = _.round(total_unaffected, 2)
+                this.form.total_free = _.round(total_free, 2)
+                this.form.total_igv = _.round(total_igv, 2)
+                this.form.total_value = _.round(total_value, 2)
+                this.form.total_taxes = _.round(total_igv, 2)
+                this.form.total = _.round(total, 2)
                 this.form.payments = [{
                     date_of_payment: this.form.date_of_issue,
                     document_id: null,
@@ -474,7 +528,7 @@
                     payment_destination_id: this.data.paymentdestination,
                     payment_method_type_id: this.data.paymentmethodtype,
                     reference: this.data.referencia,
-                }];
+                }]
             },
 
             initForm() {

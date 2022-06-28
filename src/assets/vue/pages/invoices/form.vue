@@ -5,10 +5,10 @@
             <f7-row>
                 <f7-col width="10">
                 <a class="link back text-color-white" href="/">
-                    <i class="fas fa-angle-left"></i>
+                    <i class="fas fa-angle-left custom-icon-back-form"></i>
                 </a>
                 </f7-col>
-                <f7-col width="80" class="text-color-white text-align-center">
+                <f7-col width="80" class="text-color-white text-align-center custom-title-form">
                     {{ title }}
                 </f7-col>
                 <f7-col width="10"></f7-col>
@@ -298,6 +298,7 @@
     import {auth } from "mixins_/auth"
     import {general_functions} from "mixins_/general_functions"
     import {findGeneralDefaultSerie} from "js_/helpers/functions"
+    import {store_cash} from "../cash/mixins/cash"
     import HeaderLayout from "components/layout/Header"
 
     export default {
@@ -307,7 +308,7 @@
             CustomerForm,
             HeaderLayout
         },
-        mixins: [auth, general_functions],
+        mixins: [auth, general_functions, store_cash],
         data: function () {
             return {
                 codeType: "",
@@ -728,6 +729,8 @@
                                 },
                                 verticalButtons: true,
                             }).open()
+
+                            self.storeCashDocument(data.data.id)
 
                         } else {
                             alert("No se registro la Venta")

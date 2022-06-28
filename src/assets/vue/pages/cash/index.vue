@@ -6,10 +6,10 @@
             <f7-row>
                 <f7-col width="10">
                 <a class="link back text-color-white" href="/">
-                    <i class="fas fa-angle-left"></i>
+                    <i class="fas fa-angle-left custom-icon-back-form"></i>
                 </a>
                 </f7-col>
-                <f7-col width="80" class="text-color-white text-align-center">
+                <f7-col width="80" class="text-color-white text-align-center custom-title-form">
                 Caja
                 </f7-col>
                 <f7-col width="10"></f7-col>
@@ -77,34 +77,31 @@
                                             </div>
                                             <div class="col-10 padding-top">
 
-                                                <template v-if="row.state">
-                                                    <a href="#" class="link text-color-blue" @click="clickCreate(row.id)">
-                                                        <span class="material-icons">edit</span>
-                                                    </a>
-                                                    <template v-if="row.state">
-                                                        <a href="#" class="link" @click="clickClose(row.id)">
-                                                            <span class="material-icons text-color-red">highlight_off</span>
-                                                        </a>
-                                                    </template>
-                                                    <a href="#" class="link" @click="clickDelete(row.id)">
-                                                        <span class="material-icons text-color-red">delete</span>
-                                                    </a>
-                                                </template>
+                                                <a href="#" class="link" @click="clickReports(row.id)">
+                                                    <span class="material-icons text-color-bluemagenta">picture_as_pdf</span>
+                                                </a>
+                                                <a href="#" class="link text-color-teal mt-15" @click="clickEmail(row.id)">
+                                                    <span class="material-icons">mail</span>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="card-footer">
-                                    <a href="#" class="link" >
-                                        <span class="material-icons text-color-bluemagenta">picture_as_pdf</span>
+                                <div class="card-footer" v-if="row.state">
+                                    
+                                    <a href="#" class="link text-color-blue" @click="clickCreate(row.id)">
+                                        <span class="material-icons">edit</span>
                                     </a>
-                                    <a href="#" class="link" >
-                                        <span class="material-icons text-color-blue">description</span>
+                                    <template>
+                                        <a href="#" class="link" @click="clickClose(row.id)">
+                                            <span class="material-icons text-color-red">highlight_off</span>
+                                        </a>
+                                    </template>
+                                    <a href="#" class="link" @click="clickDelete(row.id)">
+                                        <span class="material-icons text-color-red">delete</span>
                                     </a>
-                                    <a href="#" class="link text-color-teal" @click="clickEmail(row.id)">
-                                        <span class="material-icons">mail</span>
-                                    </a>
+
                                 </div>
 
                             </div>
@@ -129,6 +126,8 @@
                     :recordId="recordId"
                     ></email-form>
 
+        <cash-reports :showDialog.sync="showDialogReports"
+                    :recordId="recordId"></cash-reports>
     </f7-page>
 </template>
 
@@ -140,11 +139,12 @@
     import queryString from "query-string"
     import CashForm from './partials/form.vue'
     import EmailForm from 'components/document/EmailForm.vue'
+    import CashReports from './partials/reports.vue'
     import HeaderLayout from "components/layout/Header"
 
     export default {
         name: "IndexCash",
-        components: { CashForm, EmailForm, HeaderLayout },
+        components: { CashForm, EmailForm, HeaderLayout, CashReports },
         mixins: [auth, general_functions, deletable],
         data: function () {
             return {
@@ -165,6 +165,7 @@
                 loading_text: null,
                 showDialog: false,
                 showDialogEmail: false,
+                showDialogReports: false,
                 recordId: null,
                 configuration: {},
                 locked_query: false,
@@ -182,6 +183,11 @@
             await this.events()
         },
         methods: {
+            clickReports(recordId){
+                console.log(recordId)
+                this.recordId = recordId
+                this.showDialogReports = true
+            },
             clickEmail(id){
 
                 this.url_email = `${this.returnBaseUrl()}/${this.resource}/email`

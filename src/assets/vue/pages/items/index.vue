@@ -6,10 +6,10 @@
             <f7-row>
                 <f7-col width="10">
                 <a class="link back text-color-white" href="/">
-                    <i class="fas fa-angle-left"></i>
+                    <i class="fas fa-angle-left custom-icon-back-form"></i>
                 </a>
                 </f7-col>
-                <f7-col width="80" class="text-color-white text-align-center">
+                <f7-col width="80" class="text-color-white text-align-center custom-title-form">
                 Productos
                 </f7-col>
                 <f7-col width="10"></f7-col>
@@ -63,7 +63,7 @@
                                             <span class="material-icons icon-color-danger">highlight_off</span>
                                         </template>
                                         <template v-else>
-                                            <span class="material-icons text-color-success">check_circle</span>
+                                            <span class="material-icons icon-color-success">check_circle</span>
                                         </template>
                                     </a>
                                     <a href="#" class="link" @click="clickDelete(row.id)">

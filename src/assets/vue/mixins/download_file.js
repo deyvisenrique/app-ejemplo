@@ -1,4 +1,10 @@
 export const download_file = {
+    
+    data: function () {
+        return {
+            general_download_folder_name: 'Download' 
+        }
+    },
     methods: { 
         getUrlDownload(record, documentType){
 
@@ -23,12 +29,24 @@ export const download_file = {
             return url
 
         },
-        async downloadOpenFile(url, filename){
+        getDownloadAuthorization(authorization){
+
+            let options = {}
+            
+            if(authorization)
+            {
+                options.headers = {'Authorization': `Bearer ${this.getStorage('api_token')}`}
+            }
+
+            return options
+
+        },
+        async downloadOpenFile(url, filename, authorization = false){
 
             const context = this
             const file_transfer = new FileTransfer()
             const encode_uri = encodeURI(url)
-            const file_url = `${cordova.file.externalRootDirectory}Download/${filename}.pdf`
+            const file_url = `${cordova.file.externalRootDirectory}${this.general_download_folder_name}/${filename}.pdf`
 
             await file_transfer.download(
                 encode_uri, 
@@ -41,7 +59,7 @@ export const download_file = {
                     console.log('Error status: '+ JSON.stringify(error))
                 }, 
                 false,
-                {}
+                this.getDownloadAuthorization(authorization)
             )
 
         },
@@ -65,5 +83,27 @@ export const download_file = {
             )
 
         },
+        async downloaFileToPrint(url, filename, authorization = false){
+
+            const context = this
+            const file_transfer = new FileTransfer()
+            const encode_uri = encodeURI(url)
+            const file_url = `${cordova.file.externalRootDirectory}${this.general_download_folder_name}/${filename}.pdf`
+
+            await file_transfer.download(
+                encode_uri, 
+                file_url, 
+                (entry) => {
+                    cordova.plugins.printer.print(file_url)
+                },  
+                (error) => {
+                    context.showAlert('Error al descargar'+JSON.stringify(error))
+                    console.log('Error status: '+ JSON.stringify(error))
+                }, 
+                false,
+                this.getDownloadAuthorization(authorization)
+            )
+        },
+
     }
 }

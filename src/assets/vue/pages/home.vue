@@ -23,33 +23,9 @@
     </f7-block>
 
     <f7-block>
+
+
       <f7-row>
-        <f7-col>
-          <f7-card @click.native="go('report')" class="bg-purple">
-            <f7-card-content class="">
-              <base-icon nameIcon="bars" widthIcon="35" clases="text-align-right padding-top"></base-icon>
-              <p class="text-color-white"><br>Reportes</p>
-            </f7-card-content>
-          </f7-card>
-        </f7-col>
-        <f7-col>
-          <f7-card @click.native="go('ls_doc')" class="bg-blue">
-            <f7-card-content class="">
-              <base-icon nameIcon="file-list" widthIcon="35" clases="text-align-right padding-top"></base-icon>
-              <p class="text-color-white">Lista de <br> comprobantes</p>
-            </f7-card-content>
-          </f7-card>
-        </f7-col>
-      </f7-row>
-      <f7-row>
-        <f7-col>
-          <f7-card @click.native="go('cpe')" class="bg-dark-blue">
-            <f7-card-content class="">
-              <base-icon nameIcon="qr-code" widthIcon="35" clases="text-align-right padding-top"></base-icon>
-              <p class="text-color-white"><br> Validar cpe</p>
-            </f7-card-content>
-          </f7-card>
-        </f7-col>
         <f7-col>
           <f7-card @click.native="go('nw_doc')" class="bg-purple">
             <f7-card-content class="">
@@ -58,8 +34,6 @@
             </f7-card-content>
           </f7-card>
         </f7-col>
-      </f7-row>
-      <f7-row>
         <f7-col>
           <f7-card @click.native="go('nw_docb')" class="bg-blue">
             <f7-card-content class="">
@@ -68,6 +42,9 @@
             </f7-card-content>
           </f7-card>
         </f7-col>
+      </f7-row>
+
+      <f7-row>
         <f7-col>
           <f7-card @click.native="go('sale_note')" class="bg-dark-blue">
             <f7-card-content class="">
@@ -76,8 +53,6 @@
             </f7-card-content>
           </f7-card>
         </f7-col>
-      </f7-row>
-      <f7-row>
         <f7-col>
           <f7-card @click.native="go('order_note')" class="bg-purple">
             <f7-card-content class="">
@@ -86,6 +61,10 @@
             </f7-card-content>
           </f7-card>
         </f7-col>
+      </f7-row>
+
+
+      <f7-row>
         <f7-col>
           <f7-card @click.native="go('purchase')" class="bg-blue">
             <f7-card-content class="">
@@ -96,7 +75,37 @@
             </f7-card-content>
           </f7-card>
         </f7-col>
+
+        <f7-col>
+          <f7-card @click.native="go('ls_doc')" class="bg-dark-blue">
+            <f7-card-content class="">
+              <base-icon nameIcon="file-list" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+              <p class="text-color-white">Lista de <br> comprobantes</p>
+            </f7-card-content>
+          </f7-card>
+        </f7-col>
       </f7-row>
+
+      <f7-row>
+        <f7-col>
+          <f7-card @click.native="go('report-sales')" class="bg-purple">
+            <f7-card-content class="">
+              <base-icon nameIcon="bars" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+              <p class="text-color-white"><br>Reportes</p>
+            </f7-card-content>
+          </f7-card>
+        </f7-col>
+
+        <f7-col>
+          <f7-card @click.native="go('cpe')" class="bg-dark-blue">
+            <f7-card-content class="">
+              <base-icon nameIcon="qr-code" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+              <p class="text-color-white"><br> Validar cpe</p>
+            </f7-card-content>
+          </f7-card>
+        </f7-col>
+      </f7-row>
+
       <f7-row>
         <f7-col>
           <f7-card @click.native="go('customers')" class="bg-dark-blue">
@@ -129,6 +138,8 @@
           </f7-card>
         </f7-col>
       </f7-row>
+
+
     </f7-block>
 </f7-page>
 </template>
@@ -159,8 +170,10 @@
 
         if (localStorage.url_logo) {
             this.fp_logo_white = localStorage.url_logo
-            this.width_img = 100
-            this.height_img = 100
+            this.width_img = '45%'
+            this.height_img = '45%'
+			// this.width_img = 100
+            // this.height_img = 100
         }
 
         var self = this;
@@ -192,8 +205,8 @@
                 case "nw_docb":
                     self.$f7router.navigate("/form-document/03");
                     break;
-                case "report":
-                    self.$f7router.navigate("/report/");
+                case "report-sales":
+                    self.$f7router.navigate("/report-sales/");
                     break;
                 case "cpe":
                     self.$f7router.navigate("/cpe/");

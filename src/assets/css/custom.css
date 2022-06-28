@@ -209,6 +209,10 @@ a {
   height: 80%;
 }
 
+.default-h70-modal{
+  height: 70%;
+}
+
 .d-block{
   display: block;
 }
@@ -220,4 +224,13 @@ a {
 
 .default-h40-modal{
   height:40%;
+}
+
+.mt-15{
+  margin-top:15px
+}
+
+
+.default-h30-modal{
+  height:30%;
 }

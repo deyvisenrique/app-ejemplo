@@ -51,23 +51,27 @@
             </f7-row>
 
             <f7-row class="padding-horizontal">
-                <f7-col >
-                    <f7-list accordion-list>
+                <f7-col>
+                    
+                    <div class="c-horizontal-scroll c-h-50 mp-div-category">
+                        <template v-for="(category, index) in categories">
+                            <span class="padding margin c-span-card" style="margin-right:50px ! important" :key="index" @click="clickSearchByCategory(category.id)"><b>{{ getCategoryName(category) }}</b></span>
+                        </template>
+                    </div>
+                    
+                    <!-- <f7-list accordion-list>
                         <f7-list-item accordion-item title="Filtrar por categoría">
                             <f7-accordion-content>
                                 <f7-block>
-
                                     <div class="c-horizontal-scroll c-h-50 mp-div-category">
                                         <template v-for="(category, index) in categories">
-                                            <span class="padding c-span-card" :key="index" @click="clickSearchByCategory(category.id)"><b>{{ getCategoryName(category) }}</b></span>
+                                            <span class="padding margin c-span-card" :key="index" @click="clickSearchByCategory(category.id)"><b>{{ getCategoryName(category) }}</b></span>
                                         </template>
                                     </div>
-
                                 </f7-block>
-
                             </f7-accordion-content>
                         </f7-list-item>
-                    </f7-list>
+                    </f7-list> -->
                 </f7-col>
             </f7-row>
 
@@ -82,27 +86,32 @@
 
                         <div class="col-50" v-for="(item, index) in items_car" :key="index">
                             <div class="card no-margin-horizontal no-padding-horizontal">
-                                <div :style="'background-image:url('+item.item.image+')'" class="card-header align-items-flex-end image-max-width"></div>
-                                <div class="card-content card-content-padding">
 
-                                    <div class="item-input-wrap">
+                                <div :class="item.quantity > 0 ? 'custom-border-selected-item bg-white-shade' : ''" @click="add(index)">
 
-                                        <div @click="add(index)" class="item-media" style="min-width: 0px !important;">
-                                            <f7-icon :material="item.quantity > 0 ? 'check_box' : 'check_box_outline_blank'" class="text-color-bluemagenta"></f7-icon>
-                                            <!-- <span>{{ item.quantity > 0 ? 'Agregado' : 'Agregar'}}</span> -->
+                                    <div :style="'background-image:url('+item.item.image+')'" class="card-header align-items-flex-end image-max-width"></div>
+                                    <div class="card-content card-content-padding">
+
+                                        <div class="item-input-wrap">
+
+                                            <!-- <div @click="add(index)" class="item-media" style="min-width: 0px !important;">
+                                                <f7-icon :material="item.quantity > 0 ? 'check_box' : 'check_box_outline_blank'" class="text-color-bluemagenta"></f7-icon> -->
+                                                <!-- <span>{{ item.quantity > 0 ? 'Agregado' : 'Agregar'}}</span> -->
+                                            <!-- </div> -->
+
+                                            <span class="text-align-center"><b>{{ item.full_description }}</b></span>
+                                            <span class="">
+                                                <div class="item-content no-padding-left">
+                                                    <div class="item-media">{{ item.item.currency_type_symbol }}</div>
+                                                    <input required validate v-model="item.item.sale_unit_price" type="number" />
+                                                </div>
+                                            </span>
+                                            <br>
+
                                         </div>
-
-                                        <span class="text-align-center"><b>{{ item.full_description }}</b></span>
-                                        <span class="">
-                                            <div class="item-content no-padding-left">
-                                                <div class="item-media">{{ item.item.currency_type_symbol }}</div>
-                                                <input required validate v-model="item.item.sale_unit_price" type="number" />
-                                            </div>
-                                        </span>
-                                        <br>
-
                                     </div>
                                 </div>
+                                
                                 <div class="card-footer display-flex justify-content-center">
                                     <div class="stepper stepper-raised stepper-init full-max-width">
                                         <div class="stepper-button-minus" @click="calculate(-1, index)"></div>

@@ -10,7 +10,7 @@ import IndexCustomers from './assets/vue/pages/customers/index.vue';
 import IndexCash from './assets/vue/pages/cash/index.vue';
 
 import Validate from './assets/vue/pages/validate.vue';
-import Report from './assets/vue/pages/report.vue';
+import ReportSales from './assets/vue/pages/reports/sales.vue';
 import Documents from './assets/vue/pages/documents.vue';
 
 import Login from './assets/vue/pages/login.vue';
@@ -48,8 +48,8 @@ export default [
     component: Login
   },
   {
-    path: '/report/',
-    component: Report
+    path: '/report-sales/',
+    component: ReportSales
   },
   {
     path: '/form-sale-note/',

@@ -14,8 +14,27 @@
             <f7-row no-gap>
                 <f7-col>
                     <form class="form-store-data" id="demo-form">
+                        
+
                         <f7-list no-hairlines-md>
-                            <f7-list-input
+
+                            <div class="no-hairlines-md inline-labels">
+                                <ul>
+                                    <li class="">
+                                        <span class="item-title item-label custom-w20 custom-label-top-input">URL</span>
+                                        <div class="item-content item-input">
+                                            <div class="item-inner">
+                                                <div class="item-title item-label custom-w20">{{ internet_protocol }}</div>
+                                                <div class="item-input-wrap">
+                                                    <input type="text" placeholder="demo.facturalo.pro" required validate v-model="url"><span class="input-clear-button"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <!-- <f7-list-input
                                 floating-label
                                 type="url"
                                 clear-button
@@ -25,7 +44,9 @@
                                 validate
                                 :value="url"
                                 @input="url = $event.target.value">
-                            </f7-list-input>
+                            </f7-list-input> -->
+                            
+
                             <f7-list-input
                                 floating-label
                                 type="text"
@@ -38,6 +59,7 @@
                                 :value="email"
                                 @input="email = $event.target.value">
                             </f7-list-input>
+
                             <f7-list-input
                                 floating-label
                                 type="password"
@@ -50,7 +72,7 @@
                                 :value="password"
                                 @input="password = $event.target.value">
                                 <span slot="info">
-                                    <f7-link class="link external" color="gray" :href="url+'/password/reset'" target="BLANK">¿olvidaste la contraseña?</f7-link>
+                                    <f7-link class="link external" color="gray" :href="internet_protocol+url+'/password/reset'" target="BLANK">¿olvidaste la contraseña?</f7-link>
                                 </span>
                             </f7-list-input>
                         </f7-list>
@@ -81,8 +103,9 @@
             return {
                 email: "demo@gmail.com",
                 password: "123456",
-                url: "https://demo.facturalo.pro",
+                url: "demo.facturalo.pro",
                 fp_logo_white: logo,
+                internet_protocol: 'https://'
             };
         },
         created() {
@@ -90,29 +113,49 @@
                 this.fp_logo_white = localStorage.url_logo
             }
 
-            if (localStorage.api_url) {
-                this.url = localStorage.api_url
-            }
-
+            this.setStorageApiUrl()
         },
         computed: {},
         methods: {
+            setStorageApiUrl(){
 
+                const storage_api_url = localStorage.api_url
+
+                if (storage_api_url) 
+                {
+                    if(storage_api_url.includes(this.internet_protocol))
+                    {
+                        const parse_url = storage_api_url.split('//')
+                        if(parse_url.length == 2) this.url = parse_url[1]
+                    }
+                    else
+                    {
+                        this.url = storage_api_url
+                    }
+                }
+
+            },
             saveToken(token, name, email, ruc = null, logo = null) {
                 localStorage.api_token = token;
                 localStorage.user_name = name;
                 localStorage.user_email = email;
 
-                localStorage.api_url = this.url
-                if (ruc && logo) {
+                localStorage.api_url = `${this.internet_protocol}${this.url}`
+
+                if (ruc && logo) 
+                {
                     localStorage.ruc = ruc
-                    localStorage.url_logo = `${this.url}/storage/uploads/logos/${logo}`
-                    this.fp_logo_white = `${this.url}/storage/uploads/logos/${logo}`
+                    const url_logo = `${this.internet_protocol}${this.url}/storage/uploads/logos/${logo}`
+
+                    localStorage.url_logo = url_logo
+                    this.fp_logo_white = url_logo
                 }
+
             },
             login() {
+
                 if (!this.email || !this.password || !this.url) {
-                    return;
+                    return this.showAlert('Los campos son obligatorios.');
                 }
 
                 const self = this;
@@ -120,7 +163,7 @@
                 self.$f7.preloader.show();
 
                 this.$http
-                    .post(`${this.url}/api/login`, {
+                    .post(`${this.internet_protocol}${this.url}/api/login`, {
                         email: this.email,
                         password: this.password
                     })
@@ -139,7 +182,7 @@
                         }
                     })
                     .catch(err => {
-                        alert("No se logro conexion con la URL, verifique la URL.");
+                        this.showAlert("No se logro conexion con la URL, verifique la URL (Formato url: cliente.dominio.com).");
                     })
                     .then(() => {
                         self.$f7.preloader.hide();

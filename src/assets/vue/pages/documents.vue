@@ -5,10 +5,10 @@
       <f7-row>
         <f7-col width="10">
           <a class="link back text-color-white" href="/">
-            <i class="fas fa-angle-left"></i>
+            <i class="fas fa-angle-left custom-icon-back-form"></i>
           </a>
         </f7-col>
-        <f7-col width="80" class="text-color-white text-align-center">
+        <f7-col width="80" class="text-color-white text-align-center custom-title-form">
           Listado de comprobantes
         </f7-col>
         <f7-col width="10"></f7-col>
@@ -72,10 +72,21 @@
         <div class="tabs-animated-wrap">
             <div class="tabs">
                 <div id="tab-invoices" class="page-content tab tab-active">
-                    <f7-searchbar placeholder="Buscar" :clear-button="true" search-container=".search-list" search-in=".invoice-customer, .invoice-number, .invoice-customer-number"></f7-searchbar>
-                    <f7-list class="searchbar-not-found">
-                        <f7-list-item title="No se encontraron resultados" class="padding-left margin-left"></f7-list-item>
-                    </f7-list>
+                    
+                    <f7-searchbar placeholder="Buscar" :value="search_input" @input="search_input = $event.target.value" :clear-button="true" ></f7-searchbar>
+                    
+                    <div class="searchbar-not-found list" style="display: block;" v-if="source_invoice.length == 0">
+                        <ul>
+                            <li class="padding-left margin-left">
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">No se encontraron resultados</div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
                     <f7-list media-list class="search-list">
                         <f7-list-item v-for="item in source_invoice" :key="item.id" class="list-documents margin-bottom">
                             <span slot="subtitle">
@@ -145,10 +156,26 @@
                     </f7-list>
                 </div>
                 <div id="tab-tickets" class="page-content tab">
-                    <f7-searchbar placeholder="Buscar" :clear-button="true" search-container=".search-list" search-in=".ticket-customer, .ticket-customer-number, .ticket-number"></f7-searchbar>
+                    
+                    <f7-searchbar placeholder="Buscar" :value="search_input" @input="search_input = $event.target.value" :clear-button="true" ></f7-searchbar>
+                     
+                    <div class="searchbar-not-found list" style="display: block;" v-if="source_invoice.length == 0">
+                        <ul>
+                            <li class="padding-left margin-left">
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">No se encontraron resultados</div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- <f7-searchbar placeholder="Buscar" :clear-button="true" search-container=".search-list" search-in=".ticket-customer, .ticket-customer-number, .ticket-number"></f7-searchbar>
                     <f7-list class="searchbar-not-found">
                         <f7-list-item title="No se encontraron resultados" class="padding-left margin-left"></f7-list-item>
-                    </f7-list>
+                    </f7-list> -->
+
                     <f7-list media-list class="search-list">
                         <f7-list-item v-for="item in source_ticket" :key="item.id" class="list-documents margin-bottom">
                             <span slot="subtitle">
@@ -218,10 +245,27 @@
                     </f7-list>
                 </div>
                 <div id="tab-notes" class="page-content tab">
-                    <f7-searchbar placeholder="Buscar" :clear-button="true" search-container=".search-list" search-in=".note-customer, .note-customer-number, .note-number"></f7-searchbar>
+
+                    
+                    <f7-searchbar placeholder="Buscar" :value="search_input" @input="search_input = $event.target.value" :clear-button="true" ></f7-searchbar>
+                    
+                    <div class="searchbar-not-found list" style="display: block;" v-if="source_note.length == 0">
+                        <ul>
+                            <li class="padding-left margin-left">
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">No se encontraron resultados</div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- <f7-searchbar placeholder="Buscar" :clear-button="true" search-container=".search-list" search-in=".note-customer, .note-customer-number, .note-number"></f7-searchbar>
                     <f7-list class="searchbar-not-found">
                         <f7-list-item title="No se encontraron resultados" class="padding-left margin-left"></f7-list-item>
-                    </f7-list>
+                    </f7-list> -->
+
                     <f7-list media-list class="search-list">
                         <f7-list-item v-for="item in source_note" :key="item.id" class="list-documents margin-bottom">
                             <span slot="subtitle">
@@ -292,10 +336,26 @@
                     </f7-list>
                 </div>
                 <div id="tab-order-notes" class="page-content tab">
-                    <f7-searchbar placeholder="Buscar" :clear-button="true" search-container=".search-list" search-in=".order-notes-customer, .order-notes-customer-number, .order-notes-number"></f7-searchbar>
+                    
+                    <f7-searchbar placeholder="Buscar" :value="search_input" @input="search_input = $event.target.value" :clear-button="true" ></f7-searchbar>
+                    
+                    <div class="searchbar-not-found list" style="display: block;" v-if="source_order_note.length == 0">
+                        <ul>
+                            <li class="padding-left margin-left">
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">No se encontraron resultados</div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- <f7-searchbar placeholder="Buscar" :clear-button="true" search-container=".search-list" search-in=".order-notes-customer, .order-notes-customer-number, .order-notes-number"></f7-searchbar>
                     <f7-list class="searchbar-not-found">
                         <f7-list-item title="No se encontraron resultados" class="padding-left margin-left"></f7-list-item>
-                    </f7-list>
+                    </f7-list> -->
+
                     <f7-list media-list class="search-list">
                         <f7-list-item v-for="item in source_order_note" :key="item.id" class="list-documents margin-bottom">
                             <span slot="subtitle">
@@ -363,10 +423,27 @@
                     </f7-list>
                 </div>
                 <div id="tab-purchases" class="page-content tab">
-                    <f7-searchbar placeholder="Buscar" :clear-button="true" search-container=".search-list" search-in=".purchases-customer, .purchases-customer-number, .purchases-number"></f7-searchbar>
+
+                    
+                    <f7-searchbar placeholder="Buscar" :value="search_input" @input="search_input = $event.target.value" :clear-button="true" ></f7-searchbar>
+                    
+                    <div class="searchbar-not-found list" style="display: block;" v-if="source_purchases.length == 0">
+                        <ul>
+                            <li class="padding-left margin-left">
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">No se encontraron resultados</div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- <f7-searchbar placeholder="Buscar" :clear-button="true" search-container=".search-list" search-in=".purchases-customer, .purchases-customer-number, .purchases-number"></f7-searchbar>
                     <f7-list class="searchbar-not-found">
                         <f7-list-item title="No se encontraron resultados" class="padding-left margin-left"></f7-list-item>
-                    </f7-list>
+                    </f7-list> -->
+
                     <f7-list media-list class="search-list">
                         <f7-list-item v-for="item in source_purchases" :key="item.id" class="list-documents margin-bottom">
                             <span slot="subtitle">
@@ -481,6 +558,7 @@
     import {general_functions} from "mixins_/general_functions"
     import {download_file} from "mixins_/download_file"
     import HeaderLayout from "components/layout/Header"
+    import queryString from "query-string"
 
     export default {
         name: "documents",
@@ -515,7 +593,22 @@
                     orderNotes: false,
                     purchases: false,
                 },
+                form_search: {
+                    input: null,
+                    document_type_id: '01',
+                    type: 'invoices',
+                },
+                search_input: null,
+
             };
+        },
+        watch: {
+            search_input: function(val) {
+                if (val.length > 0) 
+                {
+                    this.searchData(val)
+                }
+            },
         },
         computed: {
             countDoc() {
@@ -525,12 +618,32 @@
         created() {
             this.loadConfiguration()
             this.initFormEmail()
-            this.getDataPurchases()
-            this.getData()
-            this.getDataSaleNote()
-            this.getDataOrderNote()
+            this.getDataDocuments()
+            // this.getDataPurchases()
+            // this.getDataSaleNote()
+            // this.getDataOrderNote()
         },
         methods: {
+            searchData(input){
+
+                this.form_search.input = input
+
+                switch (this.form_search.type) {
+                    case 'invoices':
+                        this.getDataDocuments()
+                        break;
+                    case 'notes':
+                        this.getDataSaleNote()
+                        break;
+                    case 'order_notes':
+                        this.getDataOrderNote()
+                        break;
+                    case 'purchases':
+                        this.getDataPurchases()
+                        break;
+                }
+
+            },
             loadConfiguration(){
                 this.configuration = this.getInitialConfiguration()
             },
@@ -549,42 +662,66 @@
                 await this.hideLoading()
 
             },
+            setDataFormSearch(type, document_type_id = null, input = null){
+
+                this.form_search.type = type
+                this.form_search.document_type_id = document_type_id
+                this.form_search.input = input
+                this.search_input = input
+
+            },
             show(type) {
-                const self = this;
-                switch (type) {
+                const self = this
+                switch (type) 
+                {
                     case 'invoices':
-                        self.count = self.source_invoice.length;
-                        this.resetActiveClass();
-                        this.activeClass.invoices = true;
-                        break;
+                        self.count = self.source_invoice.length
+                        this.resetActiveClass()
+                        this.activeClass.invoices = true
+                        this.setDataFormSearch('invoices', '01')
+                        this.getDataDocuments()
+
+                        break
                     case 'tickets':
-                        self.count = self.source_ticket.length;
-                        this.resetActiveClass();
-                        this.activeClass.tickets = true;
-                        break;
+                        self.count = self.source_ticket.length
+                        this.resetActiveClass()
+                        this.activeClass.tickets = true
+                        this.setDataFormSearch('invoices', '03')
+                        this.getDataDocuments()
+
+                        break
                     case 'notes':
-                        self.count = self.source_note.length;
-                        this.resetActiveClass();
-                        this.activeClass.notes = true;
-                        break;
+                        self.count = self.source_note.length
+                        this.resetActiveClass()
+                        this.activeClass.notes = true
+                        this.setDataFormSearch('notes', '80')
+                        this.getDataSaleNote()
+
+                        break
                     case 'purchases':
-                        self.count = self.source_purchases.length;
-                        this.resetActiveClass();
-                        this.activeClass.purchases = true;
-                        break;
+                        self.count = self.source_purchases.length
+                        this.resetActiveClass()
+                        this.activeClass.purchases = true
+                        this.setDataFormSearch('purchases')
+                        this.getDataPurchases()
+
+                        break
                     case 'order_notes':
-                        self.count = self.source_order_note.length;
-                        this.resetActiveClass();
-                        this.activeClass.orderNotes = true;
-                        break;
+                        self.count = self.source_order_note.length
+                        this.resetActiveClass()
+                        this.activeClass.orderNotes = true
+                        this.setDataFormSearch('order_notes')
+                        this.getDataOrderNote()
+
+                        break
                 }
             },
             resetActiveClass(){
-                this.activeClass.invoices = false;
-                this.activeClass.tickets = false;
-                this.activeClass.notes = false;
-                this.activeClass.orderNotes = false;
-                this.activeClass.purchases = false;
+                this.activeClass.invoices = false
+                this.activeClass.tickets = false
+                this.activeClass.notes = false
+                this.activeClass.orderNotes = false
+                this.activeClass.purchases = false
             },
             initFormEmail() {
                 this.form_email = {
@@ -762,6 +899,7 @@
                 } else {
                     this.source = this.sourceClone;
                 }
+
             },
             getHeaderConfig() {
                 let token = localStorage.api_token;
@@ -776,53 +914,91 @@
                 return axiosConfig;
             },
 
-            getData() {
-                const self = this;
-                self.$f7.preloader.show();
+            getQueryParameters() {
+
+                return queryString.stringify({
+                    ...this.form_search
+                })
+
+            },
+            getDataDocuments() {
+
+                const self = this
+                this.showLoading()
 
                 this.$http
-                    .get(`${this.returnBaseUrl()}/documents/lists`, this.getHeaderConfig())
+                    .get(`${this.returnBaseUrl()}/documents/records?${this.getQueryParameters()}`,  this.getHeaderConfig())
                     .then(response => {
-                        self.source = response.data.data;
-                        this.applyFilters();
+
+                        // self.source = response.data.data
+                        // this.applyFilters()
+
+                        if(this.form_search.document_type_id === '01')
+                        {
+                            this.source_invoice = response.data.data
+                        }
+                        else
+                        {
+                            this.source_ticket = response.data.data
+                        }
+
                     })
                     .catch(err => {
-                        console.log(err);
+                        console.log(err)
                     })
                     .then(() => {
-                        self.$f7.preloader.hide();
-                    });
+                        this.hideLoading()
+                    })
+
             },
             getDataSaleNote() {
-                const self = this;
+
+                const self = this
+
+                this.showLoading()
+
                 this.$http
-                    .get(`${this.returnBaseUrl()}/sale-note/lists`, this.getHeaderConfig())
+                    .get(`${this.returnBaseUrl()}/sale-note/lists?${this.getQueryParameters()}`, this.getHeaderConfig())
                     .then(response => {
-                        self.source_note = response.data.data;
+                        self.source_note = response.data.data
                     })
                     .catch(err => {})
-                    .then(() => {});
+                    .then(() => {
+                        this.hideLoading()
+                    })
             },
             getDataOrderNote() {
-                const self = this;
+
+                const self = this
+                this.showLoading()
+
                 this.$http
-                    .get(`${this.returnBaseUrl()}/order-notes/lists`, this.getHeaderConfig())
+                    .get(`${this.returnBaseUrl()}/order-notes/lists?${this.getQueryParameters()}`, this.getHeaderConfig())
                     .then(response => {
                         self.source_order_note = response.data.data;
                     })
                     .catch(err => {})
-                    .then(() => {});
+                    .then(() => {
+                        this.hideLoading()
+                    })
+
             },
             getDataPurchases() {
-                const self = this;
+
+                const self = this
+
+                this.showLoading()
+
                 this.$http
-                    .get(`${this.returnBaseUrl()}/purchases/records`, this.getHeaderConfig())
+                    .get(`${this.returnBaseUrl()}/purchases/records?${this.getQueryParameters()}`, this.getHeaderConfig())
                     .then(response => {
-                        self.source_purchases = response.data.data;
+                        self.source_purchases = response.data.data
                         // console.log(self.source_purchases)
                     })
                     .catch(err => {})
-                    .then(() => {});
+                    .then(() => {
+                        this.hideLoading()
+                    })
             },
             statusColor(status) {
                 switch (status) {

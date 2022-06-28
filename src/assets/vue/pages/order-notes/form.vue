@@ -5,10 +5,10 @@
         <f7-row>
             <f7-col width="10">
             <a class="link back text-color-white" href="/">
-                <i class="fas fa-angle-left"></i>
+                <i class="fas fa-angle-left custom-icon-back-form"></i>
             </a>
             </f7-col>
-            <f7-col width="80" class="text-color-white text-align-center">
+            <f7-col width="80" class="text-color-white text-align-center custom-title-form">
                 Pedido
             </f7-col>
             <f7-col width="10"></f7-col>
@@ -151,6 +151,7 @@
     import {auth} from "mixins_/auth";
     import {general_functions} from "mixins_/general_functions";
     import HeaderLayout from "components/layout/Header";
+    import {download_file} from "mixins_/download_file"
 
     export default {
         name: "FormOrderNote",
@@ -159,7 +160,7 @@
             CustomerForm,
             HeaderLayout
         },
-        mixins: [auth, general_functions],
+        mixins: [auth, general_functions, download_file],
         data: function () {
             // Must return an object
             return {
@@ -263,36 +264,85 @@
             send() {
                 const self = this;
 
-                let valid = this.validate();
+                let valid = this.validate()
 
-                if (!valid) return;
+                if (!valid) return
 
-                self.$f7.preloader.show();
+                self.$f7.preloader.show()
 
                 this.$http
                     .post(`${this.returnBaseUrl()}/order-notes`, this.form, this.getHeaderConfig())
                     .then(response => {
-                        let data = response.data;
+                        let data = response.data
                         if (data.success) {
-                            this.initForm();
+                            
+                            this.initForm()
+                            self.showDialogOptions(data)
 
-                            self.$f7.dialog.alert(
-                                `Pedido registrado: PD-${data.data.id}`,
-                                "Facturador PRO APP"
-                            );
-                            self.$f7router.navigate("/documents/");
                         } else {
-                            alert("No se registro la Compra");
+                            alert("No se registro la Compra")
                         }
                     })
                     .catch(err => {
-                        alert(`${err.message}`);
+                        alert(`${err.message}`)
                     })
                     .then(() => {
-                        self.$f7.preloader.hide();
-                    });
+                        self.$f7.preloader.hide()
+                    })
             },
+            async toPrint(data){
 
+                await this.showLoading()
+                await this.downloaFileToPrint(data.data.print_ticket, data.data.filename) //definido en mixin download_file
+                await this.hideLoading()
+
+            },
+            showDialogOptions(data){
+                
+                const context = this
+
+                context.showDialogConfirm({
+                    title: 'Pedido registrado',
+                    text: data.data.number_full,
+                    buttons: context.getOptionsButtons(),
+                    onClick: function(dialog, index){
+                        context.clickOptionsButtons(dialog, index, data)
+                    },
+                    verticalButtons: true,
+                })
+                
+            },
+            clickOptionsButtons(dialog, index, data){
+
+                // Imprimir
+                if(index === 0)
+                {
+                    this.toPrint(data)
+                }
+                // Ir listado
+                else if (index === 1)
+                {
+                    this.$f7router.navigate("/documents/")
+                }
+
+            },
+            getOptionsButtons(){
+                return [
+                    {
+                        text: 'Imprimir',
+                        cssClass: 'text-center',
+                        close: false
+                    },
+                    {
+                        text: 'Ir al listado',
+                        cssClass: 'text-center',
+                    },
+                    {
+                        text: 'Continuar',
+                        cssClass: 'text-center'
+                    },
+                ]
+            },
             calculateTotal() {
                 let total_discount = 0;
                 let total_charge = 0;

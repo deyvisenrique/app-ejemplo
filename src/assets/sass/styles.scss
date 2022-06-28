@@ -54,6 +54,11 @@
   background-color: $white-shade;
 }
 
+.custom-width-panel-right {
+  width: 75% !important; 
+  max-width: 80vw !important;
+}
+
 // botones
 .color-pink {
   background-color: $magenta;
@@ -72,4 +77,112 @@
 .image-max-width{
   background-size: cover;
   min-height: 125px;
+}
+
+
+.c-horizontal-scroll{
+  overflow:scroll;
+}
+
+.c-span-card{
+  background: #6E28C9;
+  color: #fff;
+  position: relative;
+  border-radius: var(--f7-card-border-radius);
+  font-size: var(--f7-card-font-size);
+  margin-top: var(--f7-card-margin-vertical);
+  margin-bottom: var(--f7-card-margin-vertical);
+  margin-left: calc(var(--f7-card-margin-horizontal) + var(--f7-safe-area-left));
+  margin-right: calc(var(--f7-card-margin-horizontal) + var(--f7-safe-area-right));
+  box-shadow: var(--f7-card-box-shadow);
+  width: 100% !important;
+}
+
+.mp-div-category{
+  margin-top: 15px;
+  padding-top: 15px;
+}
+
+.c-h-50{
+  height: 50px;
+}
+
+.full-max-width{
+  max-width: 100%;
+}
+
+
+.full-width{
+  width: 100%;
+}
+
+.c-text-bold{
+  font-weight: bold;
+}
+
+.d-block{
+  display: block;
+}
+
+.c-padding-2{
+  padding: 2px;
+}
+
+
+.default-h80-modal{
+  height: 80%;
+}
+
+.default-h70-modal{
+  height: 70%;
+}
+
+.default-h40-modal{
+  height:40%;
+}
+
+.mt-15{
+  margin-top:15px
+}
+
+
+.default-h30-modal{
+  height:30%;
+}
+
+
+.custom-w20{
+  width: 20% !important
+}
+
+.custom-label-top-input{
+  margin-left: 15px; 
+  font-size: 13px;
+}
+
+
+.icon-color-success{
+  color: #4cd964;
+}
+
+.border-disabled{
+  border-color:red;
+  border-width: 1px;
+  border-style: solid;
+}
+
+
+.custom-border-selected-item{
+  border-color:$blue-magenta;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--f7-card-border-radius);
+}
+
+.custom-title-form{
+  font-size: 20px;
+}
+
+.custom-icon-back-form{
+  font-size: 24px;
 }
