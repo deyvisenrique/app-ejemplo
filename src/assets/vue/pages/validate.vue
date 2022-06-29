@@ -31,59 +31,48 @@
     </f7-block>
 
     <template v-if="form.success">
-      <f7-block >
-        <f7-card  class="demo-card-header-pic padding">
-          <f7-card-content>
-            <div class="row">
-              <div class="col-100">
-                <span class="c-text-bold">Código:</span>
-                {{form.data.state_type_id}}
-              </div>
-            </div>
-            <div class="row">
-                <div class="col-70">
-                  <span class="c-text-bold">
-                    Estado del comprobante:
-                  </span>
-                  {{form.data.state_type_description}}
-                </div>
-                <div class="col-30">
+      <f7-block>
+        <div class="data-table card">
+          <table>
+            <thead>
+              <tr>
+                <th colspan="2" class="text-align-center">
                   <template v-if="form.data.state_type_id === '05'">
-                    <span class="material-icons icon-color-success">check_circle</span>
+                    <span class="material-icons text-color-green">check_circle</span>
                   </template>
                   <template v-else>
-                    <span class="material-icons icon-color-danger">highlight_off</span>
+                    <span class="material-icons text-color-red">highlight_off</span>
                   </template>
-                </div>
-            </div>
-            <div class="row">
-              <div class="col-100">
-                <span class="c-text-bold">Estado de la empresa:</span>
-                {{form.data.state_ruc}}
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-100">
-                <span class="c-text-bold">Condición de la empresa:</span>
-                {{form.data.condition_ruc}}
-              </div>
-            </div>
-          </f7-card-content>
-        </f7-card>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Código</td>
+                <td>{{form.data.state_type_id}}</td>
+              </tr>
+              <tr>
+                <td>Estado del comprobante</td>
+                <td>{{form.data.state_type_description}}</td>
+              </tr>
+              <tr>
+                <td>Estado de la empresa</td>
+                <td>{{form.data.state_ruc}}</td>
+              </tr>
+              <tr>
+                <td>Condición de la empresa</td>
+                <td>{{form.data.condition_ruc}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </f7-block>
     </template>
 
     <template v-else-if="form.message">
-      <f7-block>
-        <f7-card  class="demo-card-header-pic">
-          <f7-card-content>
-            <div class="row">
-              <div class="col-100">
-                <span class="c-text-bold">Error en la petición:</span> {{ form.message }}
-              </div>
-            </div>
-          </f7-card-content>
-        </f7-card>
+      <f7-block class="bg-color-red padding">
+        <p class="text-color-white text-align-center">Error en la petición </p>
+        <p class="text-color-white text-align-center">{{ form.message }}</p>
       </f7-block>
     </template>
 

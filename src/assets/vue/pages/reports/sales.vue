@@ -1,9 +1,9 @@
 <template>
-    <f7-page class="">
+    <f7-page class="" color="bluemagenta">
         <header-layout></header-layout>
 
         <f7-block class="bg-blue-magenta padding-vertical no-margin-vertical">
-            <f7-row>
+            <f7-row class="display-flex align-items-center">
                 <f7-col width="10">
                     <a class="link back text-color-white">
                         <i class="fas fa-angle-left custom-icon-back-form"></i>
@@ -23,7 +23,7 @@
                     <div class="item-content item-input no-padding-horizontal">
                         <div class="item-inner no-padding-horizontal">
                             <div class="item-title item-label">Periodo</div>
-                            
+
                             <div class="item-input-wrap input-dropdown-wrap">
                                 <select v-model="form.period" @change="changePeriod">
                                     <option value="date">Por fecha</option>
@@ -49,7 +49,7 @@
                     </f7-col>
 
                 </template>
-                
+
                 <template v-else-if="form.period == 'month'">
                     <f7-col width="50">
                         <div class="item-content item-input no-padding-horizontal">
@@ -167,7 +167,7 @@
             },
             changeDate(){
 
-                if (this.form.period === 'between_dates') 
+                if (this.form.period === 'between_dates')
                 {
                     if(moment(this.form.date_start).isAfter(this.form.date_end))
                     {
@@ -175,7 +175,7 @@
                         this.showAlert('Fecha inicio no puede ser posterior a fecha término')
                         return
                     }
-                    
+
                     if(moment(this.form.date_end).isBefore(this.form.date_start))
                     {
                         this.form.date_start = this.form.date_end
@@ -189,19 +189,19 @@
             },
             changePeriod() {
 
-                if (this.form.period === 'month') 
+                if (this.form.period === 'month')
                 {
                     this.form.month_start = moment().format('YYYY-MM')
                     this.form.month_end = moment().format('YYYY-MM')
                 }
-                
-                if (this.form.period === 'date') 
+
+                if (this.form.period === 'date')
                 {
                     this.form.date_start = moment().format('YYYY-MM-DD')
                     this.form.date_end = moment().format('YYYY-MM-DD')
                 }
 
-                if (this.form.period === 'between_dates') 
+                if (this.form.period === 'between_dates')
                 {
                     this.form.date_start = moment().startOf('month').format('YYYY-MM-DD')
                     this.form.date_end = moment().endOf('month').format('YYYY-MM-DD')

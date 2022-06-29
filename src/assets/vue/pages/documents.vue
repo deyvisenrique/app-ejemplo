@@ -2,7 +2,7 @@
 <f7-page>
     <header-layout></header-layout>
     <f7-block class="bg-blue-magenta padding-vertical no-margin-vertical">
-      <f7-row>
+      <f7-row class="display-flex align-items-center">
         <f7-col width="10">
           <a class="link back text-color-white" href="/">
             <i class="fas fa-angle-left custom-icon-back-form"></i>
@@ -72,9 +72,9 @@
         <div class="tabs-animated-wrap">
             <div class="tabs">
                 <div id="tab-invoices" class="page-content tab tab-active">
-                    
+
                     <f7-searchbar placeholder="Buscar" :value="search_input" @input="search_input = $event.target.value" :clear-button="true" ></f7-searchbar>
-                    
+
                     <div class="searchbar-not-found list" style="display: block;" v-if="source_invoice.length == 0">
                         <ul>
                             <li class="padding-left margin-left">
@@ -120,33 +120,33 @@
                                     </f7-row>
                                     <f7-row>
                                         <f7-col>
-                                            <f7-button small icon @click="clickPreviewPdf(item, 'document')" color="blue">
-                                                <f7-icon class="icon fas fa-search"></f7-icon>
+                                            <f7-button size="35" icon @click="clickPreviewPdf(item, 'document')" color="blue">
+                                                <f7-icon size="18" class="icon fas fa-search"></f7-icon>
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button small icon @click="clickDownloadPdf(item, 'document')" color="blue-shade">
-                                                <f7-icon class="icon fas fa-download"></f7-icon>
+                                            <f7-button size="35" icon @click="clickDownloadPdf(item, 'document')" color="blue-shade">
+                                                <f7-icon size="18" class="icon fas fa-download"></f7-icon>
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button small icon @click="whatsap(item.customer_telephone, item.external_id)" color="green">
-                                                <f7-icon class="icon fab fa-whatsapp"></f7-icon>
+                                            <f7-button size="35" icon @click="whatsap(item.customer_telephone, item.external_id)" color="green">
+                                                <f7-icon size="18" class="icon fab fa-whatsapp"></f7-icon>
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button small icon @click="email(item.id, 'document')" color="purple">
-                                                <f7-icon class="icon fas fa-envelope"></f7-icon>
+                                            <f7-button size="35" icon @click="email(item.id, 'document')" color="purple">
+                                                <f7-icon size="18" class="icon fas fa-envelope"></f7-icon>
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button small icon @click="download(item.external_id, 'document', 'a4')" color="lightblue">
-                                                <f7-icon class="icon fas fa-file-pdf"></f7-icon>
+                                            <f7-button size="35" icon @click="download(item.external_id, 'document', 'a4')" color="lightblue">
+                                                <f7-icon size="18" class="icon fas fa-file-pdf"></f7-icon>
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button small icon @click="download(item.external_id, 'document')" color="deeppurple">
-                                                <f7-icon class="icon fas fa-receipt"></f7-icon>
+                                            <f7-button size="35" icon @click="download(item.external_id, 'document')" color="deeppurple">
+                                                <f7-icon size="18" class="icon fas fa-receipt"></f7-icon>
                                             </f7-button>
                                         </f7-col>
                                     </f7-row>
@@ -156,9 +156,9 @@
                     </f7-list>
                 </div>
                 <div id="tab-tickets" class="page-content tab">
-                    
+
                     <f7-searchbar placeholder="Buscar" :value="search_input" @input="search_input = $event.target.value" :clear-button="true" ></f7-searchbar>
-                     
+
                     <div class="searchbar-not-found list" style="display: block;" v-if="source_invoice.length == 0">
                         <ul>
                             <li class="padding-left margin-left">
@@ -246,9 +246,9 @@
                 </div>
                 <div id="tab-notes" class="page-content tab">
 
-                    
+
                     <f7-searchbar placeholder="Buscar" :value="search_input" @input="search_input = $event.target.value" :clear-button="true" ></f7-searchbar>
-                    
+
                     <div class="searchbar-not-found list" style="display: block;" v-if="source_note.length == 0">
                         <ul>
                             <li class="padding-left margin-left">
@@ -336,9 +336,9 @@
                     </f7-list>
                 </div>
                 <div id="tab-order-notes" class="page-content tab">
-                    
+
                     <f7-searchbar placeholder="Buscar" :value="search_input" @input="search_input = $event.target.value" :clear-button="true" ></f7-searchbar>
-                    
+
                     <div class="searchbar-not-found list" style="display: block;" v-if="source_order_note.length == 0">
                         <ul>
                             <li class="padding-left margin-left">
@@ -424,9 +424,9 @@
                 </div>
                 <div id="tab-purchases" class="page-content tab">
 
-                    
+
                     <f7-searchbar placeholder="Buscar" :value="search_input" @input="search_input = $event.target.value" :clear-button="true" ></f7-searchbar>
-                    
+
                     <div class="searchbar-not-found list" style="display: block;" v-if="source_purchases.length == 0">
                         <ul>
                             <li class="padding-left margin-left">
@@ -604,7 +604,7 @@
         },
         watch: {
             search_input: function(val) {
-                if (val.length > 0) 
+                if (val.length > 0)
                 {
                     this.searchData(val)
                 }
@@ -672,7 +672,7 @@
             },
             show(type) {
                 const self = this
-                switch (type) 
+                switch (type)
                 {
                     case 'invoices':
                         self.count = self.source_invoice.length

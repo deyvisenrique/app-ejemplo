@@ -1,12 +1,14 @@
 <template>
-  <f7-page class="bg-blue-magenta" color="">
+  <f7-page class="bg-blue-magenta" color="bluemagenta">
     <f7-block class="">
-      <f7-row>
-        <f7-col width="90">
-          <a @click="closePopup" class="link text-color-white">
-            <i class="icon icon-back"></i>
-            <span class="">Listado de clientes</span>
-          </a>
+      <f7-row class="display-flex align-items-center">
+        <f7-col width="20" class="text-color-white">
+            <a @click="closePopup" class="link text-color-white">
+                <i class="fas fa-angle-left custom-icon-back-form"></i>
+            </a>
+        </f7-col>
+        <f7-col width="70" class="text-color-white">
+            Listado de clientes
         </f7-col>
         <f7-col width="10">
           <f7-link @click="addForm = !addForm" class="text-color-white text-align-right" open-panel="right" icon="fas fa-plus"></f7-link>
@@ -14,7 +16,7 @@
       </f7-row>
     </f7-block>
 
-    <f7-card class="card-100 padding no-shadow" color="red" style="min-height: 90%">
+    <f7-card class="card-100 padding no-shadow" color="bluemagenta" style="min-height: 90%">
       <f7-block style="padding:0px">
         <div class="searchbar searchbar-inline padding">
           <div class="searchbar-input-wrap">
@@ -53,7 +55,7 @@
         <f7-block class="text-align-right no-margin-vertical no-padding-vertical">
           <f7-link sheet-close class="no-padding text-color-gray"><f7-icon material="close"></f7-icon></f7-link>
         </f7-block>
-        <f7-block style="margin-top: 0px !important;" color="bluemagenta">>
+        <f7-block style="margin-top: 0px !important;" color="bluemagenta">
           <form class="list no-hairlines-md" id="demo-form-customer">
             <ul>
               <li class="item-content item-input">

@@ -5,7 +5,6 @@
       class="icon-svg"
       :width="widthIcon"
     />
-    <!-- {{require('src/assets/images/icons/'+nameIcon+'.svg')}} -->
   </f7-block>
 </template>
 

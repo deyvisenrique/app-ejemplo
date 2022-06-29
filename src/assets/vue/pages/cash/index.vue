@@ -3,14 +3,14 @@
 
         <header-layout></header-layout>
         <f7-block class="bg-blue-magenta padding-vertical no-margin-vertical">
-            <f7-row>
+            <f7-row class="display-flex align-items-center">
                 <f7-col width="10">
-                <a class="link back text-color-white" href="/">
-                    <i class="fas fa-angle-left custom-icon-back-form"></i>
-                </a>
+                    <a class="link back text-color-white" href="/">
+                        <i class="fas fa-angle-left custom-icon-back-form"></i>
+                    </a>
                 </f7-col>
                 <f7-col width="80" class="text-color-white text-align-center custom-title-form">
-                Caja
+                    Caja
                 </f7-col>
                 <f7-col width="10"></f7-col>
             </f7-row>
@@ -89,7 +89,7 @@
                                 </div>
 
                                 <div class="card-footer" v-if="row.state">
-                                    
+
                                     <a href="#" class="link text-color-blue" @click="clickCreate(row.id)">
                                         <span class="material-icons">edit</span>
                                     </a>

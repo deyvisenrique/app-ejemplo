@@ -1,12 +1,14 @@
 <template>
   <f7-page class="bg-blue-magenta">
     <f7-block>
-      <f7-row>
-        <f7-col width="90">
-          <a @click="closePopup" class="link text-color-white">
-            <i class="icon icon-back"></i>
-            <span class="">Listado de proveedores</span>
-          </a>
+      <f7-row class="display-flex align-items-center">
+        <f7-col width="20" class="text-color-white">
+            <a @click="closePopup" class="link text-color-white">
+                <i class="fas fa-angle-left custom-icon-back-form"></i>
+            </a>
+        </f7-col>
+        <f7-col width="70" class="text-color-white">
+            Listado de proveedores
         </f7-col>
         <f7-col width="10">
           <f7-link @click="addForm = !addForm" class="text-color-white text-align-right" open-panel="right" icon="fas fa-plus"></f7-link>

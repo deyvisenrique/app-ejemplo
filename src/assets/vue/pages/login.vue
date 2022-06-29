@@ -1,10 +1,10 @@
 <template>
-    <f7-page>
+    <f7-page color="bluemagenta">
         <f7-block class="bg-blue-magenta no-margin-vertical padding-vertical">
             <f7-row>
                 <f7-col width="100">
                     <p class="text-align-center">
-                        <img v-if="fp_logo_white" :src="fp_logo_white" alt="FacturaloPeru" width="40%" />
+                        <img v-if="logo" :src="logo" alt="FacturaloPeru" width="40%" />
                     </p>
                 </f7-col>
             </f7-row>
@@ -14,7 +14,7 @@
             <f7-row no-gap>
                 <f7-col>
                     <form class="form-store-data" id="demo-form">
-                        
+
 
                         <f7-list no-hairlines-md>
 
@@ -33,7 +33,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            
+
                             <!-- <f7-list-input
                                 floating-label
                                 type="url"
@@ -45,7 +45,7 @@
                                 :value="url"
                                 @input="url = $event.target.value">
                             </f7-list-input> -->
-                            
+
 
                             <f7-list-input
                                 floating-label
@@ -93,7 +93,7 @@
 
 <script>
     import {auth} from "mixins_/auth";
-    import logo from "assets/images/tulogo.png";
+    import logoLight from "assets/images/logo/logo-light.svg";
     import {general_functions} from "mixins_/general_functions"
 
     export default {
@@ -104,13 +104,15 @@
                 email: "demo@gmail.com",
                 password: "123456",
                 url: "demo.facturalo.pro",
-                fp_logo_white: logo,
+                logo: '',
                 internet_protocol: 'https://'
             };
         },
         created() {
             if (localStorage.url_logo) {
-                this.fp_logo_white = localStorage.url_logo
+                this.logo = localStorage.url_logo
+            } else {
+                this.logo = logoLight
             }
 
             this.setStorageApiUrl()
@@ -121,7 +123,7 @@
 
                 const storage_api_url = localStorage.api_url
 
-                if (storage_api_url) 
+                if (storage_api_url)
                 {
                     if(storage_api_url.includes(this.internet_protocol))
                     {
@@ -142,13 +144,13 @@
 
                 localStorage.api_url = `${this.internet_protocol}${this.url}`
 
-                if (ruc && logo) 
+                if (ruc && logo)
                 {
                     localStorage.ruc = ruc
                     const url_logo = `${this.internet_protocol}${this.url}/storage/uploads/logos/${logo}`
 
                     localStorage.url_logo = url_logo
-                    this.fp_logo_white = url_logo
+                    this.logo = url_logo
                 }
 
             },

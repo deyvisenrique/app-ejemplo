@@ -1,8 +1,8 @@
 <template>
-<f7-page class="">
+<f7-page class="" color="bluemagenta">
     <header-layout></header-layout>
     <f7-block class="bg-blue-magenta padding-vertical no-margin-vertical">
-        <f7-row>
+        <f7-row class="display-flex align-items-center">
             <f7-col width="10">
                 <a class="link back text-color-white" href="/">
                     <i class="fas fa-angle-left custom-icon-back-form"></i>
@@ -319,7 +319,7 @@
 
             },
             showDialogOptions(data){
-                
+
                 const context = this
 
                 context.showDialogConfirm({
@@ -331,7 +331,7 @@
                     },
                     verticalButtons: true,
                 })
-                
+
             },
             clickOptionsButtons(dialog, index, data){
 

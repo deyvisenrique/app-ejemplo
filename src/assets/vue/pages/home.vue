@@ -8,7 +8,7 @@
           <br><br><br>
         </f7-block>
         <f7-block class="padding-vertical display-flex justify-content-center bg-color-white no-margin-vertical">
-          <img v-if="fp_logo_white" :width="width_img" :height="height_img" class="center padding-vertical margin-vertical" :src="fp_logo_white" alt />
+          <img v-if="logo" :width="width_img" :height="height_img" class="center padding-vertical margin-vertical margin-horizontal" :src="logo" alt />
         </f7-block>
         <f7-block class=" display-flex justify-content-center no-margin bg-color-white">
           <img :src="img_icons" alt="icons" width="70%"  class="center">
@@ -23,8 +23,6 @@
     </f7-block>
 
     <f7-block>
-
-
       <f7-row>
         <f7-col>
           <f7-card @click.native="go('nw_doc')" class="bg-purple">
@@ -97,7 +95,7 @@
         </f7-col>
 
         <f7-col>
-          <f7-card @click.native="go('cpe')" class="bg-dark-blue">
+          <f7-card @click.native="go('cpe')" class="bg-blue">
             <f7-card-content class="">
               <base-icon nameIcon="qr-code" widthIcon="35" clases="text-align-right padding-top"></base-icon>
               <p class="text-color-white"><br> Validar cpe</p>
@@ -110,9 +108,9 @@
         <f7-col>
           <f7-card @click.native="go('customers')" class="bg-dark-blue">
               <f7-card-content>
-                <base-icon nameIcon="car-sale" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+                <base-icon nameIcon="users" widthIcon="35" clases="text-align-right padding-top"></base-icon>
                   <p class="text-color-white">
-                    <br>Clientes
+                    Clientes
                   </p>
               </f7-card-content>
           </f7-card>
@@ -120,9 +118,9 @@
         <f7-col>
           <f7-card @click.native="go('items')" class="bg-purple">
               <f7-card-content>
-                <base-icon nameIcon="car-sale" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+                <base-icon nameIcon="logistics" widthIcon="35" clases="text-align-right padding-top"></base-icon>
                   <p class="text-color-white">
-                    <br>Productos
+                    Productos
                   </p>
               </f7-card-content>
           </f7-card>
@@ -130,9 +128,9 @@
         <f7-col>
           <f7-card @click.native="go('cash')" class="bg-blue">
             <f7-card-content>
-              <base-icon nameIcon="car-sale" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+              <base-icon nameIcon="cash-machine" widthIcon="35" clases="text-align-right padding-top"></base-icon>
               <p class="text-color-white">
-                <br>Caja
+                Caja
               </p>
             </f7-card-content>
           </f7-card>
@@ -145,7 +143,7 @@
 </template>
 
 <script>
-  import logo from "assets/images/tulogo.png";
+  import logoOficial from "assets/images/logo/logo-oficial.svg";
   import icons from "assets/images/icons-01.svg";
   import HeaderLayout from "components/layout/Header";
   import BaseIcon from 'components/layout/BaseIcon.vue';
@@ -155,7 +153,7 @@
     data: function() {
       // Must return an object
       return {
-        fp_logo_white: logo,
+        logo: '',
         user: "",
         password: "",
         splash: true,
@@ -169,11 +167,11 @@
         // this.verifytoken();
 
         if (localStorage.url_logo) {
-            this.fp_logo_white = localStorage.url_logo
+            this.logo = localStorage.url_logo
             this.width_img = '45%'
             this.height_img = '45%'
-			// this.width_img = 100
-            // this.height_img = 100
+        } else {
+          this.logo = logoOficial
         }
 
         var self = this;

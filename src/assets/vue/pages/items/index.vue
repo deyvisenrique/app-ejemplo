@@ -3,14 +3,14 @@
 
         <header-layout></header-layout>
         <f7-block class="bg-blue-magenta padding-vertical no-margin-vertical">
-            <f7-row>
+            <f7-row class="display-flex align-items-center">
                 <f7-col width="10">
                 <a class="link back text-color-white" href="/">
                     <i class="fas fa-angle-left custom-icon-back-form"></i>
                 </a>
                 </f7-col>
                 <f7-col width="80" class="text-color-white text-align-center custom-title-form">
-                Productos
+                    Productos
                 </f7-col>
                 <f7-col width="10"></f7-col>
             </f7-row>

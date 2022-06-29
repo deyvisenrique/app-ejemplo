@@ -1,12 +1,14 @@
 <template>
-<f7-page class="bg-blue-magenta" color="">
+<f7-page class="bg-blue-magenta" color="bluemagenta">
 
     <f7-block>
-        <f7-row>
-            <f7-col width="80" class="text-color-white">
+        <f7-row class="display-flex align-items-center">
+            <f7-col width="20" class="text-color-white">
                 <a @click="closePopup" class="link text-color-white">
-                    <i class="icon icon-back"></i>
+                    <i class="fas fa-angle-left custom-icon-back-form"></i>
                 </a>
+            </f7-col>
+            <f7-col width="70" class="text-color-white">
                 Listado de Productos
             </f7-col>
             <f7-col width="10">
@@ -15,15 +17,6 @@
                     <i class="icon material-icons if-md">info_outline</i>
                 </a>
             </f7-col>
-            <!-- <f7-col width="10">
-                <a href="#" class="link" @click="sheetConfirm = !sheetConfirm">
-                    <f7-icon color="white" material="shopping_cart">
-                        <f7-badge color="blue">
-                            {{ countCar }}
-                        </f7-badge>
-                    </f7-icon>
-                </a>
-            </f7-col> -->
         </f7-row>
     </f7-block>
 
@@ -50,28 +43,13 @@
                 </f7-col>
             </f7-row>
 
-            <f7-row class="padding-horizontal">
+            <f7-row class="no-padding-horizontal">
                 <f7-col>
-                    
-                    <div class="c-horizontal-scroll c-h-50 mp-div-category">
+                    <div class="c-horizontal-scroll c-h-50 mp-div-category padding-vertical">
                         <template v-for="(category, index) in categories">
-                            <span class="padding margin c-span-card" style="margin-right:50px ! important" :key="index" @click="clickSearchByCategory(category.id)"><b>{{ getCategoryName(category) }}</b></span>
+                            <span class="padding c-span-card margin-right" :key="index" @click="clickSearchByCategory(category.id)"><b>{{ getCategoryName(category) }}</b></span>
                         </template>
                     </div>
-                    
-                    <!-- <f7-list accordion-list>
-                        <f7-list-item accordion-item title="Filtrar por categoría">
-                            <f7-accordion-content>
-                                <f7-block>
-                                    <div class="c-horizontal-scroll c-h-50 mp-div-category">
-                                        <template v-for="(category, index) in categories">
-                                            <span class="padding margin c-span-card" :key="index" @click="clickSearchByCategory(category.id)"><b>{{ getCategoryName(category) }}</b></span>
-                                        </template>
-                                    </div>
-                                </f7-block>
-                            </f7-accordion-content>
-                        </f7-list-item>
-                    </f7-list> -->
                 </f7-col>
             </f7-row>
 
@@ -85,9 +63,9 @@
                     <div class="row" v-if="items_car.length > 0">
 
                         <div class="col-50" v-for="(item, index) in items_car" :key="index">
-                            <div class="card no-margin-horizontal no-padding-horizontal">
+                            <div class="card no-margin-horizontal no-padding-horizontal" :class="item.quantity > 0 ? 'custom-border-selected-item bg-white-shade' : ''">
 
-                                <div :class="item.quantity > 0 ? 'custom-border-selected-item bg-white-shade' : ''" @click="add(index)">
+                                <div @click="add(index)">
 
                                     <div :style="'background-image:url('+item.item.image+')'" class="card-header align-items-flex-end image-max-width"></div>
                                     <div class="card-content card-content-padding">
@@ -111,9 +89,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="card-footer display-flex justify-content-center">
-                                    <div class="stepper stepper-raised stepper-init full-max-width">
+                                    <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
                                         <div class="stepper-button-minus" @click="calculate(-1, index)"></div>
                                         <div class="stepper-input-wrap">
                                             <input type="number" v-model="item.quantity" min="0" step="1" />

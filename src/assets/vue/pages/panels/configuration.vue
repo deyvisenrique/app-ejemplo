@@ -1,5 +1,5 @@
 <template>
-  <f7-page>
+  <f7-page color="bluemagenta">
     <f7-block class="bg-blue-magenta no-margin-top elevation-9">
       <f7-block class="text-align-right no-margin-top padding-top">
         <f7-link class="transparent panel-previous" color="white" @click="back">
@@ -15,11 +15,10 @@
         <p class="text-color-white">Cuenta</p>
       </f7-block>
     </f7-block>
-    <f7-block class="no-padding-top">
+    <f7-block class="no-padding-top no-padding-horizontal">
       <form class="form-store-data" id="demo-form">
         <f7-list no-hairlines-md>
           <f7-list-input
-            outline
             floating-label
             type="text"
             clear-button
@@ -31,12 +30,11 @@
             @input="form.url = $event.target.value"
           >
           <template v-slot:media>
-              <f7-icon icon="demo-list-icon">{{ internet_protocol }}</f7-icon>
+              <f7-icon icon="demo-list-icon" style="margin-bottom:6px;">{{ internet_protocol }}</f7-icon>
           </template>
 
           </f7-list-input>
           <f7-list-input
-            outline
             floating-label
             type="text"
             clear-button
@@ -50,7 +48,6 @@
           >
           </f7-list-input>
           <f7-list-input
-            outline
             floating-label
             type="password"
             clear-button
@@ -110,7 +107,7 @@ export default {
 
         const storage_api_url = localStorage.api_url
 
-        if (storage_api_url) 
+        if (storage_api_url)
         {
             if(storage_api_url.includes(this.internet_protocol))
             {
@@ -125,7 +122,7 @@ export default {
 
     },
     initForm() {
-      
+
       this.form = {
         email: localStorage.user_email,
         password: localStorage.user_password,
