@@ -16,19 +16,22 @@
     "cordova-plugin-file-downloader": {
       "PACKAGE_NAME": "com.example.facturalo"
     },
+    "cordova-plugin-file-opener2": {
+      "PACKAGE_NAME": "com.example.facturalo"
+    },
     "cordova-plugin-file-transfer": {
       "PACKAGE_NAME": "com.example.facturalo"
     },
     "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "com.example.facturalo"
     },
-    "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "com.example.facturalo"
-    },
     "cordova-plugin-printer": {
       "PACKAGE_NAME": "com.example.facturalo"
     },
-    "cordova-plugin-file-opener2": {
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.example.facturalo"
+    },
+    "phonegap-plugin-barcodescanner": {
       "PACKAGE_NAME": "com.example.facturalo"
     }
   },
