@@ -1,20 +1,7 @@
 <template>
     <f7-page infinite :infinite-distance="50" :infinite-preloader="show_preloader" @infinite="loadMoreRecords" ptr  @ptr:refresh="pullToRefresh">
 
-        <header-layout></header-layout>
-        <f7-block class="bg-blue-magenta padding-vertical no-margin-vertical">
-            <f7-row class="display-flex align-items-center">
-                <f7-col width="10">
-                <a class="link back text-color-white" href="/">
-                    <i class="fas fa-angle-left custom-icon-back-form"></i>
-                </a>
-                </f7-col>
-                <f7-col width="80" class="text-color-white text-align-center custom-title-form">
-                    Productos
-                </f7-col>
-                <f7-col width="10"></f7-col>
-            </f7-row>
-        </f7-block>
+        <header-layout title="Productos"></header-layout>
 
         <f7-card class="card-100 padding-top no-shadow" color="red" style="min-height: 90%">
             <f7-block class="">

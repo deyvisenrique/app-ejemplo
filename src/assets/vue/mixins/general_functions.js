@@ -1,7 +1,7 @@
- 
+
 export const general_functions = {
     methods: {
-        showAlert(message, title = 'Mensaje') 
+        showAlert(message, title = 'Mensaje')
         {
             this.showDialogMessage({
                 title: title,
@@ -11,11 +11,11 @@ export const general_functions = {
                 ]
             })
         },
-        showLoading() 
+        showLoading()
         {
             this.$f7.preloader.show()
         },
-        hideLoading() 
+        hideLoading()
         {
             this.$f7.preloader.hide()
         },
@@ -76,20 +76,20 @@ export const general_functions = {
     }
 }
 
- 
+
 export const scanner = {
     data: function () {
         return {
-            scanner_configuration: {  
-                showTorchButton: true, 
-                torchOn: false, 
-                saveHistory: true, 
-                prompt: 'Coloque un código de barras/qr dentro del área de escaneo', 
-                disableAnimations: false, 
-                disableSuccessBeep: false 
-            } 
+            scanner_configuration: {
+                showTorchButton: true,
+                torchOn: false,
+                saveHistory: true,
+                prompt: 'Coloque un código de barras/qr dentro del área de escaneo',
+                disableAnimations: false,
+                disableSuccessBeep: false
+            }
         }
     },
-    methods: { 
+    methods: {
     }
 }

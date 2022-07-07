@@ -2,6 +2,7 @@
 <f7-page>
 
     <!-- logo de cambio de pagina -->
+    <!-- <f7-popup class="demo-popup" :opened="splash" @popup:closed="popupOpened = false"> -->
     <f7-popup class="demo-popup" :opened="splash" @popup:closed="popupOpened = false">
         <f7-page class="bg-blue-magenta">
             <f7-block class="padding-vertical bg-color-white no-margin-vertical">
@@ -12,6 +13,13 @@
             </f7-block>
             <f7-block class=" display-flex justify-content-center no-margin bg-color-white">
                 <img :src="img_icons" alt="icons" width="70%" class="center">
+            </f7-block>
+            <f7-block :class="configuration.header_waves === 1 ? 'display-flex' : 'display-none'" class="no-margin-top no-margin-vertical no-padding-horizontal  bg-color-white">
+                <div class="waves" style="transform: rotate(180deg);">
+                    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                        <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+                    </svg>
+                </div>
             </f7-block>
         </f7-page>
     </f7-popup>
@@ -25,7 +33,7 @@
     <f7-block>
         <f7-row>
             <f7-col>
-                <f7-card @click.native="go('nw_doc')" class="bg-purple">
+                <f7-card @click.native="go('nw_doc')" class="bg-purple" style="cursor:pointer;">
                     <f7-card-content class="">
                         <base-icon nameIcon="file-invoice" widthIcon="35" clases="text-align-right padding-top"></base-icon>
                         <p class="text-color-white">Factura <br> electrónica</p>
@@ -33,7 +41,7 @@
                 </f7-card>
             </f7-col>
             <f7-col>
-                <f7-card @click.native="go('nw_docb')" class="bg-blue">
+                <f7-card @click.native="go('nw_docb')" class="bg-blue" style="cursor:pointer;">
                     <f7-card-content class="">
                         <base-icon nameIcon="file-invoice" widthIcon="35" clases="text-align-right padding-top"></base-icon>
                         <p class="text-color-white">Boleta <br> electrónica</p>
@@ -44,7 +52,7 @@
 
         <f7-row>
             <f7-col>
-                <f7-card @click.native="go('sale_note')" class="bg-dark-blue">
+                <f7-card @click.native="go('sale_note')" class="bg-dark-blue" style="cursor:pointer;">
                     <f7-card-content class="">
                         <base-icon nameIcon="file-sale" widthIcon="35" clases="text-align-right padding-top"></base-icon>
                         <p class="text-color-white"><br> Nota de venta</p>
@@ -52,7 +60,7 @@
                 </f7-card>
             </f7-col>
             <f7-col>
-                <f7-card @click.native="go('order_note')" class="bg-purple">
+                <f7-card @click.native="go('order_note')" class="bg-purple" style="cursor:pointer;">
                     <f7-card-content class="">
                         <base-icon nameIcon="file" widthIcon="35" clases="text-align-right padding-top"></base-icon>
                         <p class="text-color-white"><br> Pedido</p>
@@ -63,7 +71,7 @@
 
         <f7-row>
             <f7-col>
-                <f7-card @click.native="go('purchase')" class="bg-blue">
+                <f7-card @click.native="go('purchase')" class="bg-blue" style="cursor:pointer;">
                     <f7-card-content class="">
                         <base-icon nameIcon="car-sale" widthIcon="35" clases="text-align-right padding-top"></base-icon>
                         <p class="text-color-white">
@@ -74,7 +82,7 @@
             </f7-col>
 
             <f7-col>
-                <f7-card @click.native="go('ls_doc')" class="bg-dark-blue">
+                <f7-card @click.native="go('ls_doc')" class="bg-dark-blue" style="cursor:pointer;">
                     <f7-card-content class="">
                         <base-icon nameIcon="file-list" widthIcon="35" clases="text-align-right padding-top"></base-icon>
                         <p class="text-color-white">Lista de <br> comprobantes</p>
@@ -85,7 +93,7 @@
 
         <f7-row>
             <f7-col>
-                <f7-card @click.native="go('report-sales')" class="bg-purple">
+                <f7-card @click.native="go('report-sales')" class="bg-purple" style="cursor:pointer;">
                     <f7-card-content class="">
                         <base-icon nameIcon="bars" widthIcon="35" clases="text-align-right padding-top"></base-icon>
                         <p class="text-color-white"><br>Reportes</p>
@@ -94,7 +102,7 @@
             </f7-col>
 
             <f7-col>
-                <f7-card @click.native="go('cpe')" class="bg-blue">
+                <f7-card @click.native="go('cpe')" class="bg-blue" style="cursor:pointer;">
                     <f7-card-content class="">
                         <base-icon nameIcon="qr-code" widthIcon="35" clases="text-align-right padding-top"></base-icon>
                         <p class="text-color-white"><br> Validar cpe</p>
@@ -105,7 +113,7 @@
 
         <f7-row>
             <f7-col>
-                <f7-card @click.native="go('customers')" class="bg-dark-blue">
+                <f7-card @click.native="go('customers')" class="bg-dark-blue" style="cursor:pointer;">
                     <f7-card-content>
                         <base-icon nameIcon="users" widthIcon="35" clases="text-align-right padding-top"></base-icon>
                         <p class="text-color-white">
@@ -115,7 +123,7 @@
                 </f7-card>
             </f7-col>
             <f7-col>
-                <f7-card @click.native="go('items')" class="bg-purple">
+                <f7-card @click.native="go('items')" class="bg-purple" style="cursor:pointer;">
                     <f7-card-content>
                         <base-icon nameIcon="logistics" widthIcon="35" clases="text-align-right padding-top"></base-icon>
                         <p class="text-color-white">
@@ -125,7 +133,7 @@
                 </f7-card>
             </f7-col>
             <f7-col>
-                <f7-card @click.native="go('cash')" class="bg-blue">
+                <f7-card @click.native="go('cash')" class="bg-blue" style="cursor:pointer;">
                     <f7-card-content>
                         <base-icon nameIcon="cash-machine" widthIcon="35" clases="text-align-right padding-top"></base-icon>
                         <p class="text-color-white">
@@ -165,7 +173,8 @@
                 isOffline: false,
                 width_img: '',
                 height_img: '',
-                img_icons: icons
+                img_icons: icons,
+                configuration: {}
             };
         },
         created() {
@@ -193,7 +202,7 @@
         },
         methods: {
             appendStyleByContent(content){
-                
+
                 const style = document.createElement('style')
                 style.textContent = content
                 document.head.appendChild(style)
@@ -203,7 +212,7 @@
 
                 if(style_settings.style_theme_content)
                 {
-                    switch (style_settings.theme_color) 
+                    switch (style_settings.theme_color)
                     {
                         case 'red':
                         case 'dark':
@@ -217,7 +226,7 @@
 
                 if(style_settings.style_card_content)
                 {
-                    switch (style_settings.card_color) 
+                    switch (style_settings.card_color)
                     {
                         case 'unicolor':
                             this.appendStyleByContent(style_settings.style_card_content)
@@ -233,13 +242,18 @@
 
             },
             async getInitialSettings(){
-                
+
                 this.showLoading()
 
                 await this.$http.get(`${this.returnBaseUrl()}/app-configurations/initial-settings`,  this.getHeaderConfig())
                                 .then(response => {
                                     console.log(response)
                                     this.setInitialSettings(response.data)
+
+                                    this.configuration = this.getInitialConfiguration()
+                                    this.configuration.header_waves = response.data.style_settings.header_waves
+                                    this.setStorage('app_configuration', this.configuration, true)
+                                    this.$f7router.navigate("/"); // no funciona a la primera
                                 })
                                 .catch(err => {
                                     console.log(err)
