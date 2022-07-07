@@ -603,6 +603,7 @@
             }
         },
         created() {
+            this.checkPermissions()
             this.loadConfiguration()
             this.initFormEmail()
             this.getDataDocuments()
@@ -611,6 +612,18 @@
             // this.getDataOrderNote()
         },
         methods: {
+            checkPermissions(){
+
+                const permissions = this.getStorage('permissions', true)
+                const row = _.find(permissions, {value: 'documents'})
+
+                if(_.isEmpty(row))
+                {
+                    this.showAlert('No tiene permiso a esta sección.')
+                    this.$f7router.navigate("/")
+                }
+
+            },
             searchData(input){
 
                 this.form_search.input = input

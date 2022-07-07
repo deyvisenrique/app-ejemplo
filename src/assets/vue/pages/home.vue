@@ -32,7 +32,7 @@
 
     <f7-block>
         <f7-row>
-            <f7-col>
+            <f7-col v-if="checkPermissions('invoice')">
                 <f7-card @click.native="go('nw_doc')" class="bg-purple" style="cursor:pointer;">
                     <f7-card-content class="">
                         <base-icon nameIcon="file-invoice" widthIcon="35" clases="text-align-right padding-top"></base-icon>
@@ -40,7 +40,7 @@
                     </f7-card-content>
                 </f7-card>
             </f7-col>
-            <f7-col>
+            <f7-col v-if="checkPermissions('invoice-ticket')">
                 <f7-card @click.native="go('nw_docb')" class="bg-blue" style="cursor:pointer;">
                     <f7-card-content class="">
                         <base-icon nameIcon="file-invoice" widthIcon="35" clases="text-align-right padding-top"></base-icon>
@@ -51,7 +51,8 @@
         </f7-row>
 
         <f7-row>
-            <f7-col>
+
+            <f7-col v-if="checkPermissions('sale-note')">
                 <f7-card @click.native="go('sale_note')" class="bg-dark-blue" style="cursor:pointer;">
                     <f7-card-content class="">
                         <base-icon nameIcon="file-sale" widthIcon="35" clases="text-align-right padding-top"></base-icon>
@@ -59,7 +60,8 @@
                     </f7-card-content>
                 </f7-card>
             </f7-col>
-            <f7-col>
+
+            <f7-col v-if="checkPermissions('order-note')">
                 <f7-card @click.native="go('order_note')" class="bg-purple" style="cursor:pointer;">
                     <f7-card-content class="">
                         <base-icon nameIcon="file" widthIcon="35" clases="text-align-right padding-top"></base-icon>
@@ -70,18 +72,18 @@
         </f7-row>
 
         <f7-row>
-            <f7-col>
+            <f7-col v-if="checkPermissions('purchase')">
                 <f7-card @click.native="go('purchase')" class="bg-blue" style="cursor:pointer;">
                     <f7-card-content class="">
                         <base-icon nameIcon="car-sale" widthIcon="35" clases="text-align-right padding-top"></base-icon>
                         <p class="text-color-white">
-                            <br> Compras
+                            <br> Compra
                         </p>
                     </f7-card-content>
                 </f7-card>
             </f7-col>
 
-            <f7-col>
+            <f7-col v-if="checkPermissions('documents')">
                 <f7-card @click.native="go('ls_doc')" class="bg-dark-blue" style="cursor:pointer;">
                     <f7-card-content class="">
                         <base-icon nameIcon="file-list" widthIcon="35" clases="text-align-right padding-top"></base-icon>
@@ -92,7 +94,7 @@
         </f7-row>
 
         <f7-row>
-            <f7-col>
+            <f7-col v-if="checkPermissions('report-sales')">
                 <f7-card @click.native="go('report-sales')" class="bg-purple" style="cursor:pointer;">
                     <f7-card-content class="">
                         <base-icon nameIcon="bars" widthIcon="35" clases="text-align-right padding-top"></base-icon>
@@ -101,7 +103,8 @@
                 </f7-card>
             </f7-col>
 
-            <f7-col>
+            <f7-col v-if="checkPermissions('validate-document')">
+
                 <f7-card @click.native="go('cpe')" class="bg-blue" style="cursor:pointer;">
                     <f7-card-content class="">
                         <base-icon nameIcon="qr-code" widthIcon="35" clases="text-align-right padding-top"></base-icon>
@@ -112,7 +115,7 @@
         </f7-row>
 
         <f7-row>
-            <f7-col>
+            <f7-col v-if="checkPermissions('customers')">
                 <f7-card @click.native="go('customers')" class="bg-dark-blue" style="cursor:pointer;">
                     <f7-card-content>
                         <base-icon nameIcon="users" widthIcon="35" clases="text-align-right padding-top"></base-icon>
@@ -122,7 +125,7 @@
                     </f7-card-content>
                 </f7-card>
             </f7-col>
-            <f7-col>
+            <f7-col  v-if="checkPermissions('items')">
                 <f7-card @click.native="go('items')" class="bg-purple" style="cursor:pointer;">
                     <f7-card-content>
                         <base-icon nameIcon="logistics" widthIcon="35" clases="text-align-right padding-top"></base-icon>
@@ -132,7 +135,7 @@
                     </f7-card-content>
                 </f7-card>
             </f7-col>
-            <f7-col>
+            <f7-col v-if="checkPermissions('cash')">
                 <f7-card @click.native="go('cash')" class="bg-blue" style="cursor:pointer;">
                     <f7-card-content>
                         <base-icon nameIcon="cash-machine" widthIcon="35" clases="text-align-right padding-top"></base-icon>
@@ -174,7 +177,8 @@
                 width_img: '',
                 height_img: '',
                 img_icons: icons,
-                configuration: {}
+                configuration: {},
+                permissions: []
             };
         },
         created() {
@@ -239,6 +243,20 @@
 
                 this.setStyleThemeContent(data.style_settings)
                 this.setStyleCardContent(data.style_settings)
+                this.setPermissions(data)
+                
+            },
+            setPermissions(data){
+
+                this.permissions = data.permissions
+                this.setStorage('permissions', this.permissions, true)
+
+            },
+            checkPermissions(value){
+
+                const row = _.find(this.permissions, {value: value})
+
+                return !_.isEmpty(row)
 
             },
             async getInitialSettings(){
@@ -247,13 +265,13 @@
 
                 await this.$http.get(`${this.returnBaseUrl()}/app-configurations/initial-settings`,  this.getHeaderConfig())
                                 .then(response => {
-                                    console.log(response)
+                                    
                                     this.setInitialSettings(response.data)
 
                                     this.configuration = this.getInitialConfiguration()
                                     this.configuration.header_waves = response.data.style_settings.header_waves
                                     this.setStorage('app_configuration', this.configuration, true)
-                                    this.$f7router.navigate("/"); // no funciona a la primera
+                                    // this.$f7router.navigate("/"); // no funciona a la primera
                                 })
                                 .catch(err => {
                                     console.log(err)
