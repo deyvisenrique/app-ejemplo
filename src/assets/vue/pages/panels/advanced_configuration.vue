@@ -46,7 +46,14 @@
         </div>
     </f7-page>
 </template>
-
+<style>
+  .demo-icon {
+    background: #EE350F;
+    color: #fff;
+    border-radius: 50%;
+    text-align: center;
+  }
+</style>
 <script>
 
     import {general_functions} from "mixins_/general_functions"
@@ -86,7 +93,9 @@
                 this.$http.post(`${this.returnBaseUrl()}/${this.resource}`, this.form, this.getHeaderConfig())
                     .then(response => {
 
-                        this.showAlert(response.data.message)
+                        this.generalSuccessNotification(response.data.message)
+
+                        // this.showAlert(response.data.message)
 
                         if(response.data.success)
                         {

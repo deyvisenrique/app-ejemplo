@@ -30,7 +30,7 @@
         <p class="text-color-white text-align-center">SIN ACCESO A INTERNET, VERIFICA TU CONEXIÓN.</p>
     </f7-block>
 
-    <f7-block>
+    <f7-block v-if="hasPermissions">
         <f7-row>
             <f7-col v-if="checkPermissions('invoice')">
                 <f7-card @click.native="go('nw_doc')" class="bg-purple" style="cursor:pointer;">
@@ -49,9 +49,7 @@
                 </f7-card>
             </f7-col>
         </f7-row>
-
         <f7-row>
-
             <f7-col v-if="checkPermissions('sale-note')">
                 <f7-card @click.native="go('sale_note')" class="bg-dark-blue" style="cursor:pointer;">
                     <f7-card-content class="">
@@ -148,6 +146,21 @@
         </f7-row>
 
     </f7-block>
+    <f7-block v-else>
+        <f7-card class="card-warning">
+            <f7-card-content class="">
+                <f7-row>
+                    <f7-col width="80">
+                        <p class="text-color-white">No tiene permisos asignados, comuníquese con el administrador.</p>
+                    </f7-col>
+                    <f7-col width="20">
+                        <span class="material-icons padding-top icon-card-warning">warning</span>
+                    </f7-col>
+                </f7-row>
+            </f7-card-content>
+        </f7-card>
+    </f7-block>
+
 </f7-page>
 </template>
 
@@ -181,9 +194,9 @@
                 permissions: []
             };
         },
-        created() {
+        async created() {
 
-            this.getInitialSettings()
+            await this.getInitialSettings()
 
             if (localStorage.url_logo) {
                 this.logo = localStorage.url_logo
@@ -203,6 +216,11 @@
         },
         mounted() {
             setTimeout(this.verifytoken, 1000); // 2500);
+        },
+        computed:{
+            hasPermissions(){
+                return this.permissions.length > 0
+            }
         },
         methods: {
             appendStyleByContent(content){
@@ -250,6 +268,7 @@
 
                 this.permissions = data.permissions
                 this.setStorage('permissions', this.permissions, true)
+                this.$eventHub.$emit('updatePermissions', this.permissions)
 
             },
             checkPermissions(value){
@@ -260,6 +279,8 @@
 
             },
             async getInitialSettings(){
+
+                if(!this.getStorage('api_token')) return
 
                 this.showLoading()
 

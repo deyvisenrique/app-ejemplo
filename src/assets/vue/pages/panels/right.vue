@@ -38,10 +38,14 @@
         </f7-block>
     </f7-block>
     <f7-block class="bg-color-white margin-left">
-        <f7-link @click="go('configuration')" color="black" class="display-block margin-vertical">
-            <f7-icon material="settings" size="18"> </f7-icon>
-            &nbsp;Configuración
-        </f7-link>
+
+        <template v-if="check_configuration">
+            <f7-link @click="go('configuration')" color="black" class="display-block margin-vertical">
+                <f7-icon material="settings" size="18"> </f7-icon>
+                &nbsp;Configuración
+            </f7-link>
+        </template>
+
         <f7-link @click="go('login')" color="black" class="display-block margin-vertical">
             <f7-icon material="verified_user" size="18"> </f7-icon>
             &nbsp;cuenta
@@ -86,14 +90,31 @@
                 notifications: {
                     documents_not_sent: 0,
                     documents_regularize_shipping: 0,
-                }
+                },
+                check_configuration: false
             }
         },
         mounted() {
             this.createTooltips()
             this.getNotifications()
+            this.checkConfiguration()
+        },
+        created(){
+            this.events()
+        },
+        computed: { 
         },
         methods: {
+            events(){
+
+                this.$eventHub.$on('updatePermissions', (permissions) => {
+                    this.checkConfiguration(permissions)
+                })
+                
+            },
+            checkConfiguration(permissions){
+                this.check_configuration = this.hasPermissionInModule('configuration', permissions)
+            },
             getNotifications(){
 
                 if(!this.getStorage('api_token')) return

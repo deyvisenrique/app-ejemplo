@@ -1,6 +1,15 @@
 
 export const general_functions = {
     methods: {
+        generalSuccessNotification(message, title = 'Notificación')
+        {
+            this.showGeneralNotification({
+                icon: '<span class="material-icons text-color-green" style="font-size: 15px">check_circle</span>',
+                title:  title,
+                subtitle: message,
+                closeTimeout: 2000,
+            })
+        },
         showAlert(message, title = 'Mensaje')
         {
             this.showDialogMessage({
@@ -18,6 +27,10 @@ export const general_functions = {
         hideLoading()
         {
             this.$f7.preloader.hide()
+        },
+        showGeneralNotification(params)
+        {
+            this.$f7.notification.create(params).open()
         },
         showDialogMessage(params)
         {
@@ -70,8 +83,14 @@ export const general_functions = {
         async findGeneralDefaultCustomer()
         {
             return await this.$http.get(`${this.returnBaseUrl()}/persons/default-customer`, this.getHeaderConfig())
+        },
+        hasPermissionInModule(module, permissions = null)
+        {
+            const _permissions = permissions ? permissions : this.getStorage('permissions', true)
+            const row = _.find(_permissions, {value: module})
+            
+            return !_.isEmpty(row)
         }
-
 
     }
 }

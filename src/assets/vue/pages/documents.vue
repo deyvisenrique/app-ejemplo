@@ -60,7 +60,26 @@
             <div class="tabs">
                 <div id="tab-invoices" class="page-content tab tab-active">
 
-                    <f7-searchbar placeholder="Buscar" :value="search_input" @input="search_input = $event.target.value" :clear-button="true" ></f7-searchbar>
+                    <f7-block>
+                        <f7-row>
+                            <f7-col width="75">
+                                <f7-searchbar placeholder="Buscar" :value="search_input" @input="search_input = $event.target.value" :clear-button="true" ></f7-searchbar>
+                            </f7-col>
+                            
+                            <f7-col width="25">
+                                <div class="item-content item-input no-padding-horizontal">
+                                    <div class="item-inner no-padding-horizontal">
+
+                                        <div class="item-input-wrap input-dropdown-wrap padding-top">
+                                            <select v-model="form_search.state_type_id" @change="changeStateType()">
+                                                <option v-for="(row, index) in state_types" :value="row.id" :key="index">{{row.description}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </f7-col>
+                        </f7-row>
+                    </f7-block>
 
                     <div class="searchbar-not-found list" style="display: block;" v-if="source_invoice.length == 0">
                         <ul>
@@ -106,6 +125,11 @@
                                         </f7-col>
                                     </f7-row>
                                     <f7-row>
+                                        <!-- <f7-col v-if="item.state_type_id === '05'">
+                                            <f7-button size="35" icon @click="clickVoided(item)" color="red">
+                                                <f7-icon size="18" class="icon fas fa-ban"></f7-icon>
+                                            </f7-button>
+                                        </f7-col> -->
                                         <f7-col>
                                             <f7-button size="35" icon @click="clickPreviewPdf(item, 'document')" color="blue">
                                                 <f7-icon size="18" class="icon fas fa-search"></f7-icon>
@@ -144,9 +168,28 @@
                 </div>
                 <div id="tab-tickets" class="page-content tab">
 
-                    <f7-searchbar placeholder="Buscar" :value="search_input" @input="search_input = $event.target.value" :clear-button="true" ></f7-searchbar>
+                    <f7-block>
+                        <f7-row>
+                            <f7-col width="75">
+                                <f7-searchbar placeholder="Buscar" :value="search_input" @input="search_input = $event.target.value" :clear-button="true" ></f7-searchbar>
+                            </f7-col>
+                            
+                            <f7-col width="25">
+                                <div class="item-content item-input no-padding-horizontal">
+                                    <div class="item-inner no-padding-horizontal">
 
-                    <div class="searchbar-not-found list" style="display: block;" v-if="source_invoice.length == 0">
+                                        <div class="item-input-wrap input-dropdown-wrap padding-top">
+                                            <select v-model="form_search.state_type_id" @change="changeStateType()">
+                                                <option v-for="(row, index) in state_types" :value="row.id" :key="index">{{row.description}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </f7-col>
+                        </f7-row>
+                    </f7-block>
+
+                    <div class="searchbar-not-found list" style="display: block;" v-if="source_ticket.length == 0">
                         <ul>
                             <li class="padding-left margin-left">
                                 <div class="item-content">
@@ -531,6 +574,9 @@
                             :record="record"
                             :documentType="documentType"></preview-pdf>
 
+                <!-- <voided-form :showDialog.sync="showDialogVoided"
+                            :record="record"></voided-form> -->
+
             </f7-page-content>
         </f7-sheet>
     </f7-block>
@@ -546,13 +592,15 @@
     import {download_file} from "mixins_/download_file"
     import HeaderLayout from "components/layout/Header"
     import queryString from "query-string"
+    // import VoidedForm from './invoices/partials/voided.vue'
 
     export default {
         name: "documents",
         mixins: [auth, general_functions, download_file],
         components: {
             PreviewPdf,
-            HeaderLayout
+            HeaderLayout,
+            // VoidedForm
         },
         data: function () {
             // Must return an object
@@ -584,8 +632,11 @@
                     input: null,
                     document_type_id: '01',
                     type: 'invoices',
+                    state_type_id: 'all', //aplica para invoices
                 },
                 search_input: null,
+                state_types: [],
+                showDialogVoided: false,
 
             };
         },
@@ -602,8 +653,9 @@
                 return this.count;
             }
         },
-        created() {
-            this.checkPermissions()
+        async created() {
+            await this.checkPermissions()
+            await this.getTables()
             this.loadConfiguration()
             this.initFormEmail()
             this.getDataDocuments()
@@ -612,12 +664,32 @@
             // this.getDataOrderNote()
         },
         methods: {
+            clickVoided(row){
+                console.log(row)
+                this.record = row
+                this.showDialogVoided = true
+            },
+            changeStateType(){
+                this.getDataDocuments()
+            },
+            getTables(){
+                
+                this.showLoading()
+
+                this.$http.get(`${this.returnBaseUrl()}/documents/tables`,  this.getHeaderConfig())
+                        .then(response => {
+                            this.state_types = response.data.state_types
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                        .then(() => {
+                            this.hideLoading()
+                        })
+            },
             checkPermissions(){
 
-                const permissions = this.getStorage('permissions', true)
-                const row = _.find(permissions, {value: 'documents'})
-
-                if(_.isEmpty(row))
+                if(!this.hasPermissionInModule('documents'))
                 {
                     this.showAlert('No tiene permiso a esta sección.')
                     this.$f7router.navigate("/")
@@ -667,6 +739,7 @@
                 this.form_search.type = type
                 this.form_search.document_type_id = document_type_id
                 this.form_search.input = input
+                this.form_search.state_type_id = 'all'
                 this.search_input = input
 
             },
@@ -921,17 +994,13 @@
                 })
 
             },
-            getDataDocuments() {
+            async getDataDocuments() {
 
                 const self = this
                 this.showLoading()
 
-                this.$http
-                    .get(`${this.returnBaseUrl()}/documents/records?${this.getQueryParameters()}`,  this.getHeaderConfig())
+                await this.$http.get(`${this.returnBaseUrl()}/documents/records?${this.getQueryParameters()}`,  this.getHeaderConfig())
                     .then(response => {
-
-                        // self.source = response.data.data
-                        // this.applyFilters()
 
                         if(this.form_search.document_type_id === '01')
                         {
