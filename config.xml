@@ -4,7 +4,7 @@
     <preference name="DisallowOverscroll" value="true"/>
     <hook src="hooks/hookers.js" type="before_prepare"/>
     <hook src="hooks/beforedep.js" type="before_deploy"/>
-    <name>facturalo</name>
+    <name>Facturalo</name>
     <description>
         Brand new cordova project!
     </description>

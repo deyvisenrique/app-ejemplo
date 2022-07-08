@@ -4,7 +4,7 @@
       <f7-row class="display-flex align-items-center">
         <f7-col width="50">
           <f7-link href="/">
-            <img v-if="fp_logo_white" :src="fp_logo_white" alt="FacturaloPeru" width="100%" />
+            <img v-if="fp_logo_white" :src="fp_logo_white" alt="FacturaloPeru" width="100%" style="max-height: 80px;" />
           </f7-link>
         </f7-col>
         <f7-col width="50" class="">
