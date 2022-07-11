@@ -1,6 +1,6 @@
 <template>
  
-    <f7-sheet class="demo-sheet" color="bluemagenta" :opened="showDialog" @sheet:closed="close">
+    <f7-sheet class="demo-sheet default-h35-modal padding-top" color="bluemagenta" :opened="showDialog" @sheet:closed="close">
         <f7-page-content>
             <f7-block class="text-align-right no-margin-vertical no-padding-vertical padding-top">
                 <f7-link small sheet-close class="no-margin-horizontal  text-color-gray">
@@ -31,9 +31,6 @@
                     </ul>
                 </form>
             </f7-block>
-            <!-- <f7-block class="display-flex justify-content-center">
-                <f7-button style="width: 40%;" fill round color="pink" @click="sendEmail" outline>Enviar</f7-button>
-            </f7-block> -->
         </f7-page-content>
     </f7-sheet>
 
@@ -66,33 +63,91 @@
             this.initForm()
         },
         methods: {
-            submit(){
+            getDataToApi(){
+
+                let documentos = []
+
+                this.form.documents.forEach(document => {
+                    documentos.push({
+                        external_id: document.external_id,
+                        motivo_anulacion: document.description
+                    })    
+                })
+
+                return {
+                    fecha_de_emision_de_documentos: this.form.date_of_reference,
+                    documentos: documentos,
+                }
+
+            },
+            async submit(){
 
                 if(!this.form.documents[0].description)
                 {
                     return this.showAlert('El motivo de anulación es obligatorio')
                 }
 
+                this.showLoading()
+
+                await this.$http.post(`${this.returnBaseUrl()}/voided`, this.getDataToApi(), this.getHeaderConfig())
+                    .then(response => {
+
+                        // console.log(response)
+
+                        if (response.data.success) 
+                        {
+                            this.voidedQuery(response.data.data)
+                        }
+                        else{
+                            this.showAlert('No se pudo generar la anulación.')
+                        }
+
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        this.showAlert(`Ocurrió un error al generar la anulación: ${error.response.data.message}`)
+                        this.hideLoading()
+                    })
+
+            },
+            sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            },
+            async voidedQuery(data){
+
                 // this.showLoading()
+                await this.sleep(5000)
 
-                // this.$http.post(`${this.url}`, this.form, this.getHeaderConfig())
-                //     .then(response => {
+                const form = {
+                    external_id: data.external_id,
+                    ticket: data.ticket
+                }
 
-                //         if (response.data.success) {
-                //             this.showAlert('Correo electrónico enviado')
-                //             this.close()
-                //         }
+                const error_message = 'Ocurrió un error al consultar el ticket de la anulación, debe consultarlo desde la web para finalizar el proceso'
 
-                //     })
-                //     .catch(error => {
+                await this.$http.post(`${this.returnBaseUrl()}/voided/status`, form, this.getHeaderConfig())
+                    .then(response => {
 
-                //         console.log(error)
-                //         alert(`Ocurrió un error al guardar: ${error}`)
+                        // console.log(response)
 
-                //     })
-                //     .then(() => {
-                //         this.hideLoading()
-                //     })
+                        if (response.data.success) 
+                        {
+                            this.showAlert(response.data.response.description)
+                        }
+                        else{
+                            this.showAlert(`${error_message}.`)
+                        }
+
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        this.showAlert(`${error_message}, error: ${error.response.data.message}`)
+                    })
+                    .finally(() => {
+                        this.$eventHub.$emit('reloadDocuments')
+                        this.hideLoading()
+                        this.close()
+                    })
 
             },
             initForm(){
@@ -103,6 +158,7 @@
                         {
                             document_id: null,
                             description: null,
+                            external_id: null,
                         }
                     ]
                 }
@@ -117,6 +173,8 @@
                 const document = this.record
                 this.form.date_of_reference = document.date_of_issue
                 this.form.documents[0].document_id = document.id
+                this.form.documents[0].external_id = document.external_id
+                
                 this.title = `Anular comprobante: ${document.number}`
 
             },

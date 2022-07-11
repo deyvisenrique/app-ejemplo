@@ -4,6 +4,8 @@ import FormDocument from './assets/vue/pages/invoices/form.vue';
 import FormSaleNote from './assets/vue/pages/sale-notes/form.vue';
 import FormOrderNote from './assets/vue/pages/order-notes/form.vue';
 import FormPurchase from './assets/vue/pages/purchases/form.vue';
+import FormQuotation from './assets/vue/pages/quotations/form.vue'
+
 
 import IndexItems from './assets/vue/pages/items/index.vue';
 import IndexCustomers from './assets/vue/pages/customers/index.vue';
@@ -83,6 +85,11 @@ export default [
     path: '/cash/',
     component: IndexCash
   },
+  {
+    path: '/form-quotation/',
+    component: FormQuotation
+  },
+  
   // {
   //   path: '/pdf2/',
   //   component: PreviewPdf2

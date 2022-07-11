@@ -125,11 +125,16 @@
                                         </f7-col>
                                     </f7-row>
                                     <f7-row>
-                                        <!-- <f7-col v-if="item.state_type_id === '05'">
+                                        <f7-col v-if="item.state_type_id === '05'">
                                             <f7-button size="35" icon @click="clickVoided(item)" color="red">
                                                 <f7-icon size="18" class="icon fas fa-ban"></f7-icon>
                                             </f7-button>
-                                        </f7-col> -->
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button size="35" icon @click="clickToPrint(item, 'document')" color="purple">
+                                                <f7-icon size="18" class="icon fas fa-print"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
                                         <f7-col>
                                             <f7-button size="35" icon @click="clickPreviewPdf(item, 'document')" color="blue">
                                                 <f7-icon size="18" class="icon fas fa-search"></f7-icon>
@@ -150,7 +155,7 @@
                                                 <f7-icon size="18" class="icon fas fa-envelope"></f7-icon>
                                             </f7-button>
                                         </f7-col>
-                                        <f7-col>
+                                        <!-- <f7-col>
                                             <f7-button size="35" icon @click="download(item.external_id, 'document', 'a4')" color="lightblue">
                                                 <f7-icon size="18" class="icon fas fa-file-pdf"></f7-icon>
                                             </f7-button>
@@ -159,7 +164,7 @@
                                             <f7-button size="35" icon @click="download(item.external_id, 'document')" color="deeppurple">
                                                 <f7-icon size="18" class="icon fas fa-receipt"></f7-icon>
                                             </f7-button>
-                                        </f7-col>
+                                        </f7-col> -->
                                     </f7-row>
                                 </f7-block>
                             </span>
@@ -238,27 +243,34 @@
                                         </f7-col>
                                     </f7-row>
                                     <f7-row>
+                                        
                                         <f7-col>
-                                            <f7-button @click="clickPreviewPdf(item, 'document')" color="blue">
-                                                <f7-icon class="icon fas fa-search"></f7-icon>
+                                            <f7-button size="35" icon @click="clickToPrint(item, 'document')" color="purple">
+                                                <f7-icon size="18" class="icon fas fa-print"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        
+                                        <f7-col>
+                                            <f7-button size="35" @click="clickPreviewPdf(item, 'document')" color="blue">
+                                                <f7-icon size="18" class="icon fas fa-search"></f7-icon>
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button @click="clickDownloadPdf(item, 'document')" color="blue-shade">
-                                                <f7-icon class="icon fas fa-download"></f7-icon>
+                                            <f7-button size="35" @click="clickDownloadPdf(item, 'document')" color="blue-shade">
+                                                <f7-icon size="18" class="icon fas fa-download"></f7-icon>
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button @click="whatsap(item.customer_telephone, item.external_id)" color="green">
-                                                <f7-icon class="icon fab fa-whatsapp"></f7-icon>
+                                            <f7-button size="35" @click="whatsap(item.customer_telephone, item.external_id)" color="green">
+                                                <f7-icon size="18" class="icon fab fa-whatsapp"></f7-icon>
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button @click="email(item.id, 'document')" color="purple">
-                                                <f7-icon class="icon fas fa-envelope"></f7-icon>
+                                            <f7-button size="35" @click="email(item.id, 'document')" color="purple">
+                                                <f7-icon size="18" class="icon fas fa-envelope"></f7-icon>
                                             </f7-button>
                                         </f7-col>
-                                        <f7-col>
+                                        <!-- <f7-col>
                                             <f7-button @click="download(item.external_id, 'document', 'a4')" color="lightblue">
                                                 <f7-icon class="icon fas fa-file-pdf"></f7-icon>
                                             </f7-button>
@@ -267,7 +279,7 @@
                                             <f7-button @click="download(item.external_id, 'document')" color="deeppurple">
                                                 <f7-icon class="icon fas fa-receipt"></f7-icon>
                                             </f7-button>
-                                        </f7-col>
+                                        </f7-col> -->
                                     </f7-row>
                                 </f7-block>
                             </span>
@@ -574,8 +586,8 @@
                             :record="record"
                             :documentType="documentType"></preview-pdf>
 
-                <!-- <voided-form :showDialog.sync="showDialogVoided"
-                            :record="record"></voided-form> -->
+                <voided-form :showDialog.sync="showDialogVoided"
+                            :record="record"></voided-form>
 
             </f7-page-content>
         </f7-sheet>
@@ -588,19 +600,19 @@
     import _ from "lodash";
     import {auth} from "mixins_/auth";
     import PreviewPdf from 'components/document/PreviewPdf'
-    import {general_functions} from "mixins_/general_functions"
+    import {general_functions, print_pdf_document} from "mixins_/general_functions"
     import {download_file} from "mixins_/download_file"
     import HeaderLayout from "components/layout/Header"
     import queryString from "query-string"
-    // import VoidedForm from './invoices/partials/voided.vue'
+    import VoidedForm from './invoices/partials/voided.vue'
 
     export default {
         name: "documents",
-        mixins: [auth, general_functions, download_file],
+        mixins: [auth, general_functions, download_file, print_pdf_document],
         components: {
             PreviewPdf,
             HeaderLayout,
-            // VoidedForm
+            VoidedForm
         },
         data: function () {
             // Must return an object
@@ -659,13 +671,21 @@
             this.loadConfiguration()
             this.initFormEmail()
             this.getDataDocuments()
+            this.events()
             // this.getDataPurchases()
             // this.getDataSaleNote()
             // this.getDataOrderNote()
         },
         methods: {
+            events(){
+
+                this.$eventHub.$on('reloadDocuments', ()=>{
+                    this.getDataDocuments()
+                })
+
+            },
             clickVoided(row){
-                console.log(row)
+                // console.log(row)
                 this.record = row
                 this.showDialogVoided = true
             },
@@ -686,6 +706,7 @@
                         .then(() => {
                             this.hideLoading()
                         })
+
             },
             checkPermissions(){
 
@@ -724,6 +745,16 @@
                 this.record = record
                 this.documentType = documentType
                 this.showDialogPreviewPdf = true
+
+            },
+            clickToPrint(record, documentType){
+
+                switch (documentType) {
+                    case 'document':
+                        this.printPdfDocument(record.external_id)
+                        break;
+                
+                }
 
             },
             async clickDownloadPdf(row, documentType){

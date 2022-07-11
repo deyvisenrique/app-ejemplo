@@ -26,6 +26,30 @@
                             </div>
                         </div>
                     </f7-col>
+                    
+                </f7-row>
+                <f7-row>
+                    <f7-col width="100">
+                        <div class="item-content item-input no-padding-horizontal">
+                            <div class="item-inner no-padding-horizontal">
+                                <div class="item-title item-label">Dirección de envío</div>
+                                <div class="item-input-wrap">
+                                    <input v-model="form.shipping_address" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                    </f7-col>
+                    
+                    <f7-col width="100">
+                        <div class="item-content item-input no-padding-horizontal">
+                            <div class="item-inner no-padding-horizontal">
+                                <div class="item-title item-label">Observación</div>
+                                <div class="item-input-wrap">
+                                    <input v-model="form.observation" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                    </f7-col>
                 </f7-row>
 
                 <li class="no-padding-horizontal margin-top">
@@ -422,7 +446,9 @@
                     type_period: null,
                     quantity_period: 0,
                     automatic_date_of_issue: null,
-                    enabled_concurrency: false
+                    enabled_concurrency: false,
+                    shipping_address: null,
+                    observation: null,
                 }
 
                 this.setDefaultCustomer()

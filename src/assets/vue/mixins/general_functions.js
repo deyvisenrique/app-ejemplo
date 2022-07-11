@@ -112,3 +112,34 @@ export const scanner = {
     methods: {
     }
 }
+
+
+
+export const print_pdf_document = {
+    data: function () {
+        return {
+        }
+    },
+    methods: {
+        async printPdfDocument(external_id)
+        {
+            let html_pdf = null
+            const print_format_pdf = (this.configuration.print_format_pdf) ? this.configuration.print_format_pdf : 'ticket'
+            this.showLoading()
+
+            await this.$http.get(`${this.returnBaseUrl()}/document-print-pdf/document/${external_id}/${print_format_pdf}`, this.getHeaderConfig())
+                        .then((response)=>{
+                            html_pdf=response.data
+                        })
+                        .catch((error)=>{
+                            console.log(error)
+                        })
+
+            cordova.plugins.printer.print(html_pdf)
+
+            this.hideLoading()
+        }
+
+    }
+}
+

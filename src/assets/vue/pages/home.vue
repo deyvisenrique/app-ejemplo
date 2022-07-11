@@ -81,6 +81,22 @@
                 </f7-card>
             </f7-col>
 
+            <!-- <f7-col v-if="checkPermissions('quotation')">
+                <f7-card @click.native="go('quotation')" class="bg-blue" style="cursor:pointer;">
+                    <f7-card-content class="">
+                        <base-icon nameIcon="file-sale" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+                        <p class="text-color-white">
+                            <br> Cotización
+                        </p>
+                    </f7-card-content>
+                </f7-card>
+            </f7-col> -->
+
+        </f7-row>
+
+        <f7-row>
+            
+
             <f7-col v-if="checkPermissions('documents')">
                 <f7-card @click.native="go('ls_doc')" class="bg-dark-blue" style="cursor:pointer;">
                     <f7-card-content class="">
@@ -89,9 +105,7 @@
                     </f7-card-content>
                 </f7-card>
             </f7-col>
-        </f7-row>
 
-        <f7-row>
             <f7-col v-if="checkPermissions('report-sales')">
                 <f7-card @click.native="go('report-sales')" class="bg-purple" style="cursor:pointer;">
                     <f7-card-content class="">
@@ -342,6 +356,9 @@
                         break
                     case "cash":
                         self.$f7router.navigate("/cash/")
+                        break
+                    case "quotation":
+                        self.$f7router.navigate("/form-quotation/")
                         break
                 }
             },
