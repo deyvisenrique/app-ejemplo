@@ -55,17 +55,36 @@
                             </div>
                         </li>
 
-                        <li class="item-content item-input">
-                            <div class="item-inner">
-                                <div class="item-title item-label">
-                                    Precio Unitario (Venta) *
-                                </div>
-                                <div class="item-input-wrap">
-                                    <input v-model="form.sale_unit_price" required validate step="any" type="number" />
-                                    <span class="input-clear-button"></span>
-                                </div>
-                            </div>
-                        </li>
+                        <f7-row>
+                            <f7-col width="70">
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-title item-label">
+                                            Precio Unitario (Venta) *
+                                        </div>
+                                        <div class="item-input-wrap">
+                                            <input v-model="form.sale_unit_price" required validate step="any" type="number" />
+                                            <span class="input-clear-button"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </f7-col>
+                            <f7-col width="30">
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-title item-label">
+                                            Incluye IGV
+                                        </div>
+                                        <div class="item-input-wrap">
+                                            <label class="toggle toggle-init">
+                                                <input type="checkbox" v-model="form.has_igv" />
+                                                <span class="toggle-icon"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                            </f7-col>
+                        </f7-row>
 
                         <li class="item-content item-input">
                             <div class="item-inner">

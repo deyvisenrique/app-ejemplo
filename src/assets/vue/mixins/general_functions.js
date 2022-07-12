@@ -84,14 +84,49 @@ export const general_functions = {
         {
             return await this.$http.get(`${this.returnBaseUrl()}/persons/default-customer`, this.getHeaderConfig())
         },
+        async getGeneralCustomers()
+        {
+            return await this.$http.get(`${this.returnBaseUrl()}/document/customers`, this.getHeaderConfig())
+        },
         hasPermissionInModule(module, permissions = null)
         {
             const _permissions = permissions ? permissions : this.getStorage('permissions', true)
             const row = _.find(_permissions, {value: module})
             
             return !_.isEmpty(row)
-        }
-
+        },
+        redirectHome()
+        {
+            this.$f7router.navigate('/')
+        },
+        redirectRoute(route)
+        {
+            this.$f7router.navigate(route)
+        },
+        generalResponse(success = true, message = null)
+        {
+            return {
+                success: success,
+                message: message,
+            }
+        },
+        getGeneralFormButtons(){
+            return [
+                {
+                    text: 'Imprimir',
+                    cssClass: 'text-center',
+                    close: false
+                },
+                {
+                    text: 'Ir al listado',
+                    cssClass: 'text-center',
+                },
+                {
+                    text: 'Continuar',
+                    cssClass: 'text-center'
+                },
+            ]
+        },
     }
 }
 
@@ -140,6 +175,64 @@ export const print_pdf_document = {
             this.hideLoading()
         }
 
+    }
+}
+
+
+export const operations = {
+    data: function () {
+        return {
+        }
+    },
+    methods: {
+        generalCalculateTotal()
+        {
+            let total_exportation = 0
+            let total_taxed = 0
+            let total_exonerated = 0
+            let total_unaffected = 0
+            let total_free = 0
+            let total_igv = 0
+            let total_value = 0
+            let total = 0
+            let total_plastic_bag_taxes = 0
+
+            this.form.items.forEach(row => {
+                if (row.affectation_igv_type_id === "10") {
+                    total_taxed += parseFloat(row.total_value)
+                }
+                if (row.affectation_igv_type_id === "20") {
+                    total_exonerated += parseFloat(row.total_value)
+                }
+                if (row.affectation_igv_type_id === "30") {
+                    total_unaffected += parseFloat(row.total_value)
+                }
+                if (row.affectation_igv_type_id === "40") {
+                    total_exportation += parseFloat(row.total_value)
+                }
+                if (["10", "20", "30", "40"].indexOf(row.affectation_igv_type_id) < 0) {
+                    total_free += parseFloat(row.total_value)
+                }
+                if (
+                    ["10", "20", "30", "40"].indexOf(row.affectation_igv_type_id) > -1
+                ) {
+                    total_igv += parseFloat(row.total_igv)
+                    total += parseFloat(row.total)
+                }
+                total_value += parseFloat(row.total_value)
+                total_plastic_bag_taxes += parseFloat(row.total_plastic_bag_taxes)
+            })
+
+            this.form.total_exportation = _.round(total_exportation, 2)
+            this.form.total_taxed = _.round(total_taxed, 2)
+            this.form.total_exonerated = _.round(total_exonerated, 2)
+            this.form.total_unaffected = _.round(total_unaffected, 2)
+            this.form.total_free = _.round(total_free, 2)
+            this.form.total_igv = _.round(total_igv, 2)
+            this.form.total_value = _.round(total_value, 2)
+            this.form.total_taxes = _.round(total_igv, 2)
+            this.form.total = _.round(total, 2)
+        }
     }
 }
 

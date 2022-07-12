@@ -6,29 +6,29 @@
         <form class="list no-hairlines-md" id="demo-form">
             <ul>
                 <f7-row>
+                    
                     <f7-col width="50">
                         <div class="item-content item-input no-padding-horizontal">
                             <div class="item-inner no-padding-horizontal">
-                                <div class="item-title item-label">Fecha Vencimiento</div>
+                                <div class="item-title item-label">Tiempo de Validez</div>
                                 <div class="item-input-wrap">
-                                    <input name="date" v-model="form.date_of_due" type="date" />
-                                </div>
-                            </div>
-                        </div>
-                    </f7-col>
-                    <f7-col width="50">
-                        <div class="item-content item-input no-padding-horizontal">
-                            <div class="item-inner no-padding-horizontal">
-                                <div class="item-title item-label">Fecha de Entrega</div>
-                                <div class="item-input-wrap">
-                                    <input name="date" v-model="form.delivery_date" type="date" />
+                                    <input v-model="form.date_of_due" type="text" />
                                 </div>
                             </div>
                         </div>
                     </f7-col>
                     
-                </f7-row>
-                <f7-row>
+                    <f7-col width="50">
+                        <div class="item-content item-input no-padding-horizontal">
+                            <div class="item-inner no-padding-horizontal">
+                                <div class="item-title item-label">Tiempo de Entrega</div>
+                                <div class="item-input-wrap">
+                                    <input v-model="form.delivery_date" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                    </f7-col>
+
                     <f7-col width="100">
                         <div class="item-content item-input no-padding-horizontal">
                             <div class="item-inner no-padding-horizontal">
@@ -40,16 +40,6 @@
                         </div>
                     </f7-col>
                     
-                    <f7-col width="100">
-                        <div class="item-content item-input no-padding-horizontal">
-                            <div class="item-inner no-padding-horizontal">
-                                <div class="item-title item-label">Observación</div>
-                                <div class="item-input-wrap">
-                                    <input v-model="form.observation" type="text" />
-                                </div>
-                            </div>
-                        </div>
-                    </f7-col>
                 </f7-row>
 
                 <li class="no-padding-horizontal margin-top">
@@ -62,7 +52,7 @@
                             </f7-col>
                             <f7-col width="75" class="text-align-left">
                                 <small>CLIENTE</small><br>
-                                <small class="no-margin">{{this.form.datos_del_cliente_o_receptor ? this.form.datos_del_cliente_o_receptor.apellidos_y_nombres_o_razon_social : ''}}</small>
+                                <small class="no-margin">{{ this.form.customer_name }}</small>
                             </f7-col>
                             <f7-col width="10" class="align-self-center">
                                 <div class="badge bg-color-white text-align-right color-blue">
@@ -148,51 +138,226 @@
     </f7-popup>
 
     <f7-popup class="demo-popup" :opened="popupCustomerOpened" @popup:closed="popupCustomerOpened = false">
-        <customer-form :codeType="codeType" :customerId="form.customer_id" :showDialog.sync="popupCustomerOpened" ref="form_customer_car" @addCustomerCar="addCustomer"></customer-form>
+        <customer-form :codeType="null" :customerId="form.customer_id" :showDialog.sync="popupCustomerOpened" ref="form_customer_car" @addCustomerCar="addCustomer"></customer-form>
     </f7-popup>
 </f7-page>
 </template>
 
 <script>
-    const url = "https://demo.facturador.pro/api";
-    import moment from "moment";
-    import _ from "lodash";
-    import ItemsForm from "components/document/ItemsForm";
-    import CustomerForm from "components/document/CustomerForm";
-    import {auth} from "mixins_/auth";
-    import {general_functions} from "mixins_/general_functions";
-    import HeaderLayout from "components/layout/Header";
-    import {download_file} from "mixins_/download_file"
+
+    import moment from 'moment'
+    import _ from 'lodash'
+    import ItemsForm from 'components/document/ItemsForm'
+    import CustomerForm from 'components/document/CustomerForm'
+    import {auth} from 'mixins_/auth'
+    import {general_functions, operations} from 'mixins_/general_functions'
+    import HeaderLayout from 'components/layout/Header'
+    import {download_file} from 'mixins_/download_file'
 
     export default {
-        name: "FormOrderNote",
+        name: 'FormQuotation',
         components: {
             ItemsForm,
             CustomerForm,
             HeaderLayout
         },
-        mixins: [auth, general_functions, download_file],
+        mixins: [
+            auth, 
+            general_functions, 
+            download_file,
+            operations
+        ],
         data: function () {
-            // Must return an object
             return {
-                codeType: "",
                 isBottom: true,
                 popupCustomerOpened: false,
-                search_item: "",
                 customers: [],
                 form: {},
                 popupOpened: false,
-                api_url: localStorage.api_url,
                 default_customer: null,
-            };
+            }
         },
         computed: {},
         created() {
-            // this.initForm();
-            // this.getTables();
+            this.initForm()
+            this.getTables()
         },
 
         methods: {
+            setDefaultCustomer(){
+
+                if(!this.default_customer)
+                {
+                    this.showLoading()
+                    this.findGeneralDefaultCustomer()
+                        .then((response)=>{
+
+                            if(response.data.success)
+                            {
+                                this.default_customer = response.data.data
+                                this.addCustomer(this.default_customer)
+                            }
+                            this.hideLoading()
+
+                        })
+                        .catch((error)=>{
+                            console.log(error)
+                        })
+                }
+                else
+                {
+                    this.addCustomer(this.default_customer)
+                }
+            },
+            addCustomer(row) {
+                this.popupCustomerOpened = false
+                this.form.customer_id = row.id
+                this.form.customer_name = row.name
+            },
+            addItems(rows) {
+
+                this.popupOpened = false
+
+                rows.forEach(record => {
+                    this.form.items.push(this.getNewItem(record))
+                })
+
+                this.calculateTotal()
+            },
+            getNewItem(record){
+
+                let new_item = { ...record }
+                new_item.item.presentation = new_item.item.presentation ? new_item.item.presentation : []
+                return new_item
+
+            },
+            cancel() {
+                this.initForm()
+                this.redirectHome()
+            },
+            validateData() {
+
+                if (this.form.items.length == 0)  return this.generalResponse(false, 'Debe agregar productos.')
+                
+                if (!this.form.customer_id) return this.generalResponse(false, 'Debe seleccionar un cliente.')
+
+                return this.generalResponse()
+            },
+            send(){
+
+                const valid = this.validateData()
+                if (!valid.success) return this.showAlert(valid.message)
+
+                this.showLoading()
+
+                this.$http.post(`${this.returnBaseUrl()}/quotations`, this.form, this.getHeaderConfig())
+                        .then(response => {
+
+                            const data = response.data
+
+                            if (data.success) 
+                            {
+                                this.initForm()
+                                this.showDialogOptions(data)
+                            }
+                            else 
+                            {
+                                this.showAlert('No se registro la cotización')
+                            }
+                        })
+                        .catch(err => {
+                            this.showAlert(`No se registro la cotización: ${err.message}`)
+                        })
+                        .then(() => {
+                            this.hideLoading()
+                        })
+            },
+            async toPrint(data){
+
+                await this.showLoading()
+                await this.downloaFileToPrint(data.data.print_ticket, data.data.filename) //definido en mixin download_file
+                await this.hideLoading()
+
+            },
+            showDialogOptions(data){
+
+                const context = this
+
+                context.showDialogConfirm({
+                    title: 'Cotización registrada',
+                    text: data.data.number_full,
+                    buttons: context.getGeneralFormButtons(),
+                    onClick: function(dialog, index){
+                        context.clickOptionsButtons(dialog, index, data)
+                    },
+                    verticalButtons: true,
+                })
+
+            },
+            clickOptionsButtons(dialog, index, data){
+
+                // Imprimir
+                if(index === 0)
+                {
+                    this.toPrint(data)
+                }
+                // Ir listado
+                else if (index === 1)
+                {
+                    this.redirectRoute('/documents/')
+                }
+
+            },
+            calculateTotal() {
+                this.generalCalculateTotal()
+            },
+            initForm(){
+
+                this.form = {
+                    prefix: 'COT',
+                    establishment_id: null,
+                    date_of_issue: moment().format('YYYY-MM-DD'),
+                    time_of_issue: moment().format('HH:mm:ss'),
+                    customer_id: null,
+                    customer_name: null,
+                    currency_type_id: 'PEN',
+                    exchange_rate_sale: 1,
+                    total_prepayment: 0,
+                    total_charge: 0,
+                    total_discount: 0,
+                    total_exportation: 0,
+                    total_free: 0,
+                    total_taxed: 0,
+                    total_unaffected: 0,
+                    total_exonerated: 0,
+                    total_igv: 0,
+                    total_base_isc: 0,
+                    total_isc: 0,
+                    total_base_other_taxes: 0,
+                    total_other_taxes: 0,
+                    total_taxes: 0,
+                    total_value: 0,
+                    total: 0,
+                    items: [],
+                    payments: [],
+                    delivery_date: null,
+                    date_of_due: null,
+                    shipping_address: null,
+                }
+
+                this.setDefaultCustomer()
+
+            },
+            getTables(){
+                
+                this.showLoading()
+                this.getGeneralCustomers()
+                    .then(response => {
+                        this.customers = response.data.data.customers
+                        this.hideLoading()
+                    })
+
+            }
         }
-    };
+    }
 </script>

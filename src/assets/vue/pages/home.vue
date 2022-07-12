@@ -81,7 +81,7 @@
                 </f7-card>
             </f7-col>
 
-            <!-- <f7-col v-if="checkPermissions('quotation')">
+            <f7-col v-if="checkPermissions('quotation')">
                 <f7-card @click.native="go('quotation')" class="bg-blue" style="cursor:pointer;">
                     <f7-card-content class="">
                         <base-icon nameIcon="file-sale" widthIcon="35" clases="text-align-right padding-top"></base-icon>
@@ -90,7 +90,7 @@
                         </p>
                     </f7-card-content>
                 </f7-card>
-            </f7-col> -->
+            </f7-col>
 
         </f7-row>
 
