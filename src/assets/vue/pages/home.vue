@@ -106,14 +106,6 @@
                 </f7-card>
             </f7-col>
 
-            <f7-col v-if="checkPermissions('report-sales')">
-                <f7-card @click.native="go('report-sales')" class="bg-purple" style="cursor:pointer;">
-                    <f7-card-content class="">
-                        <base-icon nameIcon="bars" widthIcon="35" clases="text-align-right padding-top"></base-icon>
-                        <p class="text-color-white"><br>Reportes</p>
-                    </f7-card-content>
-                </f7-card>
-            </f7-col>
 
             <f7-col v-if="checkPermissions('validate-document')">
 
@@ -124,6 +116,30 @@
                     </f7-card-content>
                 </f7-card>
             </f7-col>
+        </f7-row>
+
+        <f7-row>
+            
+            <f7-col v-if="checkPermissions('report-sales')">
+                <f7-card @click.native="go('report-sales')" class="bg-purple" style="cursor:pointer;">
+                    <f7-card-content class="">
+                        <base-icon nameIcon="bars" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+                        <p class="text-color-white"><br>Reportes</p>
+                    </f7-card-content>
+                </f7-card>
+            </f7-col>
+
+            <f7-col v-if="checkPermissions('cash')">
+                <f7-card @click.native="go('cash')" class="bg-blue" style="cursor:pointer;">
+                    <f7-card-content>
+                        <base-icon nameIcon="cash-machine" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+                        <p class="text-color-white">
+                            <br>Caja
+                        </p>
+                    </f7-card-content>
+                </f7-card>
+            </f7-col>
+
         </f7-row>
 
         <f7-row>
@@ -143,16 +159,6 @@
                         <base-icon nameIcon="logistics" widthIcon="35" clases="text-align-right padding-top"></base-icon>
                         <p class="text-color-white">
                             Productos
-                        </p>
-                    </f7-card-content>
-                </f7-card>
-            </f7-col>
-            <f7-col v-if="checkPermissions('cash')">
-                <f7-card @click.native="go('cash')" class="bg-blue" style="cursor:pointer;">
-                    <f7-card-content>
-                        <base-icon nameIcon="cash-machine" widthIcon="35" clases="text-align-right padding-top"></base-icon>
-                        <p class="text-color-white">
-                            Caja
                         </p>
                     </f7-card-content>
                 </f7-card>

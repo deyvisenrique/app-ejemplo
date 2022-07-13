@@ -83,7 +83,9 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
         total: 0,
         attributes: row_old.attributes,
         charges: row_old.charges,
-        discounts: row_old.discounts
+        discounts: row_old.discounts,
+        input_description: row_old.input_description,
+        name_product_pdf: null
     };
 
     let percentage_igv = 18

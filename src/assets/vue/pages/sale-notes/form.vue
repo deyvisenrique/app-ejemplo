@@ -36,7 +36,7 @@
                             <div class="item-inner no-padding-horizontal">
                                 <div class="item-title item-label">Metodo de pago</div>
                                 <div class="item-input-wrap input-dropdown-wrap">
-                                    <select v-model="data.paymentmethodtype">
+                                    <select v-model="form_payment.payment_method_type_id">
                                         <template v-for="(row, index) in payment_method_types">
                                             <option :value="row.id" :key="index">{{row.description}}</option>
                                         </template>
@@ -50,7 +50,7 @@
                             <div class="item-inner no-padding-horizontal">
                                 <div class="item-title item-label">Referencia</div>
                                 <div class="item-input-wrap">
-                                    <input v-model="data.referencia" type="text" />
+                                    <input v-model="form_payment.reference" type="text" />
                                     <span class="input-clear-button"></span>
                                 </div>
                             </div>
@@ -59,9 +59,9 @@
                     <f7-col width="50">
                         <div class="item-content item-input no-padding-horizontal">
                             <div class="item-inner no-padding-horizontal">
-                                <div class="item-title item-label">Monto</div>
+                                <div class="item-title item-label">Monto a pagar</div>
                                 <div class="item-input-wrap">
-                                    <input required validate v-model="form.total" type="number" />
+                                    <input required validate v-model="form_payment.payment" type="number" @input="inputPayment" min="0"/>
                                     <span class="input-clear-button"></span>
                                 </div>
                             </div>
@@ -72,7 +72,7 @@
                             <div class="item-inner no-padding-horizontal">
                                 <div class="item-title item-label">Destino</div>
                                 <div class="item-input-wrap input-dropdown-wrap">
-                                    <select v-model="data.paymentdestination">
+                                    <select v-model="form_payment.payment_destination_id">
                                         <template v-for="(row, index) in payment_destinations">
                                             <option :value="row.id" :key="index">{{row.description}}</option>
                                         </template>
@@ -148,11 +148,17 @@
                                 <p>OP. Gravada</p>
                                 <p>IGV</p>
                                 <h3>Total</h3>
+                                <template v-if="payment_change > 0">
+                                    <p>Vuelto</p>
+                                </template>
                             </f7-col>
                             <f7-col class="text-align-right">
                                 <p>{{form.total_taxed}}</p>
                                 <p>{{form.total_igv}}</p>
                                 <h3>{{form.total}}</h3>
+                                <template v-if="payment_change > 0">
+                                    <p>{{payment_change}}</p>
+                                </template>
                             </f7-col>
                         </f7-row>
                         <f7-row>
@@ -183,51 +189,6 @@
 </f7-page>
 </template>
 
-<style scoped>
-.navbar-cus {
-    background: #17a2b8;
-    color: white
-}
-
-.m-text {
-    text-align: left;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.m-text-r {
-    text-align: center;
-}
-
-.footer-text {
-    position: absolute;
-    margin-top: 2%;
-    width: 50%;
-    padding-left: 1%;
-}
-
-.footer-data {
-    width: 50%;
-    color: #fff;
-    background: #17a2b8;
-    margin: auto;
-    border-right: 30px solid #fff;
-    border-left: 30px solid #fff;
-    border-bottom: 73px solid transparent;
-    text-align: center;
-}
-
-.footer {
-    text-align: center;
-    z-index: 9999;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    color: white;
-    text-align: center;
-}
-</style>
 
 <script>
 
@@ -258,10 +219,7 @@
                 popupCustomerOpened: false,
                 search_item: "",
                 customers: [],
-                data: {
-                    paymentmethodtype: "01",
-                    paymentdestination: "cash"
-                },
+                form_payment: {},
                 form: {},
                 popupOpened: false,
                 series: [],
@@ -269,6 +227,7 @@
                 payment_method_types: [],
                 payment_destinations: [],
                 default_customer: null,
+                payment_change: 0,
             }
         },
         computed: {},
@@ -280,6 +239,34 @@
         },
 
         methods: {
+            setPaymentDestinations(){
+
+                const payment_destination_cash = _.find(this.payment_destinations, {id: 'cash'})
+
+                if(payment_destination_cash)
+                {
+                    this.form_payment.payment_destination_id = payment_destination_cash.id
+                }
+                else
+                {
+                    this.form_payment.payment_destination_id = this.payment_destinations.length > 0 ? this.payment_destinations[0].id : null
+                }
+
+            },
+            inputPayment(){
+                this.payment_change = this.roundNumber(parseFloat(this.form_payment.payment) - parseFloat(this.form.total))
+            },
+            initFormPayment(){
+
+                this.form_payment = {
+                    payment_method_type_id: '01',
+                    payment_destination_id: null,
+                    reference: null,
+                    payment: 0,
+                    payment_received: true,
+                }
+
+            },
             setDefaultCustomer(){
 
                 if(!this.default_customer)
@@ -372,9 +359,21 @@
                     return false;
                 }
 
+                const validate_cash_payment = this.validateCashPayment()
+                if(!validate_cash_payment) return validate_cash_payment
+
                 return true;
             },
+            validateCashPayment(){
 
+                if(!this.form_payment.payment_destination_id)
+                {
+                    this.showAlert('El destino de pago es obligatorio, aperture caja o cuentas bancarias')
+                    return false
+                }
+
+                return true
+            },
             send() {
                 const self = this;
 
@@ -508,17 +507,34 @@
                 this.form.total_value = _.round(total_value, 2)
                 this.form.total_taxes = _.round(total_igv, 2)
                 this.form.total = _.round(total, 2)
-                this.form.payments = [{
-                    date_of_payment: this.form.date_of_issue,
-                    document_id: null,
-                    id: null,
-                    payment: _.round(total, 2),
-                    payment_destination_id: this.data.paymentdestination,
-                    payment_method_type_id: this.data.paymentmethodtype,
-                    reference: this.data.referencia,
-                }]
-            },
+                this.form.payments = this.getFormPayment()
 
+                this.calculatePaymentAmount()
+            },
+            calculatePaymentAmount() {
+
+                this.form_payment.payment = this.form.total
+                this.inputPayment()
+
+            },
+            getFormPayment(){
+
+                if(!isNaN(this.form_payment.payment) && parseFloat(this.form_payment.payment) > 0)
+                {
+                    return [
+                        {
+                            date_of_payment: this.form.date_of_issue,
+                            payment_destination_id: this.form_payment.payment_destination_id,
+                            payment_method_type_id: this.form_payment.payment_method_type_id,
+                            reference: this.form_payment.reference,
+                            payment: this.form_payment.payment
+                        }
+                    ]
+                }
+
+                return []
+
+            },
             initForm() {
                 this.form = {
                     prefix: "NV",
@@ -562,11 +578,13 @@
                     quantity_period: 0,
                     automatic_date_of_issue: null,
                     enabled_concurrency: false
-                };
+                }
 
                 // this.form.series_id = (this.series.length > 0) ? this.series[0].id : null
                 this.initSeries()
                 this.setDefaultCustomer()
+                this.initFormPayment()
+                this.setPaymentDestinations()
 
             },
             initSeries(){
@@ -607,13 +625,16 @@
                 const self = this;
                 self.$f7.preloader.show();
                 await this.$http.get(`${this.returnBaseUrl()}/document/paymentmethod`, this.getHeaderConfig()).then(response => {
+
                         //mostrar metodos de pagos
-                        this.payment_method_type = response.data.payment_method_type;
-                        this.payment_method_types = this.payment_method_type.filter(row => {
+                        this.payment_method_types = response.data.payment_method_type.filter(row => {
                             return row.is_credit == false
                         })
+
                         //mostrar destino de caja en venta
-                        this.payment_destinations = response.data.payment_destinations;
+                        this.payment_destinations = response.data.payment_destinations
+                        this.setPaymentDestinations()
+
                     })
                     .catch(err => {})
                     .then(() => {
@@ -624,3 +645,50 @@
         }
     };
 </script>
+
+
+<style scoped>
+.navbar-cus {
+    background: #17a2b8;
+    color: white
+}
+
+.m-text {
+    text-align: left;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.m-text-r {
+    text-align: center;
+}
+
+.footer-text {
+    position: absolute;
+    margin-top: 2%;
+    width: 50%;
+    padding-left: 1%;
+}
+
+.footer-data {
+    width: 50%;
+    color: #fff;
+    background: #17a2b8;
+    margin: auto;
+    border-right: 30px solid #fff;
+    border-left: 30px solid #fff;
+    border-bottom: 73px solid transparent;
+    text-align: center;
+}
+
+.footer {
+    text-align: center;
+    z-index: 9999;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    color: white;
+    text-align: center;
+}
+</style>

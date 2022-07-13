@@ -127,6 +127,9 @@ export const general_functions = {
                 },
             ]
         },
+        roundNumber(number, decimals = 2){
+            return _.round(number, decimals)
+        },
     }
 }
 

@@ -94,7 +94,7 @@
                                 <f7-col width="50">
                                     <div class="item-content item-input no-padding-horizontal">
                                         <div class="item-inner no-padding-horizontal">
-                                            <div class="item-title item-label">Monto</div>
+                                            <div class="item-title item-label">Monto a pagar</div>
                                             <div class="item-input-wrap">
                                                 <input required validate v-model="form_payment.payment" type="number" @input="inputPayment" min="0"/>
                                                 <span class="input-clear-button"></span>
@@ -146,7 +146,7 @@
                                 <f7-col width="50">
                                     <div class="item-content item-input no-padding-horizontal">
                                         <div class="item-inner no-padding-horizontal">
-                                            <div class="item-title item-label">Monto</div>
+                                            <div class="item-title item-label">Monto de la cuota</div>
                                             <div class="item-input-wrap">
                                                 <input required validate v-model="form_fee.amount" type="number" min="0"/>
                                             </div>
@@ -200,7 +200,14 @@
                                             </f7-button>
                                         </td>
                                         <td class="no-padding label-cell text-align-center">{{index + 1 }}</td>
-                                        <td class="no-padding numeric-cell">{{row.item.description}}</td>
+                                        <td class="no-padding numeric-cell">
+
+                                            <!-- {{row.item.description}} -->
+                                            <div class="item-input-wrap">
+                                                <input v-model="row.input_description" required validate type="text" @input="setInputDescription(row)"/>
+                                            </div>
+
+                                        </td>
                                         <td class="no-padding numeric-cell">{{row.quantity}}</td>
 
                                         <td class="no-padding numeric-cell">S/.&nbsp;{{ Number(row.unit_price).toFixed(2)}}</td>
@@ -336,6 +343,18 @@
 
         },
         methods: {
+            setInputDescription(row){
+
+                if(row.input_description != row.item.description)
+                {
+                    row.name_product_pdf = row.input_description
+                }
+                else
+                {
+                    row.name_product_pdf = null
+                }
+
+            },
             setDefaultCustomer(){
 
                 if(!this.default_customer)
@@ -381,7 +400,7 @@
                 this.configuration = this.getInitialConfiguration()
             },
             inputPayment(){
-                this.payment_change = parseFloat(this.form_payment.payment) - parseFloat(this.form.total)
+                this.payment_change = this.roundNumber(parseFloat(this.form_payment.payment) - parseFloat(this.form.total))
             },
             async getSeries() {
 
@@ -457,7 +476,7 @@
             deleteItem(id, index) {
                 this.form.items.splice(index, 1);
                 this.calculateTotal()
-                console.log(this.$refs.form_items_car.length);
+                // console.log(this.$refs.form_items_car.length);
                 this.$refs.form_items_car.delete_parent(id);
                 this.calculateTotal()
             },
@@ -587,7 +606,8 @@
                             total_impuestos_bolsa_plastica: x.total_plastic_bag_taxes,
                             total_impuestos: x.total_taxes,
                             total_valor_item: x.total_value,
-                            total_item: x.total
+                            total_item: x.total,
+                            nombre_producto_pdf: x.name_product_pdf,
                         };
                     }),
                     pagos: this.getFormPayment(),

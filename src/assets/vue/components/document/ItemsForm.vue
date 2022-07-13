@@ -44,12 +44,39 @@
             </f7-row>
 
             <f7-row class="no-padding-horizontal">
-                <f7-col>
-                    <div class="c-horizontal-scroll c-h-50 mp-div-category padding-vertical">
+                <f7-col width="100">
+                    <!-- <div class="c-horizontal-scroll c-h-50 mp-div-category padding-vertical">
                         <template v-for="(category, index) in categories">
                             <span class="padding c-span-card margin-right" :key="index" @click="clickSearchByCategory(category.id)"><b>{{ getCategoryName(category) }}</b></span>
                         </template>
-                    </div>
+                    </div> -->
+
+                    <!-- <div class="block-title">2 Slides Per View, 20px Between</div> -->
+                    <!-- <div data-pagination='{"el": ".swiper-pagination"}' data-space-between="1" data-slides-per-view="auto" class="swiper swiper-init demo-swiper">
+                        <div class="swiper-pagination"></div>
+                            <div class="swiper-wrapper">
+                            <div class="swiper-slide">Slide 1</div>
+                            <div class="swiper-slide">Slide 2</div>
+                            <div class="swiper-slide">Slide 3</div>
+                            <div class="swiper-slide">Slide 4</div>
+                            <div class="swiper-slide">Slide 5</div>
+                            <div class="swiper-slide">Slide 6</div>
+                            <div class="swiper-slide">Slide 7</div>
+                            <div class="swiper-slide">Slide 8</div>
+                            <div class="swiper-slide">Slide 9</div>
+                            <div class="swiper-slide">Slide 10</div>
+                        </div>
+                    </div> -->
+                    <!-- <f7-swiper navigation :speed="100" :slidesPerView="5" :spaceBetween="5" >
+                        <f7-swiper-slide >Slide 1</f7-swiper-slide>
+                        <f7-swiper-slide >Slide 2</f7-swiper-slide>
+                        <f7-swiper-slide >Slide 3</f7-swiper-slide>
+                        <f7-swiper-slide >Slide 4</f7-swiper-slide>
+                        <f7-swiper-slide >Slide 5</f7-swiper-slide>
+                        <f7-swiper-slide >Slide 6</f7-swiper-slide>
+                        
+                    </f7-swiper> -->
+
                 </f7-col>
             </f7-row>
 
@@ -322,10 +349,22 @@
 </template>
 
 <style scoped>
-.page-content {
-    padding-top: 2% !important;
-}
+    .page-content {
+        padding-top: 2% !important;
+    }
 
+    .swiper-slide {
+        background: red;
+        /* text-align: center; */
+        /* font-size: 18px; */
+        /* line-height: 1px; */
+        width: 20px !important;
+        height: 20px !important;
+        padding: 20px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        padding: 50px;
+    }
 </style>
 
 <script>
@@ -599,7 +638,9 @@
                     charges: [],
                     discounts: [],
                     attributes: [],
-                    has_igv: null
+                    has_igv: null,
+                    input_description: null,
+                    name_product_pdf: null,
                 };
             },
             send() {
@@ -608,16 +649,16 @@
                 let send_items = this.items_car
                     .filter(x => x.quantity > 0 && x.item.sale_unit_price > 0)
                     .map(o => {
+
                         let obj = self.initFormItem();
+
                         obj.quantity = o.quantity;
                         (obj.item = o.item), //_.find(self.items, { id: o.id });
                         (obj.unit_price_value = obj.item.sale_unit_price);
                         obj.has_igv = obj.item.has_igv;
                         obj.affectation_igv_type_id = obj.item.sale_affectation_igv_type_id;
 
-                        let unit_price = obj.has_igv ?
-                            obj.unit_price_value :
-                            obj.unit_price_value * 1.18;
+                        let unit_price = obj.has_igv ? obj.unit_price_value : obj.unit_price_value * 1.18;
 
                         obj.unit_price = unit_price;
                         obj.item.unit_price = unit_price;
@@ -629,6 +670,8 @@
                         obj.affectation_igv_type = _.find(this.affectation_igv_types, {
                             id: obj.affectation_igv_type_id
                         });
+
+                        obj.input_description = o.item.description;
 
                         let row = calculateRowItem(obj, "PEN", 1);
 
