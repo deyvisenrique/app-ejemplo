@@ -109,8 +109,8 @@
         data: function () {
             return {
                 email: "demo@gmail.com",
-                password: "123456",
-                url: "demo.facturalo.pro",
+                password: "1234567",
+                url: "app.facturalo.pro",
                 logo: '',
                 internet_protocol: 'https://'
             };
