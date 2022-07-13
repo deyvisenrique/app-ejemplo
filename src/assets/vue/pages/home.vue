@@ -2,14 +2,13 @@
 <f7-page>
 
     <!-- logo de cambio de pagina -->
-    <!-- <f7-popup class="demo-popup" :opened="splash" @popup:closed="popupOpened = false"> -->
     <f7-popup class="demo-popup" :opened="splash" @popup:closed="popupOpened = false">
         <f7-page class="bg-blue-magenta">
             <f7-block class="padding-vertical bg-color-white no-margin-vertical">
                 <br><br><br>
             </f7-block>
             <f7-block class="padding-vertical display-flex justify-content-center bg-color-white no-margin-vertical">
-                <img v-if="logo" :width="width_img" :height="height_img" class="center padding-vertical margin-vertical margin-horizontal" :src="logo" alt />
+                <img :width="width_img" :height="height_img" class="center padding-vertical margin-vertical margin-horizontal" :src="logo" alt />
             </f7-block>
             <f7-block class=" display-flex justify-content-center no-margin bg-color-white">
                 <img :src="img_icons" alt="icons" width="70%" class="center">
@@ -177,26 +176,26 @@
         mixins: [auth, general_functions],
         components: {
             HeaderLayout,
-            BaseIcon
+            BaseIcon,
+            logoOficial
         },
         data: function () {
             // Must return an object
             return {
                 logo: '',
+                logo_oficial: '',
                 user: "",
                 password: "",
                 splash: true,
                 isOffline: false,
-                width_img: '',
-                height_img: '',
+                width_img: '60%',
+                height_img: '60%',
                 img_icons: icons,
                 configuration: {},
                 permissions: []
             };
         },
         async created() {
-
-            await this.getInitialSettings()
 
             if (localStorage.url_logo) {
                 this.logo = localStorage.url_logo
@@ -205,6 +204,8 @@
             } else {
                 this.logo = logoOficial
             }
+
+            await this.getInitialSettings()
 
             var self = this;
             window.addEventListener("online", function () {

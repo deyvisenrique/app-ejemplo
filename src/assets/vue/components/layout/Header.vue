@@ -4,7 +4,7 @@
       <f7-row class="display-flex align-items-center">
         <f7-col width="50">
           <f7-link href="/">
-            <img v-if="fp_logo_white" :src="fp_logo_white" alt="FacturaloPeru" width="100%" style="max-height: 80px;" />
+            <img v-if="logo" :src="logo" alt="FacturaloPeru" width="100%" style="max-height: 80px;" />
           </f7-link>
         </f7-col>
         <f7-col width="50" class="">
@@ -30,21 +30,21 @@
 </template>
 
 <script>
-  import logo from "assets/images/tulogo.png";
+  import logoOficialLight from "assets/images/logo/logo-light.svg";
   import HeaderWaves from "./HeaderWaves.vue"
 
   export default {
     name: "HeaderLayout",
     props: [ "title", ],
-    components: { HeaderWaves },
+    components: { HeaderWaves, logoOficialLight },
     data: function() {
       return {
-        fp_logo_white: logo,
+        logo: logoOficialLight,
       };
     },
     created() {
       if(localStorage.url_logo){
-        this.fp_logo_white = localStorage.url_logo
+        this.logo = localStorage.url_logo
       }
     },
     mounted() {

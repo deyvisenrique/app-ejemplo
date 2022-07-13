@@ -1,19 +1,6 @@
 <template>
   <f7-page class="" color="">
-    <header-layout></header-layout>
-    <f7-block class="bg-blue-magenta padding-vertical no-margin-vertical">
-      <f7-row class="display-flex align-items-center">
-        <f7-col width="10">
-          <a class="link back text-color-white">
-            <i class="fas fa-angle-left custom-icon-back-form"></i>
-          </a>
-        </f7-col>
-        <f7-col width="80" class="text-color-white text-align-center custom-title-form">
-          Coloque el código Qr <br> dentro del área
-        </f7-col>
-        <f7-col width="10"></f7-col>
-      </f7-row>
-    </f7-block>
+    <header-layout title="Validador de comprobantes"></header-layout>
 
     <f7-block>
       <f7-row>
