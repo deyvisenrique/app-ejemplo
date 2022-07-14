@@ -67,7 +67,7 @@
                                 @input="email = $event.target.value">
                             </f7-list-input>
 
-                            <f7-list-input
+                            <!-- <f7-list-input
                                 floating-label
                                 type="password"
                                 clear-button
@@ -81,7 +81,30 @@
                                 <span slot="info">
                                     <f7-link class="link external" color="gray" :href="internet_protocol+url+'/password/reset'" target="BLANK">¿olvidaste la contraseña?</f7-link>
                                 </span>
-                            </f7-list-input>
+                            </f7-list-input> -->
+
+                            <div class="no-hairlines-md inline-labels">
+                                <ul>
+                                    <li class="">
+                                        <span class="item-title item-label custom-w20 custom-label-top-input-pw">Contraseña</span>
+                                        <div class="item-content item-input" style="margin-top:-12px;">
+                                            <div class="item-inner">
+                                                <div class="item-input-wrap">
+                                                    <input :type="is_type_password ? 'password':'text'" placeholder="Contraseña" required validate v-model="password">
+                                                </div>
+                                                <div class="item-title item-label custom-w10">
+                                                    <i class="f7-icons field-icon" @click="clickShowPassword">eye</i>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <span class="custom-w20 custom-label-top-input-pw">
+                                            <f7-link class="link external" color="gray" :href="internet_protocol+url+'/password/reset'" target="BLANK">¿olvidaste la contraseña?</f7-link>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+
                         </f7-list>
                     </form>
                 </f7-col>
@@ -109,10 +132,11 @@
         data: function () {
             return {
                 email: "demo@gmail.com",
-                password: "123456",
-                url: "demo.facturalo.pro",
+                password: "1234567",
+                url: "app.facturalo.pro",
                 logo: '',
-                internet_protocol: 'https://'
+                internet_protocol: 'https://',
+                is_type_password: true,
             };
         },
         created() {
@@ -126,6 +150,9 @@
         },
         computed: {},
         methods: {
+            clickShowPassword(){
+                this.is_type_password = !this.is_type_password
+            },
             setStorageApiUrl(){
 
                 const storage_api_url = localStorage.api_url
@@ -159,6 +186,14 @@
                     localStorage.url_logo = url_logo
                     this.logo = url_logo
                 }
+                else
+                {
+                    if(!logo)
+                    {
+                        this.removeStorage('url_logo')
+                        this.logo = null
+                    }
+                }
 
             },
             login() {
@@ -181,7 +216,7 @@
 
                         if (data.success)
                         {
-                            self.saveToken(data.token, data.name, data.email, data.ruc, data.logo);
+                            self.saveToken(data.token, data.name, data.email, data.ruc, data.app_logo);
                             if (data.app_configuration) self.setStorage('app_configuration', data.app_configuration, true)
                             self.$f7router.navigate("/");
                         }

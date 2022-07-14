@@ -152,6 +152,34 @@ export const scanner = {
 }
 
 
+export const set_logo = {
+    data: function () {
+        return {
+        }
+    },
+    methods: {
+
+        setAppLogo(_generals = null)
+        {
+            const generals = _generals ? _generals : this.getStorage('generals', true)
+
+            const general_app_logo = generals.app_logo
+            const url_logo = this.getStorage('url_logo')
+
+            if(general_app_logo && (general_app_logo !== url_logo))
+            {
+                this.setStorage('url_logo', general_app_logo)
+                this.logo = general_app_logo
+            }
+            else
+            {
+                if (url_logo) this.logo = url_logo
+            }
+
+        }
+    }
+}
+
 
 export const print_pdf_document = {
     data: function () {

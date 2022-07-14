@@ -216,12 +216,19 @@
   font-size: 15px
 }
 
-
 .default-h-modal{
   height:55%;
 }
 
-
 .default-h35-modal{
   height:35%;
+}
+
+.custom-w10{
+  width: 10% !important
+}
+
+.custom-label-top-input-pw{
+  margin-left: 15px;
+  font-size: var(--f7-label-font-size) !important;
 }
