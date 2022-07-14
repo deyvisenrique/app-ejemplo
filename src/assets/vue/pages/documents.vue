@@ -665,7 +665,7 @@
         },
         methods: {
             clickVoided(row){
-                console.log(row)
+                // console.log(row)
                 this.record = row
                 this.showDialogVoided = true
             },

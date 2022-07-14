@@ -7,7 +7,7 @@
             <f7-block class="padding-vertical bg-color-white no-margin-vertical">
                 <br><br><br>
             </f7-block>
-            <f7-block class="padding-vertical display-flex justify-content-center bg-color-white no-margin-vertical">
+            <f7-block class="padding-vertical display-flex justify-content-center bg-color-white no-margin-vertical" v-if="logo">
                 <img :width="width_img" :height="height_img" class="center padding-vertical margin-vertical margin-horizontal" :src="logo" alt />
             </f7-block>
             <f7-block class=" display-flex justify-content-center no-margin bg-color-white">
@@ -170,10 +170,10 @@
     import HeaderLayout from "components/layout/Header";
     import BaseIcon from 'components/layout/BaseIcon.vue';
     import {auth} from "mixins_/auth";
-    import {general_functions} from "mixins_/general_functions"
+    import {general_functions, set_logo} from "mixins_/general_functions"
 
     export default {
-        mixins: [auth, general_functions],
+        mixins: [auth, general_functions, set_logo],
         components: {
             HeaderLayout,
             BaseIcon,
@@ -182,14 +182,14 @@
         data: function () {
             // Must return an object
             return {
-                logo: '',
+                logo: logoOficial,
                 logo_oficial: '',
                 user: "",
                 password: "",
                 splash: true,
                 isOffline: false,
-                width_img: '60%',
-                height_img: '60%',
+                width_img: '45%',
+                height_img: '45%',
                 img_icons: icons,
                 configuration: {},
                 permissions: []
@@ -197,14 +197,7 @@
         },
         async created() {
 
-            if (localStorage.url_logo) {
-                this.logo = localStorage.url_logo
-                this.width_img = '45%'
-                this.height_img = '45%'
-            } else {
-                this.logo = logoOficial
-            }
-
+            await this.setInitialLogo()
             await this.getInitialSettings()
 
             var self = this;
@@ -224,6 +217,14 @@
             }
         },
         methods: {
+            setInitialLogo(){
+
+                if (localStorage.url_logo) 
+                {
+                    this.logo = localStorage.url_logo
+                }
+                
+            },
             appendStyleByContent(content){
 
                 const style = document.createElement('style')
@@ -258,11 +259,19 @@
                 }
 
             },
-            setInitialSettings(data){
+            async setInitialSettings(data){
 
-                this.setStyleThemeContent(data.style_settings)
-                this.setStyleCardContent(data.style_settings)
-                this.setPermissions(data)
+                await this.setStyleThemeContent(data.style_settings)
+                await this.setStyleCardContent(data.style_settings)
+                await this.setPermissions(data)
+                await this.setAppLogo(data.generals)
+                await this.setGenerals(data)
+
+            },
+            setGenerals(data){
+                
+                this.setStorage('generals', data.generals, true)
+                this.$eventHub.$emit('updateGenerals', data.generals)
 
             },
             setPermissions(data){
