@@ -161,7 +161,7 @@
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button size="35" icon @click="email(item.id, 'document')" color="purple">
+                                            <f7-button size="35" icon @click="email(item.id, 'document', item.customer_email)" color="purple">
                                                 <f7-icon size="18" class="icon fas fa-envelope"></f7-icon>
                                             </f7-button>
                                         </f7-col>
@@ -276,7 +276,7 @@
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button size="35" @click="email(item.id, 'document')" color="purple">
+                                            <f7-button size="35" @click="email(item.id, 'document', item.customer_email)" color="purple">
                                                 <f7-icon size="18" class="icon fas fa-envelope"></f7-icon>
                                             </f7-button>
                                         </f7-col>
@@ -367,7 +367,7 @@
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button @click="email(item.id, 'sale-note')" color="purple">
+                                            <f7-button @click="email(item.id, 'sale-note', item.customer_email)" color="purple">
                                                 <f7-icon class="icon fas fa-envelope"></f7-icon>
                                             </f7-button>
                                         </f7-col>
@@ -454,7 +454,7 @@
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button @click="email(item.id, 'order-note')" color="purple">
+                                            <f7-button @click="email(item.id, 'order-note', item.customer_email)" color="purple">
                                                 <f7-icon class="icon fas fa-envelope"></f7-icon>
                                             </f7-button>
                                         </f7-col>
@@ -539,12 +539,12 @@
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_a4)" class="block" color="green">
+                                            <f7-button @click="whatsap(item.supplier_telephone, item.external_id, item.print_a4)" class="block" color="green">
                                                 <f7-icon class="icon fab fa-whatsapp"></f7-icon>
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button @click="email(item.id, 'purchase')" color="purple">
+                                            <f7-button @click="email(item.id, 'purchase', item.supplier_email)" color="purple">
                                                 <f7-icon class="icon fas fa-envelope"></f7-icon>
                                             </f7-button>
                                         </f7-col>
@@ -616,7 +616,7 @@
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button @click="email(item.id, 'quotations')" color="purple">
+                                            <f7-button @click="email(item.id, 'quotations', item.customer_email)" color="purple">
                                                 <f7-icon class="icon fas fa-envelope"></f7-icon>
                                             </f7-button>
                                         </f7-col> 
@@ -938,7 +938,7 @@
                         opened: function () {}
                     },
                     content: `<div class="dialog-input-field input">
-                                <input type="tel" name="dialog-wasap" placeholder="Ingrese numero celular" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" class="dialog-input dialog-wasap">
+                                <input type="tel" name="dialog-wasap" placeholder="Ingrese numero celular" ${phone ? 'value='+phone : ''} pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" class="dialog-input dialog-wasap">
                             </div>`,
                     buttons: [
                         {
@@ -1030,19 +1030,26 @@
                         self.sendMailOpen = false;
                     });
             },
-            email(id, type) {
+            email(id, type, default_email = null) {
                 const self = this;
                 self.initFormEmail();
                 self.form_email.id = id;
                 //  this.sendMailOpen = true;
-                self.$f7.dialog.prompt("Ingresa el Email", "", function (value) {
-                    if (value) {
-                        self.form_email.email = value;
-                        self.sendEmail(type);
-                    } else {
-                        alert("Ingrese el Email.");
-                    }
-                });
+                self.$f7.dialog.prompt(
+                    "Ingresa el Email", 
+                    "", //titulo
+                    function (value) 
+                    {
+                        if (value) {
+                            self.form_email.email = value;
+                            self.sendEmail(type);
+                        } else {
+                            alert("Ingrese el Email.");
+                        }
+                    },
+                    ()=>{},
+                    default_email
+                )
             },
             applyFilters() {
                 this.source_invoice = _.filter(this.source, {
