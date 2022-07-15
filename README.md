@@ -12,4 +12,4 @@
 
 ### Manual de usuario
 
-* Ver [Manual](https://docs.google.com/document/d/1UPO2rH-khPy5ymkXj9J6ofuiiECG89yo2JrfuVUf7Rc/edit?usp=sharing)
+* Ver [Manual](https://docs.google.com/document/d/1jLTnGiylAv8EB5mJPT3DTgIaDrI7S9SC/edit)
