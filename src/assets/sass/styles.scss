@@ -95,6 +95,7 @@
   margin-right: calc(var(--f7-card-margin-horizontal) + var(--f7-safe-area-right));
   box-shadow: var(--f7-card-box-shadow);
   width: 100% !important;
+  white-space: nowrap;
 }
 
 .mp-div-category{

@@ -6,6 +6,22 @@
         <!-- filtros -->
         <f7-block class="list no-hairlines-md">
             <f7-row>
+                <f7-col width="100" v-if="user_data.type === 'admin'">
+                    <div class="item-content item-input no-padding-horizontal">
+                        <div class="item-inner no-padding-horizontal">
+                            <div class="item-title item-label">Establecimiento</div>
+
+                            <div class="item-input-wrap input-dropdown-wrap">
+                                <select v-model="form.establishment_id" @change="changeEstablishment">
+                                    <template v-for="(row, index) in establishments">
+                                        <option :value="row.id" :key="index">{{row.description}}</option>
+                                    </template>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </f7-col>
+
                 <f7-col width="100">
                     <div class="item-content item-input no-padding-horizontal">
                         <div class="item-inner no-padding-horizontal">
@@ -94,6 +110,13 @@
                         </span>
                     </template>
                 </f7-list-item>
+                <f7-list-item title="Total pedidos">
+                    <template #after>
+                        <span class="text-align-right padding-right text-color-pink">
+                            {{general.totals.total_order_notes}}
+                        </span>
+                    </template>
+                </f7-list-item>
             </f7-list>
         </f7-block>
         <f7-block class="bg-white-shade">
@@ -107,8 +130,12 @@
             </f7-row>
         </f7-block>
         <f7-block class="padding-top padding-bottom">
-            <f7-row class="padding-top padding-bottom">
-                <f7-col class="padding-top padding-bottom">
+            <f7-row class="padding-bottom">
+                <f7-col class="padding-bottom">
+                    <h4>
+                        <i class="icon material-icons if-md">info_outline</i> 
+                        No incluye pedidos
+                    </h4>
                     <x-graph-line :all-data="general.graph"></x-graph-line>
                 </f7-col>
             </f7-row>
@@ -140,15 +167,47 @@
                     totals: {},
                     graph: {}
                 },
-                resource: 'reports'
+                resource: 'reports',
+                establishments: [],
+                user_data: {},
             }
         },
         async created() {
             await this.initForm()
+            await this.getUserData()
+            await this.filters()
             await this.getData()
         },
         mounted() {},
         methods: {
+            getUserData(){
+                const generals = this.getStorage('generals', true)
+                this.user_data = generals.user_data
+            },
+            async filters() {
+
+                this.showLoading()
+
+                await this.$http.get(`${this.returnBaseUrl()}/${this.resource}/filters`, this.getHeaderConfig())
+                            .then((response)=>{
+                                this.establishments = response.data.establishments
+                                this.setEstablishment()
+                                this.hideLoading()
+                            })
+
+            },
+            setEstablishment(){
+
+                if(this.user_data.type === 'admin')
+                {
+                    this.form.establishment_id = this.establishments.length > 0 ? this.establishments[0].id : null
+                }
+                else
+                {
+                    this.form.establishment_id = null
+                }
+                
+            },
             changeMonth(){
                 this.getData()
             },
@@ -197,6 +256,9 @@
                 this.getData()
 
             },
+            changeEstablishment(){
+                this.getData()
+            },
             initForm(){
 
                 this.form = {
@@ -204,7 +266,13 @@
                     date_start: moment().format('YYYY-MM-DD'),
                     date_end: moment().format('YYYY-MM-DD'),
                     month_start: moment().format('YYYY-MM'),
-                    month_end: moment().format('YYYY-MM')
+                    month_end: moment().format('YYYY-MM'),
+                    establishment_id: null
+                }
+
+                this.user_data = {
+                    establishment_id: null,
+                    type: null,
                 }
 
             },

@@ -45,38 +45,11 @@
 
             <f7-row class="no-padding-horizontal">
                 <f7-col width="100">
-                    <!-- <div class="c-horizontal-scroll c-h-50 mp-div-category padding-vertical">
+                    <div class="c-horizontal-scroll c-h-50 mp-div-category padding-vertical" >
                         <template v-for="(category, index) in categories">
                             <span class="padding c-span-card margin-right" :key="index" @click="clickSearchByCategory(category.id)"><b>{{ getCategoryName(category) }}</b></span>
                         </template>
-                    </div> -->
-
-                    <!-- <div class="block-title">2 Slides Per View, 20px Between</div> -->
-                    <!-- <div data-pagination='{"el": ".swiper-pagination"}' data-space-between="1" data-slides-per-view="auto" class="swiper swiper-init demo-swiper">
-                        <div class="swiper-pagination"></div>
-                            <div class="swiper-wrapper">
-                            <div class="swiper-slide">Slide 1</div>
-                            <div class="swiper-slide">Slide 2</div>
-                            <div class="swiper-slide">Slide 3</div>
-                            <div class="swiper-slide">Slide 4</div>
-                            <div class="swiper-slide">Slide 5</div>
-                            <div class="swiper-slide">Slide 6</div>
-                            <div class="swiper-slide">Slide 7</div>
-                            <div class="swiper-slide">Slide 8</div>
-                            <div class="swiper-slide">Slide 9</div>
-                            <div class="swiper-slide">Slide 10</div>
-                        </div>
-                    </div> -->
-                    <!-- <f7-swiper navigation :speed="100" :slidesPerView="5" :spaceBetween="5" >
-                        <f7-swiper-slide >Slide 1</f7-swiper-slide>
-                        <f7-swiper-slide >Slide 2</f7-swiper-slide>
-                        <f7-swiper-slide >Slide 3</f7-swiper-slide>
-                        <f7-swiper-slide >Slide 4</f7-swiper-slide>
-                        <f7-swiper-slide >Slide 5</f7-swiper-slide>
-                        <f7-swiper-slide >Slide 6</f7-swiper-slide>
-                        
-                    </f7-swiper> -->
-
+                    </div>
                 </f7-col>
             </f7-row>
 
@@ -563,6 +536,8 @@
                                 item: it
                             });
 
+                            this.search_item =  it.internal_id
+                            this.searchItems()
                         }
 
                     })
