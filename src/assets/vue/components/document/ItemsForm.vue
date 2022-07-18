@@ -84,6 +84,11 @@
                                                     <input required validate v-model="item.item.sale_unit_price" type="number" />
                                                 </div>
                                             </span>
+
+                                            <template v-if="item.item.unit_type_id !== 'ZZ'">
+                                                <span class="fs-14"><b>Stock: {{ item.item.stock }}</b></span>
+                                            </template>
+
                                             <br>
 
                                         </div>

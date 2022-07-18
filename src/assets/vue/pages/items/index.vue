@@ -38,6 +38,9 @@
                                     <div class="item-input-wrap">
                                         <span class="text-align-center"><b>{{row.description}}</b></span><br>
                                         <span class="text-align-center">{{row.internal_id}}</span><br>
+                                        <template v-if="row.unit_type_id !== 'ZZ'">
+                                            <span class="text-align-center"><b>Stock: {{row.stock}}</b></span><br>
+                                        </template>
                                         <span class="float-right"><b>{{row.show_sale_unit_price}}</b></span><br>
                                     </div>
                                 </div>

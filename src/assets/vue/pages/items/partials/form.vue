@@ -254,7 +254,19 @@
 
                 this.cleanInputImage()
             },
+            itemValidations(){
+
+                if(this.recordId)
+                {
+                    if(!this.form.internal_id) return this.generalResponse(false, 'El campo código interno es obligatorio.')
+                }
+
+                return this.generalResponse()
+            },
             submit(){
+
+                const item_validations = this.itemValidations()
+                if(!item_validations.success) return this.showAlert(item_validations.message)
 
                 this.$f7.preloader.show()
 
