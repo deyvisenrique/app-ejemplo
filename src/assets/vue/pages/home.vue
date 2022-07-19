@@ -304,8 +304,9 @@
                                     this.setStorage('app_configuration', this.configuration, true)
                                     // this.$f7router.navigate("/"); // no funciona a la primera
                                 })
-                                .catch(err => {
-                                    console.log(err)
+                                .catch(error => {
+                                    console.log(error)
+                                    this.showAlert(`Ocurrió un error al cargar la configuración inicial: ${error.response.data.message}`)
                                 })
                                 .then(() => {
                                     this.hideLoading()
