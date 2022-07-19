@@ -1,6 +1,12 @@
 
 export const general_functions = {
+    computed: {
+    },
     methods: {
+        isPosMode(app_mode = null){
+            const _app_mode = app_mode ? app_mode : this.getStorage('app_mode')
+            return _app_mode === 'pos'
+        },
         generalSuccessNotification(message, title = 'Notificación')
         {
             this.showGeneralNotification({

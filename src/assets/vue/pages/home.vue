@@ -30,139 +30,146 @@
     </f7-block>
 
     <f7-block v-if="hasPermissions">
-        <f7-row>
-            <f7-col v-if="checkPermissions('invoice')">
-                <f7-card @click.native="go('nw_doc')" class="bg-purple" style="cursor:pointer;">
-                    <f7-card-content class="">
-                        <base-icon nameIcon="file-invoice" widthIcon="35" clases="text-align-right padding-top"></base-icon>
-                        <p class="text-color-white">Factura <br> electrónica</p>
-                    </f7-card-content>
-                </f7-card>
-            </f7-col>
-            <f7-col v-if="checkPermissions('invoice-ticket')">
-                <f7-card @click.native="go('nw_docb')" class="bg-blue" style="cursor:pointer;">
-                    <f7-card-content class="">
-                        <base-icon nameIcon="file-invoice" widthIcon="35" clases="text-align-right padding-top"></base-icon>
-                        <p class="text-color-white">Boleta <br> electrónica</p>
-                    </f7-card-content>
-                </f7-card>
-            </f7-col>
-        </f7-row>
-        <f7-row>
-            <f7-col v-if="checkPermissions('sale-note')">
-                <f7-card @click.native="go('sale_note')" class="bg-dark-blue" style="cursor:pointer;">
-                    <f7-card-content class="">
-                        <base-icon nameIcon="file-sale" widthIcon="35" clases="text-align-right padding-top"></base-icon>
-                        <p class="text-color-white"><br> Nota de venta</p>
-                    </f7-card-content>
-                </f7-card>
-            </f7-col>
 
-            <f7-col v-if="checkPermissions('order-note')">
-                <f7-card @click.native="go('order_note')" class="bg-purple" style="cursor:pointer;">
-                    <f7-card-content class="">
-                        <base-icon nameIcon="file" widthIcon="35" clases="text-align-right padding-top"></base-icon>
-                        <p class="text-color-white"><br> Pedido</p>
-                    </f7-card-content>
-                </f7-card>
-            </f7-col>
-        </f7-row>
+        <template v-if="is_pos_mode">
+            <p>MODO POS</p>
+        </template>
+        <template v-else>
+            <f7-row>
+                <f7-col v-if="checkPermissions('invoice')">
+                    <f7-card @click.native="go('nw_doc')" class="bg-purple" style="cursor:pointer;">
+                        <f7-card-content class="">
+                            <base-icon nameIcon="file-invoice" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+                            <p class="text-color-white">Factura <br> electrónica</p>
+                        </f7-card-content>
+                    </f7-card>
+                </f7-col>
+                <f7-col v-if="checkPermissions('invoice-ticket')">
+                    <f7-card @click.native="go('nw_docb')" class="bg-blue" style="cursor:pointer;">
+                        <f7-card-content class="">
+                            <base-icon nameIcon="file-invoice" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+                            <p class="text-color-white">Boleta <br> electrónica</p>
+                        </f7-card-content>
+                    </f7-card>
+                </f7-col>
+            </f7-row>
+            <f7-row>
+                <f7-col v-if="checkPermissions('sale-note')">
+                    <f7-card @click.native="go('sale_note')" class="bg-dark-blue" style="cursor:pointer;">
+                        <f7-card-content class="">
+                            <base-icon nameIcon="file-sale" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+                            <p class="text-color-white"><br> Nota de venta</p>
+                        </f7-card-content>
+                    </f7-card>
+                </f7-col>
 
-        <f7-row>
-            <f7-col v-if="checkPermissions('purchase')">
-                <f7-card @click.native="go('purchase')" class="bg-blue" style="cursor:pointer;">
-                    <f7-card-content class="">
-                        <base-icon nameIcon="car-sale" widthIcon="35" clases="text-align-right padding-top"></base-icon>
-                        <p class="text-color-white">
-                            <br> Compra
-                        </p>
-                    </f7-card-content>
-                </f7-card>
-            </f7-col>
+                <f7-col v-if="checkPermissions('order-note')">
+                    <f7-card @click.native="go('order_note')" class="bg-purple" style="cursor:pointer;">
+                        <f7-card-content class="">
+                            <base-icon nameIcon="file" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+                            <p class="text-color-white"><br> Pedido</p>
+                        </f7-card-content>
+                    </f7-card>
+                </f7-col>
+            </f7-row>
 
-            <f7-col v-if="checkPermissions('quotation')">
-                <f7-card @click.native="go('quotation')" class="bg-blue" style="cursor:pointer;">
-                    <f7-card-content class="">
-                        <base-icon nameIcon="file-sale" widthIcon="35" clases="text-align-right padding-top"></base-icon>
-                        <p class="text-color-white">
-                            <br> Cotización
-                        </p>
-                    </f7-card-content>
-                </f7-card>
-            </f7-col>
+            <f7-row>
+                <f7-col v-if="checkPermissions('purchase')">
+                    <f7-card @click.native="go('purchase')" class="bg-blue" style="cursor:pointer;">
+                        <f7-card-content class="">
+                            <base-icon nameIcon="car-sale" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+                            <p class="text-color-white">
+                                <br> Compra
+                            </p>
+                        </f7-card-content>
+                    </f7-card>
+                </f7-col>
 
-        </f7-row>
+                <f7-col v-if="checkPermissions('quotation')">
+                    <f7-card @click.native="go('quotation')" class="bg-blue" style="cursor:pointer;">
+                        <f7-card-content class="">
+                            <base-icon nameIcon="file-sale" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+                            <p class="text-color-white">
+                                <br> Cotización
+                            </p>
+                        </f7-card-content>
+                    </f7-card>
+                </f7-col>
 
-        <f7-row>
-            
+            </f7-row>
 
-            <f7-col v-if="checkPermissions('documents')">
-                <f7-card @click.native="go('ls_doc')" class="bg-dark-blue" style="cursor:pointer;">
-                    <f7-card-content class="">
-                        <base-icon nameIcon="file-list" widthIcon="35" clases="text-align-right padding-top"></base-icon>
-                        <p class="text-color-white">Lista de <br> comprobantes</p>
-                    </f7-card-content>
-                </f7-card>
-            </f7-col>
+            <f7-row>
+                
+
+                <f7-col v-if="checkPermissions('documents')">
+                    <f7-card @click.native="go('ls_doc')" class="bg-dark-blue" style="cursor:pointer;">
+                        <f7-card-content class="">
+                            <base-icon nameIcon="file-list" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+                            <p class="text-color-white">Lista de <br> comprobantes</p>
+                        </f7-card-content>
+                    </f7-card>
+                </f7-col>
 
 
-            <f7-col v-if="checkPermissions('validate-document')">
+                <f7-col v-if="checkPermissions('validate-document')">
 
-                <f7-card @click.native="go('cpe')" class="bg-blue" style="cursor:pointer;">
-                    <f7-card-content class="">
-                        <base-icon nameIcon="qr-code" widthIcon="35" clases="text-align-right padding-top"></base-icon>
-                        <p class="text-color-white"><br> Validar cpe</p>
-                    </f7-card-content>
-                </f7-card>
-            </f7-col>
-        </f7-row>
+                    <f7-card @click.native="go('cpe')" class="bg-blue" style="cursor:pointer;">
+                        <f7-card-content class="">
+                            <base-icon nameIcon="qr-code" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+                            <p class="text-color-white"><br> Validar cpe</p>
+                        </f7-card-content>
+                    </f7-card>
+                </f7-col>
+            </f7-row>
 
-        <f7-row>
-            
-            <f7-col v-if="checkPermissions('report-sales')">
-                <f7-card @click.native="go('report-sales')" class="bg-purple" style="cursor:pointer;">
-                    <f7-card-content class="">
-                        <base-icon nameIcon="bars" widthIcon="35" clases="text-align-right padding-top"></base-icon>
-                        <p class="text-color-white"><br>Reportes</p>
-                    </f7-card-content>
-                </f7-card>
-            </f7-col>
+            <f7-row>
+                
+                <f7-col v-if="checkPermissions('report-sales')">
+                    <f7-card @click.native="go('report-sales')" class="bg-purple" style="cursor:pointer;">
+                        <f7-card-content class="">
+                            <base-icon nameIcon="bars" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+                            <p class="text-color-white"><br>Reportes</p>
+                        </f7-card-content>
+                    </f7-card>
+                </f7-col>
 
-            <f7-col v-if="checkPermissions('cash')">
-                <f7-card @click.native="go('cash')" class="bg-blue" style="cursor:pointer;">
-                    <f7-card-content>
-                        <base-icon nameIcon="cash-machine" widthIcon="35" clases="text-align-right padding-top"></base-icon>
-                        <p class="text-color-white">
-                            <br>Caja
-                        </p>
-                    </f7-card-content>
-                </f7-card>
-            </f7-col>
+                <f7-col v-if="checkPermissions('cash')">
+                    <f7-card @click.native="go('cash')" class="bg-blue" style="cursor:pointer;">
+                        <f7-card-content>
+                            <base-icon nameIcon="cash-machine" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+                            <p class="text-color-white">
+                                <br>Caja
+                            </p>
+                        </f7-card-content>
+                    </f7-card>
+                </f7-col>
 
-        </f7-row>
+            </f7-row>
 
-        <f7-row>
-            <f7-col v-if="checkPermissions('customers')">
-                <f7-card @click.native="go('customers')" class="bg-dark-blue" style="cursor:pointer;">
-                    <f7-card-content>
-                        <base-icon nameIcon="users" widthIcon="35" clases="text-align-right padding-top"></base-icon>
-                        <p class="text-color-white">
-                            Clientes
-                        </p>
-                    </f7-card-content>
-                </f7-card>
-            </f7-col>
-            <f7-col  v-if="checkPermissions('items')">
-                <f7-card @click.native="go('items')" class="bg-purple" style="cursor:pointer;">
-                    <f7-card-content>
-                        <base-icon nameIcon="logistics" widthIcon="35" clases="text-align-right padding-top"></base-icon>
-                        <p class="text-color-white">
-                            Productos
-                        </p>
-                    </f7-card-content>
-                </f7-card>
-            </f7-col>
-        </f7-row>
+            <f7-row>
+                <f7-col v-if="checkPermissions('customers')">
+                    <f7-card @click.native="go('customers')" class="bg-dark-blue" style="cursor:pointer;">
+                        <f7-card-content>
+                            <base-icon nameIcon="users" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+                            <p class="text-color-white">
+                                Clientes
+                            </p>
+                        </f7-card-content>
+                    </f7-card>
+                </f7-col>
+                <f7-col  v-if="checkPermissions('items')">
+                    <f7-card @click.native="go('items')" class="bg-purple" style="cursor:pointer;">
+                        <f7-card-content>
+                            <base-icon nameIcon="logistics" widthIcon="35" clases="text-align-right padding-top"></base-icon>
+                            <p class="text-color-white">
+                                Productos
+                            </p>
+                        </f7-card-content>
+                    </f7-card>
+                </f7-col>
+            </f7-row>
+        </template>
+
 
     </f7-block>
     <f7-block v-else>
@@ -212,7 +219,8 @@
                 height_img: '45%',
                 img_icons: icons,
                 configuration: {},
-                permissions: []
+                permissions: [],
+                is_pos_mode: false,
             };
         },
         async created() {
@@ -227,6 +235,7 @@
             window.addEventListener("offline", function () {
                 self.isOffline = true;
             });
+ 
         },
         mounted() {
             setTimeout(this.verifytoken, 1000); // 2500);
@@ -286,6 +295,13 @@
                 await this.setPermissions(data)
                 await this.setAppLogo(data.generals)
                 await this.setGenerals(data)
+                await this.setAppMode(data)
+
+            },
+            setAppMode(data){
+                
+                this.setStorage('app_mode', data.style_settings.app_mode)
+                this.is_pos_mode = this.isPosMode(data.style_settings.app_mode)
 
             },
             setGenerals(data){
