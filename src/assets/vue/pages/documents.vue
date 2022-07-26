@@ -53,6 +53,16 @@
             style="text-transform:capitalize; font-weight: 400;">
             Compras
         </f7-button>
+        <f7-button
+            :outline="!activeClass.quotations"
+            small
+            :color="activeClass.quotations ? 'pink text-color-white' : 'gray'"
+            href="#tab-quotations"
+            class="tab-link"
+            @click="show('quotations')"
+            style="text-transform:capitalize; font-weight: 400;">
+            Cotización
+        </f7-button>
     </f7-block>
 
     <f7-block class="no-padding">
@@ -125,11 +135,16 @@
                                         </f7-col>
                                     </f7-row>
                                     <f7-row>
-                                        <!-- <f7-col v-if="item.state_type_id === '05'">
+                                        <f7-col v-if="item.state_type_id === '05'">
                                             <f7-button size="35" icon @click="clickVoided(item)" color="red">
                                                 <f7-icon size="18" class="icon fas fa-ban"></f7-icon>
                                             </f7-button>
-                                        </f7-col> -->
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button size="35" icon @click="clickToPrint(item, 'document')" color="purple">
+                                                <f7-icon size="18" class="icon fas fa-print"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
                                         <f7-col>
                                             <f7-button size="35" icon @click="clickPreviewPdf(item, 'document')" color="blue">
                                                 <f7-icon size="18" class="icon fas fa-search"></f7-icon>
@@ -146,11 +161,11 @@
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button size="35" icon @click="email(item.id, 'document')" color="purple">
+                                            <f7-button size="35" icon @click="email(item.id, 'document', item.customer_email)" color="purple">
                                                 <f7-icon size="18" class="icon fas fa-envelope"></f7-icon>
                                             </f7-button>
                                         </f7-col>
-                                        <f7-col>
+                                        <!-- <f7-col>
                                             <f7-button size="35" icon @click="download(item.external_id, 'document', 'a4')" color="lightblue">
                                                 <f7-icon size="18" class="icon fas fa-file-pdf"></f7-icon>
                                             </f7-button>
@@ -159,7 +174,7 @@
                                             <f7-button size="35" icon @click="download(item.external_id, 'document')" color="deeppurple">
                                                 <f7-icon size="18" class="icon fas fa-receipt"></f7-icon>
                                             </f7-button>
-                                        </f7-col>
+                                        </f7-col> -->
                                     </f7-row>
                                 </f7-block>
                             </span>
@@ -238,27 +253,34 @@
                                         </f7-col>
                                     </f7-row>
                                     <f7-row>
+                                        
                                         <f7-col>
-                                            <f7-button @click="clickPreviewPdf(item, 'document')" color="blue">
-                                                <f7-icon class="icon fas fa-search"></f7-icon>
+                                            <f7-button size="35" icon @click="clickToPrint(item, 'document')" color="purple">
+                                                <f7-icon size="18" class="icon fas fa-print"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        
+                                        <f7-col>
+                                            <f7-button size="35" @click="clickPreviewPdf(item, 'document')" color="blue">
+                                                <f7-icon size="18" class="icon fas fa-search"></f7-icon>
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button @click="clickDownloadPdf(item, 'document')" color="blue-shade">
-                                                <f7-icon class="icon fas fa-download"></f7-icon>
+                                            <f7-button size="35" @click="clickDownloadPdf(item, 'document')" color="blue-shade">
+                                                <f7-icon size="18" class="icon fas fa-download"></f7-icon>
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button @click="whatsap(item.customer_telephone, item.external_id)" color="green">
-                                                <f7-icon class="icon fab fa-whatsapp"></f7-icon>
+                                            <f7-button size="35" @click="whatsap(item.customer_telephone, item.external_id)" color="green">
+                                                <f7-icon size="18" class="icon fab fa-whatsapp"></f7-icon>
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button @click="email(item.id, 'document')" color="purple">
-                                                <f7-icon class="icon fas fa-envelope"></f7-icon>
+                                            <f7-button size="35" @click="email(item.id, 'document', item.customer_email)" color="purple">
+                                                <f7-icon size="18" class="icon fas fa-envelope"></f7-icon>
                                             </f7-button>
                                         </f7-col>
-                                        <f7-col>
+                                        <!-- <f7-col>
                                             <f7-button @click="download(item.external_id, 'document', 'a4')" color="lightblue">
                                                 <f7-icon class="icon fas fa-file-pdf"></f7-icon>
                                             </f7-button>
@@ -267,7 +289,7 @@
                                             <f7-button @click="download(item.external_id, 'document')" color="deeppurple">
                                                 <f7-icon class="icon fas fa-receipt"></f7-icon>
                                             </f7-button>
-                                        </f7-col>
+                                        </f7-col> -->
                                     </f7-row>
                                 </f7-block>
                             </span>
@@ -345,7 +367,7 @@
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button @click="email(item.id, 'sale-note')" color="purple">
+                                            <f7-button @click="email(item.id, 'sale-note', item.customer_email)" color="purple">
                                                 <f7-icon class="icon fas fa-envelope"></f7-icon>
                                             </f7-button>
                                         </f7-col>
@@ -432,7 +454,7 @@
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button @click="email(item.id, 'order-note')" color="purple">
+                                            <f7-button @click="email(item.id, 'order-note', item.customer_email)" color="purple">
                                                 <f7-icon class="icon fas fa-envelope"></f7-icon>
                                             </f7-button>
                                         </f7-col>
@@ -517,12 +539,12 @@
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_a4)" class="block" color="green">
+                                            <f7-button @click="whatsap(item.supplier_telephone, item.external_id, item.print_a4)" class="block" color="green">
                                                 <f7-icon class="icon fab fa-whatsapp"></f7-icon>
                                             </f7-button>
                                         </f7-col>
                                         <f7-col>
-                                            <f7-button @click="email(item.id, 'purchase')" color="purple">
+                                            <f7-button @click="email(item.id, 'purchase', item.supplier_email)" color="purple">
                                                 <f7-icon class="icon fas fa-envelope"></f7-icon>
                                             </f7-button>
                                         </f7-col>
@@ -532,6 +554,79 @@
                         </f7-list-item>
                     </f7-list>
                 </div>
+                
+                <div id="tab-quotations" class="page-content tab">
+
+
+                    <f7-searchbar placeholder="Buscar" :value="search_input" @input="search_input = $event.target.value" :clear-button="true" ></f7-searchbar>
+
+                    <div class="searchbar-not-found list" style="display: block;" v-if="source_quotations.length == 0">
+                        <ul>
+                            <li class="padding-left margin-left">
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">No se encontraron resultados</div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <f7-list media-list class="search-list">
+                        <f7-list-item v-for="item in source_quotations" :key="item.id" class="list-documents margin-bottom">
+                            <span slot="subtitle">
+                                <f7-block class="no-padding no-margin-vertical">
+                                    <f7-row>
+                                        <f7-col width="60" class="text-align-left">
+                                            <div style="word-break: break-all !important; white-space: pre-line !important; margin-top: -25px;" class="note-customer">
+                                                {{ item.customer_name }}
+                                            </div>
+                                            <span class="text-color-gray">
+                                                RUC: <span class="note-customer-number">{{ item.customer_number }}</span><br>
+                                                {{ item.created_at }}
+                                            </span>
+                                        </f7-col>
+                                        <f7-col width="40" class="text-align-right">
+                                            <f7-row>
+                                                <f7-col width="100">
+                                                    <span class="note-number">{{item.number_full}}</span>
+                                                </f7-col>
+                                                <f7-col width="100">
+                                                    <f7-badge :color="statusColor(item.state_type_description)" style="width: 100%">
+                                                        {{ item.state_type_description }}
+                                                    </f7-badge>
+                                                    <br>
+                                                    <span style="font-size: 16px; font-weight: bold">
+                                                        Total:
+                                                        {{ item.total }}
+                                                    </span>
+                                                </f7-col>
+                                            </f7-row>
+                                        </f7-col>
+                                    </f7-row>
+                                    <f7-row>
+                                        <f7-col>
+                                            <f7-button @click="clickDownloadPdf(item, 'quotation')" color="blue-shade">
+                                                <f7-icon class="icon fas fa-download"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_ticket)" color="green">
+                                                <f7-icon class="icon fab fa-whatsapp"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
+                                            <f7-button @click="email(item.id, 'quotations', item.customer_email)" color="purple">
+                                                <f7-icon class="icon fas fa-envelope"></f7-icon>
+                                            </f7-button>
+                                        </f7-col> 
+                                    </f7-row>
+                                </f7-block>
+                            </span>
+                        </f7-list-item>
+                    </f7-list>
+                </div>
+
             </div>
         </div>
 
@@ -574,8 +669,8 @@
                             :record="record"
                             :documentType="documentType"></preview-pdf>
 
-                <!-- <voided-form :showDialog.sync="showDialogVoided"
-                            :record="record"></voided-form> -->
+                <voided-form :showDialog.sync="showDialogVoided"
+                            :record="record"></voided-form>
 
             </f7-page-content>
         </f7-sheet>
@@ -588,19 +683,19 @@
     import _ from "lodash";
     import {auth} from "mixins_/auth";
     import PreviewPdf from 'components/document/PreviewPdf'
-    import {general_functions} from "mixins_/general_functions"
+    import {general_functions, print_pdf_document} from "mixins_/general_functions"
     import {download_file} from "mixins_/download_file"
     import HeaderLayout from "components/layout/Header"
     import queryString from "query-string"
-    // import VoidedForm from './invoices/partials/voided.vue'
+    import VoidedForm from './invoices/partials/voided.vue'
 
     export default {
         name: "documents",
-        mixins: [auth, general_functions, download_file],
+        mixins: [auth, general_functions, download_file, print_pdf_document],
         components: {
             PreviewPdf,
             HeaderLayout,
-            // VoidedForm
+            VoidedForm
         },
         data: function () {
             // Must return an object
@@ -627,6 +722,7 @@
                     notes: false,
                     orderNotes: false,
                     purchases: false,
+                    quotations: false,
                 },
                 form_search: {
                     input: null,
@@ -637,6 +733,7 @@
                 search_input: null,
                 state_types: [],
                 showDialogVoided: false,
+                source_quotations: [],
 
             };
         },
@@ -659,11 +756,19 @@
             this.loadConfiguration()
             this.initFormEmail()
             this.getDataDocuments()
+            this.events()
             // this.getDataPurchases()
             // this.getDataSaleNote()
             // this.getDataOrderNote()
         },
         methods: {
+            events(){
+
+                this.$eventHub.$on('reloadDocuments', ()=>{
+                    this.getDataDocuments()
+                })
+
+            },
             clickVoided(row){
                 // console.log(row)
                 this.record = row
@@ -686,6 +791,7 @@
                         .then(() => {
                             this.hideLoading()
                         })
+
             },
             checkPermissions(){
 
@@ -713,6 +819,9 @@
                     case 'purchases':
                         this.getDataPurchases()
                         break;
+                    case 'quotations':
+                        this.getDataQuotations()
+                        break;
                 }
 
             },
@@ -724,6 +833,16 @@
                 this.record = record
                 this.documentType = documentType
                 this.showDialogPreviewPdf = true
+
+            },
+            clickToPrint(record, documentType){
+
+                switch (documentType) {
+                    case 'document':
+                        this.printPdfDocument(record.external_id)
+                        break;
+                
+                }
 
             },
             async clickDownloadPdf(row, documentType){
@@ -753,39 +872,46 @@
                         this.activeClass.invoices = true
                         this.setDataFormSearch('invoices', '01')
                         this.getDataDocuments()
-
                         break
+
                     case 'tickets':
                         self.count = self.source_ticket.length
                         this.resetActiveClass()
                         this.activeClass.tickets = true
                         this.setDataFormSearch('invoices', '03')
                         this.getDataDocuments()
-
                         break
+
                     case 'notes':
                         self.count = self.source_note.length
                         this.resetActiveClass()
                         this.activeClass.notes = true
                         this.setDataFormSearch('notes', '80')
                         this.getDataSaleNote()
-
                         break
+
                     case 'purchases':
                         self.count = self.source_purchases.length
                         this.resetActiveClass()
                         this.activeClass.purchases = true
                         this.setDataFormSearch('purchases')
                         this.getDataPurchases()
-
                         break
+
                     case 'order_notes':
                         self.count = self.source_order_note.length
                         this.resetActiveClass()
                         this.activeClass.orderNotes = true
                         this.setDataFormSearch('order_notes')
                         this.getDataOrderNote()
+                        break
 
+                    case 'quotations':
+                        self.count = self.source_quotations.length
+                        this.resetActiveClass()
+                        this.activeClass.quotations = true
+                        this.setDataFormSearch('quotations')
+                        this.getDataQuotations()
                         break
                 }
             },
@@ -795,6 +921,7 @@
                 this.activeClass.notes = false
                 this.activeClass.orderNotes = false
                 this.activeClass.purchases = false
+                this.activeClass.quotations = false
             },
             initFormEmail() {
                 this.form_email = {
@@ -805,49 +932,66 @@
             whatsap(phone, external_id, print_a4 = null) {
                 const self = this;
 
-                self.$f7.dialog
-                    .create({
-                        text: "WhattsApp (9 dígitos)",
-                        on: {
-                            opened: function () {}
+                self.$f7.dialog.create({
+                    text: "WhattsApp (9 dígitos)",
+                    on: {
+                        opened: function () {}
+                    },
+                    content: `<div class="dialog-input-field input">
+                                <input type="tel" name="dialog-wasap" placeholder="Ingrese numero celular" ${phone ? 'value='+phone : ''} pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" class="dialog-input dialog-wasap">
+                            </div>`,
+                    buttons: [
+                        {
+                            text: "Cancel",
+                            keyCodes: null,
+                            color: null
                         },
-                        content: `
-                <div class="dialog-input-field input">
-                    <input type="tel" name="dialog-wasap" placeholder="Ingrese numero celular" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" class="dialog-input dialog-wasap">
-                </div>`,
-                        buttons: [{
-                                text: "Cancel",
-                                keyCodes: null,
-                                color: null
-                            },
+                        {
+                            text: "Ok",
+                            bold: true,
+                            keyCodes: null
+                        }
+                    ],
+                    onClick(dialog, e) 
+                    {
+                        if (e == 1) 
+                        {
+                            let number = (dialog.$el.find('.dialog-wasap').val()).toString()
+
+                            if (number.length == 9) 
                             {
-                                text: "Ok",
-                                bold: true,
-                                keyCodes: null
-                            }
-                        ],
-                        onClick(dialog, e) {
-                            if (e == 1) {
-
-                                let number = (dialog.$el.find('.dialog-wasap').val()).toString()
-
-                                if (number.length == 9) {
-                                    let link_pdf = (print_a4) ? print_a4 : `${localStorage.api_url}/print/document/${external_id}/a4`;
-                                    let message = `Hola, revisa tu comprobante ingresando a este link ${link_pdf}`;
-                                    let message_ = message.split(" ").join("%20");
-                                    window.open(`https://wa.me/51${number}/?text=${message_}`, "_system");
-                                } else {
-                                    self.$f7.dialog.alert(
-                                        `Ingrese correctamente los dígitos`,
-                                        "WhatsApp"
-                                    );
-                                }
+                                let link_pdf = (print_a4) ? print_a4 : `${localStorage.api_url}/print/document/${external_id}/a4`;
+                                let message = `Hola, revisa tu comprobante ingresando a este link ${link_pdf}`;
+                                let message_ = message.split(" ").join("%20");
+                                window.open(`https://wa.me/51${number}/?text=${message_}`, "_system");
+                            } 
+                            else 
+                            {
+                                self.$f7.dialog.alert(
+                                    `Ingrese correctamente los dígitos`,
+                                    "WhatsApp"
+                                );
                             }
                         }
-                    }).open();
+                    }
+                }).open();
 
             },
+            // getLinkPdf(document_type, print_a4 = null){
 
+            //     let link_pdf = null
+                
+            //     switch (document_type) {
+            //         case 'value':
+            //             break;
+                
+            //         default:
+            //             link_pdf = (print_a4) ? print_a4 : `${localStorage.api_url}/print/document/${external_id}/a4`
+            //             break;
+            //     }
+
+            //     return link_pdf
+            // },
             validateEmail(email) {
                 var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 return re.test(email);
@@ -874,7 +1018,7 @@
                     )
                     .then(response => {
                         if (response.data.success) {
-                            alert(`${response.data.message}`);
+                            this.showAlert(`${response.data.message}`)
                             this.initFormEmail();
                         }
                     })
@@ -886,19 +1030,26 @@
                         self.sendMailOpen = false;
                     });
             },
-            email(id, type) {
+            email(id, type, default_email = null) {
                 const self = this;
                 self.initFormEmail();
                 self.form_email.id = id;
                 //  this.sendMailOpen = true;
-                self.$f7.dialog.prompt("Ingresa el Email", "", function (value) {
-                    if (value) {
-                        self.form_email.email = value;
-                        self.sendEmail(type);
-                    } else {
-                        alert("Ingrese el Email.");
-                    }
-                });
+                self.$f7.dialog.prompt(
+                    "Ingresa el Email", 
+                    "", //titulo
+                    function (value) 
+                    {
+                        if (value) {
+                            self.form_email.email = value;
+                            self.sendEmail(type);
+                        } else {
+                            alert("Ingrese el Email.");
+                        }
+                    },
+                    ()=>{},
+                    default_email
+                )
             },
             applyFilters() {
                 this.source_invoice = _.filter(this.source, {
@@ -1068,6 +1219,20 @@
                     .then(() => {
                         this.hideLoading()
                     })
+            },
+            async getDataQuotations() {
+
+                this.showLoading()
+
+                await this.$http.get(`${this.returnBaseUrl()}/quotations/list?${this.getQueryParameters()}`, this.getHeaderConfig())
+                    .then(response => {
+                        this.source_quotations = response.data.data
+                    })
+                    .catch(err => {})
+                    .then(() => {
+                        this.hideLoading()
+                    })
+
             },
             statusColor(status) {
                 switch (status) {

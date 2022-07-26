@@ -1,34 +1,34 @@
 <template>
 <f7-page class="" color="bluemagenta">
-    <header-layout title="Pedido"></header-layout>
+    <header-layout title="Cotización"></header-layout>
 
     <f7-block>
         <form class="list no-hairlines-md" id="demo-form">
             <ul>
                 <f7-row>
+                    
                     <f7-col width="50">
                         <div class="item-content item-input no-padding-horizontal">
                             <div class="item-inner no-padding-horizontal">
-                                <div class="item-title item-label">Fecha Vencimiento</div>
+                                <div class="item-title item-label">Tiempo de Validez</div>
                                 <div class="item-input-wrap">
-                                    <input name="date" v-model="form.date_of_due" type="date" />
-                                </div>
-                            </div>
-                        </div>
-                    </f7-col>
-                    <f7-col width="50">
-                        <div class="item-content item-input no-padding-horizontal">
-                            <div class="item-inner no-padding-horizontal">
-                                <div class="item-title item-label">Fecha de Entrega</div>
-                                <div class="item-input-wrap">
-                                    <input name="date" v-model="form.delivery_date" type="date" />
+                                    <input v-model="form.date_of_due" type="text" />
                                 </div>
                             </div>
                         </div>
                     </f7-col>
                     
-                </f7-row>
-                <f7-row>
+                    <f7-col width="50">
+                        <div class="item-content item-input no-padding-horizontal">
+                            <div class="item-inner no-padding-horizontal">
+                                <div class="item-title item-label">Tiempo de Entrega</div>
+                                <div class="item-input-wrap">
+                                    <input v-model="form.delivery_date" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                    </f7-col>
+
                     <f7-col width="100">
                         <div class="item-content item-input no-padding-horizontal">
                             <div class="item-inner no-padding-horizontal">
@@ -40,16 +40,6 @@
                         </div>
                     </f7-col>
                     
-                    <f7-col width="100">
-                        <div class="item-content item-input no-padding-horizontal">
-                            <div class="item-inner no-padding-horizontal">
-                                <div class="item-title item-label">Observación</div>
-                                <div class="item-input-wrap">
-                                    <input v-model="form.observation" type="text" />
-                                </div>
-                            </div>
-                        </div>
-                    </f7-col>
                 </f7-row>
 
                 <li class="no-padding-horizontal margin-top">
@@ -62,7 +52,7 @@
                             </f7-col>
                             <f7-col width="75" class="text-align-left">
                                 <small>CLIENTE</small><br>
-                                <small class="no-margin">{{this.form.datos_del_cliente_o_receptor ? this.form.datos_del_cliente_o_receptor.apellidos_y_nombres_o_razon_social : ''}}</small>
+                                <small class="no-margin">{{ this.form.customer_name }}</small>
                             </f7-col>
                             <f7-col width="10" class="align-self-center">
                                 <div class="badge bg-color-white text-align-right color-blue">
@@ -148,48 +138,49 @@
     </f7-popup>
 
     <f7-popup class="demo-popup" :opened="popupCustomerOpened" @popup:closed="popupCustomerOpened = false">
-        <customer-form :codeType="codeType" :customerId="form.customer_id" :showDialog.sync="popupCustomerOpened" ref="form_customer_car" @addCustomerCar="addCustomer"></customer-form>
+        <customer-form :codeType="null" :customerId="form.customer_id" :showDialog.sync="popupCustomerOpened" ref="form_customer_car" @addCustomerCar="addCustomer"></customer-form>
     </f7-popup>
 </f7-page>
 </template>
 
 <script>
-    const url = "https://demo.facturador.pro/api";
-    import moment from "moment";
-    import _ from "lodash";
-    import ItemsForm from "components/document/ItemsForm";
-    import CustomerForm from "components/document/CustomerForm";
-    import {auth} from "mixins_/auth";
-    import {general_functions} from "mixins_/general_functions";
-    import HeaderLayout from "components/layout/Header";
-    import {download_file} from "mixins_/download_file"
+
+    import moment from 'moment'
+    import _ from 'lodash'
+    import ItemsForm from 'components/document/ItemsForm'
+    import CustomerForm from 'components/document/CustomerForm'
+    import {auth} from 'mixins_/auth'
+    import {general_functions, operations} from 'mixins_/general_functions'
+    import HeaderLayout from 'components/layout/Header'
+    import {download_file} from 'mixins_/download_file'
 
     export default {
-        name: "FormOrderNote",
+        name: 'FormQuotation',
         components: {
             ItemsForm,
             CustomerForm,
             HeaderLayout
         },
-        mixins: [auth, general_functions, download_file],
+        mixins: [
+            auth, 
+            general_functions, 
+            download_file,
+            operations
+        ],
         data: function () {
-            // Must return an object
             return {
-                codeType: "",
                 isBottom: true,
                 popupCustomerOpened: false,
-                search_item: "",
                 customers: [],
                 form: {},
                 popupOpened: false,
-                api_url: localStorage.api_url,
                 default_customer: null,
-            };
+            }
         },
         computed: {},
         created() {
-            this.initForm();
-            this.getTables();
+            this.initForm()
+            this.getTables()
         },
 
         methods: {
@@ -217,89 +208,69 @@
                 {
                     this.addCustomer(this.default_customer)
                 }
-
             },
             addCustomer(row) {
-                this.popupCustomerOpened = false;
-                this.form.customer_id = row.id;
-                this.form.datos_del_cliente_o_receptor = {
-                    codigo_tipo_documento_identidad: row.identity_document_type_id,
-                    numero_documento: row.number,
-                    apellidos_y_nombres_o_razon_social: row.name,
-                    codigo_pais: "PE",
-                    ubigeo: "150101",
-                    direccion: row.address,
-                    correo_electronico: row.email,
-                    telefono: "427-1148"
-                };
+                this.popupCustomerOpened = false
+                this.form.customer_id = row.id
+                this.form.customer_name = row.name
             },
             addItems(rows) {
-                // console.log(rows)
-                let contex = this
 
-                contex.popupOpened = false;
+                this.popupOpened = false
 
                 rows.forEach(record => {
+                    this.form.items.push(this.getNewItem(record))
+                })
 
-                    contex.form.items.push(record)
+                this.calculateTotal()
+            },
+            getNewItem(record){
 
-                });
+                let new_item = { ...record }
+                new_item.item.presentation = new_item.item.presentation ? new_item.item.presentation : []
+                return new_item
 
-                this.calculateTotal();
             },
             cancel() {
-                this.initForm();
-                this.$f7router.navigate("/");
+                this.initForm()
+                this.redirectHome()
             },
+            validateData() {
 
-            validate() {
-                const self = this;
-                if (this.form.items.length == 0) {
-                    self.$f7.dialog.alert(`Debe agregar productos.`, "Facturador PRO APP");
+                if (this.form.items.length == 0)  return this.generalResponse(false, 'Debe agregar productos.')
+                
+                if (!this.form.customer_id) return this.generalResponse(false, 'Debe seleccionar un cliente.')
 
-                    return false;
-                }
-
-                if (!this.form.customer_id) {
-                    self.$f7.dialog.alert(
-                        `Debe seleccionar un cliente.`,
-                        "Facturador PRO APP"
-                    );
-
-                    return false;
-                }
-
-                return true;
+                return this.generalResponse()
             },
+            send(){
 
-            send() {
-                const self = this;
+                const valid = this.validateData()
+                if (!valid.success) return this.showAlert(valid.message)
 
-                let valid = this.validate()
+                this.showLoading()
 
-                if (!valid) return
+                this.$http.post(`${this.returnBaseUrl()}/quotations`, this.form, this.getHeaderConfig())
+                        .then(response => {
 
-                self.$f7.preloader.show()
+                            const data = response.data
 
-                this.$http
-                    .post(`${this.returnBaseUrl()}/order-notes`, this.form, this.getHeaderConfig())
-                    .then(response => {
-                        let data = response.data
-                        if (data.success) {
-
-                            this.initForm()
-                            self.showDialogOptions(data)
-
-                        } else {
-                            alert("No se registro la Compra")
-                        }
-                    })
-                    .catch(err => {
-                        alert(`${err.message}`)
-                    })
-                    .then(() => {
-                        self.$f7.preloader.hide()
-                    })
+                            if (data.success) 
+                            {
+                                this.initForm()
+                                this.showDialogOptions(data)
+                            }
+                            else 
+                            {
+                                this.showAlert('No se registro la cotización')
+                            }
+                        })
+                        .catch(err => {
+                            this.showAlert(`No se registro la cotización: ${err.message}`)
+                        })
+                        .then(() => {
+                            this.hideLoading()
+                        })
             },
             async toPrint(data){
 
@@ -313,9 +284,9 @@
                 const context = this
 
                 context.showDialogConfirm({
-                    title: 'Pedido registrado',
+                    title: 'Cotización registrada',
                     text: data.data.number_full,
-                    buttons: context.getOptionsButtons(),
+                    buttons: context.getGeneralFormButtons(),
                     onClick: function(dialog, index){
                         context.clickOptionsButtons(dialog, index, data)
                     },
@@ -333,88 +304,24 @@
                 // Ir listado
                 else if (index === 1)
                 {
-                    this.$f7router.navigate("/documents/")
+                    this.redirectRoute('/documents/')
                 }
 
             },
-            getOptionsButtons(){
-                return [
-                    {
-                        text: 'Imprimir',
-                        cssClass: 'text-center',
-                        close: false
-                    },
-                    {
-                        text: 'Ir al listado',
-                        cssClass: 'text-center',
-                    },
-                    {
-                        text: 'Continuar',
-                        cssClass: 'text-center'
-                    },
-                ]
-            },
             calculateTotal() {
-                let total_discount = 0;
-                let total_charge = 0;
-                let total_exportation = 0;
-                let total_taxed = 0;
-                let total_exonerated = 0;
-                let total_unaffected = 0;
-                let total_free = 0;
-                let total_igv = 0;
-                let total_value = 0;
-                let total = 0;
-                let total_plastic_bag_taxes = 0;
-                this.form.items.forEach(row => {
-                    if (row.affectation_igv_type_id === "10") {
-                        total_taxed += parseFloat(row.total_value);
-                    }
-                    if (row.affectation_igv_type_id === "20") {
-                        total_exonerated += parseFloat(row.total_value);
-                    }
-                    if (row.affectation_igv_type_id === "30") {
-                        total_unaffected += parseFloat(row.total_value);
-                    }
-                    if (row.affectation_igv_type_id === "40") {
-                        total_exportation += parseFloat(row.total_value);
-                    }
-                    if (["10", "20", "30", "40"].indexOf(row.affectation_igv_type_id) < 0) {
-                        total_free += parseFloat(row.total_value);
-                    }
-                    if (
-                        ["10", "20", "30", "40"].indexOf(row.affectation_igv_type_id) > -1
-                    ) {
-                        total_igv += parseFloat(row.total_igv);
-                        total += parseFloat(row.total);
-                    }
-                    total_value += parseFloat(row.total_value);
-                    total_plastic_bag_taxes += parseFloat(row.total_plastic_bag_taxes);
-                });
-
-                this.form.total_exportation = _.round(total_exportation, 2);
-                this.form.total_taxed = _.round(total_taxed, 2);
-                this.form.total_exonerated = _.round(total_exonerated, 2);
-                this.form.total_unaffected = _.round(total_unaffected, 2);
-                this.form.total_free = _.round(total_free, 2);
-                this.form.total_igv = _.round(total_igv, 2);
-                this.form.total_value = _.round(total_value, 2);
-                this.form.total_taxes = _.round(total_igv, 2);
-                this.form.total = _.round(total, 2);
+                this.generalCalculateTotal()
             },
+            initForm(){
 
-            initForm() {
                 this.form = {
-                    prefix: "PD",
-                    establishment_id: 1,
-                    delivery_date: '',
-                    date_of_due: '',
-                    date_of_issue: moment().format("YYYY-MM-DD"),
-                    time_of_issue: moment().format("HH:mm:ss"),
+                    prefix: 'COT',
+                    establishment_id: null,
+                    date_of_issue: moment().format('YYYY-MM-DD'),
+                    time_of_issue: moment().format('HH:mm:ss'),
                     customer_id: null,
-                    currency_type_id: "PEN",
-                    purchase_order: null,
-                    exchange_rate_sale: 0.01,
+                    customer_name: null,
+                    currency_type_id: 'PEN',
+                    exchange_rate_sale: 1,
                     total_prepayment: 0,
                     total_charge: 0,
                     total_discount: 0,
@@ -431,48 +338,26 @@
                     total_taxes: 0,
                     total_value: 0,
                     total: 0,
-                    operation_type_id: null,
                     items: [],
-                    charges: [],
-                    discounts: [],
-                    attributes: [],
-                    guides: [],
                     payments: [],
-                    additional_information: null,
-                    actions: {
-                        format_pdf: "a4"
-                    },
-                    apply_concurrency: false,
-                    type_period: null,
-                    quantity_period: 0,
-                    automatic_date_of_issue: null,
-                    enabled_concurrency: false,
+                    delivery_date: null,
+                    date_of_due: null,
                     shipping_address: null,
-                    observation: null,
                 }
 
                 this.setDefaultCustomer()
 
             },
-            getTables() {
-                const self = this;
-                self.$f7.preloader.show();
-                this.$http
-                    .get(
-                        `${this.returnBaseUrl()}/document/customers`,
-                        this.getHeaderConfig()
-                    )
+            getTables(){
+                
+                this.showLoading()
+                this.getGeneralCustomers()
                     .then(response => {
-                        let source = response.data.data;
-                        self.customers = source.customers;
+                        this.customers = response.data.data.customers
+                        this.hideLoading()
                     })
-                    .catch(err => {
-                        console.log(err);
-                    })
-                    .then(() => {
-                        self.$f7.preloader.hide();
-                    });
+
             }
         }
-    };
+    }
 </script>

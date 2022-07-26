@@ -18,6 +18,7 @@ export const download_file = {
             
                 case 'sale_note':
                 case 'order_note':
+                case 'quotation':
                     url = record.print_ticket
                     break
 

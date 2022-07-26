@@ -44,8 +44,8 @@
             </f7-row>
 
             <f7-row class="no-padding-horizontal">
-                <f7-col>
-                    <div class="c-horizontal-scroll c-h-50 mp-div-category padding-vertical">
+                <f7-col width="100">
+                    <div class="c-horizontal-scroll c-h-50 mp-div-category padding-vertical" >
                         <template v-for="(category, index) in categories">
                             <span class="padding c-span-card margin-right" :key="index" @click="clickSearchByCategory(category.id)"><b>{{ getCategoryName(category) }}</b></span>
                         </template>
@@ -84,6 +84,11 @@
                                                     <input required validate v-model="item.item.sale_unit_price" type="number" />
                                                 </div>
                                             </span>
+
+                                            <template v-if="item.item.unit_type_id !== 'ZZ'">
+                                                <span class="fs-14"><b>Stock: {{ item.item.stock }}</b></span>
+                                            </template>
+
                                             <br>
 
                                         </div>
@@ -196,18 +201,38 @@
                                 </div>
                             </div>
                         </li>
+                        
+                        <f7-row>
+                            <f7-col width="70">
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-title item-label">
+                                            Precio Unitario (Venta) *
+                                        </div>
+                                        <div class="item-input-wrap">
+                                            <input v-model="form.sale_unit_price" required validate step="any" type="number" />
+                                            <span class="input-clear-button"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </f7-col>
+                            <f7-col width="30">
 
-                        <li class="item-content item-input">
-                            <div class="item-inner">
-                                <div class="item-title item-label">
-                                    Precio Unitario (Venta) *
-                                </div>
-                                <div class="item-input-wrap">
-                                    <input v-model="form.sale_unit_price" required validate step="any" type="number" />
-                                    <span class="input-clear-button"></span>
-                                </div>
-                            </div>
-                        </li>
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-title item-label">
+                                            Incluye IGV
+                                        </div>
+                                        <div class="item-input-wrap">
+                                            <label class="toggle toggle-init">
+                                                <input type="checkbox" v-model="form.has_igv" />
+                                                <span class="toggle-icon"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                            </f7-col>
+                        </f7-row>
 
                         <li class="item-content item-input">
                             <div class="item-inner">
@@ -302,10 +327,22 @@
 </template>
 
 <style scoped>
-.page-content {
-    padding-top: 2% !important;
-}
+    .page-content {
+        padding-top: 2% !important;
+    }
 
+    .swiper-slide {
+        background: red;
+        /* text-align: center; */
+        /* font-size: 18px; */
+        /* line-height: 1px; */
+        width: 20px !important;
+        height: 20px !important;
+        padding: 20px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        padding: 50px;
+    }
 </style>
 
 <script>
@@ -504,6 +541,8 @@
                                 item: it
                             });
 
+                            this.search_item =  it.internal_id
+                            this.searchItems()
                         }
 
                     })
@@ -579,7 +618,9 @@
                     charges: [],
                     discounts: [],
                     attributes: [],
-                    has_igv: null
+                    has_igv: null,
+                    input_description: null,
+                    name_product_pdf: null,
                 };
             },
             send() {
@@ -588,16 +629,16 @@
                 let send_items = this.items_car
                     .filter(x => x.quantity > 0 && x.item.sale_unit_price > 0)
                     .map(o => {
+
                         let obj = self.initFormItem();
+
                         obj.quantity = o.quantity;
                         (obj.item = o.item), //_.find(self.items, { id: o.id });
                         (obj.unit_price_value = obj.item.sale_unit_price);
                         obj.has_igv = obj.item.has_igv;
                         obj.affectation_igv_type_id = obj.item.sale_affectation_igv_type_id;
 
-                        let unit_price = obj.has_igv ?
-                            obj.unit_price_value :
-                            obj.unit_price_value * 1.18;
+                        let unit_price = obj.has_igv ? obj.unit_price_value : obj.unit_price_value * 1.18;
 
                         obj.unit_price = unit_price;
                         obj.item.unit_price = unit_price;
@@ -609,6 +650,8 @@
                         obj.affectation_igv_type = _.find(this.affectation_igv_types, {
                             id: obj.affectation_igv_type_id
                         });
+
+                        obj.input_description = o.item.description;
 
                         let row = calculateRowItem(obj, "PEN", 1);
 
