@@ -20,6 +20,10 @@ import PanelRightPage from './assets/vue/pages/panels/right.vue';
 import Configuration from './assets/vue/pages/panels/configuration.vue';
 import AdvancedConfiguration from './assets/vue/pages/panels/advanced_configuration.vue';
 
+
+import ListItemsSale from './assets/vue/pages/pos/components/ListItemsSale.vue'
+import SaleDetailPos from './assets/vue/pages/pos/sale_detail.vue'
+
 // import PreviewPdf2 from './assets/vue/components/document/PreviewPdf2';
 
 
@@ -88,6 +92,14 @@ export default [
   {
     path: '/form-quotation/',
     component: FormQuotation
+  },
+  {
+    path: '/list-items-sale/',
+    component: ListItemsSale
+  },
+  {
+    path: '/sale-detail-pos/',
+    component: SaleDetailPos
   },
   
   // {

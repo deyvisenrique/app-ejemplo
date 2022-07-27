@@ -15,8 +15,10 @@
     <f7-block class="bg-blue-magenta padding-vertical no-margin-vertical" v-if="title">
         <f7-row class="display-flex align-items-center">
             <f7-col width="10">
-                <a class="link back text-color-white" href="/">
-                    <i class="fas fa-angle-left custom-icon-back-form"></i>
+                <a class="link back text-color-white" @click="clickHrefBack">
+                    <template v-if="showBackHome">
+                        <i class="fas fa-angle-left custom-icon-back-form"></i>
+                    </template>
                 </a>
             </f7-col>
             <f7-col width="80" class="text-color-white text-align-center custom-title-form">
@@ -38,7 +40,7 @@
     export default {
         mixins: [general_functions, set_logo],
         name: "HeaderLayout",
-        props: ["title"],
+        props: ["title", 'showButtonBack', 'hrefBack'],
         components: {
             HeaderWaves,
             logoOficialLight
@@ -52,7 +54,24 @@
             await this.events()
             await this.checkAppLogo()
         },
+        computed:{
+            showBackHome(){
+                if(this.showButtonBack !== undefined) return this.showButtonBack
+
+                return true
+            },
+            hrefBackHome(){
+
+                if(this.hrefBack !== undefined) return this.hrefBack
+
+                return '/'
+            }
+        },
         methods: {
+            clickHrefBack(){
+                // @todo por revisar funcion/componente f7, para que no redireccione al home por defecto
+                return this.redirectRoute(this.hrefBackHome)
+            },
             checkAppLogo(){
                 
                 const url_logo = this.getStorage('url_logo')

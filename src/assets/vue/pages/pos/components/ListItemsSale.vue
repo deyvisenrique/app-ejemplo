@@ -1,0 +1,383 @@
+<template>
+    <f7-page infinite :infinite-distance="50" :infinite-preloader="show_preloader" @infinite="loadMoreRecords" ptr  @ptr:refresh="pullToRefresh">
+
+        <header-layout title="Productos" :showButtonBack="false"></header-layout>
+
+        <f7-card class="card-100 padding-top no-shadow" color="red" style="min-height: 90%">
+            <f7-block class="">
+                <f7-row>
+                    <f7-col width="70">
+                        <div class="searchbar searchbar-inline" style="margin:4%">
+                            <div class="searchbar-input-wrap">
+                                <input type="search" placeholder="Buscar" style="font-size:12px" v-model="form.input" @input="searchRecords"/>
+                                <i class="searchbar-icon"></i>
+                                <button  class="input-clear-button" @click="clickClearInput"></button>
+                            </div>
+                        </div>
+                    </f7-col>
+                    <f7-col width="15" class="text-align-center">
+                        <f7-button @click="clickSearchBarcode" color="bluemagenta" fill small open-panel="right" icon="fas fa-camera"></f7-button>
+                        <span class="" style="font-size: 10px;line-height: 10px !important;">BUSCAR</span>
+                    </f7-col>
+                    <f7-col width="15" class="text-align-center">
+                        <f7-button @click="clickCreate()" color="bluemagenta" fill small open-panel="right" icon="fas fa-plus"></f7-button>
+                        <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
+                    </f7-col>
+                </f7-row>
+            </f7-block>
+
+            <f7-row class="padding-horizontal">
+                <f7-col width="100">
+                    <div class="c-horizontal-scroll c-h-50 mp-div-category padding-vertical" >
+                        <template v-for="(category, index) in categories">
+                            <span class="padding c-span-card margin-right" :key="index" @click="clickSearchByCategory(category.id)"><b>{{ getCategoryName(category) }}</b></span>
+                        </template>
+                    </div>
+                </f7-col>
+            </f7-row>
+
+            <f7-block>
+                <div class="list inset">
+                    <div class="row" v-if="records.length > 0">
+                        <div class="col-50" v-for="(row, index) in records" :key="index">
+
+                            <div class="card no-margin-horizontal no-padding-horizontal" :class="isSelectedRecord(index) ? 'custom-border-selected-item bg-white-shade' : ''">
+
+                                <div @click="selected(index)">
+
+                                    <template v-if="configuration.show_image_item">
+                                        <div :style="'background-image:url('+row.image_url+')'" class="card-header align-items-flex-end image-max-width"></div>
+                                    </template>
+
+                                    <div class="card-content card-content-padding">
+                                        <div class="item-input-wrap">
+                                            <span class="text-align-center"><b>{{row.full_description}}</b></span>
+
+                                            <span class="">
+                                                <div class="item-content no-padding-left">
+                                                    <div class="item-media">{{ row.currency_type_symbol }}</div>
+                                                    <input required validate v-model="row.sale_unit_price" type="number" />
+                                                </div>
+                                            </span>
+
+                                            <template v-if="row.unit_type_id !== 'ZZ'">
+                                                <span class="text-align-center"><b>Stock: {{row.stock}}</b></span><br>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-footer display-flex justify-content-center">
+                                    <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
+                                        <div class="stepper-button-minus" @click="calculateQuantity(-1, index)"></div>
+                                        <div class="stepper-input-wrap">
+                                            <input type="number" v-model="row.quantity" min="0" step="1" />
+                                        </div>
+                                        <div class="stepper-button-plus" @click="calculateQuantity(1, index)"></div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" v-else>
+                        <div class="col-100">
+                            <h3 class="text-align-center">
+                                {{ loading_text }}
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </f7-block>
+        </f7-card>
+ 
+        <f7-fab position="right-bottom" class="margin-right" color="bluemagenta" v-if="quantitySelectedRecords() > 0" @click="sendListItems">
+            <f7-icon ios="f7:plus" aurora="f7:plus" md="material:shopping_cart" >
+                <f7-badge color="pink">
+                    {{ quantitySelectedRecords() }}
+                </f7-badge>
+            </f7-icon>
+        </f7-fab>
+
+        <item-form :showDialog.sync="showDialog"
+                    :recordId="recordId"></item-form>
+
+    </f7-page>
+</template>
+
+<script>
+
+    import _ from "lodash"
+    import { auth } from "mixins_/auth"
+    import {general_functions, scanner} from "mixins_/general_functions"
+    import {deletable} from "mixins_/deletable"
+    import queryString from "query-string"
+    import ItemForm from '../../items/partials/form.vue'
+    import HeaderLayout from "components/layout/Header"
+
+    export default {
+        name: "ListItemsSale",
+        components: { ItemForm, HeaderLayout },
+        mixins: [auth, general_functions, deletable, scanner],
+        data: function () {
+            return {
+                resource: 'items',
+                records: [],
+                form: {},
+                current_page: 1,
+                pagination: {
+                    current_page: 0,
+                    from: 0,
+                    last_page: 0,
+                    path: null,
+                    per_page: 0,
+                    to: 0,
+                    total: 0
+                },
+                show_preloader: true,
+                loading_text: null,
+                showDialog: false,
+                recordId: null,
+                configuration: {},
+                categories: []
+            }
+        },
+        computed: {
+        },
+        async created() {
+            await this.loadConfiguration()
+            await this.initForm()
+            await this.initLoadingText()
+            await this.getCategories()
+            await this.getRecords()
+            await this.events()
+        },
+        // watch: {
+        //     records: function(val) {
+        //         // if (val.length > 1) {
+        //         //     this.searchCustomers();
+        //         // } else if (val.length == 0) {
+        //         //     this.initItems();
+        //         // }
+        //         this.quantitySelectedRecords()
+
+        //     },
+        // },
+        methods: {
+            quantitySelectedRecords() 
+            {
+                console.log("aq")
+                return this.getListItemsSale().length
+            },
+            getListItemsSale()
+            {
+                const list_items_sale = this.getStorage('list_items_sale', true)
+
+                if(list_items_sale) return list_items_sale
+
+                return []
+            },
+            getCategoryName(category){
+                return category.name.toUpperCase()
+            },
+            clickSearchByCategory(category_id){
+                this.form.category_id = category_id
+                this.initData()
+            },
+            async getCategories() {
+
+                this.showLoading()
+
+                await this.$http.get(`${this.returnBaseUrl()}/${this.resource}/table/categories`, this.getHeaderConfig())
+                            .then(response => {
+                                this.categories = response.data
+                                this.categories.unshift({id: null, name: 'TODOS'})
+                            })
+                            .then(() => {
+                                this.hideLoading()
+                            })
+
+            },
+            sendListItems(){
+                this.redirectRoute('/sale-detail-pos/')
+            },
+            getSelectedRecords()
+            {
+                return this.records.filter((row) => {
+                    return row.quantity > 0
+                })
+            },
+            isSelectedRecord(index)
+            {
+                return this.records[index].quantity > 0
+            },
+            saveSelectedItems()
+            {
+                const list_items_sale = this.getListItemsSale()
+                const selected_records = this.getSelectedRecords()
+                let data = []
+
+                if(list_items_sale.length > 0)
+                {
+                    // arreglar
+                    data = selected_records
+                    
+                }
+                else
+                {
+                    data = selected_records
+                }
+
+                this.setStorage('list_items_sale', data, true)
+            },
+            selected(index, quantity = 1)
+            {
+                this.records[index].quantity = (this.records[index].quantity > 0) ? 0 : quantity
+                this.saveSelectedItems()
+                this.quantitySelectedRecords()
+            },
+            calculateQuantity(value, index) 
+            {
+                let quantity = parseFloat(this.records[index].quantity)
+                let result = (quantity += parseFloat(value))
+                this.records[index].quantity = (result < 0) ? 0 : result
+                this.saveSelectedItems()
+            },
+            findItem(item_id)
+            {
+                return _.find(this.records, {item_id:item_id})
+            },
+            checkSelectedRecords(){
+
+                const selected_records = this.getStorage('list_items_sale', true)
+
+                selected_records.forEach(sr_row => {
+                    
+                    const find_item = this.findItem(sr_row.item_id)
+
+                    if(find_item)
+                    {
+                        find_item.quantity = sr_row.quantity
+                    }
+                })
+
+            },
+
+            clickSearchBarcode(){
+
+                const context = this
+                cordova.plugins.barcodeScanner.scan(
+                    (result) => {
+                        if(result.text)
+                        {
+                            context.form.input = result.text
+                            context.form.search_by_barcode = 1
+                            context.initData()
+                            context.form.search_by_barcode = 0
+                        }
+                    },
+                    (error) => {
+                        context.showAlert(`Error al escanear: ${error}`)
+                    },
+                    context.scanner_configuration
+                )
+
+            },
+            loadConfiguration(){
+                this.configuration = this.getInitialConfiguration()
+            },
+            events(){
+
+                this.$eventHub.$on('reloadData', ()=>{
+                    this.initData()
+                })
+
+            },
+            clickCreate(recordId = null){
+                this.recordId = recordId
+                this.showDialog = true
+            },
+            clickClearInput(){
+                this.form.input = null
+                this.initData()
+            },
+            initLoadingText(){
+                this.loading_text = 'Sin datos'
+            },
+            async searchRecords(){
+
+                if(this.form.input.length > 2)
+                {
+                    await this.initData()
+                }
+
+            },
+            initForm(){
+                this.form = {
+                    input : null,
+                    search_by_barcode : 0,
+                    category_id: null,
+                }
+            },
+            async pullToRefresh(e, done){
+
+                await this.initData()
+                done()
+
+            },
+            async initData(){
+
+                this.current_page = 1
+                this.records = []
+                await this.getRecords()
+
+            },
+            async loadMoreRecords(){
+
+                const self = this
+
+                if(this.current_page >= this.pagination.last_page)
+                {
+                    self.show_preloader = false
+                    return
+                }
+
+                this.current_page++
+                await this.getRecords()
+
+            },
+            async getRecords() {
+
+                this.show_preloader = true
+                this.loading_text = 'Cargando...'
+
+                await this.$http.get(`${this.returnBaseUrl()}/items/records-sale?${this.getQueryParameters()}`, this.getHeaderConfig())
+                        .then(response => {
+                            this.records.push(...response.data.data)
+                            this.pagination = response.data.meta
+                            this.pagination.per_page = parseInt(response.data.meta.per_page)
+                            this.loading_text = 'Sin datos'
+                            this.checkSelectedRecords()
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        })
+                        .then(()=>{
+
+                            this.show_preloader = false
+                            if(this.records.length == 0) this.initLoadingText()
+
+                        })
+
+            },
+            getQueryParameters() {
+
+                return queryString.stringify({
+                    page: this.current_page,
+                    ...this.form
+                })
+
+            },
+        }
+    }
+</script>

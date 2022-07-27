@@ -31,10 +31,7 @@
 
     <f7-block v-if="hasPermissions">
 
-        <template v-if="is_pos_mode">
-            <p>MODO POS</p>
-        </template>
-        <template v-else>
+        <template v-if="!is_pos_mode">
             <f7-row>
                 <f7-col v-if="checkPermissions('invoice')">
                     <f7-card @click.native="go('nw_doc')" class="bg-purple" style="cursor:pointer;">
@@ -204,7 +201,7 @@
         components: {
             HeaderLayout,
             BaseIcon,
-            logoOficial
+            logoOficial,
         },
         data: function () {
             // Must return an object
@@ -290,18 +287,23 @@
             },
             async setInitialSettings(data){
 
+                await this.setAppMode(data)
                 await this.setStyleThemeContent(data.style_settings)
                 await this.setStyleCardContent(data.style_settings)
                 await this.setPermissions(data)
                 await this.setAppLogo(data.generals)
                 await this.setGenerals(data)
-                await this.setAppMode(data)
 
             },
             setAppMode(data){
                 
                 this.setStorage('app_mode', data.style_settings.app_mode)
                 this.is_pos_mode = this.isPosMode(data.style_settings.app_mode)
+
+                if(this.is_pos_mode)
+                {
+                    this.redirectRoute('/list-items-sale/')
+                }
 
             },
             setGenerals(data){
