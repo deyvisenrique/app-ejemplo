@@ -151,22 +151,10 @@
             await this.getCategories()
             await this.getRecords()
             await this.events()
-        },
-        // watch: {
-        //     records: function(val) {
-        //         // if (val.length > 1) {
-        //         //     this.searchCustomers();
-        //         // } else if (val.length == 0) {
-        //         //     this.initItems();
-        //         // }
-        //         this.quantitySelectedRecords()
-
-        //     },
-        // },
+        }, 
         methods: {
             quantitySelectedRecords() 
             {
-                console.log("aq")
                 return this.getListItemsSale().length
             },
             getListItemsSale()
@@ -211,17 +199,41 @@
             {
                 return this.records[index].quantity > 0
             },
-            saveSelectedItems()
+            saveSelectedItems(current_selected_item)
             {
-                const list_items_sale = this.getListItemsSale()
+                let list_items_sale = this.getListItemsSale()
                 const selected_records = this.getSelectedRecords()
                 let data = []
 
+                // si existen productos guardados en storage
                 if(list_items_sale.length > 0)
                 {
-                    // arreglar
-                    data = selected_records
-                    
+                    // se valida la cantidad para determinar si se elimina el producto
+                    if(current_selected_item.quantity <= 0)
+                    {
+                        _.remove(list_items_sale, {item_id : current_selected_item.item_id})
+                    }
+                    else
+                    {
+                        // se buscan los productos registrados en storage
+                        selected_records.forEach(row => {
+
+                            const item_sale = _.find(list_items_sale, {item_id : row.item_id})
+
+                            // si no existe el producto seleccionado en el storage, se agrega
+                            if(!item_sale)
+                            {
+                                list_items_sale.push({...row})
+                            }
+                            else
+                            {
+                                // si existe se regulariza cantidad
+                                item_sale.quantity = row.quantity
+                            }
+                        })
+                    }
+
+                    data = list_items_sale
                 }
                 else
                 {
@@ -233,7 +245,7 @@
             selected(index, quantity = 1)
             {
                 this.records[index].quantity = (this.records[index].quantity > 0) ? 0 : quantity
-                this.saveSelectedItems()
+                this.saveSelectedItems(this.records[index])
                 this.quantitySelectedRecords()
             },
             calculateQuantity(value, index) 
@@ -241,7 +253,7 @@
                 let quantity = parseFloat(this.records[index].quantity)
                 let result = (quantity += parseFloat(value))
                 this.records[index].quantity = (result < 0) ? 0 : result
-                this.saveSelectedItems()
+                this.saveSelectedItems(this.records[index])
             },
             findItem(item_id)
             {
@@ -251,15 +263,18 @@
 
                 const selected_records = this.getStorage('list_items_sale', true)
 
-                selected_records.forEach(sr_row => {
-                    
-                    const find_item = this.findItem(sr_row.item_id)
-
-                    if(find_item)
-                    {
-                        find_item.quantity = sr_row.quantity
-                    }
-                })
+                if(selected_records)
+                {
+                    selected_records.forEach(sr_row => {
+                        
+                        const find_item = this.findItem(sr_row.item_id)
+    
+                        if(find_item)
+                        {
+                            find_item.quantity = sr_row.quantity
+                        }
+                    })
+                }
 
             },
 

@@ -1,7 +1,7 @@
 <template>
     <f7-page class="" color="bluemagenta">
 
-        <header-layout :title="geTitle" hrefBack="/xxxxx"></header-layout>
+        <header-layout :title="geTitle" hrefBack="/list-items-sale/" :overwriteBackRoute="true"></header-layout>
 
         <f7-block>
             <div class="data-table margin-bottom">
@@ -10,7 +10,7 @@
                         <tr>
                             <th class="numeric-only">#</th>
                             <th class="label-cell">Producto</th>
-                            <th class="label-cell">Precio</th>
+                            <th class="label-cell">P. Unitario</th>
                             <th class="numeric-only text-align-center">Cantidad</th>
                             <th class="numeric-only">Total</th>
                         </tr>
@@ -25,7 +25,7 @@
                                 <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
                                     <div class="stepper-button-minus" @click="calculateQuantity(-1, index)"></div>
                                     <div class="stepper-input-wrap">
-                                        <input type="number" v-model="row.quantity" min="0" step="1" />
+                                        <input type="number" v-model="row.quantity" min="0" step="1" @change="changeQuantity(index)" />
                                     </div>
                                     <div class="stepper-button-plus" @click="calculateQuantity(1, index)"></div>
                                 </div>
@@ -53,12 +53,11 @@
             </div>
         </f7-block>
  
-        <f7-fab position="left-bottom" class="margin-right" color="red">
-            <f7-icon ios="f7:delete" aurora="f7:delete" md="material:delete" >
-            </f7-icon>
+        <f7-fab position="left-bottom" class="margin-right" color="red" @click="clickDeleteItems">
+            <f7-icon ios="f7:delete" aurora="f7:delete" md="material:delete"></f7-icon>
         </f7-fab>
 
-        <f7-fab position="right-bottom" class="margin-right" color="bluemagenta">
+        <f7-fab position="right-bottom" class="margin-right" color="bluemagenta" @click="clickPayment">
             <f7-icon ios="f7:arrow_forward" aurora="f7:arrow_forward" md="material:arrow_forward"></f7-icon>
         </f7-fab>
     </f7-page>
@@ -86,11 +85,15 @@
         data: function () {
             return {
                 affectation_igv_types: [],
-                form:{},
+                document_types: [],
+                form:{
+                    total: 0
+                },
                 currency_type: {
                     symbol: 'S/'
                 },
-                list_items_sale: []
+                list_items_sale: [],
+                resource: 'documents',
             }
         },
         computed: {
@@ -104,13 +107,55 @@
             await this.initData()
         },
         methods: {
+            getDocumentTypesToButtons(document_types)
+            {
+                return document_types.map((row) => {
+                    return {
+                        id: row.id,
+                        text: row.description,
+                        cssClass: 'text-align-center',
+                    }
+                })
+            },
+            clickPayment()
+            {
+                const context = this
+
+                this.showDialogConfirm({
+                    title: 'TIPO DE COMPROBANTE',
+                    buttons: this.document_types,
+                    verticalButtons: true,
+                    onClick: function(dialog, index){
+                        context.clickOptionsButtons(dialog, index)
+                    },
+                })
+
+            },
+            clickOptionsButtons(dialog, index){
+
+                this.form.document_type_id = this.document_types[index].id
+                this.saveFormInStorage()
+                this.redirectRoute(`/sale-payment-pos/${this.document_types[index].text}`)
+
+            },
+            saveFormInStorage()
+            {
+                this.setStorage('form_sale_detail', this.form, true)
+            },
+            clickDeleteItems(){
+
+                this.removeStorage('list_items_sale')
+                this.redirectRoute('/list-items-sale/')
+
+            },
             async getAffectationIgvTypes() {
 
                 this.showLoading()
 
-                await this.$http.get(`${this.returnBaseUrl()}/items/table/affectation_igv_types`, this.getHeaderConfig())
+                await this.$http.get(`${this.returnBaseUrl()}/${this.resource}/tables-sale-detail`, this.getHeaderConfig())
                             .then(response => {
-                                this.affectation_igv_types = response.data
+                                this.document_types = this.getDocumentTypesToButtons(response.data.document_types)
+                                this.affectation_igv_types = response.data.affectation_igv_types
                             })
                             .then(() => {
                                 this.hideLoading()
@@ -120,14 +165,16 @@
             initForm() 
             {
                 this.form = {
-                    serie_documento: null,
-                    numero_documento: '#',
-                    fecha_de_emision: moment().format('YYYY-MM-DD'),
-                    hora_de_emision: moment().format('HH:mm:ss'),
-                    codigo_tipo_operacion: '0101',
-                    codigo_tipo_documento: this.$f7route.params.cod,
-                    codigo_tipo_moneda: 'PEN',
-                    fecha_de_vencimiento: moment().format('YYYY-MM-DD'),
+                    prefix: 'NV',
+                    series_id: null,
+                    establishment_id: null,
+                    date_of_issue: moment().format('YYYY-MM-DD'),
+                    time_of_issue: moment().format('HH:mm:ss'),
+                    date_of_due: moment().format('YYYY-MM-DD'),
+                    customer_id: null,
+                    currency_type_id: 'PEN',
+                    document_type_id: null,
+                    exchange_rate_sale: 1,
                     datos_del_cliente_o_receptor: {},
                     totales: {},
                     items: [],
@@ -165,6 +212,7 @@
                     discounts: [],
                     attributes: [],
                     has_igv: null,
+                    is_set: false,
                     input_description: null,
                     name_product_pdf: null,
                     presentation: null,
@@ -228,12 +276,42 @@
                 else
                 {
                     this.form.items[index].quantity = result
-                    const item_sale = _.find(this.list_items_sale, {item_id : this.form.items[index].item_id})
-                    item_sale.quantity = result
-
-                    this.form.items[index] = this.calculateDataItem(item_sale)
-                    this.calculateTotal()
+                    this.calculateQuantityItem(index, result)
                 }
+            },
+            changeQuantity(index)
+            {
+                const quantity = this.form.items[index].quantity
+
+                if(quantity <= 0)
+                {
+                    this.showAlert('La cantidad debe ser mayor a 0.')
+                }
+                else
+                {
+                    this.calculateQuantityItem(index, quantity)
+                }
+            },
+            calculateQuantityItem(index, quantity)
+            {
+                
+                const item_sale = _.find(this.list_items_sale, {item_id : this.form.items[index].item_id})
+                item_sale.quantity = quantity
+
+                this.form.items[index] = this.calculateDataItem(item_sale)
+                this.calculateTotal()
+                this.updateQuantityItemsStorage(index)
+
+            },
+            updateQuantityItemsStorage(index)
+            {
+                const quantity = this.form.items[index].quantity
+
+                const item_sale = _.find(this.list_items_sale, {item_id: this.form.items[index].item_id})
+                
+                item_sale.quantity = parseFloat(quantity)
+
+                this.setStorage('list_items_sale', this.list_items_sale, true)
             },
         }
     }
