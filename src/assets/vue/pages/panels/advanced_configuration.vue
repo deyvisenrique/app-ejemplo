@@ -40,6 +40,24 @@
                         <option value="a4">A4</option>
                     </select>
                 </f7-list-item>
+
+                <div>
+                    <table>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>MAC</th>
+                            <th>Tipo</th>
+                        </tr>
+                        <tr v-for="(device, index) in devices" :key="index">
+                            <td>{{index + 1}}</td>
+                            <td>{{ device.name }}</td>
+                            <td>{{ device.mac_address }}</td>
+                            <td>{{ device.type }}</td>
+                        </tr>
+                    </table>
+                </div>
+
             </f7-list>
         </f7-block>
         <div class="configuration-footer">
@@ -68,13 +86,49 @@
                 form: {},
                 resource: 'app-configurations',
                 key_storage: 'app_configuration',
+                devices: [],
             }
         },
         created() {
             this.initForm()
             this.initData()
+            this.initDirectPrint()
         },
         methods: {
+            getDevicesData(data)
+            {
+                if(data && _.isArray(data))
+                {
+                    return _.chunk(data, 3).map((device)=>{
+    
+                        if(device.length === 3)
+                        {
+                            return {
+                                name: device[0],
+                                mac_address: device[1],
+                                type: device[2],
+                            }
+                        }
+                    })
+                }
+
+                return []
+            },
+            initDirectPrint()
+            {
+                const context = this
+
+                BTPrinter.list(
+                    function(data)
+                    {
+                        context.devices = context.getDevicesData(data)
+                    },
+                    function(error)
+                    {
+                        context.showAlert(`Ocurrió un error al listar los dispositivos: ${error}`)
+                    }
+                )
+            },
             initData(){
 
                 const data = this.getStorage(this.key_storage, true)

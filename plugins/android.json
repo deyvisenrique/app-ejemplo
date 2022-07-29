@@ -10,6 +10,9 @@
     "cordova-plugin-android-permissions": {
       "PACKAGE_NAME": "com.example.facturalo"
     },
+    "cordova-plugin-btprinter": {
+      "PACKAGE_NAME": "com.example.facturalo"
+    },
     "cordova-plugin-downloadmanager": {
       "PACKAGE_NAME": "com.example.facturalo"
     },
