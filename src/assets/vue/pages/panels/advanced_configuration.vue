@@ -41,22 +41,35 @@
                     </select>
                 </f7-list-item>
 
-                <div>
-                    <table>
-                        <tr>
-                            <th>#</th>
-                            <th>Nombre</th>
-                            <th>MAC</th>
-                            <th>Tipo</th>
-                        </tr>
-                        <tr v-for="(device, index) in devices" :key="index">
-                            <td>{{index + 1}}</td>
-                            <td>{{ device.name }}</td>
-                            <td>{{ device.mac_address }}</td>
-                            <td>{{ device.type }}</td>
-                        </tr>
-                    </table>
-                </div>
+                <f7-list-item title="Impresión directa">
+                    <template #after>
+                        <label class="toggle toggle-init color-blue">
+                            <input type="checkbox" v-model="form.direct_print" @change="submit"/>
+                            <span class="toggle-icon"></span>
+                        </label>
+                    </template>
+                </f7-list-item>
+
+                <template v-if="form.direct_print">
+                
+                    <f7-list-item v-if="form.printer_name" :title="`Impresora: ${form.printer_name}`">
+                        <f7-button @click="testPrint">
+                            Prueba
+                        </f7-button>
+                    </f7-list-item>
+
+                    <f7-block-title><b>Dispositivos sincronizados</b></f7-block-title>
+
+                    <template v-if="devices.length > 0">
+                        <f7-list>
+                            <f7-list-item radio radio-icon="start" :checked="device.selected" :title="device.name" name="demo-radio-start" v-for="(device, index) in devices" :key="index" @change="changeSelectedDevice(index)"></f7-list-item>
+                        </f7-list>
+                    </template>
+                    <template v-else>
+                        <f7-block-header class="padding-horizontal">No tiene dispositivos sincronizados</f7-block-header>
+                    </template>
+
+                </template>
 
             </f7-list>
         </f7-block>
@@ -89,12 +102,113 @@
                 devices: [],
             }
         },
-        created() {
-            this.initForm()
-            this.initData()
-            this.initDirectPrint()
+        async created() {
+            await this.initForm()
+            await this.initData()
+            await this.initDirectPrint()
         },
         methods: {
+            printerConnect()
+            {
+                BTPrinter.connect(
+                    function(data)
+                    {
+                        // alert("Success");
+                        // alert(data)
+                    },
+                    function(err)
+                    {
+                        // alert("Error");
+                        // alert(err)
+                    },
+                    this.form.printer_name
+                )
+            },
+            testPrint()
+            {
+                const context = this
+
+                BTPrinter.connected(
+                    function (data) 
+                    {
+                        // alert(data)
+                        if(data)
+                        {
+                            context.sendPrinter()
+                            context.showAlert("Si la impresión salió, esta correctamente configurado su impresora")
+                        }
+                        else
+                        {
+                            context.showAlert("Impresora no esta correctamente configurada")
+                        }
+
+                    }, 
+                    function (error) 
+                    {
+                        context.showAlert(`Ocurrió un error al imprimir: ${error}`)
+                    }
+                );
+            },
+            async sendPrinter()
+            {
+                // BTPrinter.printText(function(data){
+                //     alert("Success");
+                //     alert(data)
+                // },function(err){
+                //     alert("Error");
+                //     alert(`my err: ${err}`)
+                // }, "String to Print")
+
+                let html_pdf = null 
+
+                await this.$http.get(`${this.returnBaseUrl()}/document-print-pdf/document/07d8b891-8964-4388-bce8-9c0ce8527284/ticket_50`, this.getHeaderConfig())
+                    .then((response)=>{
+                        html_pdf=response.data
+                        alert(html_pdf)
+                    })
+                    .catch((error)=>{
+                        alert(error)
+                        console.log(error)
+                    })
+
+                
+                var cabeceraempresa1 = '\\0' + html_pdf + '';
+
+
+                BTPrinter.printTextSizeAlign(function (data) {
+                    // alert("alig")
+                    // alert(data)
+                }, function (err) {
+                    
+                    // alert("Error");
+                    alert(`my err: ${err}`)
+
+                }, cabeceraempresa1, '00', '1');
+            },
+
+            changeSelectedDevice(index)
+            {
+                const device = this.devices[index]
+                this.form.printer_name = device.name
+                this.setStorage(this.key_storage, this.form, true)
+
+                this.generalSuccessNotification('Impresora seleccionada')
+
+            },
+            checkSelectedDevice()
+            {
+                if(this.form.direct_print)
+                {
+                    const printer = _.find(this.devices, {name : this.form.printer_name})
+
+                    if(printer)
+                    {
+                        printer.selected = true
+                        this.printerConnect()
+                    }
+
+                }
+            },
             getDevicesData(data)
             {
                 if(data && _.isArray(data))
@@ -107,6 +221,7 @@
                                 name: device[0],
                                 mac_address: device[1],
                                 type: device[2],
+                                selected: false,
                             }
                         }
                     })
@@ -122,12 +237,14 @@
                     function(data)
                     {
                         context.devices = context.getDevicesData(data)
+                        context.checkSelectedDevice()
                     },
                     function(error)
                     {
                         context.showAlert(`Ocurrió un error al listar los dispositivos: ${error}`)
                     }
                 )
+                
             },
             initData(){
 
@@ -139,6 +256,8 @@
                 this.form = {
                     show_image_item: false,
                     print_format_pdf: 'ticket',
+                    direct_print: false,
+                    printer_name: null,
                 }
             },
             submit() {
