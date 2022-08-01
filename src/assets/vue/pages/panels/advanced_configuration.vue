@@ -135,11 +135,11 @@
                         if(data)
                         {
                             context.sendPrinter()
-                            context.showAlert("Si la impresión salió, esta correctamente configurado su impresora")
+                            context.showAlert("Prueba realizada, verifique los datos del usuario en la impresión.")
                         }
                         else
                         {
-                            context.showAlert("Impresora no esta correctamente configurada")
+                            context.showAlert("Impresora no configurada")
                         }
 
                     }, 
@@ -159,31 +159,31 @@
                 //     alert(`my err: ${err}`)
                 // }, "String to Print")
 
-                let html_pdf = null 
+                // let html_pdf = null 
 
-                await this.$http.get(`${this.returnBaseUrl()}/document-print-pdf/document/07d8b891-8964-4388-bce8-9c0ce8527284/ticket_50`, this.getHeaderConfig())
-                    .then((response)=>{
-                        html_pdf=response.data
-                        alert(html_pdf)
-                    })
-                    .catch((error)=>{
-                        alert(error)
-                        console.log(error)
-                    })
+                // await this.$http.get(`${this.returnBaseUrl()}/document-print-pdf/document/07d8b891-8964-4388-bce8-9c0ce8527284/ticket_50`, this.getHeaderConfig())
+                //     .then((response)=>{
+                //         html_pdf=response.data
+                //         alert(html_pdf)
+                //     })
+                //     .catch((error)=>{
+                //         alert(error)
+                //         console.log(error)
+                //     })
 
                 
-                var cabeceraempresa1 = '\\0' + html_pdf + '';
+                const text_test = `Prueba impresión \nRUC: ${this.getStorage('ruc')} \nCliente: ${this.getStorage('api_url')} \nUsuario: ${this.getStorage('user_name')} \nCorreo: ${this.getStorage('user_email')}`
 
 
                 BTPrinter.printTextSizeAlign(function (data) {
                     // alert("alig")
                     // alert(data)
-                }, function (err) {
+                }, 
+                function (err) {
                     
-                    // alert("Error");
-                    alert(`my err: ${err}`)
+                    alert(`Error: ${err}`)
 
-                }, cabeceraempresa1, '00', '1');
+                }, text_test, '00', '1');
             },
 
             changeSelectedDevice(index)
@@ -274,6 +274,8 @@
                         {
                             this.setStorage(this.key_storage, response.data.data, true)
                             // this.$eventHub.$emit('reloadPageItem')
+                            location.reload()
+                            // this.redirectRoute('/')
                         }
 
                     })

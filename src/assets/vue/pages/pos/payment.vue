@@ -383,30 +383,61 @@
             },
             async toPrint(data){
 
-                // @todo registrar en un mixin o usar la misma forma de impresion que nv
-                if(this.isInvoiceDocument)
+                if(this.configuration.direct_print && this.isInvoiceDocument)
                 {
-                    let html_pdf = null
-                    const print_format_pdf = (this.configuration.print_format_pdf) ? this.configuration.print_format_pdf : 'ticket'
-                    this.showLoading()
 
-                    await this.$http.get(`${this.returnBaseUrl()}/document-print-pdf/document/${data.data.external_id}/${print_format_pdf}`, this.getHeaderConfig())
-                                .then((response)=>{
-                                    html_pdf=response.data
-                                })
-                                .catch((error)=>{
-                                    console.log(error)
-                                })
+                    let html_text = null 
 
-                    cordova.plugins.printer.print(html_pdf)
+                    await this.$http.get(`${this.returnBaseUrl()}/document-print-pdf-text/document/${data.data.external_id}/ticket_50`, this.getHeaderConfig())
+                        .then((response)=>{
+                            html_text=response.data
+                            // alert(html_text)
+                        })
+                        .catch((error)=>{
+                            alert(error)
+                            console.log(error)
+                        })
 
-                    this.hideLoading()
+                    const context = this 
+                    BTPrinter.printTextSizeAlign(function (data) {
+                        // alert("alig")
+                        context.generalSuccessNotification('Impresión en proceso')
+                        // alert(data)
+                    }, 
+                    function (err) {
+                        
+                        alert(`Error: ${err}`)
+
+                    }, html_text, '00', '1');
+
                 }
                 else
                 {
-                    await this.showLoading()
-                    await this.downloaFileToPrint(data.data.print_ticket, data.data.filename) //definido en mixin download_file
-                    await this.hideLoading()
+                    // @todo registrar en un mixin o usar la misma forma de impresion que nv
+                    if(this.isInvoiceDocument)
+                    {
+                        let html_pdf = null
+                        const print_format_pdf = (this.configuration.print_format_pdf) ? this.configuration.print_format_pdf : 'ticket'
+                        this.showLoading()
+    
+                        await this.$http.get(`${this.returnBaseUrl()}/document-print-pdf/document/${data.data.external_id}/${print_format_pdf}`, this.getHeaderConfig())
+                                    .then((response)=>{
+                                        html_pdf=response.data
+                                    })
+                                    .catch((error)=>{
+                                        console.log(error)
+                                    })
+    
+                        cordova.plugins.printer.print(html_pdf)
+    
+                        this.hideLoading()
+                    }
+                    else
+                    {
+                        await this.showLoading()
+                        await this.downloaFileToPrint(data.data.print_ticket, data.data.filename) //definido en mixin download_file
+                        await this.hideLoading()
+                    }
                 }
 
             },
