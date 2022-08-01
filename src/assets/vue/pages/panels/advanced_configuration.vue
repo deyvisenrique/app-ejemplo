@@ -105,7 +105,7 @@
         async created() {
             await this.initForm()
             await this.initData()
-            await this.initDirectPrint()
+            // await this.initDirectPrint()
         },
         methods: {
             printerConnect()

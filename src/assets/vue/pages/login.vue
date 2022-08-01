@@ -135,8 +135,7 @@
                 password: "1234567",
                 url: "app.facturalo.pro",
                 logo: '',
-                internet_protocol: 'http://',
-                // internet_protocol: 'https://',
+                internet_protocol: 'https://',
                 is_type_password: true,
             };
         },

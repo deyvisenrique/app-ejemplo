@@ -186,7 +186,24 @@
                             })
 
             },
-            sendListItems(){
+            validateData()
+            {
+                let items_price_zero = 0
+                const list_items_sale = this.getListItemsSale()
+
+                list_items_sale.forEach(row => {
+                    if(!row.sale_unit_price || isNaN(row.sale_unit_price) || parseFloat(row.sale_unit_price) <= 0) items_price_zero++
+                })
+
+                if(items_price_zero > 0) return this.generalResponse(false, 'El precio unitario de venta de los productos debe ser mayor a 0.')
+
+                return this.generalResponse()
+            },
+            sendListItems()
+            {
+                const validate_data = this.validateData()
+                if(!validate_data.success) return this.showAlert(validate_data.message)
+
                 this.redirectRoute('/sale-detail-pos/')
             },
             getSelectedRecords()

@@ -1,5 +1,6 @@
 <template>
 <f7-page class="">
+
     <f7-block class="bg-blue-magenta no-margin-top elevation-9">
         <f7-block class="text-align-right no-margin-top padding-top">
             <f7-link panel-close class="text-color-white"><i class="fas fa-times"></i></f7-link>
@@ -39,7 +40,8 @@
     </f7-block>
     <f7-block class="bg-color-white margin-left">
 
-        <template v-if="check_configuration">
+        <template v-if="checkPermissions('configuration')">
+        <!-- <template v-if="check_configuration"> -->
             <f7-link @click="go('configuration')" color="black" class="display-block margin-vertical">
                 <f7-icon material="settings" size="18"> </f7-icon>
                 &nbsp;Configuración
@@ -53,7 +55,7 @@
 
     </f7-block>
 
-    <!-- <f7-block class="bg-color-white margin-left"  v-if="isPosMode()">
+    <f7-block class="bg-color-white margin-left"  v-if="check_is_pos_mode">
 
         <p>Menú</p>
 
@@ -109,7 +111,7 @@
             &nbsp;Productos
         </f7-link>
 
-    </f7-block> -->
+    </f7-block>
 
     <div class="footer bg-color-white">
         <f7-block>
@@ -150,38 +152,42 @@
                     documents_not_sent: 0,
                     documents_regularize_shipping: 0,
                 },
-                check_configuration: false
+                check_configuration: false,
+                check_is_pos_mode: false,
+                current_permissions: [],
             }
         },
         mounted() {
             this.createTooltips()
             this.getNotifications()
-            this.checkConfiguration()
         },
         created(){
             this.events()
-            console.log("isPosMode",this.isPosMode())
+            this.checkPosMode()
         },
         computed: { 
         },
         methods: {
-            checkPermissions(value){
+            checkPermissions(value)
+            {
+                const all_permissions = this.current_permissions.length > 0 ? this.current_permissions : this.getStoragePermissions()
 
-                // const row = _.find(this.permissions, {value: value})
-
-                // return !_.isEmpty(row)
-                return true
-
+                return this.hasPermissionInModule(value, all_permissions)
+            },
+            checkPosMode(is_pos_mode = null)
+            {
+                this.check_is_pos_mode = this.isPosMode(is_pos_mode)
             },
             events(){
 
                 this.$eventHub.$on('updatePermissions', (permissions) => {
-                    this.checkConfiguration(permissions)
+                    this.current_permissions = permissions
                 })
                 
-            },
-            checkConfiguration(permissions){
-                this.check_configuration = this.hasPermissionInModule('configuration', permissions)
+                this.$eventHub.$on('appMode', (is_pos_mode) => {
+                    this.checkPosMode(is_pos_mode)
+                })
+
             },
             getNotifications(){
 
@@ -217,49 +223,71 @@
                 })
 
             },
-            go(type) {
-
-                switch (type) {
+            go(type) 
+            {
+                switch (type) 
+                {
                     case 'login':
-                        this.$f7router.navigate("/configuration/");
-                        break;
+                        this.redirectRoute('/configuration/')
+                        break
                     case 'configuration':
-                        this.$f7router.navigate("/advanced-configuration/");
-                        break;
+                        this.redirectRoute('/advanced-configuration/')
+                        break
+                }
 
-                    // redireccion en modo pos
-                    case "pos":
-                        this.$f7router.navigate("/list-items-sale/")
-                        break
-                    case "ls_doc":
-                        this.$f7router.navigate("/documents/")
-                        break
-                    case "report-sales":
-                        this.$f7router.navigate("/report-sales/")
-                        break
-                    case "cpe":
-                        this.$f7router.navigate("/cpe/")
-                        break
-                    case "order_note":
-                        this.$f7router.navigate("/form-order-note/")
-                        break
-                    case "purchase":
-                        this.$f7router.navigate("/form-purchase/")
-                        break
-                    case "items":
-                        this.$f7router.navigate("/items/")
-                        break
-                    case "customers":
-                        this.$f7router.navigate("/customers/")
-                        break
-                    case "cash":
-                        this.$f7router.navigate("/cash/")
-                        break
-                    case "quotation":
-                        this.$f7router.navigate("/form-quotation/")
-                    // redireccion en modo pos
+                // redireccion en modo pos
+                this.redirectPosMode(type)
+            },
+            isRedirectMainView(type)
+            {
+                return !['login', 'configuration'].includes(type)
+            },
+            redirectPosMode(type)
+            {
+                if(this.check_is_pos_mode)
+                {
+                    switch(type) 
+                    {
+                        case 'pos':
+                            this.redirectMainRoute('/list-items-sale/')
+                            break
+                        case 'ls_doc':
+                            this.redirectMainRoute('/documents/')
+                            break
+                        case 'report-sales':
+                            this.redirectMainRoute('/report-sales/')
+                            break
+                        case 'cpe':
+                            this.redirectMainRoute('/cpe/')
+                            break
+                        case 'order-note':
+                            this.redirectMainRoute('/form-order-note/')
+                            break
+                        case 'purchase':
+                            this.redirectMainRoute('/form-purchase/')
+                            break
+                        case 'items':
+                            this.redirectMainRoute('/items/')
+                            break
+                        case 'customers':
+                            this.redirectMainRoute('/customers/')
+                            break
+                        case 'cash':
+                            this.redirectMainRoute('/cash/')
+                            break
+                        case 'quotation':
+                            this.redirectMainRoute('/form-quotation/')
+                            break
+                    }
+
+            
+                    if(this.isRedirectMainView(type))
+                    {
+                        this.$eventHub.$emit('closePanel')
+                    }
 
                 }
+
             },
             logout() {
                 localStorage.removeItem("api_token")

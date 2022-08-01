@@ -3,7 +3,8 @@ export const general_functions = {
     computed: {
     },
     methods: {
-        isPosMode(app_mode = null){
+        isPosMode(app_mode = null)
+        {
             const _app_mode = app_mode ? app_mode : this.getStorage('app_mode')
             return _app_mode === 'pos'
         },
@@ -103,6 +104,10 @@ export const general_functions = {
             
             return !_.isEmpty(row)
         },
+        getStoragePermissions()
+        {
+            return this.getStorage('permissions', true)
+        },
         redirectHome()
         {
             this.$f7router.navigate('/')
@@ -110,6 +115,10 @@ export const general_functions = {
         redirectRoute(route)
         {
             this.$f7router.navigate(route)
+        },
+        redirectMainRoute(route)
+        {
+            this.$f7.views.main.router.navigate(route)
         },
         generalResponse(success = true, message = null)
         {
@@ -224,6 +233,7 @@ export const operations = {
         }
     },
     methods: {
+        // usado en modo pos, cpe, nv - cotizacion
         generalCalculateTotal()
         {
             let total_exportation = 0
@@ -270,6 +280,7 @@ export const operations = {
             this.form.total_igv = _.round(total_igv, 2)
             this.form.total_value = _.round(total_value, 2)
             this.form.total_taxes = _.round(total_igv, 2)
+            this.form.subtotal = _.round(total, 2)
             this.form.total = _.round(total, 2)
         }
     }

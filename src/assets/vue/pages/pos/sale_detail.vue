@@ -94,6 +94,7 @@
                 },
                 list_items_sale: [],
                 resource: 'documents',
+                pos_document_types: []
             }
         },
         computed: {
@@ -102,27 +103,50 @@
             }
         },
         async created() {
-            await this.getAffectationIgvTypes()
+            await this.getTables()
             await this.initForm()
             await this.initData()
         },
         methods: {
+            getPosDocumentTypes()
+            {
+                const generals = this.getStorage('generals', true)
+                return generals ? generals.pos_document_types : []
+            },
             getDocumentTypesToButtons(document_types)
             {
-                return document_types.map((row) => {
-                    return {
-                        id: row.id,
-                        text: row.description,
-                        cssClass: 'text-align-center',
+                this.pos_document_types = this.getPosDocumentTypes()
+                const permissions = this.getStoragePermissions()
+                let allowed_document_types = []
+
+                document_types.forEach(row => {
+                    
+                    const doc_permission = _.find(this.pos_document_types, {document_type_id : row.id})
+
+                    if(doc_permission)
+                    {
+                        const has_permission = this.hasPermissionInModule(doc_permission.module, permissions)
+
+                        if(has_permission)
+                        {
+                            allowed_document_types.push({
+                                id: row.id,
+                                text: row.description,
+                                cssClass: 'text-align-center',
+                            })
+                        }
+
                     }
                 })
+
+                return allowed_document_types
             },
             clickPayment()
             {
                 const context = this
 
                 this.showDialogConfirm({
-                    title: 'TIPO DE COMPROBANTE',
+                    title: this.document_types.length === 0 ? 'NO TIENE PERMISOS ASIGNADOS' : 'TIPO DE COMPROBANTE',
                     buttons: this.document_types,
                     verticalButtons: true,
                     onClick: function(dialog, index){
@@ -148,7 +172,7 @@
                 this.redirectRoute('/list-items-sale/')
 
             },
-            async getAffectationIgvTypes() {
+            async getTables() {
 
                 this.showLoading()
 
@@ -188,8 +212,10 @@
                     total_igv: 0,
                     total_value: 0,
                     total_taxes: 0,
+                    subtotal: 0,
                     total: 0,
-                };
+                }
+ 
 
             },
             getFormItem() 

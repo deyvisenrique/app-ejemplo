@@ -579,7 +579,7 @@
                     return [
                         {
                             fecha: this.form_fee.date,
-                            codigo_tipo_moneda: this.form.codigo_tipo_moneda,
+                            codigo_tipo_moneda: this.form.currency_type_id,
                             monto: this.form_fee.amount,
                             codigo_metodo_de_pago: this.form_fee.payment_method_type_id,
                         }

@@ -305,6 +305,8 @@
                     this.redirectRoute('/list-items-sale/')
                 }
 
+                this.$eventHub.$emit('appMode', data.style_settings.app_mode)
+
             },
             setGenerals(data){
                 
