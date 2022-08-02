@@ -147,6 +147,82 @@ export const general_functions = {
         roundNumber(number, decimals = 2){
             return _.round(number, decimals)
         },
+        generalSleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        },
+    }
+}
+
+
+export const functions_direct_print = {
+    data: function () {
+        return {
+        }
+    },
+    methods: {
+        isAllowedDirectPrint(param_configuration = null)
+        {
+            const configuration = param_configuration ? param_configuration : this.getInitialConfiguration()
+
+            return (configuration.direct_print && configuration.printer_name)
+        },
+        generalCheckConnectionSendPrint()
+        {
+            const context = this
+
+            BTPrinter.connected(
+                function (data) 
+                {
+                    // si esta conectada la impresora
+                    if(data)
+                    {
+                        //este método debe declararse en el componente que usa este mixin e implementar la función "generalPrinterDocument()" que realizará la impresión
+                        context.generalPrinterDocument() 
+                    }
+                    else
+                    {
+                        context.showAlert('Impresora desconectada.')
+                    }
+
+                }, 
+                function (error) 
+                {
+                    context.showAlert(`Ocurrió un error al imprimir: ${error}`)
+                }
+            )
+        },
+        printerConnect(printer_name)
+        {
+            const context = this
+
+            BTPrinter.connect(
+                function(data)
+                {
+                    if(data) context.generalSuccessNotification('Impresora conectada')
+                },
+                function(error)
+                {
+                    context.generalSuccessNotification(`Ocurrió un error al conectar: ${error}`)
+                },
+                printer_name
+            )
+        },
+        printerDisconnect(printer_name)
+        {
+            const context = this
+
+            BTPrinter.disconnect(
+                function(data)
+                {
+                    if(data) context.generalSuccessNotification('Impresora desconectada')
+                },
+                function(error)
+                {
+                    context.generalSuccessNotification(`Ocurrió un error al desconectar: ${error}`)
+                },
+                printer_name
+            )
+        },
     }
 }
 

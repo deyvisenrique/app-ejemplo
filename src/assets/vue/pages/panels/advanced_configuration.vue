@@ -44,7 +44,7 @@
                 <f7-list-item title="Impresión directa">
                     <template #after>
                         <label class="toggle toggle-init color-blue">
-                            <input type="checkbox" v-model="form.direct_print" @change="submit"/>
+                            <input type="checkbox" v-model="form.direct_print" @change="changeDirectPrint"/>
                             <span class="toggle-icon"></span>
                         </label>
                     </template>
@@ -87,11 +87,15 @@
 </style>
 <script>
 
-    import {general_functions} from "mixins_/general_functions"
+    import {general_functions, functions_direct_print} from "mixins_/general_functions"
     import { auth } from "mixins_/auth"
 
     export default {
-        mixins: [auth, general_functions],
+        mixins: [
+            auth, 
+            general_functions, 
+            functions_direct_print
+        ],
         name: "AdvancedConfiguration",
         components: {},
         data: function () {
@@ -105,95 +109,60 @@
         async created() {
             await this.initForm()
             await this.initData()
-            // await this.initDirectPrint()
+            await this.initDirectPrint() 
         },
-        methods: {
-            printerConnect()
+        mounted(){
+        },
+        computed:{
+            enabledDirectPrint()
             {
-                BTPrinter.connect(
-                    function(data)
-                    {
-                        // alert("Success");
-                        // alert(data)
-                    },
-                    function(err)
-                    {
-                        // alert("Error");
-                        // alert(err)
-                    },
-                    this.form.printer_name
-                )
-            },
-            testPrint()
+                return this.form.direct_print
+            }
+        },
+        methods: { 
+            async testPrint()
             {
                 const context = this
+                await context.showLoading()
+                await context.generalSleep(1000)
+                await context.printerDisconnect(this.form.printer_name)
+                await context.printerConnect(this.form.printer_name)
+                await context.generalCheckConnectionSendPrint()
+                await context.hideLoading()
+            },
+            getTextTest()
+            {
+                return `Prueba impresión \nRUC: ${this.getStorage('ruc')} \nCliente: ${this.getStorage('api_url')} \nUsuario: ${this.getStorage('user_name')} \nCorreo: ${this.getStorage('user_email')}`
+            },
+            generalPrinterDocument()
+            {
+                const context = this
+                const text_test = context.getTextTest()
 
-                BTPrinter.connected(
+                BTPrinter.printTextSizeAlign(
                     function (data) 
                     {
-                        // alert(data)
                         if(data)
                         {
-                            context.sendPrinter()
-                            context.showAlert("Prueba realizada, verifique los datos del usuario en la impresión.")
+                            context.showAlert('Prueba realizada, verifique los datos del usuario en la impresión.')
                         }
-                        else
-                        {
-                            context.showAlert("Impresora no configurada")
-                        }
-
                     }, 
                     function (error) 
                     {
                         context.showAlert(`Ocurrió un error al imprimir: ${error}`)
-                    }
-                );
+                    }, 
+                    text_test, 
+                    '00', 
+                    '1'
+                )
             },
-            async sendPrinter()
-            {
-                // BTPrinter.printText(function(data){
-                //     alert("Success");
-                //     alert(data)
-                // },function(err){
-                //     alert("Error");
-                //     alert(`my err: ${err}`)
-                // }, "String to Print")
-
-                // let html_pdf = null 
-
-                // await this.$http.get(`${this.returnBaseUrl()}/document-print-pdf/document/07d8b891-8964-4388-bce8-9c0ce8527284/ticket_50`, this.getHeaderConfig())
-                //     .then((response)=>{
-                //         html_pdf=response.data
-                //         alert(html_pdf)
-                //     })
-                //     .catch((error)=>{
-                //         alert(error)
-                //         console.log(error)
-                //     })
-
-                
-                const text_test = `Prueba impresión \nRUC: ${this.getStorage('ruc')} \nCliente: ${this.getStorage('api_url')} \nUsuario: ${this.getStorage('user_name')} \nCorreo: ${this.getStorage('user_email')}`
-
-
-                BTPrinter.printTextSizeAlign(function (data) {
-                    // alert("alig")
-                    // alert(data)
-                }, 
-                function (err) {
-                    
-                    alert(`Error: ${err}`)
-
-                }, text_test, '00', '1');
-            },
-
             changeSelectedDevice(index)
             {
                 const device = this.devices[index]
                 this.form.printer_name = device.name
                 this.setStorage(this.key_storage, this.form, true)
-
+                this.redirectMainRoute('/')
                 this.generalSuccessNotification('Impresora seleccionada')
-
             },
             checkSelectedDevice()
             {
@@ -204,55 +173,69 @@
                     if(printer)
                     {
                         printer.selected = true
-                        this.printerConnect()
                     }
-
                 }
-            },
-            getDevicesData(data)
+            }, 
+            async setDevicesData(data)
             {
                 if(data && _.isArray(data))
                 {
-                    return _.chunk(data, 3).map((device)=>{
-    
+                    const parse_data = _.chunk(data, 3)
+
+                    await parse_data.forEach(device => {
+                        
                         if(device.length === 3)
                         {
-                            return {
+                            this.devices.push({
                                 name: device[0],
                                 mac_address: device[1],
                                 type: device[2],
                                 selected: false,
-                            }
+                            })
                         }
                     })
-                }
 
-                return []
+                    await this.checkSelectedDevice()
+                }
             },
             initDirectPrint()
+            {
+                if(this.enabledDirectPrint)
+                {
+                    this.listDevices()
+                }
+            },
+            listDevices()
             {
                 const context = this
 
                 BTPrinter.list(
                     function(data)
                     {
-                        context.devices = context.getDevicesData(data)
-                        context.checkSelectedDevice()
+                        context.setDevicesData(data)
                     },
                     function(error)
                     {
                         context.showAlert(`Ocurrió un error al listar los dispositivos: ${error}`)
                     }
                 )
-                
             },
-            initData(){
-
+            initData()
+            {
                 const data = this.getStorage(this.key_storage, true)
-                if(data) this.form = data
 
+                if(data)
+                {
+                    this.form = {
+                        show_image_item: data.show_image_item,
+                        print_format_pdf: data.print_format_pdf,
+                        direct_print: data.direct_print,
+                        printer_name: data.printer_name,
+                    }
+                }
             },
-            initForm() {
+            initForm() 
+            {
                 this.form = {
                     show_image_item: false,
                     print_format_pdf: 'ticket',
@@ -260,7 +243,28 @@
                     printer_name: null,
                 }
             },
-            submit() {
+            async changeDirectPrint()
+            {
+                if(this.form.direct_print)
+                {
+                    await this.listDevices()
+                }
+                else
+                {
+                    await this.printerDisconnect()
+                    this.form.printer_name = null
+                    this.devices = []
+                    this.redirectMainRoute('/')
+                }
+
+                this.submit()
+            },
+            saveConfigStorage(data = null)
+            {
+                this.setStorage(this.key_storage, data ? data : this.form, true)
+            },
+            submit() 
+            {
 
                 this.showLoading()
                 this.$http.post(`${this.returnBaseUrl()}/${this.resource}`, this.form, this.getHeaderConfig())
@@ -268,21 +272,17 @@
 
                         this.generalSuccessNotification(response.data.message)
 
-                        // this.showAlert(response.data.message)
-
                         if(response.data.success)
                         {
-                            this.setStorage(this.key_storage, response.data.data, true)
-                            // this.$eventHub.$emit('reloadPageItem')
-                            location.reload()
-                            // this.redirectRoute('/')
+                            this.saveConfigStorage()
+                            // this.setStorage(this.key_storage, response.data.data, true)
                         }
 
                     })
                     .catch(error => {
 
                         console.log(error)
-                        alert(`Ocurrió un error al guardar: ${error}`)
+                        this.showAlert(`Ocurrió un error al guardar: ${error}`)
 
                     })
                     .then(() => {

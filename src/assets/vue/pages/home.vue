@@ -194,10 +194,10 @@
     import HeaderLayout from "components/layout/Header";
     import BaseIcon from 'components/layout/BaseIcon.vue';
     import {auth} from "mixins_/auth";
-    import {general_functions, set_logo} from "mixins_/general_functions"
+    import {general_functions, set_logo, functions_direct_print} from "mixins_/general_functions"
 
     export default {
-        mixins: [auth, general_functions, set_logo],
+        mixins: [auth, general_functions, set_logo, functions_direct_print],
         components: {
             HeaderLayout,
             BaseIcon,
@@ -232,6 +232,8 @@
             window.addEventListener("offline", function () {
                 self.isOffline = true;
             });
+
+            this.checkDirectPrint()
  
         },
         mounted() {
@@ -243,6 +245,17 @@
             }
         },
         methods: {
+            checkDirectPrint()
+            {
+                const configuration = this.getInitialConfiguration()
+
+                if(this.isAllowedDirectPrint(configuration))
+                {
+                    this.printerDisconnect(configuration.printer_name)
+                    this.printerConnect(configuration.printer_name)
+                }
+
+            },
             setInitialLogo(){
 
                 if (localStorage.url_logo) 

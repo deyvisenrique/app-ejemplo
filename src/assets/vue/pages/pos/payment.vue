@@ -226,7 +226,7 @@
     import moment from 'moment'
     import _ from 'lodash'
     import {auth} from 'mixins_/auth'
-    import {general_functions, operations} from 'mixins_/general_functions'
+    import {general_functions, operations, print_pdf_document} from 'mixins_/general_functions'
     import HeaderLayout from 'components/layout/Header'
     import {findGeneralDefaultSerie} from "js_/helpers/functions"
     import CustomerForm from "components/document/CustomerForm"
@@ -244,7 +244,8 @@
             general_functions, 
             operations,
             download_file,
-            store_cash
+            store_cash,
+            print_pdf_document
         ],
         data: function () {
             return {
@@ -309,6 +310,9 @@
                 {
                     this.sendSaleNote()
                 }
+
+                // alert("fin---"+JSON.stringify(this.configuration))
+
             },
             sendSaleNote()
             {
@@ -381,56 +385,44 @@
                 })
 
             },
-            async toPrint(data){
+            async sendDirectPrint(data)
+            {
+                let html_text = null 
 
+                await this.$http.get(`${this.returnBaseUrl()}/document-print-pdf-text/document/${data.data.external_id}/ticket_50`, this.getHeaderConfig())
+                    .then((response)=>{
+                        html_text=response.data
+                        // alert(html_text)
+                    })
+                    .catch((error)=>{
+                        alert(error)
+                        console.log(error)
+                    })
+
+                const context = this 
+                BTPrinter.printTextSizeAlign(function (data) {
+                    // alert("alig")
+                    context.generalSuccessNotification('Impresión en proceso')
+                    // alert(data)
+                }, 
+                function (err) {
+                    
+                    alert(`Error: ${err}`)
+
+                }, html_text, '00', '1');
+
+            },
+            async toPrint(data)
+            {
                 if(this.configuration.direct_print && this.isInvoiceDocument)
                 {
-
-                    let html_text = null 
-
-                    await this.$http.get(`${this.returnBaseUrl()}/document-print-pdf-text/document/${data.data.external_id}/ticket_50`, this.getHeaderConfig())
-                        .then((response)=>{
-                            html_text=response.data
-                            // alert(html_text)
-                        })
-                        .catch((error)=>{
-                            alert(error)
-                            console.log(error)
-                        })
-
-                    const context = this 
-                    BTPrinter.printTextSizeAlign(function (data) {
-                        // alert("alig")
-                        context.generalSuccessNotification('Impresión en proceso')
-                        // alert(data)
-                    }, 
-                    function (err) {
-                        
-                        alert(`Error: ${err}`)
-
-                    }, html_text, '00', '1');
-
+                    this.sendDirectPrint(data)
                 }
                 else
                 {
-                    // @todo registrar en un mixin o usar la misma forma de impresion que nv
                     if(this.isInvoiceDocument)
                     {
-                        let html_pdf = null
-                        const print_format_pdf = (this.configuration.print_format_pdf) ? this.configuration.print_format_pdf : 'ticket'
-                        this.showLoading()
-    
-                        await this.$http.get(`${this.returnBaseUrl()}/document-print-pdf/document/${data.data.external_id}/${print_format_pdf}`, this.getHeaderConfig())
-                                    .then((response)=>{
-                                        html_pdf=response.data
-                                    })
-                                    .catch((error)=>{
-                                        console.log(error)
-                                    })
-    
-                        cordova.plugins.printer.print(html_pdf)
-    
-                        this.hideLoading()
+                        this.printPdfDocument(data.data.external_id)
                     }
                     else
                     {
@@ -439,7 +431,6 @@
                         await this.hideLoading()
                     }
                 }
-
             },
             clickOptionsButtons(dialog, index, data){
 
