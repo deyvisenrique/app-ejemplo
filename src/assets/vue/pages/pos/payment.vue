@@ -204,6 +204,10 @@
    
                 </ul>
             </form>
+
+            <!-- <body id="html_print_document"></body> -->
+            <pdf-direct-print ref="pdf_direct_print"></pdf-direct-print>
+
         </f7-block>
  
         <f7-popup class="demo-popup" :opened="popupCustomerOpened" @popup:closed="popupCustomerOpened = false">
@@ -217,6 +221,7 @@
         <f7-fab position="center-bottom" class="margin-right" color="bluemagenta" @click.prevent="clickSubmit">
             <f7-icon ios="f7:check" aurora="f7:check" md="material:check"></f7-icon>
         </f7-fab>
+
 
     </f7-page>
 </template>
@@ -232,12 +237,16 @@
     import CustomerForm from "components/document/CustomerForm"
     import {download_file} from "mixins_/download_file"
     import {store_cash} from "../cash/mixins/cash"
+    // import * as htmlToImage from 'html-to-image'
+    import PdfDirectPrint from 'components/document/PdfDirectPrint'
+
 
     export default {
         name: 'SalePaymentPos',
         components: {
             CustomerForm,
-            HeaderLayout
+            HeaderLayout,
+            PdfDirectPrint
         },
         mixins: [
             auth, 
@@ -311,8 +320,6 @@
                     this.sendSaleNote()
                 }
 
-                // alert("fin---"+JSON.stringify(this.configuration))
-
             },
             sendSaleNote()
             {
@@ -385,36 +392,18 @@
                 })
 
             },
-            async sendDirectPrint(data)
+            sendDirectPrint(data)
             {
-                let html_text = null 
+                const document_type = this.isInvoiceDocument ? 'document' : 'saleNote'
+                const external_id = data.data.external_id
+                const format = this.configuration.print_format_pdf
+                const extend_pdf_height = 150
 
-                await this.$http.get(`${this.returnBaseUrl()}/document-print-pdf-text/document/${data.data.external_id}/ticket_50`, this.getHeaderConfig())
-                    .then((response)=>{
-                        html_text=response.data
-                        // alert(html_text)
-                    })
-                    .catch((error)=>{
-                        alert(error)
-                        console.log(error)
-                    })
-
-                const context = this 
-                BTPrinter.printTextSizeAlign(function (data) {
-                    // alert("alig")
-                    context.generalSuccessNotification('Impresión en proceso')
-                    // alert(data)
-                }, 
-                function (err) {
-                    
-                    alert(`Error: ${err}`)
-
-                }, html_text, '00', '1');
-
+                this.$refs.pdf_direct_print.sendPrintDocument(document_type, external_id, format, extend_pdf_height)
             },
             async toPrint(data)
             {
-                if(this.configuration.direct_print && this.isInvoiceDocument)
+                if(this.configuration.direct_print)
                 {
                     this.sendDirectPrint(data)
                 }
@@ -450,12 +439,12 @@
                 return [
                     {
                         text: 'Imprimir',
-                        cssClass: 'text-center',
+                        cssClass: 'text-align-center',
                         close: false
                     },
                     {
                         text: 'Continuar',
-                        cssClass: 'text-center'
+                        cssClass: 'text-align-center'
                     },
                 ]
             },
