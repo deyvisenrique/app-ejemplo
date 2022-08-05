@@ -48,6 +48,7 @@
                                     <a href="#" class="link" @click="clickCreate(row.id)">
                                         <span class="material-icons text-color-blue">edit</span>
                                     </a>
+                                    
                                     <a href="#" class="link" @click="clickChangeActive(row.id, row.active)">
                                         <template v-if="row.active">
                                             <span class="material-icons icon-color-danger">highlight_off</span>
@@ -56,6 +57,16 @@
                                             <span class="material-icons icon-color-success">check_circle</span>
                                         </template>
                                     </a>
+                                    
+                                    <a href="#" class="link" @click="clickChangeFavorite(row.id, row.favorite)">
+                                        <template v-if="row.favorite">
+                                            <span class="material-icons text-color-purple">favorite</span>
+                                        </template>
+                                        <template v-else>
+                                            <span class="material-icons text-color-purple">favorite_border</span>
+                                        </template>
+                                    </a>
+
                                     <a href="#" class="link" @click="clickDelete(row.id)">
                                         <span class="material-icons icon-color-danger">delete</span>
                                     </a>
@@ -152,6 +163,31 @@
             },
             loadConfiguration(){
                 this.configuration = this.getInitialConfiguration()
+            },
+            clickChangeFavorite(id, favorite)
+            {
+                const favorite_param = favorite ? 0 : 1
+
+                this.showLoading()
+
+                this.$http.get(`${this.returnBaseUrl()}/items/change-favorite/${id}/${favorite_param}`, this.getHeaderConfig())
+                        .then(response => {
+                            
+                            if(response.data.success)
+                            {
+                                this.showAlert(response.data.message)
+                                this.initData()
+                            }
+                            
+                        })
+                        .catch(error => {
+                            console.log(error)
+                            this.showAlert(`Ocurrió un error: ${error}`)
+                        })
+                        .then(()=>{
+                            this.hideLoading()
+                        })
+
             },
             clickChangeActive(id, active){
 

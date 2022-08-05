@@ -113,7 +113,7 @@
 
     </f7-block>
 
-    <div class="footer bg-color-white">
+    <div :class="showBlockFooter ? 'block-footer bg-color-white pt-1' : 'footer bg-color-white'">
         <f7-block>
             <f7-button class="padding-horizontal" @click="logout" color="pink" fill round>
                 Cerrar sesión
@@ -166,11 +166,19 @@
             this.checkPosMode()
         },
         computed: { 
+            showBlockFooter()
+            {
+                return this.check_is_pos_mode && this.getAllPermissions().length > 5
+            }
         },
         methods: {
+            getAllPermissions()
+            {
+                return this.current_permissions.length > 0 ? this.current_permissions : this.getStoragePermissions()
+            },
             checkPermissions(value)
             {
-                const all_permissions = this.current_permissions.length > 0 ? this.current_permissions : this.getStoragePermissions()
+                const all_permissions = this.getAllPermissions()
 
                 return this.hasPermissionInModule(value, all_permissions)
             },

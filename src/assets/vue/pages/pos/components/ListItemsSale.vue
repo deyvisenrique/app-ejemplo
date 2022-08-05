@@ -28,9 +28,15 @@
 
             <f7-row class="padding-horizontal">
                 <f7-col width="100">
-                    <div class="c-horizontal-scroll c-h-50 mp-div-category padding-vertical" >
+                    <div class="c-horizontal-scroll c-h-50 mp-div-category">
                         <template v-for="(category, index) in categories">
-                            <span class="padding c-span-card margin-right" :key="index" @click="clickSearchByCategory(category.id)"><b>{{ getCategoryName(category) }}</b></span>
+                            <span 
+                                class="c-padding-span-card c-span-card c-margin-span-card"
+                                :class="category.selected ? 'selected-span-card' : ''" 
+                                :key="index" 
+                                @click="clickSearchByCategory(index, category.id)">
+                                <b>{{ getCategoryName(category) }}</b>
+                            </span>
                         </template>
                     </div>
                 </f7-col>
@@ -168,9 +174,20 @@
             getCategoryName(category){
                 return category.name.toUpperCase()
             },
-            clickSearchByCategory(category_id){
+            clickSearchByCategory(index, category_id)
+            {
+                this.selectedCategory(index)
                 this.form.category_id = category_id
                 this.initData()
+            },
+            selectedCategory(index)
+            {
+                this.categories = this.categories.map((row)=>{
+                    row.selected = false
+                    return row
+                })
+
+                this.categories[index].selected = true
             },
             async getCategories() {
 
@@ -179,7 +196,7 @@
                 await this.$http.get(`${this.returnBaseUrl()}/${this.resource}/table/categories`, this.getHeaderConfig())
                             .then(response => {
                                 this.categories = response.data
-                                this.categories.unshift({id: null, name: 'TODOS'})
+                                this.categories.unshift({id: null, name: 'TODOS', selected: false})
                             })
                             .then(() => {
                                 this.hideLoading()
