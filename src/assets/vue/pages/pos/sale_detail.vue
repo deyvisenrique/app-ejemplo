@@ -4,7 +4,19 @@
         <header-layout :title="geTitle" hrefBack="/list-items-sale/" :overwriteBackRoute="true"></header-layout>
 
         <f7-block>
-            <div class="data-table margin-bottom">
+
+            <template v-if="document_types.length > 0">
+                <f7-segmented raised>
+                    <template v-for="(row, index) in document_types">
+                        <f7-button @click="clickChangeDocumentType(row.id)" :class="form.document_type_id === row.id ? 'button-active':''">{{row.text}}</f7-button>
+                    </template>
+                </f7-segmented>
+            </template>
+            <template v-else>
+                <f7-button class="button-active">NO TIENE PERMISOS ASIGNADOS</f7-button>
+            </template>
+ 
+            <div class="data-table margin-bottom padding-top">
                 <table>
                     <thead>
                         <tr>
@@ -108,10 +120,37 @@
             await this.initData()
         },
         methods: {
+            getDocumentType(id)
+            {
+                return _.find(this.document_types, {id:id})
+            },
             getPosDocumentTypes()
             {
                 const generals = this.getStorage('generals', true)
                 return generals ? generals.pos_document_types : []
+            },
+            clickChangeDocumentType(document_type_id)
+            {
+                this.form.document_type_id = document_type_id
+            },
+            getShortDescriptionDocumentType(document_type)
+            {
+                let description = null
+
+                switch (document_type.id) 
+                {
+                    case '01':
+                        description = 'FACTURA'
+                        break
+                    case '03':
+                        description = 'BOLETA'
+                        break
+                    case '80':
+                        description = 'N. VENTA'
+                        break
+                }
+
+                return description
             },
             getDocumentTypesToButtons(document_types)
             {
@@ -129,10 +168,13 @@
 
                         if(has_permission)
                         {
+                            const text = this.getShortDescriptionDocumentType(row)
+
                             allowed_document_types.push({
                                 id: row.id,
-                                text: row.description,
+                                text: text,
                                 cssClass: 'text-align-center',
+                                description: row.description,
                             })
                         }
 
@@ -144,24 +186,30 @@
             clickPayment()
             {
                 const context = this
+                const document_type = this.getDocumentType(this.form.document_type_id)
 
-                this.showDialogConfirm({
-                    title: this.document_types.length === 0 ? 'NO TIENE PERMISOS ASIGNADOS' : 'TIPO DE COMPROBANTE',
-                    buttons: this.document_types,
-                    verticalButtons: true,
-                    onClick: function(dialog, index){
-                        context.clickOptionsButtons(dialog, index)
-                    },
-                })
+                if(!document_type) return this.showAlert('No ha seleccionado un tipo de documento, no puede continuar.')
 
-            },
-            clickOptionsButtons(dialog, index){
-
-                this.form.document_type_id = this.document_types[index].id
                 this.saveFormInStorage()
-                this.redirectRoute(`/sale-payment-pos/${this.document_types[index].text}`)
+                this.redirectRoute(`/sale-payment-pos/${document_type.description}`)
+
+                // this.showDialogConfirm({
+                //     title: this.document_types.length === 0 ? 'NO TIENE PERMISOS ASIGNADOS' : 'TIPO DE COMPROBANTE',
+                //     buttons: this.document_types,
+                //     verticalButtons: true,
+                //     onClick: function(dialog, index){
+                //         context.clickOptionsButtons(dialog, index)
+                //     },
+                // })
 
             },
+            // clickOptionsButtons(dialog, index){
+
+            //     this.form.document_type_id = this.document_types[index].id
+            //     this.saveFormInStorage()
+            //     this.redirectRoute(`/sale-payment-pos/${this.document_types[index].text}`)
+
+            // },
             saveFormInStorage()
             {
                 this.setStorage('form_sale_detail', this.form, true)
@@ -215,8 +263,13 @@
                     subtotal: 0,
                     total: 0,
                 }
- 
 
+                this.setDefaultDocumentType()
+
+            },
+            setDefaultDocumentType()
+            {
+                this.form.document_type_id = this.document_types.length > 0 ? this.document_types[0].id : null
             },
             getFormItem() 
             {
