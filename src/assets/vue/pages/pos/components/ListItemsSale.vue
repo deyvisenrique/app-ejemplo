@@ -16,11 +16,11 @@
                         </div>
                     </f7-col>
                     <f7-col width="15" class="text-align-center">
-                        <f7-button @click="clickSearchBarcode" color="bluemagenta" fill small open-panel="right" icon="fas fa-camera"></f7-button>
+                        <f7-button @click="clickSearchBarcode" color="green" fill small open-panel="right" icon="fas fa-camera"></f7-button>
                         <span class="" style="font-size: 10px;line-height: 10px !important;">BUSCAR</span>
                     </f7-col>
                     <f7-col width="15" class="text-align-center">
-                        <f7-button @click="clickCreate()" color="bluemagenta" fill small open-panel="right" icon="fas fa-plus"></f7-button>
+                        <f7-button @click="clickCreate()" color="green" fill small open-panel="right" icon="fas fa-plus"></f7-button>
                         <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
                     </f7-col>
                 </f7-row>
@@ -76,7 +76,7 @@
                                         <div class="stepper-button-plus" @click="calculateQuantity(1, index)"></div>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -90,10 +90,10 @@
                 </div>
             </f7-block>
         </f7-card>
- 
-        <f7-fab position="right-bottom" class="margin-right" color="bluemagenta" v-if="quantitySelectedRecords() > 0" @click="sendListItems">
+
+        <f7-fab position="right-bottom" class="margin-right" color="green" v-if="quantitySelectedRecords() > 0" @click="sendListItems">
             <f7-icon ios="f7:plus" aurora="f7:plus" md="material:shopping_cart" >
-                <f7-badge color="pink">
+                <f7-badge color="red">
                     {{ quantitySelectedRecords() }}
                 </f7-badge>
             </f7-icon>
@@ -151,9 +151,9 @@
             await this.getCategories()
             await this.getRecords()
             await this.events()
-        }, 
+        },
         methods: {
-            quantitySelectedRecords() 
+            quantitySelectedRecords()
             {
                 return this.getListItemsSale().length
             },
@@ -248,7 +248,7 @@
                 this.saveSelectedItems(this.records[index])
                 this.quantitySelectedRecords()
             },
-            calculateQuantity(value, index) 
+            calculateQuantity(value, index)
             {
                 let quantity = parseFloat(this.records[index].quantity)
                 let result = (quantity += parseFloat(value))
@@ -266,9 +266,9 @@
                 if(selected_records)
                 {
                     selected_records.forEach(sr_row => {
-                        
+
                         const find_item = this.findItem(sr_row.item_id)
-    
+
                         if(find_item)
                         {
                             find_item.quantity = sr_row.quantity

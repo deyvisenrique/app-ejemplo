@@ -1,9 +1,9 @@
 <template>
-<f7-page class="" color="bluemagenta">
+<f7-page class="" color="green">
 
     <header-layout title="Nota de Venta"></header-layout>
 
-    <f7-block>
+    <f7-card class="padding margin-top">
         <form class="list no-hairlines-md" id="demo-form">
             <ul>
                 <f7-row>
@@ -88,7 +88,7 @@
                         <f7-row @click="popupCustomerOpened = true">
                             <f7-col width="15" class="align-self-center">
                                 <div class="badge bg-color-white">
-                                    <f7-icon icon="fas fa-user" size="24" color="deeppurple"></f7-icon>
+                                    <f7-icon icon="fas fa-user" size="24" color="green"></f7-icon>
                                 </div>
                             </f7-col>
                             <f7-col width="75" class="text-align-left">
@@ -133,7 +133,7 @@
                 </li>
 
                 <li class="padding-vertical">
-                    <f7-button @click="popupOpened = true" fill color="blue" class="text-align-left padding-left">
+                    <f7-button @click="popupOpened = true" fill color="teal" class="text-align-left padding-left">
                         <small>
                             <f7-icon icon="fas fa-plus"></f7-icon>
                             Añadir producto
@@ -168,7 +168,7 @@
                                 </f7-button>
                             </f7-col>
                             <f7-col>
-                                <f7-button fill round small color="pink" @click="send">
+                                <f7-button fill round small color="green" @click="send">
                                     Aceptar
                                 </f7-button>
                             </f7-col>
@@ -177,7 +177,7 @@
                 </li>
             </ul>
         </form>
-    </f7-block>
+    </f7-card>
 
     <f7-popup class="demo-popup" :opened="popupOpened" @popup:closed="popupOpened = false">
         <items-form :showDialog.sync="popupOpened" ref="form_items_car" @addItemsCar="addItems"></items-form>

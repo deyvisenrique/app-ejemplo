@@ -6,7 +6,7 @@
                 <f7-icon material="close"></f7-icon>
             </f7-link>
         </f7-block>
-        <f7-block style="margin-top: 0px !important" color="bluemagenta">
+        <f7-block style="margin-top: 0px !important" color="green">
             <form class="list no-hairlines-md" id="demo-form-customer">
                 <ul>
                     <li class="item-content item-input">
@@ -94,7 +94,7 @@
                     </li>
 
                     <li class="item-content item-input">
-                        <f7-button style="width: 40%;" fill round color="pink" @click="submit">Guardar</f7-button>
+                        <f7-button style="width: 40%;" fill round color="green" @click="submit">Guardar</f7-button>
                     </li>
                 </ul>
             </form>

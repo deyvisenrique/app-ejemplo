@@ -1,5 +1,5 @@
 <template>
-    <f7-page class="" color="bluemagenta">
+    <f7-page class="bg-color-white" color="green">
 
         <header-layout title="Reporte"></header-layout>
 
@@ -133,7 +133,7 @@
             <f7-row class="padding-bottom">
                 <f7-col class="padding-bottom">
                     <h4>
-                        <i class="icon material-icons if-md">info_outline</i> 
+                        <i class="icon material-icons if-md">info_outline</i>
                         No incluye pedidos
                     </h4>
                     <x-graph-line :all-data="general.graph"></x-graph-line>
@@ -206,7 +206,7 @@
                 {
                     this.form.establishment_id = null
                 }
-                
+
             },
             changeMonth(){
                 this.getData()

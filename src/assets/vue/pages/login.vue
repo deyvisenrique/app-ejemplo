@@ -1,5 +1,5 @@
 <template>
-    <f7-page color="bluemagenta">
+    <f7-page color="green">
         <f7-block class="bg-blue-magenta no-margin-vertical padding-vertical">
             <f7-row>
                 <f7-col width="100">
@@ -17,7 +17,8 @@
             </div>
         </f7-block>
 
-        <f7-block>
+        <f7-block class="padding-top">
+            <f7-card class="padding-top padding-bottom">
             <f7-row no-gap>
                 <f7-col>
                     <form class="form-store-data" id="demo-form">
@@ -96,7 +97,7 @@
                                                     <i class="f7-icons field-icon" @click="clickShowPassword">eye</i>
                                                 </div>
                                             </div>
-                                            
+
                                         </div>
                                         <span class="custom-w20 custom-label-top-input-pw">
                                             <f7-link class="link external" color="gray" :href="internet_protocol+url+'/password/reset'" target="BLANK">¿olvidaste la contraseña?</f7-link>
@@ -109,12 +110,13 @@
                     </form>
                 </f7-col>
             </f7-row>
+            </f7-card>
         </f7-block>
 
         <f7-block class="display-flex justify-content-center">
             <f7-row tag="p">
                 <f7-col>
-                    <f7-button class="padding-horizontal" @click="login" color="pink" large fill round>Iniciar sesión</f7-button>
+                    <f7-button class="padding-horizontal" @click="login" color="green" large fill round>Iniciar sesión</f7-button>
                 </f7-col>
             </f7-row>
         </f7-block>

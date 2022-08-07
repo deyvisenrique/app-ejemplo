@@ -1,8 +1,8 @@
 <template>
-  <f7-page color="bluemagenta">
+  <f7-page color="green">
     <f7-block class="bg-blue-magenta no-margin-top elevation-9">
       <f7-block class="text-align-right no-margin-top padding-top">
-        <f7-link class="transparent panel-previous" color="white" @click="back">
+        <f7-link class="transparent panel-previous" color="green" @click="back">
           <i class="fas fa-times"></i>
         </f7-link>
       </f7-block>
@@ -15,7 +15,7 @@
         <p class="text-color-white">Cuenta</p>
       </f7-block>
     </f7-block>
-    <f7-block class="no-padding-top no-padding-horizontal">
+    <f7-card class="no-padding-top no-padding-horizontal">
       <form class="form-store-data" id="demo-form">
         <f7-list no-hairlines-md>
           <f7-list-input
@@ -61,10 +61,10 @@
           </f7-list-input>
         </f7-list>
       </form>
-    </f7-block>
+    </f7-card>
     <div class="footer">
       <f7-block>
-        <f7-button class="padding-horizontal" color="pink" @click="submit" fill round>
+        <f7-button class="padding-horizontal" color="green" @click="submit" fill round>
           Guardar
         </f7-button>
       </f7-block>

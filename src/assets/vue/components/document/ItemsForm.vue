@@ -1,5 +1,5 @@
 <template>
-<f7-page class="bg-blue-magenta" color="bluemagenta">
+<f7-page class="bg-blue-magenta" color="green">
 
     <f7-block>
         <f7-row class="display-flex align-items-center">
@@ -20,7 +20,7 @@
         </f7-row>
     </f7-block>
 
-    <f7-card class="card-100 padding no-shadow" color="bluemagenta" style="min-height: 90%">
+    <f7-card class="card-100 padding no-shadow" color="green" style="min-height: 90%">
         <f7-block style="padding:0px">
             <f7-row>
                 <f7-col width="70">
@@ -33,12 +33,12 @@
                     </div>
                 </f7-col>
                 <f7-col width="15" class="text-align-center">
-                    <f7-button @click="clickSearchBarcode" color="bluemagenta" fill small open-panel="right" icon="fas fa-camera"></f7-button>
+                    <f7-button @click="clickSearchBarcode" color="green" fill small open-panel="right" icon="fas fa-camera"></f7-button>
                     <span class="" style="font-size: 10px;line-height: 10px !important;">BUSCAR</span>
                 </f7-col>
 
                 <f7-col width="15" class="text-align-center">
-                    <f7-button @click="addForm = !addForm" color="bluemagenta" fill small open-panel="right" icon="fas fa-plus"></f7-button>
+                    <f7-button @click="addForm = !addForm" color="green" fill small open-panel="right" icon="fas fa-plus"></f7-button>
                     <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
                 </f7-col>
             </f7-row>
@@ -153,7 +153,7 @@
                     <f7-icon material="close"></f7-icon>
                 </f7-link>
             </f7-block>
-            <f7-block style="margin-top: 0px !important;" color="bluemagenta">
+            <f7-block style="margin-top: 0px !important;" color="green">
                 <form class="list no-hairlines-md" id="demo-form-item">
                     <ul>
                         <li class="item-content item-input">
@@ -201,7 +201,7 @@
                                 </div>
                             </div>
                         </li>
-                        
+
                         <f7-row>
                             <f7-col width="70">
                                 <li class="item-content item-input">
@@ -273,7 +273,7 @@
 
                         <li class="item-content item-input">
                             <div class="item-inner">
-                                <f7-button fill round color="pink" @click="submit" class="padding-horizontal">Guardar</f7-button>
+                                <f7-button fill round color="green" @click="submit" class="padding-horizontal">Guardar</f7-button>
                             </div>
                         </li>
                     </ul>
@@ -315,9 +315,9 @@
         </f7-page-content>
     </f7-sheet>
 
-    <f7-fab position="right-bottom" class="margin-right" color="bluemagenta" v-if="countCar > 0" @click="send">
+    <f7-fab position="right-bottom" class="margin-right" color="green" v-if="countCar > 0" @click="send">
         <f7-icon ios="f7:plus" aurora="f7:plus" md="material:shopping_cart" >
-            <f7-badge color="pink">
+            <f7-badge color="red">
                 {{ countCar }}
             </f7-badge>
         </f7-icon>

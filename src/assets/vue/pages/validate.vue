@@ -7,7 +7,7 @@
         <f7-col>
           <f7-button class="padding-horizontal"
             @click="openScanner"
-            color="pink"
+            color="green"
             large
             fill
             round>

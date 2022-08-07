@@ -7,7 +7,7 @@
                 <f7-link sheet-close>Cerrar</f7-link>
             </div>
         </f7-toolbar> -->
-    <f7-sheet class="demo-sheet" color="bluemagenta" :opened="showDialog" @sheet:closed="close">
+    <f7-sheet class="demo-sheet" color="green" :opened="showDialog" @sheet:closed="close">
         <f7-page-content>
             <f7-block class="text-align-right no-margin-vertical no-padding-vertical padding-top">
                 <f7-link small sheet-close class="no-margin-horizontal  text-color-gray">
@@ -37,7 +37,7 @@
                 </f7-row>
             </f7-block>
             <!-- <f7-block class="display-flex justify-content-center">
-                <f7-button style="width: 40%;" fill round color="pink" @click="sendEmail" outline>Enviar</f7-button>
+                <f7-button style="width: 40%;" fill round color="green" @click="sendEmail" outline>Enviar</f7-button>
             </f7-block> -->
         </f7-page-content>
     </f7-sheet>

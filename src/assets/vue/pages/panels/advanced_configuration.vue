@@ -1,8 +1,8 @@
 <template>
-    <f7-page class="">
+    <f7-page class="" color="green">
         <f7-block class="bg-blue-magenta no-margin-top elevation-9">
             <f7-block class="text-align-right no-margin-top padding-top">
-                <f7-link class="transparent panel-previous" color="white" @click="back">
+                <f7-link class="transparent panel-previous" color="green" @click="back">
                 <i class="fas fa-times"></i>
                 </f7-link>
             </f7-block>

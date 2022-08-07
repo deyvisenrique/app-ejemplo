@@ -1,5 +1,5 @@
 <template>
-  <f7-page class="bg-blue-magenta" color="bluemagenta">
+  <f7-page class="bg-blue-magenta" color="green">
     <f7-block class="">
       <f7-row class="display-flex align-items-center">
         <f7-col width="20" class="text-color-white">
@@ -16,7 +16,7 @@
       </f7-row>
     </f7-block>
 
-    <f7-card class="card-100 padding no-shadow" color="bluemagenta" style="min-height: 90%">
+    <f7-card class="card-100 padding no-shadow" color="green" style="min-height: 90%">
       <f7-block style="padding:0px">
         <div class="searchbar searchbar-inline padding">
           <div class="searchbar-input-wrap">
@@ -55,7 +55,7 @@
         <f7-block class="text-align-right no-margin-vertical no-padding-vertical">
           <f7-link sheet-close class="no-padding text-color-gray"><f7-icon material="close"></f7-icon></f7-link>
         </f7-block>
-        <f7-block style="margin-top: 0px !important;" color="bluemagenta">
+        <f7-block style="margin-top: 0px !important;" color="green">
           <form class="list no-hairlines-md" id="demo-form-customer">
             <ul>
               <li class="item-content item-input">
@@ -148,7 +148,7 @@
               </li>
 
               <li class="item-content item-input">
-                <f7-button fill round color="pink" class="padding-horizontal" @click="submit">Guardar</f7-button>
+                <f7-button fill round color="green" class="padding-horizontal" @click="submit">Guardar</f7-button>
               </li>
             </ul>
           </form>

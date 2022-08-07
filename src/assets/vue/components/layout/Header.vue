@@ -36,7 +36,7 @@
                 </template>
 
             </f7-col>
-            <f7-col width="80" class="text-color-white text-align-center custom-title-form">
+            <f7-col width="80" class="text-align-center custom-title-form">
                 {{ title }}
             </f7-col>
             <f7-col width="10"></f7-col>
@@ -92,7 +92,7 @@
                 return this.redirectRoute(this.hrefBackHome)
             },
             checkAppLogo(){
-                
+
                 const url_logo = this.getStorage('url_logo')
                 if (url_logo) this.logo = url_logo
 

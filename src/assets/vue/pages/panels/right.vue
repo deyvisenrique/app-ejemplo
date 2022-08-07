@@ -21,8 +21,8 @@
                             </f7-icon>
                         </a>
                     </p>
-                    
-                    <p v-show="notifications.documents_regularize_shipping > 0"> 
+
+                    <p v-show="notifications.documents_regularize_shipping > 0">
                         <a href="#" class="link navbar-tooltip-regularize-shipping text-color-white">
                             <f7-icon material="warning" size="22px">
                                 <span class="badge color-red">{{ notifications.documents_regularize_shipping }}</span>
@@ -37,7 +37,7 @@
             <p class="text-color-white">{{user}} <br> {{email}}</p>
         </f7-block>
     </f7-block>
-    <f7-block class="bg-color-white margin-left">
+    <f7-block class="margin-left">
 
         <template v-if="check_configuration">
             <f7-link @click="go('configuration')" color="black" class="display-block margin-vertical">
@@ -113,7 +113,7 @@
 
     <div class="footer bg-color-white">
         <f7-block>
-            <f7-button class="padding-horizontal" @click="logout" color="pink" fill round>
+            <f7-button class="padding-horizontal" @click="logout" color="green" fill round>
                 Cerrar sesión
             </f7-button>
         </f7-block>
@@ -162,7 +162,7 @@
             this.events()
             console.log("isPosMode",this.isPosMode())
         },
-        computed: { 
+        computed: {
         },
         methods: {
             checkPermissions(value){
@@ -178,7 +178,7 @@
                 this.$eventHub.$on('updatePermissions', (permissions) => {
                     this.checkConfiguration(permissions)
                 })
-                
+
             },
             checkConfiguration(permissions){
                 this.check_configuration = this.hasPermissionInModule('configuration', permissions)
@@ -186,11 +186,11 @@
             getNotifications(){
 
                 if(!this.getStorage('api_token')) return
-                
+
                 this.showLoading()
                 this.$http.get(`${this.returnBaseUrl()}/documents/notifications`, this.getHeaderConfig())
                     .then(response => {
-                        
+
                         if(response.data.success)
                         {
                             this.notifications = response.data.data
@@ -205,7 +205,7 @@
                     })
             },
             createTooltips(){
-                
+
                 this.$f7.tooltip.create({
                     targetEl: '.navbar-tooltip-regularize-shipping',
                     text: 'Comprobantes pendientes de rectificación'

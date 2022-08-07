@@ -1,12 +1,13 @@
 <template>
-<f7-page>
+<f7-page color="green">
     <header-layout title="Listado de comprobantes"></header-layout>
 
     <f7-block class="display-flex justify-content-space-around no-margin-horizontal no-padding-horizontal">
         <f7-button
             :outline="!activeClass.invoices"
             small
-            :color="activeClass.invoices ? 'pink text-color-white' : 'gray'"
+            :color="activeClass.invoices ? 'green' : 'gray'"
+            :fill="activeClass.invoices"
             href="#tab-invoices"
             class="tab-link"
             @click="show('invoices')"
@@ -16,7 +17,8 @@
         <f7-button
             :outline="!activeClass.tickets"
             small
-            :color="activeClass.tickets ? 'pink text-color-white' : 'gray'"
+            :color="activeClass.tickets ? 'green' : 'gray'"
+            :fill="activeClass.tickets"
             href="#tab-tickets"
             class="tab-link"
             @click="show('tickets')"
@@ -26,7 +28,8 @@
         <f7-button
             :outline="!activeClass.notes"
             small
-            :color="activeClass.notes ? 'pink text-color-white' : 'gray'"
+            :color="activeClass.notes ? 'green' : 'gray'"
+            :fill="activeClass.notes"
             href="#tab-notes"
             class="tab-link"
             @click="show('notes')"
@@ -36,7 +39,8 @@
         <f7-button
             :outline="!activeClass.orderNotes"
             small
-            :color="activeClass.orderNotes ? 'pink text-color-white' : 'gray'"
+            :color="activeClass.orderNotes ? 'green' : 'gray'"
+            :fill="activeClass.orderNotes"
             href="#tab-order-notes"
             class="tab-link"
             @click="show('order_notes')"
@@ -46,7 +50,8 @@
         <f7-button
             :outline="!activeClass.purchases"
             small
-            :color="activeClass.purchases ? 'pink text-color-white' : 'gray'"
+            :color="activeClass.purchases ? 'green' : 'gray'"
+            :fill="activeClass.purchases"
             href="#tab-purchases"
             class="tab-link"
             @click="show('purchases')"
@@ -56,7 +61,8 @@
         <f7-button
             :outline="!activeClass.quotations"
             small
-            :color="activeClass.quotations ? 'pink text-color-white' : 'gray'"
+            :color="activeClass.quotations ? 'green' : 'gray'"
+            :fill="activeClass.quotations"
             href="#tab-quotations"
             class="tab-link"
             @click="show('quotations')"
@@ -72,13 +78,13 @@
 
                     <f7-block>
                         <f7-row>
-                            <f7-col width="75">
+                            <f7-col width="70">
                                 <f7-searchbar placeholder="Buscar" :value="search_input" @input="search_input = $event.target.value" :clear-button="true" ></f7-searchbar>
                             </f7-col>
-                            
+
                             <f7-col width="25">
-                                <div class="item-content item-input no-padding-horizontal">
-                                    <div class="item-inner no-padding-horizontal">
+                                <div class="item-content item-input">
+                                    <div class="item-inner">
 
                                         <div class="item-input-wrap input-dropdown-wrap padding-top">
                                             <select v-model="form_search.state_type_id" @change="changeStateType()">
@@ -188,7 +194,7 @@
                             <f7-col width="75">
                                 <f7-searchbar placeholder="Buscar" :value="search_input" @input="search_input = $event.target.value" :clear-button="true" ></f7-searchbar>
                             </f7-col>
-                            
+
                             <f7-col width="25">
                                 <div class="item-content item-input no-padding-horizontal">
                                     <div class="item-inner no-padding-horizontal">
@@ -253,13 +259,13 @@
                                         </f7-col>
                                     </f7-row>
                                     <f7-row>
-                                        
+
                                         <f7-col>
                                             <f7-button size="35" icon @click="clickToPrint(item, 'document')" color="purple">
                                                 <f7-icon size="18" class="icon fas fa-print"></f7-icon>
                                             </f7-button>
                                         </f7-col>
-                                        
+
                                         <f7-col>
                                             <f7-button size="35" @click="clickPreviewPdf(item, 'document')" color="blue">
                                                 <f7-icon size="18" class="icon fas fa-search"></f7-icon>
@@ -554,7 +560,7 @@
                         </f7-list-item>
                     </f7-list>
                 </div>
-                
+
                 <div id="tab-quotations" class="page-content tab">
 
 
@@ -619,7 +625,7 @@
                                             <f7-button @click="email(item.id, 'quotations', item.customer_email)" color="purple">
                                                 <f7-icon class="icon fas fa-envelope"></f7-icon>
                                             </f7-button>
-                                        </f7-col> 
+                                        </f7-col>
                                     </f7-row>
                                 </f7-block>
                             </span>
@@ -778,7 +784,7 @@
                 this.getDataDocuments()
             },
             getTables(){
-                
+
                 this.showLoading()
 
                 this.$http.get(`${this.returnBaseUrl()}/documents/tables`,  this.getHeaderConfig())
@@ -841,7 +847,7 @@
                     case 'document':
                         this.printPdfDocument(record.external_id)
                         break;
-                
+
                 }
 
             },
@@ -952,20 +958,20 @@
                             keyCodes: null
                         }
                     ],
-                    onClick(dialog, e) 
+                    onClick(dialog, e)
                     {
-                        if (e == 1) 
+                        if (e == 1)
                         {
                             let number = (dialog.$el.find('.dialog-wasap').val()).toString()
 
-                            if (number.length == 9) 
+                            if (number.length == 9)
                             {
                                 let link_pdf = (print_a4) ? print_a4 : `${localStorage.api_url}/print/document/${external_id}/a4`;
                                 let message = `Hola, revisa tu comprobante ingresando a este link ${link_pdf}`;
                                 let message_ = message.split(" ").join("%20");
                                 window.open(`https://wa.me/51${number}/?text=${message_}`, "_system");
-                            } 
-                            else 
+                            }
+                            else
                             {
                                 self.$f7.dialog.alert(
                                     `Ingrese correctamente los dígitos`,
@@ -980,11 +986,11 @@
             // getLinkPdf(document_type, print_a4 = null){
 
             //     let link_pdf = null
-                
+
             //     switch (document_type) {
             //         case 'value':
             //             break;
-                
+
             //         default:
             //             link_pdf = (print_a4) ? print_a4 : `${localStorage.api_url}/print/document/${external_id}/a4`
             //             break;
@@ -1036,9 +1042,9 @@
                 self.form_email.id = id;
                 //  this.sendMailOpen = true;
                 self.$f7.dialog.prompt(
-                    "Ingresa el Email", 
+                    "Ingresa el Email",
                     "", //titulo
-                    function (value) 
+                    function (value)
                     {
                         if (value) {
                             self.form_email.email = value;
