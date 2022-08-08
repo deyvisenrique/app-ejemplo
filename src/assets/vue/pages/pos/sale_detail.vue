@@ -24,14 +24,18 @@
                             <th class="label-cell">Producto</th>
                             <th class="label-cell">P. Unitario</th>
                             <th class="numeric-only text-align-center">Cantidad</th>
+                            <th class="numeric-only">M. Descuento</th>
                             <th class="numeric-only">Total</th>
+                            <th class="numeric-only"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(row, index) in form.items" :key="index">
                             <td class="numeric-only">{{ index + 1 }}</td>
                             <td class="label-cell">{{ row.item.description }}</td>
-                            <td class="numeric-only">{{ row.unit_price }}</td>
+                            <td class="numeric-only">
+                                <input class="input-quantity-table" required validate v-model="row.unit_price" type="number"  @change="changeUnitPrice(index)" />
+                            </td>
                             <td class="numeric-only padding">
                                 
                                 <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
@@ -43,7 +47,15 @@
                                 </div>
 
                             </td>
-                            <td class="numeric-only">{{ row.total }}</td>
+                            <td class="numeric-only">
+                                <input class="input-quantity-table" required validate v-model="row.input_discount" type="number"  @change="changeInputDiscount(index)" />
+                            </td>
+                            <td class="numeric-only">{{ row.total }}</td> 
+                            <td>
+                                <a @click="clickDelete(index)">
+                                    <f7-icon ios="f7:delete" color="red" aurora="f7:delete" md="material:delete" ></f7-icon>
+                                </a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -106,7 +118,8 @@
                 },
                 list_items_sale: [],
                 resource: 'documents',
-                pos_document_types: []
+                pos_document_types: [],
+                item_discount_types: [],
             }
         },
         computed: {
@@ -183,8 +196,37 @@
 
                 return allowed_document_types
             },
+            validateData()
+            {
+                if(this.form.items.length === 0) return this.generalResponse(false, 'Debe agregar productos.')
+
+                let items_price_zero = 0
+                let items_quantity_zero = 0
+                let items_total_zero = 0
+
+                this.form.items.forEach(row => {
+
+                    if(!row.unit_price || isNaN(row.unit_price) || parseFloat(row.unit_price) <= 0) items_price_zero++
+                    if(!row.quantity || isNaN(row.quantity) || parseFloat(row.quantity) <= 0) items_quantity_zero++
+                    if(parseFloat(row.total) <= 0) items_total_zero++
+
+                })
+
+                if(items_price_zero > 0) return this.generalResponse(false, 'El precio unitario de venta de los productos debe ser mayor a 0, no puede continuar.')
+
+                if(items_quantity_zero > 0) return this.generalResponse(false, 'La cantidad vendida de los productos debe ser mayor a 0, no puede continuar.')
+
+                if(items_total_zero > 0) return this.generalResponse(false, 'El total por línea debe ser mayor a 0, no puede continuar.')
+
+                return this.generalResponse()
+            },
             clickPayment()
             {
+                // validaciones
+                const validate_data = this.validateData()
+                if(!validate_data.success) return this.showAlert(validate_data.message)
+                // validaciones
+
                 const context = this
                 const document_type = this.getDocumentType(this.form.document_type_id)
 
@@ -193,23 +235,46 @@
                 this.saveFormInStorage()
                 this.redirectRoute(`/sale-payment-pos/${document_type.description}`)
 
-                // this.showDialogConfirm({
-                //     title: this.document_types.length === 0 ? 'NO TIENE PERMISOS ASIGNADOS' : 'TIPO DE COMPROBANTE',
-                //     buttons: this.document_types,
-                //     verticalButtons: true,
-                //     onClick: function(dialog, index){
-                //         context.clickOptionsButtons(dialog, index)
-                //     },
-                // })
+            },
+            changeInputDiscount(index)
+            {
+                let input_discount = parseFloat(this.form.items[index].input_discount)
+
+                if(input_discount < 0)
+                {
+                    input_discount = 0
+                    this.showAlert('El monto de descuento debe ser mayor a 0.')
+                }
+
+                // inicializar variables descuento
+                const item_sale = this.findItemInListSale(this.form.items[index].item_id)
+                item_sale.discounts = []
+                item_sale.input_discount = input_discount
+
+
+                // agregar descuento
+                if(input_discount > 0)
+                {
+                    const discount_type_id = '00'
+                    const discount_type = _.find(this.item_discount_types, { id : discount_type_id})
+                    
+                    item_sale.discounts.push({
+                        discount_type_id: discount_type_id,
+                        discount_type: discount_type,
+                        description: discount_type.description,
+                        percentage: input_discount,
+                        factor: 0,
+                        amount: 0,
+                        base: 0,
+                        is_amount: true
+                    })
+                }
+            
+                // procesar descuento o inicializar valores
+                this.form.items[index] = this.calculateDataItem(item_sale)
+                this.calculateTotal()
 
             },
-            // clickOptionsButtons(dialog, index){
-
-            //     this.form.document_type_id = this.document_types[index].id
-            //     this.saveFormInStorage()
-            //     this.redirectRoute(`/sale-payment-pos/${this.document_types[index].text}`)
-
-            // },
             saveFormInStorage()
             {
                 this.setStorage('form_sale_detail', this.form, true)
@@ -220,6 +285,17 @@
                 this.redirectRoute('/list-items-sale/')
 
             },
+            clickDelete(index)
+            {
+                // se elimina item del listado de ventas, registra en storage
+                _.remove(this.list_items_sale, {item_id : this.form.items[index].item_id})
+                this.saveListItemsSale()
+
+                // se elimina item del form para facturacion
+                this.form.items.splice(index, 1)
+                this.calculateTotal()
+
+            },
             async getTables() {
 
                 this.showLoading()
@@ -228,6 +304,7 @@
                             .then(response => {
                                 this.document_types = this.getDocumentTypesToButtons(response.data.document_types)
                                 this.affectation_igv_types = response.data.affectation_igv_types
+                                this.item_discount_types = response.data.item_discount_types
                             })
                             .then(() => {
                                 this.hideLoading()
@@ -295,6 +372,7 @@
                     input_description: null,
                     name_product_pdf: null,
                     presentation: null,
+                    input_discount: 0,
                 }
             },
             getTransformDataItem(data)
@@ -309,6 +387,8 @@
                 let form_item = this.getFormItem()
 
                 form_item.item = row
+                console.log("form_item.item.sale_unit_price", form_item.item.sale_unit_price)
+
                 form_item.quantity = row.quantity
                 form_item.unit_price_value = form_item.item.sale_unit_price
 
@@ -319,6 +399,7 @@
 
                 form_item.unit_price = unit_price
                 form_item.item.unit_price = unit_price
+                console.log("unit_price", unit_price)
 
 
                 form_item.affectation_igv_type = _.find(this.affectation_igv_types, {
@@ -326,6 +407,19 @@
                 })
 
                 form_item.input_description = row.description
+
+                // data descuentos
+                if(row.discounts)
+                {
+                    if(row.discounts.length > 0)
+                    {
+                        form_item.discounts = row.discounts
+                        form_item.input_discount = row.input_discount
+                        console.log("form_item.discounts", form_item.discounts)
+                        console.log("row.input_discount", row.input_discount)
+                    }
+                }
+                // data descuentos
 
                 return calculateRowItem(form_item, 'PEN', 1)
 
@@ -342,6 +436,27 @@
             calculateTotal()
             {
                 this.generalCalculateTotal() //definido en mixin operations
+            },
+            findItemInListSale(item_id)
+            {
+                return _.find(this.list_items_sale, {item_id : item_id})
+            },
+            changeUnitPrice(index)
+            {
+                const unit_price = parseFloat(this.form.items[index].unit_price)
+
+                if(unit_price <= 0)
+                {
+                    return this.showAlert('El precio unitario debe ser mayor a 0.')
+                }
+
+                const item_sale = this.findItemInListSale(this.form.items[index].item_id)
+                item_sale.sale_unit_price = unit_price
+
+                this.form.items[index] = this.calculateDataItem(item_sale)
+                this.calculateTotal()
+                this.saveListItemsSale()
+
             },
             calculateQuantity(value, index) 
             {
@@ -374,7 +489,7 @@
             calculateQuantityItem(index, quantity)
             {
                 
-                const item_sale = _.find(this.list_items_sale, {item_id : this.form.items[index].item_id})
+                const item_sale = this.findItemInListSale(this.form.items[index].item_id)
                 item_sale.quantity = quantity
 
                 this.form.items[index] = this.calculateDataItem(item_sale)
@@ -386,10 +501,14 @@
             {
                 const quantity = this.form.items[index].quantity
 
-                const item_sale = _.find(this.list_items_sale, {item_id: this.form.items[index].item_id})
+                const item_sale = this.findItemInListSale(this.form.items[index].item_id)
                 
                 item_sale.quantity = parseFloat(quantity)
 
+                this.saveListItemsSale()
+            },
+            saveListItemsSale()
+            {
                 this.setStorage('list_items_sale', this.list_items_sale, true)
             },
         }

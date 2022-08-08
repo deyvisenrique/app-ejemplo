@@ -27,7 +27,17 @@
             </f7-block>
 
             <f7-row class="padding-horizontal">
-                <f7-col width="100">
+
+                <f7-col width="10">
+                    <template v-if="form.favorite == 1">
+                        <span class="padding-top margin-top material-icons text-color-purple" @click="clickFavorite">favorite</span>
+                    </template>
+                    <template v-else>
+                        <span class="padding-top margin-top material-icons text-color-purple" @click="clickFavorite">favorite_border</span>
+                    </template>
+                </f7-col>
+
+                <f7-col width="90">
                     <div class="c-horizontal-scroll c-h-50 mp-div-category">
                         <template v-for="(category, index) in categories">
                             <span 
@@ -61,8 +71,8 @@
 
                                             <span class="">
                                                 <div class="item-content no-padding-left">
-                                                    <div class="item-media">{{ row.currency_type_symbol }}</div>
-                                                    <input required validate v-model="row.sale_unit_price" type="number" />
+                                                    <div class="item-media">{{ row.currency_type_symbol }} {{row.sale_unit_price}}</div>
+                                                    <!-- <input required validate v-model="row.sale_unit_price" type="number" /> -->
                                                 </div>
                                             </span>
 
@@ -203,6 +213,11 @@
                             })
 
             },
+            clickFavorite()
+            {
+                this.form.favorite = (this.form.favorite === 1) ? 0 : 1
+                this.initData()
+            },
             validateData()
             {
                 let items_price_zero = 0
@@ -306,6 +321,7 @@
                         if(find_item)
                         {
                             find_item.quantity = sr_row.quantity
+                            find_item.sale_unit_price = sr_row.sale_unit_price
                         }
                     })
                 }
@@ -366,6 +382,7 @@
                     input : null,
                     search_by_barcode : 0,
                     category_id: null,
+                    favorite : 0,
                 }
             },
             async pullToRefresh(e, done){

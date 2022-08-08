@@ -20,39 +20,6 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
         unit_price = unit_price * exchange_rate_sale;
     }
 
-    // unit_price = _.round(unit_price, 4);
-
-    // $table->increments('id');
-    // $table->unsignedInteger('document_id');
-    // $table->unsignedInteger('item_id');
-    // $table->json('item');
-    // $table->integer('quantity');
-    // $table->decimal('unit_value', 12, 2);
-    //
-    // $table->char('affectation_igv_type_id', 2);
-    // $table->decimal('total_base_igv', 12, 2);
-    // $table->decimal('percentage_igv', 12, 2);
-    // $table->decimal('total_igv', 12, 2);
-    //
-    // $table->char('system_isc_type_id', 2)->nullable();
-    // $table->decimal('total_base_isc', 12, 2)->default(0);
-    // $table->decimal('percentage_isc', 12, 2)->default(0);
-    // $table->decimal('total_isc', 12, 2)->default(0);
-    //
-    // $table->decimal('total_base_other_taxes', 12, 2)->default(0);
-    // $table->decimal('percentage_other_taxes', 12, 2)->default(0);
-    // $table->decimal('total_other_taxes', 12, 2)->default(0);
-    // $table->decimal('total_taxes', 12, 2);
-    //
-    // $table->char('price_type_id', 2);
-    // $table->decimal('unit_price', 12, 2);
-    //
-    // $table->decimal('total_value', 12, 2);
-    // $table->decimal('total', 12, 2);
-    //
-    // $table->json('attributes')->nullable();
-    // $table->json('charges')->nullable();
-    // $table->json('discounts')->nullable();
 
     let row = {
         item_id: row_old.item.id,
@@ -85,7 +52,8 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
         charges: row_old.charges,
         discounts: row_old.discounts,
         input_description: row_old.input_description,
-        name_product_pdf: null
+        name_product_pdf: null,
+        input_discount: row_old.input_discount,
     };
 
     let percentage_igv = 18
@@ -104,58 +72,63 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
     /* Discounts */
     let discount_base = 0
     let discount_no_base = 0
-    // row.discounts.forEach((discount, index) => {
-    //     discount.percentage = parseFloat(discount.percentage)
-    //     discount.factor = discount.percentage / 100
-    //     discount.base = _.round(total_value_partial, 2)
-    //     discount.amount = _.round(discount.base * discount.factor, 2)
-    //     if (discount.discount_type.base) {
-    //         discount_base += discount.amount
-    //     } else {
-    //         discount_no_base += discount.amount
-    //     }
-    //     row.discounts.splice(index, discount)
-    // })
-
+    
     row.discounts.forEach((discount, index) => {
 
-        if(discount.is_amount){
+        if (discount.is_amount) 
+        {
+            if (discount.discount_type.base) 
+            {
+                discount.base = _.round(total_value_partial, 2)
 
-            discount.base = _.round(total_value_partial, 2)            
-            //amount and percentage are equals in input
-            discount.amount = _.round(discount.percentage, 2)
-            
-            discount.percentage =  _.round(100 * (parseFloat(discount.amount) / parseFloat(discount.base)),2)
+                //amount and percentage are equals in input
+                discount.amount = _.round(discount.percentage, 2)
 
-            discount.factor = _.round(discount.percentage / 100, 2)
+                discount.percentage = _.round(100 * (parseFloat(discount.amount) / parseFloat(discount.base)), 5)
 
-            if (discount.discount_type.base) {
+                discount.factor = _.round(discount.percentage / 100, 5)
+
                 discount_base += discount.amount
-            } else {
-                discount_no_base += discount.amount
-            }
 
-        }else{
+            } 
+            else 
+            {
+                let aux_total_line = row.unit_price * row.quantity
 
-            discount.percentage = parseFloat(discount.percentage)
-            discount.factor = discount.percentage / 100
-            discount.base = _.round(total_value_partial, 2)
-            discount.amount = _.round(discount.base * discount.factor, 2)
-            if (discount.discount_type.base) {
-                discount_base += discount.amount
-            } else {
-                discount_no_base += discount.amount
+                discount.base = _.round(aux_total_line, 2)
+
+                //amount and percentage are equals in input
+                discount.amount = _.round(discount.percentage, 2)
+                discount.percentage = _.round(100 * (parseFloat(discount.amount) / parseFloat(discount.base)), 2)
+                discount.factor = _.round(discount.percentage / 100, 5)
             }
 
         }
-        
+        else 
+        {
+            if (discount.discount_type.base) 
+            {
+                discount.percentage = parseFloat(discount.percentage)
+                discount.factor = discount.percentage / 100
+                discount.base = _.round(total_value_partial, 2)
+                discount.amount = _.round(discount.base * discount.factor, 2)
+                discount_base += discount.amount
+
+            } 
+            else 
+            {
+                let aux_total_line = row.unit_price * row.quantity
+                discount.factor = _.round(discount.percentage / 100, 5)
+                discount.amount = _.round(aux_total_line * discount.factor, 2)
+                discount.base = _.round(aux_total_line, 2)
+            }
+        }
+
         row.discounts.splice(index, discount)
     })
 
     // console.log('total base discount:'+discount_base)
     // console.log('total no base discount:'+discount_no_base)
-
-
 
 
     /* Charges */
@@ -207,6 +180,28 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
     row.total_igv =  _.round(total_igv, 2)
     row.total_taxes = _.round(total_taxes, 2)
     row.total = _.round(total, 2)
+
+    
+    // descuentos, se modifica precio unitario y total descuentos
+    if (row.discounts.length > 0) 
+    {
+        let sum_discount_no_base = 0
+        let sum_discount_base = 0
+
+        row.discounts.forEach(discount => {
+            sum_discount_no_base += (discount.discount_type_id == '01') ? discount.amount : 0
+            sum_discount_base += (discount.discount_type_id == '00') ? discount.amount : 0
+        })
+
+        //obs 4287
+        // monto dscto que no afecta a la base segun fila 180, hoja factura2_0 excel validaciones (20210902)
+        row.unit_price = _.round((total_value + total_taxes - sum_discount_no_base) / row.quantity, 6)
+
+        let total_discounts = sum_discount_no_base + sum_discount_base;
+        row.total_discount = _.round(total_discounts, 2)
+    }
+    // descuentos
+
 
     if (row.affectation_igv_type.free) {
         row.price_type_id = '02'
