@@ -78,6 +78,9 @@ export const general_functions = {
                 print_format_pdf: 'ticket',
                 printer_name: null,
                 direct_print: false,
+                direct_print: false,
+                default_document_type: '01',
+                // number_columns_list_items_sale: 2,
             }
 
         },
@@ -321,8 +324,12 @@ export const operations = {
             let total_value = 0
             let total = 0
             let total_plastic_bag_taxes = 0
+            let total_discount = 0
 
             this.form.items.forEach(row => {
+
+                total_discount += parseFloat(row.total_discount)
+
                 if (row.affectation_igv_type_id === "10") {
                     total_taxed += parseFloat(row.total_value)
                 }
@@ -348,6 +355,7 @@ export const operations = {
                 total_plastic_bag_taxes += parseFloat(row.total_plastic_bag_taxes)
             })
 
+            this.form.total_discount = _.round(total_discount, 2)
             this.form.total_exportation = _.round(total_exportation, 2)
             this.form.total_taxed = _.round(total_taxed, 2)
             this.form.total_exonerated = _.round(total_exonerated, 2)

@@ -168,7 +168,10 @@
         computed: { 
             showBlockFooter()
             {
-                return this.check_is_pos_mode && this.getAllPermissions().length > 5
+                const all_permissions = this.getAllPermissions()
+                const check_all_permissions = all_permissions ? all_permissions : []
+                
+                return this.check_is_pos_mode && check_all_permissions.length > 5
             }
         },
         methods: {

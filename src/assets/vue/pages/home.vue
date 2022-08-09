@@ -247,14 +247,16 @@
         methods: {
             checkDirectPrint()
             {
-                const configuration = this.getInitialConfiguration()
-
-                if(this.isAllowedDirectPrint(configuration))
+                if(this.is_pos_mode)
                 {
-                    this.printerDisconnect(configuration.printer_name)
-                    this.printerConnect(configuration.printer_name)
+                    const configuration = this.getInitialConfiguration()
+    
+                    if(this.isAllowedDirectPrint(configuration))
+                    {
+                        this.printerDisconnect(configuration.printer_name)
+                        this.printerConnect(configuration.printer_name)
+                    }
                 }
-
             },
             setInitialLogo(){
 

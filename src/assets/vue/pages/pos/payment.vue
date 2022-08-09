@@ -450,10 +450,14 @@
             },
             sendInvoice()
             {
+                // console.log(this.getFormDocument())
+                // return
+
                 const valid = this.validate()
                 if (!valid) return
 
                 this.showLoading()
+
 
                 this.$http
                     .post(`${this.returnBaseUrl()}/${this.resource}`, this.getFormDocument(), this.getHeaderConfig())
@@ -485,6 +489,7 @@
             },
             getFormDocument() {
 
+                const context = this
                 const series = _.find(this.series, {id : this.form.series_id})
 
                 return {
@@ -508,6 +513,7 @@
                         total_igv: this.form.total_igv,
                         total_impuestos: this.form.total_taxes,
                         total_valor: this.form.total_value,
+                        total_descuentos: this.form.total_discount ? this.form.total_discount : 0,
                         total_venta: this.form.total
                     },
                     items: this.form.items.map(x => {
@@ -528,12 +534,34 @@
                             total_impuestos: x.total_taxes,
                             total_valor_item: x.total_value,
                             total_item: x.total,
+                            total_descuentos: x.total_discount ? x.total_discount : 0,
+                            descuentos: context.getDiscountsDocument(x)
                             // nombre_producto_pdf: x.name_product_pdf,
                         };
                     }),
                     pagos: this.getFormPaymentDocument(),
                     cuotas: this.getFormFee()
                 };
+            },
+            getDiscountsDocument(row)
+            {
+                if(row.discounts)
+                {
+                    if(row.discounts.length > 0)
+                    {
+                        return row.discounts.map((discount) => {                            
+                            return {
+                                codigo: discount.discount_type_id,
+                                descripcion: discount.description,
+                                factor: discount.factor,
+                                monto: discount.amount,
+                                base: discount.base,
+                            }
+                        })
+                    }
+                }
+
+                return []
             },
             getFormPaymentDocument()
             {

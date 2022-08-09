@@ -67,10 +67,12 @@
                         <f7-col>
                             <h3>OP. Gravada</h3>
                             <h3>IGV</h3>
+                            <h3>Descuentos</h3>
                         </f7-col>
                         <f7-col class="text-align-right">
                             <h3>{{currency_type.symbol}} {{form.total_taxed}}</h3>
                             <h3>{{currency_type.symbol}} {{form.total_igv}}</h3>
+                            <h3>{{currency_type.symbol}} {{form.total_discount}}</h3>
                         </f7-col>
                     </f7-row>
                 </f7-block>
@@ -120,6 +122,7 @@
                 resource: 'documents',
                 pos_document_types: [],
                 item_discount_types: [],
+                configuration: {},
             }
         },
         computed: {
@@ -128,11 +131,15 @@
             }
         },
         async created() {
+            await this.loadConfiguration()
             await this.getTables()
             await this.initForm()
             await this.initData()
         },
         methods: {
+            loadConfiguration(){
+                this.configuration = this.getInitialConfiguration()
+            },
             getDocumentType(id)
             {
                 return _.find(this.document_types, {id:id})
@@ -251,12 +258,13 @@
                 item_sale.discounts = []
                 item_sale.input_discount = input_discount
 
-
                 // agregar descuento
                 if(input_discount > 0)
                 {
                     const discount_type_id = '00'
                     const discount_type = _.find(this.item_discount_types, { id : discount_type_id})
+
+                    if(!discount_type) this.showAlert('No se ubicó el tipo de descuento, verifique que el servicio en el facturador se encuentre disponible.')
                     
                     item_sale.discounts.push({
                         discount_type_id: discount_type_id,
@@ -273,6 +281,7 @@
                 // procesar descuento o inicializar valores
                 this.form.items[index] = this.calculateDataItem(item_sale)
                 this.calculateTotal()
+                this.saveListItemsSale()
 
             },
             saveFormInStorage()
@@ -338,6 +347,7 @@
                     total_value: 0,
                     total_taxes: 0,
                     subtotal: 0,
+                    total_discount: 0,
                     total: 0,
                 }
 
@@ -345,6 +355,17 @@
 
             },
             setDefaultDocumentType()
+            {
+                if(this.configuration.default_document_type)
+                {
+                    this.form.document_type_id = (_.some(this.document_types, {id : this.configuration.default_document_type})) ? this.configuration.default_document_type : this.setInitialDefaultDocumentType()
+                }
+                else
+                {
+                    this.setInitialDefaultDocumentType()
+                }
+            },
+            setInitialDefaultDocumentType()
             {
                 this.form.document_type_id = this.document_types.length > 0 ? this.document_types[0].id : null
             },
@@ -380,14 +401,13 @@
                 return data.map(row => {
                     return this.calculateDataItem(row)
                 })
-
             },
             calculateDataItem(row)
             {
                 let form_item = this.getFormItem()
 
                 form_item.item = row
-                console.log("form_item.item.sale_unit_price", form_item.item.sale_unit_price)
+                // console.log("form_item.item.sale_unit_price", form_item.item.sale_unit_price)
 
                 form_item.quantity = row.quantity
                 form_item.unit_price_value = form_item.item.sale_unit_price
@@ -399,7 +419,7 @@
 
                 form_item.unit_price = unit_price
                 form_item.item.unit_price = unit_price
-                console.log("unit_price", unit_price)
+                // console.log("unit_price", unit_price)
 
 
                 form_item.affectation_igv_type = _.find(this.affectation_igv_types, {
@@ -411,12 +431,14 @@
                 // data descuentos
                 if(row.discounts)
                 {
-                    if(row.discounts.length > 0)
+                    // se maneja solo 1 dscto por item
+                    if(row.discounts.length === 1)
                     {
                         form_item.discounts = row.discounts
                         form_item.input_discount = row.input_discount
-                        console.log("form_item.discounts", form_item.discounts)
-                        console.log("row.input_discount", row.input_discount)
+
+                        //se asigna monto de descuento al campo "percentage", ya que este se usa para calculos en functions
+                        form_item.discounts[0].percentage = row.input_discount 
                     }
                 }
                 // data descuentos

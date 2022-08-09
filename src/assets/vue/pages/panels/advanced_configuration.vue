@@ -17,14 +17,17 @@
         </f7-block>
         <f7-block class="no-padding-horizontal">
             <f7-list>
-                <f7-list-item title="Imagen en productos">
-                    <template #after>
-                        <label class="toggle toggle-init color-blue">
-                            <input type="checkbox" v-model="form.show_image_item" @change="submit"/>
-                            <span class="toggle-icon"></span>
-                        </label>
-                    </template>
-                </f7-list-item>
+                <template v-if="!check_is_pos_mode">
+                    <f7-list-item title="Imagen en productos">
+                        <template #after>
+                            <label class="toggle toggle-init color-blue">
+                                <input type="checkbox" v-model="form.show_image_item" @change="submit"/>
+                                <span class="toggle-icon"></span>
+                            </label>
+                        </template>
+                    </f7-list-item>
+                </template>
+
                 <f7-list-item smart-select :smart-select-params="{openIn: 'popover'}">
                     <template #title>
                         Formato PDF (CPE)
@@ -41,34 +44,53 @@
                     </select>
                 </f7-list-item>
 
-                <f7-list-item title="Impresión directa">
-                    <template #after>
-                        <label class="toggle toggle-init color-blue">
-                            <input type="checkbox" v-model="form.direct_print" @change="changeDirectPrint"/>
-                            <span class="toggle-icon"></span>
-                        </label>
-                    </template>
-                </f7-list-item>
-
-                <template v-if="form.direct_print">
-                
-                    <f7-list-item v-if="form.printer_name" :title="`Impresora: ${form.printer_name}`">
-                        <f7-button @click="testPrint">
-                            Prueba
-                        </f7-button>
+                <template v-if="check_is_pos_mode">
+                    
+                    <f7-list-item smart-select :smart-select-params="{openIn: 'popover'}">
+                        <template #title>
+                            Documento por defecto
+                            <span class="badge">{{ getSelectedDocumentType() }}</span>
+                        </template>
+                        <select v-model="form.default_document_type" @change="saveOnlyConfigStorage" class="full-width bg-color-blue">
+                            <template v-for="(option, index) in default_document_types">
+                                <option :value="option.id">{{ option.description }}</option>
+                            </template>
+                        </select>
                     </f7-list-item>
 
-                    <f7-block-title><b>Dispositivos sincronizados</b></f7-block-title>
+                    <!-- <f7-list-item  :title="`N° columnas en productos`">
+                        <input style="width: 40px !important;" class="input-quantity-table" required validate v-model="form.number_columns_list_items_sale" type="number"  @change="saveOnlyConfigStorage" />
+                    </f7-list-item> -->
+ 
+                    <f7-list-item title="Conectar impresora bluetooth">
+                        <template #after>
+                            <label class="toggle toggle-init color-blue">
+                                <input type="checkbox" v-model="form.direct_print" @change="changeDirectPrint"/>
+                                <span class="toggle-icon"></span>
+                            </label>
+                        </template>
+                    </f7-list-item>
 
-                    <template v-if="devices.length > 0">
-                        <f7-list>
-                            <f7-list-item radio radio-icon="start" :checked="device.selected" :title="device.name" name="demo-radio-start" v-for="(device, index) in devices" :key="index" @change="changeSelectedDevice(index)"></f7-list-item>
-                        </f7-list>
-                    </template>
-                    <template v-else>
-                        <f7-block-header class="padding-horizontal">No tiene dispositivos sincronizados</f7-block-header>
-                    </template>
+                    <template v-if="form.direct_print">
+                    
+                        <f7-list-item v-if="form.printer_name" :title="`Impresora: ${form.printer_name}`">
+                            <f7-button @click="testPrint">
+                                Prueba
+                            </f7-button>
+                        </f7-list-item>
 
+                        <f7-block-title><b>Dispositivos sincronizados</b></f7-block-title>
+
+                        <template v-if="devices.length > 0">
+                            <f7-list>
+                                <f7-list-item radio radio-icon="start" :checked="device.selected" :title="device.name" name="demo-radio-start" v-for="(device, index) in devices" :key="index" @change="changeSelectedDevice(index)"></f7-list-item>
+                            </f7-list>
+                        </template>
+                        <template v-else>
+                            <f7-block-header class="padding-horizontal">No tiene dispositivos sincronizados</f7-block-header>
+                        </template>
+
+                    </template>
                 </template>
 
             </f7-list>
@@ -104,9 +126,17 @@
                 resource: 'app-configurations',
                 key_storage: 'app_configuration',
                 devices: [],
+                check_is_pos_mode: false,
+                default_document_types: [
+                    {id: '01', description: 'FACTURA'},
+                    {id: '03', description: 'BOLETA'},
+                    {id: '80', description: 'N. VENTA'},
+                ]
             }
         },
         async created() {
+            await this.events()
+            await this.checkPosMode()
             await this.initForm()
             await this.initData()
             await this.initDirectPrint() 
@@ -117,9 +147,27 @@
             enabledDirectPrint()
             {
                 return this.form.direct_print
-            }
+            },
         },
         methods: { 
+            getSelectedDocumentType()
+            {
+                const default_document_type_id = '01'
+                this.form.default_document_type = this.form.default_document_type ? this.form.default_document_type : default_document_type_id
+
+                const document_type = _.find(this.default_document_types, {id : this.form.default_document_type})
+                if(document_type) return document_type.description
+            },
+            checkPosMode(is_pos_mode = null)
+            {
+                this.check_is_pos_mode = this.isPosMode(is_pos_mode)
+            },
+            events()
+            {
+                this.$eventHub.$on('appMode', (is_pos_mode) => {
+                    this.checkPosMode(is_pos_mode)
+                })
+            },
             async testPrint()
             {
                 const context = this
@@ -200,7 +248,7 @@
             },
             initDirectPrint()
             {
-                if(this.enabledDirectPrint)
+                if(this.enabledDirectPrint && this.check_is_pos_mode)
                 {
                     this.listDevices()
                 }
@@ -231,6 +279,8 @@
                         print_format_pdf: data.print_format_pdf,
                         direct_print: data.direct_print,
                         printer_name: data.printer_name,
+                        default_document_type: data.default_document_type,
+                        // number_columns_list_items_sale: data.number_columns_list_items_sale ? data.number_columns_list_items_sale : 2,
                     }
                 }
             },
@@ -241,6 +291,8 @@
                     print_format_pdf: 'ticket',
                     direct_print: false,
                     printer_name: null,
+                    default_document_type: '01',
+                    // number_columns_list_items_sale: 2
                 }
             },
             async changeDirectPrint()
@@ -262,6 +314,11 @@
             saveConfigStorage(data = null)
             {
                 this.setStorage(this.key_storage, data ? data : this.form, true)
+            },
+            saveOnlyConfigStorage()
+            {
+                this.generalSuccessNotification('Configuración actualizada')
+                this.saveConfigStorage()
             },
             submit() 
             {
