@@ -75,6 +75,7 @@ export const general_functions = {
             return {
                 show_image_item: true,
                 print_format_pdf: 'ticket',
+                theme_color: 'blue'
             }
 
         },
