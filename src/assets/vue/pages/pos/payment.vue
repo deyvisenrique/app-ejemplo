@@ -1,5 +1,5 @@
 <template>
-    <f7-page class="" color="green">
+    <f7-page class="" :color="theme.name_color_theme">
 
         <header-layout :title="geTitle" hrefBack="/sale-detail-pos/" :overwriteBackRoute="true"></header-layout>
 
@@ -10,7 +10,7 @@
                         <f7-block class="bg-white-shade block-strong inset no-margin">
                             <f7-row @click="popupCustomerOpened = true">
                                 <f7-col width="15" class="align-self-center">
-                                    <f7-icon icon="fas fa-user" size="24" color="green"></f7-icon>
+                                    <f7-icon icon="fas fa-user" size="24" :color="theme.name_color_theme"></f7-icon>
                                 </f7-col>
                                 <f7-col width="75" class="text-align-left">
                                     <small>CLIENTE</small><br>
@@ -270,6 +270,7 @@
                 credit_payment_method_types: [],
                 default_customer: null,
                 configuration: {},
+                theme: {},
             }
         },
         computed: {
@@ -289,6 +290,7 @@
         },
         async created() {
             await this.loadConfiguration()
+            await this.getInitialSettings()
             await this.loadForm()
             await this.getTables()
             await this.initData()
@@ -842,6 +844,9 @@
                 this.series = _.filter(this.all_series, {
                     document_type_id: this.form.document_type_id
                 })
+            },
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
             },
         }
     }

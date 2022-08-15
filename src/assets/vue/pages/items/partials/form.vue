@@ -6,7 +6,7 @@
                     <f7-icon material="close"></f7-icon>
                 </f7-link>
             </f7-block>
-            <f7-block style="margin-top: 0px !important;" color="green">
+            <f7-block style="margin-top: 0px !important;" :color="theme.name_color_theme">
                 <form class="list no-hairlines-md" id="demo-form-item">
                     <ul>
                         <li class="item-content item-input">
@@ -124,7 +124,7 @@
 
                         <li class="item-content item-input">
                             <div class="item-inner">
-                                <f7-button fill round color="green" class="padding-horizontal" @click="submit">Guardar</f7-button>
+                                <f7-button fill round :color="theme.name_color_theme" class="padding-horizontal" @click="submit">Guardar</f7-button>
                             </div>
                         </li>
                     </ul>
@@ -150,6 +150,7 @@
                 resource: 'items',
                 records: [],
                 form: {},
+                theme: {},
             }
         },
         computed: {
@@ -165,6 +166,7 @@
         },
         async created() {
             await this.initForm()
+            await this.getInitialSettings()
             await this.getTables()
         },
         methods: {
@@ -340,7 +342,10 @@
             close() {
                 this.$emit('update:showDialog', false)
                 this.initForm()
-            }
+            },
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
+            },
         }
     }
 </script>

@@ -1,18 +1,18 @@
 <template>
-<f7-page class="bg-blue-magenta" color="green">
+<f7-page :class="theme.class_bg_header" :color="theme.name_color_theme">
 
     <f7-block>
         <f7-row class="display-flex align-items-center">
-            <f7-col width="20" class="text-color-white">
-                <a @click="closePopup" class="link text-color-white">
+            <f7-col width="20" :class="theme.class_menu_text_color">
+                <a @click="closePopup" class="link" :class="theme.class_menu_text_color">
                     <i class="fas fa-angle-left custom-icon-back-form"></i>
                 </a>
             </f7-col>
-            <f7-col width="70" class="text-color-white">
+            <f7-col width="70" :class="theme.class_menu_text_color">
                 Listado de Productos
             </f7-col>
             <f7-col width="10">
-                <a href="#" class="link navbar-tooltip text-color-white">
+                <a href="#" class="link navbar-tooltip" :class="theme.class_menu_text_color">
                     <i class="icon f7-icons if-not-md">info</i>
                     <i class="icon material-icons if-md">info_outline</i>
                 </a>
@@ -20,7 +20,7 @@
         </f7-row>
     </f7-block>
 
-    <f7-card class="card-100 padding no-shadow" color="green" style="min-height: 90%">
+    <f7-card class="card-100 padding no-shadow" :color="theme.name_color_theme" style="min-height: 90%">
         <f7-block style="padding:0px">
             <f7-row>
                 <f7-col width="70">
@@ -33,12 +33,12 @@
                     </div>
                 </f7-col>
                 <f7-col width="15" class="text-align-center">
-                    <f7-button @click="clickSearchBarcode" color="green" fill small open-panel="right" icon="fas fa-camera"></f7-button>
+                    <f7-button @click="clickSearchBarcode" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-camera"></f7-button>
                     <span class="" style="font-size: 10px;line-height: 10px !important;">BUSCAR</span>
                 </f7-col>
 
                 <f7-col width="15" class="text-align-center">
-                    <f7-button @click="addForm = !addForm" color="green" fill small open-panel="right" icon="fas fa-plus"></f7-button>
+                    <f7-button @click="addForm = !addForm" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-plus"></f7-button>
                     <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
                 </f7-col>
             </f7-row>
@@ -117,7 +117,7 @@
                                     <f7-icon :material="item.quantity > 0 ? 'check_box' : 'check_box_outline_blank'" class="text-color-bluemagenta"></f7-icon>
                                 </div>
                                 <div class="item-inner">
-                                    <div class="item-title text-color-blue" style="font-size: .9em">
+                                    <div class="item-title" :color="theme.name_color_theme" style="font-size: .9em">
                                         {{ item.full_description }}
 
                                         <div class="item-content">
@@ -153,7 +153,7 @@
                     <f7-icon material="close"></f7-icon>
                 </f7-link>
             </f7-block>
-            <f7-block style="margin-top: 0px !important;" color="green">
+            <f7-block style="margin-top: 0px !important;" :color="theme.name_color_theme">
                 <form class="list no-hairlines-md" id="demo-form-item">
                     <ul>
                         <li class="item-content item-input">
@@ -273,7 +273,7 @@
 
                         <li class="item-content item-input">
                             <div class="item-inner">
-                                <f7-button fill round color="green" @click="submit" class="padding-horizontal">Guardar</f7-button>
+                                <f7-button fill round :color="theme.name_color_theme" @click="submit" class="padding-horizontal">Guardar</f7-button>
                             </div>
                         </li>
                     </ul>
@@ -289,7 +289,7 @@
                     <f7-icon material="close"></f7-icon>
                 </f7-link>
             </f7-block>
-            <f7-block color="red">
+            <f7-block :color="theme.name_color_theme">
                 <div class="data-table margin-bottom">
                     <table>
                         <thead>
@@ -308,16 +308,16 @@
                         </tbody>
                     </table>
                 </div>
-                <f7-button color="red" @click="send" small fill>
+                <f7-button :color="theme.name_color_theme" @click="send" small fill>
                     Confirmar
                 </f7-button>
             </f7-block>
         </f7-page-content>
     </f7-sheet>
 
-    <f7-fab position="right-bottom" class="margin-right" color="green" v-if="countCar > 0" @click="send">
+    <f7-fab position="right-bottom" class="margin-right" :color="theme.name_color_theme" v-if="countCar > 0" @click="send">
         <f7-icon ios="f7:plus" aurora="f7:plus" md="material:shopping_cart" >
-            <f7-badge color="red">
+            <f7-badge :color="theme.name_color_theme">
                 {{ countCar }}
             </f7-badge>
         </f7-icon>
@@ -373,6 +373,7 @@
                 form: {},
                 configuration: {},
                 search_category_id: null,
+                theme: {},
             };
         },
         computed: {
@@ -398,6 +399,7 @@
         },
         created() {
             this.loadConfiguration()
+            this.getInitialSettings()
             this.initForm();
             this.getTables();
         },
@@ -754,6 +756,9 @@
                     }
                 })
 
+            },
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
             },
         }
     };

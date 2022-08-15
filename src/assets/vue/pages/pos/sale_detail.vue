@@ -1,5 +1,5 @@
 <template>
-    <f7-page class="" color="green">
+    <f7-page class="" :color="theme.name_color_theme">
 
         <header-layout :title="geTitle" hrefBack="/list-items-sale/" :overwriteBackRoute="true"></header-layout>
 
@@ -94,6 +94,7 @@
                 },
                 list_items_sale: [],
                 resource: 'documents',
+                theme: {},
             }
         },
         computed: {
@@ -103,6 +104,7 @@
         },
         async created() {
             await this.getAffectationIgvTypes()
+            await this.getInitialSettings()
             await this.initForm()
             await this.initData()
         },
@@ -312,6 +314,9 @@
                 item_sale.quantity = parseFloat(quantity)
 
                 this.setStorage('list_items_sale', this.list_items_sale, true)
+            },
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
             },
         }
     }

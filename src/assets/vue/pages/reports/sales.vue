@@ -1,5 +1,5 @@
 <template>
-    <f7-page class="bg-color-white" color="green">
+    <f7-page :color="theme.name_color_theme" :class="theme.class_bg_body">
 
         <header-layout title="Reporte"></header-layout>
 
@@ -170,10 +170,12 @@
                 resource: 'reports',
                 establishments: [],
                 user_data: {},
+                theme: {},
             }
         },
         async created() {
             await this.initForm()
+            await this.getInitialSettings()
             await this.getUserData()
             await this.filters()
             await this.getData()
@@ -293,7 +295,10 @@
                                 this.hideLoading()
                             })
 
-            }
+            },
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
+            },
 
         }
     }

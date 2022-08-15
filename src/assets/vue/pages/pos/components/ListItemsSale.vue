@@ -1,9 +1,9 @@
 <template>
-    <f7-page infinite :infinite-distance="50" :infinite-preloader="show_preloader" @infinite="loadMoreRecords" ptr  @ptr:refresh="pullToRefresh">
+    <f7-page infinite :infinite-distance="50" :infinite-preloader="show_preloader" @infinite="loadMoreRecords" ptr  @ptr:refresh="pullToRefresh" :color="theme.name_color_theme" :class="theme.class_bg_body">
 
         <header-layout title="Productos" :showButtonBack="false"></header-layout>
 
-        <f7-card class="card-100 padding-top no-shadow" color="red" style="min-height: 90%">
+        <f7-card class="card-100 padding-top no-shadow" :color="theme.name_color_theme" style="min-height: 90%">
             <f7-block class="">
                 <f7-row>
                     <f7-col width="70">
@@ -16,11 +16,11 @@
                         </div>
                     </f7-col>
                     <f7-col width="15" class="text-align-center">
-                        <f7-button @click="clickSearchBarcode" color="green" fill small open-panel="right" icon="fas fa-camera"></f7-button>
+                        <f7-button @click="clickSearchBarcode" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-camera"></f7-button>
                         <span class="" style="font-size: 10px;line-height: 10px !important;">BUSCAR</span>
                     </f7-col>
                     <f7-col width="15" class="text-align-center">
-                        <f7-button @click="clickCreate()" color="green" fill small open-panel="right" icon="fas fa-plus"></f7-button>
+                        <f7-button @click="clickCreate()" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-plus"></f7-button>
                         <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
                     </f7-col>
                 </f7-row>
@@ -91,7 +91,7 @@
             </f7-block>
         </f7-card>
 
-        <f7-fab position="right-bottom" class="margin-right" color="green" v-if="quantitySelectedRecords() > 0" @click="sendListItems">
+        <f7-fab position="right-bottom" class="margin-right" :color="theme.name_color_theme" v-if="quantitySelectedRecords() > 0" @click="sendListItems">
             <f7-icon ios="f7:plus" aurora="f7:plus" md="material:shopping_cart" >
                 <f7-badge color="red">
                     {{ quantitySelectedRecords() }}
@@ -139,7 +139,8 @@
                 showDialog: false,
                 recordId: null,
                 configuration: {},
-                categories: []
+                categories: [],
+                theme: {},
             }
         },
         computed: {
@@ -147,6 +148,7 @@
         async created() {
             await this.loadConfiguration()
             await this.initForm()
+            await this.getInitialSettings()
             await this.initLoadingText()
             await this.getCategories()
             await this.getRecords()
@@ -392,6 +394,9 @@
                     ...this.form
                 })
 
+            },
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
             },
         }
     }

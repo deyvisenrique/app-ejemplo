@@ -1,8 +1,8 @@
 <template>
-<f7-page class="" color="green">
+<f7-page :color="theme.name_color_theme" :class="theme.class_bg_body">
     <header-layout title="Cotización"></header-layout>
 
-    <f7-card class="padding margin-top">
+    <f7-card class="padding margin-top" no-shadow>
         <form class="list no-hairlines-md" id="demo-form">
             <ul>
                 <f7-row>
@@ -47,7 +47,7 @@
                         <f7-row @click="popupCustomerOpened = true">
                             <f7-col width="15" class="align-self-center">
                                 <div class="badge bg-color-white">
-                                    <f7-icon icon="fas fa-user" size="24" color="green"></f7-icon>
+                                    <f7-icon icon="fas fa-user" size="24" :color="theme.name_color_theme"></f7-icon>
                                 </div>
                             </f7-col>
                             <f7-col width="75" class="text-align-left">
@@ -92,7 +92,7 @@
                 </li>
 
                 <li class="padding-vertical">
-                    <f7-button @click="popupOpened = true" fill color="teal" class="text-align-left padding-left">
+                    <f7-button @click="popupOpened = true" fill :color="theme.name_color_theme" class="text-align-left padding-left">
                         <small>
                             <f7-icon icon="fas fa-plus"></f7-icon>
                             Añadir producto
@@ -121,7 +121,7 @@
                                 </f7-button>
                             </f7-col>
                             <f7-col>
-                                <f7-button fill round small color="green" @click="send">
+                                <f7-button fill round small :color="theme.name_color_theme" @click="send">
                                     Aceptar
                                 </f7-button>
                             </f7-col>
@@ -175,11 +175,13 @@
                 form: {},
                 popupOpened: false,
                 default_customer: null,
+                theme: {},
             }
         },
         computed: {},
         created() {
             this.initForm()
+            this.getInitialSettings()
             this.getTables()
         },
 
@@ -357,7 +359,10 @@
                         this.hideLoading()
                     })
 
-            }
+            },
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
+            },
         }
     }
 </script>

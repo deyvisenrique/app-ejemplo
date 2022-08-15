@@ -1,18 +1,18 @@
 <template>
-  <f7-page color="green">
-    <f7-block class="bg-blue-magenta no-margin-top elevation-9">
+  <f7-page :color="theme.name_color_theme">
+    <f7-block class="no-margin-top" :class="theme.class_bg_header">
       <f7-block class="text-align-right no-margin-top padding-top">
-        <f7-link class="transparent panel-previous" color="green" @click="back">
+        <f7-link class="transparent panel-previous" :class="theme.class_menu_text_color" @click="back">
           <i class="fas fa-times"></i>
         </f7-link>
       </f7-block>
       <f7-block class="no-margin-vertical">
-        <p class="text-color-white">
+        <p :class="theme.class_header_text_color">
           <f7-icon material="verified_user" size="44px" class="padding-right"></f7-icon>
         </p>
       </f7-block>
       <f7-block class="no-margin-top padding-bottom">
-        <p class="text-color-white">Cuenta</p>
+        <p :class="theme.class_header_text_color">Cuenta</p>
       </f7-block>
     </f7-block>
     <f7-card class="no-padding-top no-padding-horizontal">
@@ -64,7 +64,7 @@
     </f7-card>
     <div class="footer">
       <f7-block>
-        <f7-button class="padding-horizontal" color="green" @click="submit" fill round>
+        <f7-button class="padding-horizontal" :color="theme.name_color_theme" @click="submit" fill round>
           Guardar
         </f7-button>
       </f7-block>
@@ -96,11 +96,13 @@ export default {
   data: function() {
     return {
       form: {},
-      internet_protocol: 'https://'
+      internet_protocol: 'https://',
+      theme: {},
     };
   },
   created() {
-    this.initForm();
+    this.initForm()
+    this.getInitialSettings()
   },
   methods: {
     getStorageApiUrl(){
@@ -168,6 +170,9 @@ export default {
     },
     back() {
       this.$f7router.navigate("/panel-right/");
+    },
+    getInitialSettings() {
+      this.theme = this.getThemeSettings()
     },
   }
 };

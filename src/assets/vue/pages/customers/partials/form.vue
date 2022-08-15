@@ -1,5 +1,5 @@
 <template>
-<f7-sheet class="demo-sheet default-h-modal padding-top" :opened="showDialog" @sheet:closed="close">
+<f7-sheet :color="theme.name_color_theme" :class="theme.class_bg_body" class="demo-sheet default-h-modal padding-top" :opened="showDialog" @sheet:closed="close">
     <f7-page-content>
         <f7-block class="text-align-right no-margin-vertical no-padding-vertical">
             <f7-link small sheet-close class="no-margin no-padding text-color-gray">
@@ -117,6 +117,7 @@
                 resource: 'persons',
                 records: [],
                 form: {},
+                theme: {},
             }
         },
         watch: {
@@ -128,6 +129,7 @@
         },
         async created() {
             await this.initForm()
+            await this.getInitialSettings()
         },
         methods: {
             open() {
@@ -261,7 +263,10 @@
             close() {
                 this.$emit('update:showDialog', false)
                 this.initForm()
-            }
+            },
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
+            },
         }
     }
 </script>

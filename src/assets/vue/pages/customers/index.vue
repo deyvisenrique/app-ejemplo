@@ -1,9 +1,9 @@
 <template>
-    <f7-page class=""  infinite :infinite-distance="50" :infinite-preloader="show_preloader" @infinite="loadMoreRecords" ptr  @ptr:refresh="pullToRefresh">
+    <f7-page :color="theme.name_color_theme" :class="theme.class_bg_body" infinite :infinite-distance="50" :infinite-preloader="show_preloader" @infinite="loadMoreRecords" ptr  @ptr:refresh="pullToRefresh">
 
         <header-layout title="Clientes"></header-layout>
 
-        <f7-card class="card-100 padding-top no-shadow" color="red" style="min-height: 90%">
+        <f7-card class="card-100 padding-top no-shadow" :color="theme.name_color_theme" style="min-height: 90%">
 
             <f7-block class="">
                 <f7-row>
@@ -116,13 +116,15 @@
                 loading_text: null,
                 showDialog: false,
                 recordId: null,
-                configuration: {}
+                configuration: {},
+                theme: {},
             }
         },
         computed: {
         },
         async created() {
             await this.loadConfiguration()
+            await this.getInitialSettings()
             await this.initForm()
             await this.initLoadingText()
             await this.getRecords()
@@ -236,6 +238,9 @@
                     ...this.form
                 })
 
+            },
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
             },
         }
     }

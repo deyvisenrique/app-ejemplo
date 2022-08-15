@@ -1,18 +1,18 @@
 <template>
-    <f7-page color="green">
-        <f7-block class="bg-blue-magenta no-margin-vertical padding-vertical">
+    <f7-page :color="theme.name_color_theme" :class="theme.class_bg_body">
+        <f7-block class="no-margin-vertical padding-vertical" :class="theme.class_bg_header" :color="theme.name_color_theme">
             <f7-row>
                 <f7-col width="100">
                     <p class="text-align-center">
-                        <img v-if="logo" :src="logo" alt="FacturaloPeru" width="40%" />
+                        <logo heightLogo="60"></logo>
                     </p>
                 </f7-col>
             </f7-row>
         </f7-block>
-        <f7-block class="no-margin-top no-margin-vertical no-padding-horizontal bg-color-white display-flex">
+        <f7-block :class="theme.class_bg_body" class="no-margin-top no-margin-vertical no-padding-horizontal display-flex">
             <div class="waves">
                 <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 180" preserveAspectRatio="none">
-                    <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+                    <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" :class="theme.class_waves_color_fill"></path>
                 </svg>
             </div>
         </f7-block>
@@ -116,7 +116,7 @@
         <f7-block class="display-flex justify-content-center">
             <f7-row tag="p">
                 <f7-col>
-                    <f7-button class="padding-horizontal" @click="login" color="green" large fill round>Iniciar sesión</f7-button>
+                    <f7-button class="padding-horizontal" @click="login" :color="theme.name_color_theme" large fill round>Iniciar sesión</f7-button>
                 </f7-col>
             </f7-row>
         </f7-block>
@@ -127,10 +127,11 @@
     import {auth} from "mixins_/auth";
     import logoLight from "assets/images/logo/logo-light.svg";
     import {general_functions} from "mixins_/general_functions"
+    import Logo from "components/layout/Logo.vue"
 
     export default {
         mixins: [auth, general_functions],
-        components: {},
+        components: { Logo },
         data: function () {
             return {
                 email: "demo@gmail.com",
@@ -139,6 +140,7 @@
                 logo: '',
                 internet_protocol: 'https://',
                 is_type_password: true,
+                theme: {},
             };
         },
         created() {
@@ -149,6 +151,7 @@
             }
 
             this.setStorageApiUrl()
+            this.getInitialSettings()
         },
         computed: {},
         methods: {
@@ -233,7 +236,10 @@
                     .then(() => {
                         self.$f7.preloader.hide();
                     });
-            }
+            },
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
+            },
         }
     };
 </script>

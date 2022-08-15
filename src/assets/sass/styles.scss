@@ -237,3 +237,106 @@
 .fs-14{
   font-size:14px
 }
+
+.font-w-500 {
+  font-weight: 500;
+}
+
+.md {
+  --f7-input-text-color: #5b5b5b;
+  --f7-text-color: #5b5b5b;
+  --f7-label-text-color: #1b1b1b;
+}
+
+/*====================
+  Color Overrides
+==================== */
+/* black */
+.color-black {
+  --f7-theme-color: #1A1F1D;
+  --f7-theme-color-rgb: 26, 31, 29;
+  --f7-theme-color-shade: #000000;
+  --f7-theme-color-tint: #141414;
+}
+.text-color-black {
+  --f7-theme-color-text-color: #1A1F1D;
+}
+.bg-color-black {
+  --f7-theme-color-bg-color: #1A1F1D;
+}
+.bg-color-black-shade {
+  --f7-theme-color-bg-color: #000000;
+}
+.bg-color-black-tint {
+  --f7-theme-color-bg-color: #141414;
+}
+.border-color-black {
+  --f7-theme-color-border-color: #1A1F1D;
+}
+.waves .shape-fill-black {
+  fill: $dark;
+}
+/* red */
+.color-red {
+  --f7-theme-color: #cb2027;
+  --f7-theme-color-rgb: 189, 13, 38;
+  --f7-theme-color-shade: #CC0D00;
+  --f7-theme-color-tint: #A30B00;
+}
+.text-color-red {
+  --f7-theme-color-text-color: #cb2027;
+}
+.bg-color-red {
+  --f7-theme-color-bg-color: #cb2027;
+}
+.bg-color-red-shade {
+  --f7-theme-color-bg-color: #CC0D00;
+}
+.bg-color-red-tint {
+  --f7-theme-color-bg-color: #A30B00;
+}
+.border-color-red {
+  --f7-theme-color-border-color: #cb2027;
+}
+.waves .shape-fill-red {
+  fill: $red;
+}
+/* white */
+.color-white {
+  --f7-color-white: #ffffff;
+  --f7-color-white-rgb: 255, 255, 255;
+  --f7-color-white-shade: #ebebeb;
+  --f7-color-white-tint: #ffffff;
+}
+.text-color-white {
+  --f7-theme-color-text-color: #ffffff;
+}
+.bg-color-white {
+  --f7-theme-color-bg-color: #ffffff;
+}
+.bg-color-white-shade {
+  --f7-theme-color-bg-color: #ebebeb;
+}
+.bg-color-white-tint {
+  --f7-theme-color-bg-color: #f5f5f5;
+}
+.border-color-white {
+  --f7-theme-color-border-color: #ffffff;
+}
+.waves .shape-fill-white {
+  fill: var(--f7-color-white-shade);
+}
+/* white */
+.bg-color-blue-shade {
+  --f7-theme-color-bg-color: #331B83;
+}
+.bg-color-blue-tint {
+  --f7-theme-color-bg-color: #6E28C9;
+}
+/* green */
+.color-green {
+  --f7-theme-color: #009688;
+  --f7-theme-color-rgb: 0,150,136;
+  --f7-theme-color-shade: #006d63;
+  --f7-theme-color-tint: #00bfad;
+}

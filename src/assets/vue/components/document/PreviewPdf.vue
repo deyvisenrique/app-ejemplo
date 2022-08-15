@@ -1,7 +1,7 @@
 
-                                            
 
-<template> 
+
+<template>
     <f7-sheet class="demo-sheet default-h80-modal padding-top" :opened="showDialog" @sheet:closed="close">
         <f7-page-content>
             <f7-block class="text-align-right no-margin-vertical no-padding-vertical">
@@ -9,15 +9,15 @@
                     <f7-icon material="close"></f7-icon>
                 </f7-link>
             </f7-block>
-            <f7-block style="margin-top: 0px !important;" color="red"> 
+            <f7-block style="margin-top: 0px !important;" :color="theme.name_color_theme">
                 <div>
                     <div class="card-content card-content-padding">
                         <div v-if="url_preview">
-                            <iframe 
+                            <iframe
                                 :src="url_preview"
                                 frameborder="0"
-                                scrolling="no" 
-                                width="100%" 
+                                scrolling="no"
+                                width="100%"
                                 height="800px"
                                 SameSite="None"
                                 >
@@ -42,7 +42,8 @@
             return {
                 configuration: {},
                 url_preview: null,
-                gview: 'https://docs.google.com/gview?embedded=true&url='
+                gview: 'https://docs.google.com/gview?embedded=true&url=',
+                theme: {},
             }
         },
         watch: {
@@ -56,6 +57,7 @@
         },
         created() {
             this.loadConfiguration()
+            this.getInitialSettings()
         },
         methods: {
             initUrl(){
@@ -81,7 +83,7 @@
                     case 'document':
                         url = `${this.gview}${this.getBaseUrl()}/print/${this.documentType}/${this.record.external_id}/${this.getPrintFormatPdf()}`
                         break
-                
+
                     case 'sale_note':
                     case 'order_note':
                         url = `${this.gview}${this.record.print_ticket}`
@@ -101,7 +103,10 @@
             close() {
                 this.$emit('update:showDialog', false)
                 this.initUrl()
-            } 
+            },
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
+            },
         }
     }
 </script>

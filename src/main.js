@@ -32,7 +32,7 @@ import FastClick from 'fastclick';
 // import customCss from './assets/css/custom.css';
 // import './assets/sass/variables.scss';
 import './assets/sass/styles.scss';
-import './assets/sass/skin-white.scss';
+// import './assets/sass/skin-white.scss';
 
 // Import App Component
 import app from './main.vue';
