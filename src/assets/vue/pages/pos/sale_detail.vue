@@ -349,6 +349,7 @@
                     subtotal: 0,
                     total_discount: 0,
                     total: 0,
+                    payments: [],
                 }
 
                 this.setDefaultDocumentType()

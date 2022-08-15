@@ -92,9 +92,10 @@ export const general_functions = {
         {
             return this.getStorage('api_url')
         },
-        async findGeneralDefaultCustomer()
+        async findGeneralDefaultCustomer(document_type_id = null)
         {
-            return await this.$http.get(`${this.returnBaseUrl()}/persons/default-customer`, this.getHeaderConfig())
+            const param_document_type_id = document_type_id ? `/${document_type_id}` : ''
+            return await this.$http.get(`${this.returnBaseUrl()}/persons/default-customer${param_document_type_id}`, this.getHeaderConfig())
         },
         async getGeneralCustomers()
         {

@@ -88,60 +88,71 @@
                                     </div>
                                 </div>
                             </f7-col>
+                            
                         </template>
+                        
+                        <f7-col :width="isInvoiceDocument ? '50' : '100'">
+                            <div class="item-content item-input no-padding-horizontal">
+                                <div class="item-inner no-padding-horizontal">
+                                    <div class="item-title item-label">Destino</div>
+                                    <div class="item-input-wrap input-dropdown-wrap">
+                                        <select v-model="payment_destination_id" @change="changePaymentDestination">
+                                            <template v-for="(row, index) in payment_destinations">
+                                                <option :value="row.id" :key="index">{{row.description}}</option>
+                                            </template>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </f7-col>
 
                         <template>
                             <template v-if="isCashPayment">
-                                <f7-col width="50">
-                                    <div class="item-content item-input no-padding-horizontal">
-                                        <div class="item-inner no-padding-horizontal">
-                                            <div class="item-title item-label">Metodo de pago</div>
-                                            <div class="item-input-wrap input-dropdown-wrap">
-                                                <select v-model="form_payment.payment_method_type_id">
-                                                    <template v-for="(row, index) in cash_payment_method_types">
-                                                        <option :value="row.id" :key="index">{{row.description}}</option>
-                                                    </template>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </f7-col>
-                                <f7-col width="50">
-                                    <div class="item-content item-input no-padding-horizontal">
-                                        <div class="item-inner no-padding-horizontal">
-                                            <div class="item-title item-label">Referencia</div>
-                                            <div class="item-input-wrap">
-                                                <input v-model="form_payment.reference" type="text" />
-                                                <span class="input-clear-button"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </f7-col>
-                                <f7-col width="50">
-                                    <div class="item-content item-input no-padding-horizontal">
-                                        <div class="item-inner no-padding-horizontal">
-                                            <div class="item-title item-label">Monto a pagar</div>
-                                            <div class="item-input-wrap">
-                                                <input required validate v-model="form_payment.payment" type="number" @input="inputPayment" min="0"/>
-                                                <span class="input-clear-button"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </f7-col>
-                                <f7-col :width="isInvoiceDocument ? 100 : 50">
-                                    <div class="item-content item-input no-padding-horizontal">
-                                        <div class="item-inner no-padding-horizontal">
-                                            <div class="item-title item-label">Destino</div>
-                                            <div class="item-input-wrap input-dropdown-wrap">
-                                                <select v-model="form_payment.payment_destination_id">
-                                                    <template v-for="(row, index) in payment_destinations">
-                                                        <option :value="row.id" :key="index">{{row.description}}</option>
-                                                    </template>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </f7-col>
+                                <table>
+                                    <tbody>
+                                        <tr v-for="(row, index) in form.payments">
+                                            <td>
+                                              
+                                                <div class="item-content item-input no-padding-horizontal">
+                                                    <div class="item-inner no-padding-horizontal">
+                                                        <div class="item-title item-label" v-if="index === 0"> <strong>Metodo de pago</strong></div>
+                                                        <div class="item-input-wrap input-dropdown-wrap">
+                                                            <select v-model="row.payment_method_type_id">
+                                                                <template v-for="(row, index) in cash_payment_method_types">
+                                                                    <option :value="row.id" :key="index">{{row.description}}</option>
+                                                                </template>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+
+                                                <div class="item-content item-input no-padding-horizontal">
+                                                    <div class="item-inner no-padding-horizontal">
+                                                        <div class="item-title item-label" v-if="index === 0"> <strong>Monto a pagar</strong></div>
+                                                        <div class="item-input-wrap">
+                                                            <input required validate v-model="row.payment" type="number" @input="inputPayment" min="0"/>
+                                                            <!-- <span class="input-clear-button"></span> -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <template v-if="index === 0">
+                                                    <a @click="clickAddPayment">
+                                                        <f7-icon class="" ios="f7:add_circle" aurora="f7:add_circle" md="material:add_circle"></f7-icon>
+                                                    </a>
+                                                </template>
+                                                <template v-else>
+                                                    <a @click="clickAddDeletePayment(index)">
+                                                        <f7-icon ios="f7:delete" color="red" aurora="f7:delete" md="material:delete" ></f7-icon>
+                                                    </a>
+                                                </template>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </template>
 
                             <template v-if="isCreditPayment">
@@ -274,12 +285,12 @@
                 all_series: [],
                 all_payment_method_types: [],
                 payment_change: 0,
-                form_payment: {},
                 form_fee: {},
                 cash_payment_method_types: [],
                 credit_payment_method_types: [],
                 default_customer: null,
                 configuration: {},
+                payment_destination_id: null,
             }
         },
         computed: {
@@ -329,7 +340,7 @@
                 this.showLoading()
 
                 this.$http
-                    .post(`${this.returnBaseUrl()}/sale-note`, this.getFormSaleNote(), this.getHeaderConfig())
+                    .post(`${this.returnBaseUrl()}/sale-note`, this.form, this.getHeaderConfig())
                     .then(response => {
 
                         const data = response.data
@@ -350,31 +361,6 @@
                     .then(() => {
                         this.hideLoading()
                     })
-
-            },
-            getFormSaleNote()
-            {   
-                let new_form = this.form
-
-                new_form.payments = this.getFormPaymentSaleNote()
-                return new_form
-            },
-            getFormPaymentSaleNote(){
-
-                if(!isNaN(this.form_payment.payment) && parseFloat(this.form_payment.payment) > 0)
-                {
-                    return [
-                        {
-                            date_of_payment: this.form.date_of_issue,
-                            payment_destination_id: this.form_payment.payment_destination_id,
-                            payment_method_type_id: this.form_payment.payment_method_type_id,
-                            reference: this.form_payment.reference,
-                            payment: this.form_payment.payment
-                        }
-                    ]
-                }
-
-                return []
 
             },
             showDialogOptions(data)
@@ -563,39 +549,6 @@
 
                 return []
             },
-            getFormPaymentDocument()
-            {
-                if(this.isCashPayment && !isNaN(this.form_payment.payment) && parseFloat(this.form_payment.payment) > 0)
-                {
-                    return [
-                        {
-                            codigo_destino_pago: this.form_payment.payment_destination_id,
-                            codigo_metodo_pago: this.form_payment.payment_method_type_id,
-                            referencia: this.form_payment.reference,
-                            pago_recibido: this.form_payment.payment_received,
-                            monto: this.form_payment.payment
-                        }
-                    ]
-                }
-
-                return []
-            },
-            getFormFee()
-            {
-                if(this.isCreditPayment)
-                {
-                    return [
-                        {
-                            fecha: this.form_fee.date,
-                            codigo_tipo_moneda: this.form.currency_type_id,
-                            monto: this.form_fee.amount,
-                            codigo_metodo_de_pago: this.form_fee.payment_method_type_id,
-                        }
-                    ]
-                }
-
-                return []
-            },
             validate() 
             {
                 const self = this
@@ -628,38 +581,6 @@
 
                 return true
             },
-            validateCashPayment(){
-
-                if(this.isCashPayment)
-                {
-                    if(!this.form_payment.payment_destination_id)
-                    {
-                        this.showAlert('El destino de pago es obligatorio, aperture caja o cuentas bancarias')
-                        return false
-                    }
-                }
-
-                return true
-            },
-            validateCreditPayment(){
-
-                if(this.isCreditPayment)
-                {
-                    if(!this.form_fee.amount || this.form_fee.amount <= 0)
-                    {
-                        this.showAlert('El monto es obligatorio y debe ser mayor a 0')
-                        return false
-                    }
-
-                    if(parseFloat(this.form_fee.amount) > parseFloat(this.form.total))
-                    {
-                        this.showAlert('El monto neto pendiente de pago debe ser menor o igual al importe total del comprobante')
-                        return false
-                    }
-                }
-
-                return true
-            },
             //generar documento
 
             async initData()
@@ -668,42 +589,17 @@
                 await this.setDefaultCustomer()
                 
                 await this.setDefaultSeries()
-                await this.initFormPayment()
+                await this.initPayments()
                 await this.initFormFee()
 
                 await this.setPaymentMethodTypes()
                 await this.setPaymentDestinations()
 
+                await this.clickAddPayment()
+
 
                 // asignar monto a pagar
-                this.calculatePaymentFeeAmount()
-            },
-            setPaymentMethodTypes(){
-                this.cash_payment_method_types = this.filterPaymentMethodTypes(false)
-                this.credit_payment_method_types = this.filterPaymentMethodTypes(true)
-            },
-            //formas de pago
-            filterPaymentMethodTypes(is_credit){
-
-                return this.all_payment_method_types.filter(row => {
-                    return row.is_credit == is_credit
-                })
-
-            },
-            setPaymentDestinations(){
-
-                const payment_destination_cash = _.find(this.payment_destinations, {id: 'cash'})
-
-
-                if(payment_destination_cash)
-                {
-                    this.form_payment.payment_destination_id = payment_destination_cash.id
-                }
-                else
-                {
-                    this.form_payment.payment_destination_id = this.payment_destinations.length > 0 ? this.payment_destinations[0].id : null
-                }
-
+                this.calculatePaymentFee()
             },
             setDefaultSeries() {
 
@@ -719,31 +615,12 @@
                 }
 
             },
-            initFormPayment(){
-
-                this.form_payment = {
-                    payment_method_type_id: '01',
-                    payment_destination_id: null,
-                    reference: null,
-                    payment: 0,
-                    payment_received: true,
-                }
-
-            },
-            initFormFee(){
-
-                this.form_fee = {
-                    payment_method_type_id: null,
-                    amount: 0,
-                    date: null,
-                }
-            },
             setDefaultCustomer(){
 
                 if(!this.default_customer)
                 {
                     this.showLoading()
-                    this.findGeneralDefaultCustomer()
+                    this.findGeneralDefaultCustomer(this.form.document_type_id)
                         .then((response)=>{
 
                             if(response.data.success)
@@ -796,59 +673,6 @@
 
                 return allow
             },
-            changePaymentCondition() {
-
-                this.setDataPayment()
-                this.setDataPaymentFee()
-                this.calculatePaymentFeeAmount()
-
-            },
-            setDataPayment(){
-
-                if (this.isCashPayment)
-                {
-                    this.initFormPayment()
-                    this.form_payment.payment_method_type_id = (this.cash_payment_method_types.length > 0) ? this.cash_payment_method_types[0].id:null
-                    this.setPaymentDestinations()
-                }
-
-            },
-            changePaymentMethodTypeFee(){
-
-                const payment_method_type = _.find(this.credit_payment_method_types, {id : this.form_fee.payment_method_type_id})
-
-                if(payment_method_type)
-                {
-                    const number_days = payment_method_type.number_days ? payment_method_type.number_days : 1
-                    this.form_fee.date = moment(this.form.fecha_de_emision).add(number_days, 'days').format('YYYY-MM-DD')
-                }
-
-            },
-            calculatePaymentFeeAmount() {
-
-                if(this.isCashPayment)
-                {
-                    this.form_payment.payment = this.form.total
-                    this.inputPayment()
-                }
-                else
-                {
-                    this.form_fee.amount = this.form.total
-                }
-            },
-            setDataPaymentFee(){
-
-                if (this.isCreditPayment)
-                {
-                    this.initFormFee()
-                    this.form_fee.payment_method_type_id = (this.credit_payment_method_types.length > 0) ? this.credit_payment_method_types[0].id:null
-                    this.changePaymentMethodTypeFee()
-                }
-
-            },
-            inputPayment(){
-                this.payment_change = this.roundNumber(parseFloat(this.form_payment.payment) - parseFloat(this.form.total))
-            },
             loadForm()
             {
                 this.form = this.getStorage('form_sale_detail', true)
@@ -882,6 +706,202 @@
                     document_type_id: this.form.document_type_id
                 })
             },
+            // pagos
+            
+            initPayments()
+            {
+                this.form.payments = []
+            },
+            initFormFee(){
+
+                this.form_fee = {
+                    payment_method_type_id: null,
+                    amount: 0,
+                    date: null,
+                }
+            },
+            validateCashPayment(){
+
+                if(this.isCashPayment)
+                {
+                    if(!this.payment_destination_id)
+                    {
+                        this.showAlert('El destino de pago es obligatorio, aperture caja o cuentas bancarias')
+                        return false
+                    }
+                }
+
+                return true
+            },
+            validateCreditPayment(){
+
+                if(this.isCreditPayment)
+                {
+                    if(!this.form_fee.amount || this.form_fee.amount <= 0)
+                    {
+                        this.showAlert('El monto es obligatorio y debe ser mayor a 0')
+                        return false
+                    }
+
+                    if(parseFloat(this.form_fee.amount) > parseFloat(this.form.total))
+                    {
+                        this.showAlert('El monto neto pendiente de pago debe ser menor o igual al importe total del comprobante')
+                        return false
+                    }
+                }
+
+                return true
+            },
+            setPaymentMethodTypes(){
+                this.cash_payment_method_types = this.filterPaymentMethodTypes(false)
+                this.credit_payment_method_types = this.filterPaymentMethodTypes(true)
+            },
+            //formas de pago
+            filterPaymentMethodTypes(is_credit){
+
+                return this.all_payment_method_types.filter(row => {
+                    return row.is_credit == is_credit
+                })
+
+            },
+            setPaymentDestinations()
+            {
+                const payment_destination_cash = _.find(this.payment_destinations, {id: 'cash'})
+
+                if(payment_destination_cash)
+                {
+                    this.payment_destination_id = payment_destination_cash.id
+                }
+                else
+                {
+                    this.payment_destination_id = this.payment_destinations.length > 0 ? this.payment_destinations[0].id : null
+                }
+
+            },
+            changePaymentCondition() {
+
+                this.setDataPayment()
+                this.setDataPaymentFee()
+                this.calculatePaymentFee()
+
+            },
+            setDataPayment(){
+
+                this.initPayments()
+
+                if (this.isCashPayment)
+                {
+                    this.clickAddPayment()
+                }
+
+            },
+            getTotalPayments()
+            {
+                return  _.sumBy(this.form.payments, (row)=>{
+                    return parseFloat(row.payment)
+                })
+            },
+            getFormPaymentDocument()
+            {
+                const total_payments = this.getTotalPayments()
+
+                if(this.isCashPayment && !isNaN(total_payments) && total_payments > 0)
+                {
+                    return this.form.payments.map((row) => {
+                        return {
+                            codigo_destino_pago: row.payment_destination_id,
+                            codigo_metodo_pago: row.payment_method_type_id,
+                            referencia: row.reference,
+                            pago_recibido: true,
+                            monto: row.payment
+                        }
+                    })
+                }
+
+                return []
+            },
+            getFormFee()
+            {
+                if(this.isCreditPayment)
+                {
+                    return [
+                        {
+                            fecha: this.form_fee.date,
+                            codigo_tipo_moneda: this.form.currency_type_id,
+                            monto: this.form_fee.amount,
+                            codigo_metodo_de_pago: this.form_fee.payment_method_type_id,
+                        }
+                    ]
+                }
+
+                return []
+            },
+            changePaymentDestination()
+            {
+                _.forEach(this.form.payments, row => {
+                    row.payment_destination_id = this.payment_destination_id
+                })
+            },
+            clickAddPayment() 
+            {
+                const payment_method_type_id = (this.cash_payment_method_types.length > 0) ? this.cash_payment_method_types[0].id:null
+
+                this.form.payments.push({
+                    date_of_payment: moment().format('YYYY-MM-DD'),
+                    payment_method_type_id: payment_method_type_id,
+                    reference: null,
+                    payment_destination_id: this.payment_destination_id,
+                    payment: 0,
+                })
+
+                this.calculateAmountPayments()
+
+            },
+            calculateAmountPayments() 
+            {
+                const amount = _.round(this.form.total / this.form.payments.length, 2)
+
+                _.forEach(this.form.payments, row => {
+                    row.payment = amount
+                })
+
+                this.inputPayment()
+            },
+            clickAddDeletePayment(index)
+            {
+                this.form.payments.splice(index, 1)
+                this.calculateAmountPayments()
+            },
+            changePaymentMethodTypeFee(){
+
+                const payment_method_type = _.find(this.credit_payment_method_types, {id : this.form_fee.payment_method_type_id})
+
+                if(payment_method_type)
+                {
+                    const number_days = payment_method_type.number_days ? payment_method_type.number_days : 1
+                    this.form_fee.date = moment(this.form.fecha_de_emision).add(number_days, 'days').format('YYYY-MM-DD')
+                }
+
+            },
+            calculatePaymentFee()
+            {
+                this.form_fee.amount = this.form.total
+            },
+            setDataPaymentFee(){
+
+                if (this.isCreditPayment)
+                {
+                    this.initFormFee()
+                    this.form_fee.payment_method_type_id = (this.credit_payment_method_types.length > 0) ? this.credit_payment_method_types[0].id:null
+                    this.changePaymentMethodTypeFee()
+                }
+
+            },
+            inputPayment(){
+                this.payment_change = this.roundNumber(this.getTotalPayments() - parseFloat(this.form.total))
+            },
+            // pagos
+
         }
     }
 </script>
