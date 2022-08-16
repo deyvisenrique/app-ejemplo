@@ -24,6 +24,7 @@ import AdvancedConfiguration from './assets/vue/pages/panels/advanced_configurat
 import ListItemsSale from './assets/vue/pages/pos/components/ListItemsSale.vue'
 import SaleDetailPos from './assets/vue/pages/pos/sale_detail.vue'
 import SalePaymentPos from './assets/vue/pages/pos/payment.vue'
+import LandscapePos from './assets/vue/pages/pos/landscape_pos.vue'
 
 // import PreviewPdf2 from './assets/vue/components/document/PreviewPdf2';
 
@@ -105,6 +106,10 @@ export default [
   {
     path: '/sale-payment-pos/:document_type_description',
     component: SalePaymentPos
+  },
+  {
+    path: '/landscape-pos/',
+    component: LandscapePos
   },
   
   // {

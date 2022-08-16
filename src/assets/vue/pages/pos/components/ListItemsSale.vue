@@ -9,7 +9,7 @@
                     <f7-col width="70">
                         <div class="searchbar searchbar-inline" style="margin:4%">
                             <div class="searchbar-input-wrap">
-                                <input type="search" placeholder="Buscar" style="font-size:12px" v-model="form.input" @input="searchRecords"/>
+                                <input type="search" placeholder="Buscar" style="font-size:12px" v-model="form_search.input" @input="searchRecords"/>
                                 <i class="searchbar-icon"></i>
                                 <button  class="input-clear-button" @click="clickClearInput"></button>
                             </div>
@@ -29,7 +29,7 @@
             <f7-row class="padding-horizontal">
 
                 <f7-col width="10">
-                    <template v-if="form.favorite == 1">
+                    <template v-if="form_search.favorite == 1">
                         <span class="padding-top margin-top material-icons text-color-purple" @click="clickFavorite">favorite</span>
                     </template>
                     <template v-else>
@@ -127,19 +127,20 @@
     import { auth } from "mixins_/auth"
     import {general_functions, scanner} from "mixins_/general_functions"
     import {deletable} from "mixins_/deletable"
-    import queryString from "query-string"
     import ItemForm from '../../items/partials/form.vue'
     import HeaderLayout from "components/layout/Header"
+
+    import {fn_list_items_sale} from "../mixins/pos_functions"
 
     export default {
         name: "ListItemsSale",
         components: { ItemForm, HeaderLayout },
-        mixins: [auth, general_functions, deletable, scanner],
+        mixins: [auth, general_functions, deletable, scanner, fn_list_items_sale],
         data: function () {
             return {
                 resource: 'items',
                 records: [],
-                form: {},
+                form_search: {},
                 current_page: 1,
                 pagination: {
                     current_page: 0,
@@ -161,63 +162,15 @@
         computed: {
         },
         async created() {
+            await this.checkOrientation()
             await this.loadConfiguration()
-            await this.initForm()
+            await this.initFormSearch()
             await this.initLoadingText()
             await this.getCategories()
             await this.getRecords()
             await this.events()
         }, 
         methods: {
-            quantitySelectedRecords() 
-            {
-                return this.getListItemsSale().length
-            },
-            getListItemsSale()
-            {
-                const list_items_sale = this.getStorage('list_items_sale', true)
-
-                if(list_items_sale) return list_items_sale
-
-                return []
-            },
-            getCategoryName(category){
-                return category.name.toUpperCase()
-            },
-            clickSearchByCategory(index, category_id)
-            {
-                this.selectedCategory(index)
-                this.form.category_id = category_id
-                this.initData()
-            },
-            selectedCategory(index)
-            {
-                this.categories = this.categories.map((row)=>{
-                    row.selected = false
-                    return row
-                })
-
-                this.categories[index].selected = true
-            },
-            async getCategories() {
-
-                this.showLoading()
-
-                await this.$http.get(`${this.returnBaseUrl()}/${this.resource}/table/categories`, this.getHeaderConfig())
-                            .then(response => {
-                                this.categories = response.data
-                                this.categories.unshift({id: null, name: 'TODOS', selected: false})
-                            })
-                            .then(() => {
-                                this.hideLoading()
-                            })
-
-            },
-            clickFavorite()
-            {
-                this.form.favorite = (this.form.favorite === 1) ? 0 : 1
-                this.initData()
-            },
             validateData()
             {
                 let items_price_zero = 0
@@ -238,164 +191,17 @@
 
                 this.redirectRoute('/sale-detail-pos/')
             },
-            getSelectedRecords()
-            {
-                return this.records.filter((row) => {
-                    return row.quantity > 0
-                })
-            },
-            isSelectedRecord(index)
-            {
-                return this.records[index].quantity > 0
-            },
-            saveSelectedItems(current_selected_item)
-            {
-                let list_items_sale = this.getListItemsSale()
-                const selected_records = this.getSelectedRecords()
-                let data = []
-
-                // si existen productos guardados en storage
-                if(list_items_sale.length > 0)
-                {
-                    // se valida la cantidad para determinar si se elimina el producto
-                    if(current_selected_item.quantity <= 0)
-                    {
-                        _.remove(list_items_sale, {item_id : current_selected_item.item_id})
-                    }
-                    else
-                    {
-                        // se buscan los productos registrados en storage
-                        selected_records.forEach(row => {
-
-                            const item_sale = _.find(list_items_sale, {item_id : row.item_id})
-
-                            // si no existe el producto seleccionado en el storage, se agrega
-                            if(!item_sale)
-                            {
-                                list_items_sale.push({...row})
-                            }
-                            else
-                            {
-                                // si existe se regulariza cantidad
-                                item_sale.quantity = row.quantity
-                            }
-                        })
-                    }
-
-                    data = list_items_sale
-                }
-                else
-                {
-                    data = selected_records
-                }
-
-                this.setStorage('list_items_sale', data, true)
-            },
-            selected(index, quantity = 1)
-            {
-                this.records[index].quantity = (this.records[index].quantity > 0) ? 0 : quantity
-                this.saveSelectedItems(this.records[index])
-                this.quantitySelectedRecords()
-            },
-            calculateQuantity(value, index) 
-            {
-                let quantity = parseFloat(this.records[index].quantity)
-                let result = (quantity += parseFloat(value))
-                this.records[index].quantity = (result < 0) ? 0 : result
-                this.saveSelectedItems(this.records[index])
-            },
-            findItem(item_id)
-            {
-                return _.find(this.records, {item_id:item_id})
-            },
-            checkSelectedRecords(){
-
-                const selected_records = this.getStorage('list_items_sale', true)
-
-                if(selected_records)
-                {
-                    selected_records.forEach(sr_row => {
-                        
-                        const find_item = this.findItem(sr_row.item_id)
-    
-                        if(find_item)
-                        {
-                            find_item.quantity = sr_row.quantity
-                            find_item.sale_unit_price = sr_row.sale_unit_price
-                        }
-                    })
-                }
-
-            },
-
-            clickSearchBarcode(){
-
-                const context = this
-                cordova.plugins.barcodeScanner.scan(
-                    (result) => {
-                        if(result.text)
-                        {
-                            context.form.input = result.text
-                            context.form.search_by_barcode = 1
-                            context.initData()
-                            context.form.search_by_barcode = 0
-                        }
-                    },
-                    (error) => {
-                        context.showAlert(`Error al escanear: ${error}`)
-                    },
-                    context.scanner_configuration
-                )
-
-            },
             loadConfiguration(){
                 this.configuration = this.getInitialConfiguration()
-            },
-            events(){
-
-                this.$eventHub.$on('reloadData', ()=>{
-                    this.initData()
-                })
-
             },
             clickCreate(recordId = null){
                 this.recordId = recordId
                 this.showDialog = true
             },
-            clickClearInput(){
-                this.form.input = null
-                this.initData()
-            },
-            initLoadingText(){
-                this.loading_text = 'Sin datos'
-            },
-            async searchRecords(){
-
-                if(this.form.input.length > 2)
-                {
-                    await this.initData()
-                }
-
-            },
-            initForm(){
-                this.form = {
-                    input : null,
-                    search_by_barcode : 0,
-                    category_id: null,
-                    favorite : 0,
-                }
-            },
             async pullToRefresh(e, done){
 
-                await this.initData()
+                await this.initDataListItems()
                 done()
-
-            },
-            async initData(){
-
-                this.current_page = 1
-                this.records = []
-                await this.getRecords()
 
             },
             async loadMoreRecords(){
@@ -434,14 +240,6 @@
                             if(this.records.length == 0) this.initLoadingText()
 
                         })
-
-            },
-            getQueryParameters() {
-
-                return queryString.stringify({
-                    page: this.current_page,
-                    ...this.form
-                })
 
             },
         }
