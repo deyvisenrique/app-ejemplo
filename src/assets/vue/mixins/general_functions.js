@@ -75,7 +75,6 @@ export const general_functions = {
             return {
                 show_image_item: true,
                 print_format_pdf: 'ticket',
-                theme_color: 'blue'
             }
 
         },
@@ -138,7 +137,14 @@ export const general_functions = {
             return _.round(number, decimals)
         },
         getThemeSettings() {
-            const config = JSON.parse(this.getStorage('app_configuration'))
+            const theme = {
+                theme_color: 'blue',
+                card_color: 'multicolor'
+            }
+            if(this.getStorage('app_configuration') === null) {
+                this.setStorage('app_configuration', theme, true)
+            }
+            const config = this.getStorage('app_configuration', true)
             const theme_color = config.theme_color // white | blue | red | dark
             const is_unicolor_boxes = config.card_color == 'unicolor' ? true : false
             // logo

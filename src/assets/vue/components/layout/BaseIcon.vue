@@ -31,14 +31,14 @@
 <style>
 
 .home-icon {
-    border-radius: 40%;
+    border-radius: 35%;
     text-align: center;
     padding: 10px;
 }
 .home-icon-white {
   background: var(--f7-color-teal);
 }
-.home-icon-blue {
+/*.home-icon-blue {
   background: var(--f7-color-gray);
-}
+}*/
 </style>
