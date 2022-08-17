@@ -35,7 +35,7 @@
         <template v-if="!is_pos_mode">
             <f7-row>
                 <f7-col v-if="checkPermissions('invoice')">
-                    <f7-card @click.native="go('nw_doc')" :class="theme.class_box_color" style="cursor:pointer;">
+                    <f7-card no-shadow @click.native="go('nw_doc')" :class="theme.class_box_color" style="cursor:pointer;">
                         <f7-card-content class="text-align-center">
                             <base-icon nameIcon="file-invoice" widthIcon="25" clases="padding-top"></base-icon>
                             <p class="font-w-500" :class="theme.class_text_color">Factura <br> electrónica</p>
@@ -43,7 +43,7 @@
                     </f7-card>
                 </f7-col>
                 <f7-col v-if="checkPermissions('invoice-ticket')">
-                    <f7-card @click.native="go('nw_docb')" :class="theme.class_box_color_tint" style="cursor:pointer;">
+                    <f7-card no-shadow @click.native="go('nw_docb')" :class="theme.class_box_color_tint" style="cursor:pointer;">
                         <f7-card-content class="text-align-center">
                             <base-icon nameIcon="file-invoice" widthIcon="25" clases="padding-top"></base-icon>
                             <p class="font-w-500" :class="theme.class_text_color">Boleta <br> electrónica</p>
@@ -54,7 +54,7 @@
 
             <f7-row>
                 <f7-col v-if="checkPermissions('sale-note')">
-                    <f7-card @click.native="go('sale_note')" :class="theme.class_box_color_shade" style="cursor:pointer;">
+                    <f7-card no-shadow @click.native="go('sale_note')" :class="theme.class_box_color_shade" style="cursor:pointer;">
                         <f7-card-content class="text-align-center">
                             <base-icon nameIcon="file-sale" widthIcon="25" clases="padding-top"></base-icon>
                             <p class="font-w-500" :class="theme.class_text_color"><br> Nota de venta</p>
@@ -62,7 +62,7 @@
                     </f7-card>
                 </f7-col>
                 <f7-col v-if="checkPermissions('order-note')">
-                    <f7-card @click.native="go('order_note')" :class="theme.class_box_color" style="cursor:pointer;">
+                    <f7-card no-shadow @click.native="go('order_note')" :class="theme.class_box_color" style="cursor:pointer;">
                         <f7-card-content class="text-align-center">
                             <base-icon nameIcon="file" widthIcon="25" clases="padding-top"></base-icon>
                             <p class="font-w-500" :class="theme.class_text_color"><br> Pedido</p>
@@ -73,7 +73,7 @@
 
             <f7-row>
                 <f7-col v-if="checkPermissions('purchase')">
-                    <f7-card @click.native="go('purchase')" :class="theme.class_box_color_tint" style="cursor:pointer;">
+                    <f7-card no-shadow @click.native="go('purchase')" :class="theme.class_box_color_tint" style="cursor:pointer;">
                         <f7-card-content class="text-align-center">
                             <base-icon nameIcon="car-sale" widthIcon="25" clases="padding-top"></base-icon>
                             <p class="font-w-500" :class="theme.class_text_color">
@@ -83,7 +83,7 @@
                     </f7-card>
                 </f7-col>
                 <f7-col v-if="checkPermissions('quotation')">
-                    <f7-card @click.native="go('quotation')" :class="theme.class_box_color_shade" style="cursor:pointer;">
+                    <f7-card no-shadow @click.native="go('quotation')" :class="theme.class_box_color_shade" style="cursor:pointer;">
                         <f7-card-content class="text-align-center">
                             <base-icon nameIcon="file-sale" widthIcon="25" clases="padding-top"></base-icon>
                             <p class="font-w-500" :class="theme.class_text_color">
@@ -96,7 +96,7 @@
 
             <f7-row>
                 <f7-col v-if="checkPermissions('documents')">
-                    <f7-card @click.native="go('ls_doc')" :class="theme.class_box_color" style="cursor:pointer;">
+                    <f7-card no-shadow @click.native="go('ls_doc')" :class="theme.class_box_color" style="cursor:pointer;">
                         <f7-card-content class="text-align-center">
                             <base-icon nameIcon="file-list" widthIcon="25" clases="padding-top"></base-icon>
                             <p class="font-w-500" :class="theme.class_text_color">Lista de <br> comprobantes</p>
@@ -104,7 +104,7 @@
                     </f7-card>
                 </f7-col>
                 <f7-col v-if="checkPermissions('customers')">
-                    <f7-card @click.native="go('customers')" :class="theme.class_box_color_tint" style="cursor:pointer;">
+                    <f7-card no-shadow @click.native="go('customers')" :class="theme.class_box_color_tint" style="cursor:pointer;">
                         <f7-card-content clases="">
                             <base-icon nameIcon="users" widthIcon="25" clases="padding-top text-align-center"></base-icon>
                             <p class="font-w-500 text-align-center" :class="theme.class_text_color">
@@ -117,7 +117,7 @@
 
             <f7-row>
                 <f7-col v-if="checkPermissions('cash')">
-                    <f7-card @click.native="go('cash')" :class="theme.class_box_color_shade" style="cursor:pointer;">
+                    <f7-card no-shadow @click.native="go('cash')" :class="theme.class_box_color_shade" style="cursor:pointer;">
                         <f7-card-content clases="">
                             <base-icon nameIcon="cash-machine" widthIcon="25" clases="text-align-center padding-top"></base-icon>
                             <p class="font-w-500 text-align-center" :class="theme.class_text_color">
@@ -127,7 +127,7 @@
                     </f7-card>
                 </f7-col>
                 <f7-col  v-if="checkPermissions('items')">
-                    <f7-card @click.native="go('items')" :class="theme.class_box_color" style="cursor:pointer;">
+                    <f7-card no-shadow @click.native="go('items')" :class="theme.class_box_color" style="cursor:pointer;">
                         <f7-card-content clases="">
                             <base-icon nameIcon="logistics" widthIcon="25" clases="padding-top text-align-center"></base-icon>
                             <p class="font-w-500 text-align-center" :class="theme.class_text_color">
@@ -140,7 +140,7 @@
 
             <f7-row>
                 <f7-col v-if="checkPermissions('report-sales')">
-                    <f7-card @click.native="go('report-sales')" :class="theme.class_box_color_tint" style="cursor:pointer;">
+                    <f7-card no-shadow @click.native="go('report-sales')" :class="theme.class_box_color_tint" style="cursor:pointer;">
                         <f7-card-content class="text-align-center">
                             <base-icon nameIcon="bars" widthIcon="25" clases="padding-top"></base-icon>
                             <p class="font-w-500" :class="theme.class_text_color"><br>Reportes</p>
@@ -148,7 +148,7 @@
                     </f7-card>
                 </f7-col>
                 <f7-col v-if="checkPermissions('validate-document')">
-                    <f7-card @click.native="go('cpe')" :class="theme.class_box_color_shade" style="cursor:pointer;">
+                    <f7-card no-shadow @click.native="go('cpe')" :class="theme.class_box_color_shade" style="cursor:pointer;">
                         <f7-card-content class="text-align-center">
                             <base-icon nameIcon="qr-code" widthIcon="25" clases="padding-top"></base-icon>
                             <p class="font-w-500" :class="theme.class_text_color"><br> Validar cpe</p>

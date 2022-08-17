@@ -145,7 +145,7 @@ export const general_functions = {
                 this.setStorage('app_configuration', theme, true)
             }
             const config = this.getStorage('app_configuration', true)
-            const theme_color = config.theme_color // white | blue | red | dark
+            const theme_color =  config.theme_color // 'white' //  white | blue | red | dark
             const is_unicolor_boxes = config.card_color == 'unicolor' ? true : false
             // logo
             const css_color_fill = theme_color == 'white' ? '#00B19A' : '#fff'

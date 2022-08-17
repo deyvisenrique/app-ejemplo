@@ -3,10 +3,10 @@
 
         <header-layout title="Productos"></header-layout>
 
-        <f7-card class="card-100 padding-top no-shadow" :color="theme.name_color_theme" style="min-height: 90%">
-            <f7-block class="">
+        <f7-card class="card-100 padding-top no-shadow" :class="theme.class_bg_body" :color="theme.name_color_theme" style="min-height: 90%">
+            <f7-card class="padding" no-shadow>
                 <f7-row>
-                    <f7-col width="70">
+                    <f7-col width="70" style="border: 1px solid #8e8e93;border-radius: 5px;">
                         <div class="searchbar searchbar-inline" style="margin:4%">
                             <div class="searchbar-input-wrap">
                                 <input type="search" placeholder="Buscar" style="font-size:12px" v-model="form.input" @input="searchRecords"/>
@@ -24,9 +24,9 @@
                         <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
                     </f7-col>
                 </f7-row>
-            </f7-block>
+            </f7-card>
 
-            <f7-block>
+            <f7-block style="padding-left: 8px;padding-right: 8px;">
                 <div>
                     <div class="row" v-if="records.length > 0">
                         <div class="col-50" v-for="(row, index) in records" :key="index">

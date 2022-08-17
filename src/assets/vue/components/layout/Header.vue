@@ -2,14 +2,19 @@
 <div>
     <f7-block :class="theme.class_bg_header" class="no-margin-vertical padding-vertical">
         <f7-row class="display-flex align-items-center">
-            <f7-col width="50">
-                <f7-link href="/">
+            <f7-col width="33">
+                <f7-link href="/" v-if="theme.theme_color != 'white'">
                     <logo heightLogo="60"></logo>
                 </f7-link>
                 <!-- tema: {{ theme.theme_color }} <br>
                 unicolor: {{ theme.is_unicolor_boxes }} <br> -->
             </f7-col>
-            <f7-col width="50" class="">
+            <f7-col width="33" class="text-align-center">
+                <f7-link href="/" v-if="theme.theme_color == 'white'">
+                    <logo heightLogo="60"></logo>
+                </f7-link>
+            </f7-col>
+            <f7-col width="33" class="">
                 <f7-button panel-open="right" class="text-align-right" :class="theme.class_menu_text_color"><i class="fas fa-bars"></i></f7-button>
             </f7-col>
         </f7-row>
@@ -44,7 +49,7 @@
             <f7-col width="10"></f7-col>
         </f7-row>
     </f7-block>
-    <header-waves :title="title"></header-waves>
+    <header-waves :title="title" v-if="theme.theme_color != 'white'"></header-waves>
 </div>
 </template>
 

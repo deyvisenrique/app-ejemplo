@@ -8,7 +8,7 @@
                     <i class="fas fa-angle-left custom-icon-back-form"></i>
                 </a>
             </f7-col>
-            <f7-col width="70" :class="theme.class_menu_text_color">
+            <f7-col width="70" :class="theme.class_menu_text_color" class="custom-title-form">
                 Listado de Productos
             </f7-col>
             <f7-col width="10">
@@ -20,10 +20,10 @@
         </f7-row>
     </f7-block>
 
-    <f7-card class="card-100 padding no-shadow" :color="theme.name_color_theme" style="min-height: 90%">
-        <f7-block style="padding:0px">
+    <f7-card class="card-100 no-padding no-shadow" :class="theme.class_bg_body" :color="theme.name_color_theme" style="min-height: 90%">
+        <f7-card class="padding" no-shadow>
             <f7-row>
-                <f7-col width="70">
+                <f7-col width="70" style="border: 1px solid #8e8e93;border-radius: 5px;">
                     <div class="searchbar searchbar-inline" style="margin:4%">
                         <div class="searchbar-input-wrap">
                             <input type="search" placeholder="Buscar" style="font-size:12px" v-model="search_item" @input="inputSearchItem"/>
@@ -52,7 +52,9 @@
                     </div>
                 </f7-col>
             </f7-row>
+        </f7-card>
 
+        <f7-block style="padding-left: 8px;padding-right: 8px;">
             <div class="list inset ">
                 <p v-if="items_car.length == 0">
                     No tienes productos agregados
