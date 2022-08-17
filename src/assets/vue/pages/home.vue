@@ -317,11 +317,26 @@
 
                 if(this.is_pos_mode)
                 {
-                    this.redirectRoute('/list-items-sale/')
+                    this.checkCurrentOrientation()
+                    // this.redirectRoute('/list-items-sale/')
                 }
 
                 this.$eventHub.$emit('appMode', data.style_settings.app_mode)
 
+            },
+            checkCurrentOrientation()
+            {
+                const context = this
+
+                if (window.matchMedia('(orientation: portrait)').matches) 
+                {
+                    context.redirectRoute('/list-items-sale/')
+                }
+                
+                if (window.matchMedia('(orientation: landscape)').matches) 
+                {
+                    context.redirectRoute('/landscape-pos/')
+                }
             },
             setGenerals(data){
                 

@@ -1,92 +1,175 @@
 <template>
-    <f7-page class="" color="bluemagenta">
+    
+    <div>
 
-        <header-layout :title="geTitle" hrefBack="/list-items-sale/" :overwriteBackRoute="true"></header-layout>
-
-        <f7-block>
-
-            <template v-if="document_types.length > 0">
-                <f7-segmented raised>
-                    <template v-for="(row, index) in document_types">
-                        <f7-button @click="clickChangeDocumentType(row.id)" :class="form.document_type_id === row.id ? 'button-active':''">{{row.text}}</f7-button>
-                    </template>
-                </f7-segmented>
-            </template>
-            <template v-else>
-                <f7-button class="button-active">NO TIENE PERMISOS ASIGNADOS</f7-button>
-            </template>
- 
-            <div class="data-table margin-bottom padding-top">
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="numeric-only">#</th>
-                            <th class="label-cell">Producto</th>
-                            <th class="label-cell">P. Unitario</th>
-                            <th class="numeric-only text-align-center">Cantidad</th>
-                            <th class="numeric-only">M. Descuento</th>
-                            <th class="numeric-only">Total</th>
-                            <th class="numeric-only"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(row, index) in form.items" :key="index">
-                            <td class="numeric-only">{{ index + 1 }}</td>
-                            <td class="label-cell">{{ row.item.description }}</td>
-                            <td class="numeric-only">
-                                <input class="input-quantity-table" required validate v-model="row.unit_price" type="number"  @change="changeUnitPrice(index)" />
-                            </td>
-                            <td class="numeric-only padding">
-                                
-                                <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
-                                    <div class="stepper-button-minus" @click="calculateQuantity(-1, index)"></div>
-                                    <div class="stepper-input-wrap">
-                                        <input type="number" v-model="row.quantity" min="0" step="1" @change="changeQuantity(index)" />
+        <template v-if="landscapeMode">
+            
+            <f7-block>
+                <template v-if="document_types.length > 0">
+                    <f7-segmented raised>
+                        <template v-for="(row, index) in document_types">
+                            <f7-button @click="clickChangeDocumentType(row.id)" :class="form.document_type_id === row.id ? 'button-active':''">{{row.text}}</f7-button>
+                        </template>
+                    </f7-segmented>
+                </template>
+                <template v-else>
+                    <f7-button class="button-active">NO TIENE PERMISOS ASIGNADOS</f7-button>
+                </template>
+    
+                <div class="data-table margin-bottom padding-top">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="numeric-only">#</th>
+                                <th class="label-cell">Producto</th>
+                                <th class="label-cell">P. Unitario</th>
+                                <th class="numeric-only text-align-center">Cantidad</th>
+                                <th class="numeric-only">M. Descuento</th>
+                                <th class="numeric-only">Total</th>
+                                <th class="numeric-only"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(row, index) in form.items" :key="index">
+                                <td class="numeric-only">{{ index + 1 }}</td>
+                                <td class="label-cell">{{ row.item.description }}</td>
+                                <td class="numeric-only">
+                                    <input class="input-quantity-table" required validate v-model="row.unit_price" type="number"  @change="changeUnitPrice(index)" />
+                                </td>
+                                <td class="numeric-only padding">
+                                    
+                                    <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
+                                        <div class="stepper-button-minus" @click="calculateQuantity(-1, index)"></div>
+                                        <div class="stepper-input-wrap">
+                                            <input type="number" v-model="row.quantity" min="0" step="1" @change="changeQuantity(index)" />
+                                        </div>
+                                        <div class="stepper-button-plus" @click="calculateQuantity(1, index)"></div>
                                     </div>
-                                    <div class="stepper-button-plus" @click="calculateQuantity(1, index)"></div>
-                                </div>
 
-                            </td>
-                            <td class="numeric-only">
-                                <input class="input-quantity-table" required validate v-model="row.input_discount" type="number"  @change="changeInputDiscount(index)" />
-                            </td>
-                            <td class="numeric-only">{{ row.total }}</td> 
-                            <td>
-                                <a @click="clickDelete(index)">
-                                    <f7-icon ios="f7:delete" color="red" aurora="f7:delete" md="material:delete" ></f7-icon>
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                                </td>
+                                <td class="numeric-only">
+                                    <input class="input-quantity-table" required validate v-model="row.input_discount" type="number"  @change="changeInputDiscount(index)" />
+                                </td>
+                                <td class="numeric-only">{{ row.total }}</td> 
+                                <td>
+                                    <a @click="clickDelete(index)">
+                                        <f7-icon ios="f7:delete" color="red" aurora="f7:delete" md="material:delete" ></f7-icon>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-            <div class="no-padding-horizontal padding-top">
-                <f7-block class="bg-white-shade block-strong inset no-margin">
-                    <f7-row>
-                        <f7-col>
-                            <h3>OP. Gravada</h3>
-                            <h3>IGV</h3>
-                            <h3>Descuentos</h3>
-                        </f7-col>
-                        <f7-col class="text-align-right">
-                            <h3>{{currency_type.symbol}} {{form.total_taxed}}</h3>
-                            <h3>{{currency_type.symbol}} {{form.total_igv}}</h3>
-                            <h3>{{currency_type.symbol}} {{form.total_discount}}</h3>
-                        </f7-col>
-                    </f7-row>
-                </f7-block>
-            </div>
-        </f7-block>
- 
-        <f7-fab position="left-bottom" class="margin-right" color="red" @click="clickDeleteItems">
-            <f7-icon ios="f7:delete" aurora="f7:delete" md="material:delete"></f7-icon>
-        </f7-fab>
+                <div class="no-padding-horizontal padding-top">
+                    <f7-block class="bg-white-shade block-strong inset no-margin">
+                        <f7-row>
+                            <f7-col>
+                                <h3>OP. Gravada</h3>
+                                <h3>IGV</h3>
+                                <h3>Descuentos</h3>
+                            </f7-col>
+                            <f7-col class="text-align-right">
+                                <h3>{{currency_type.symbol}} {{form.total_taxed}}</h3>
+                                <h3>{{currency_type.symbol}} {{form.total_igv}}</h3>
+                                <h3>{{currency_type.symbol}} {{form.total_discount}}</h3>
+                            </f7-col>
+                        </f7-row>
+                    </f7-block>
+                </div>
+            </f7-block>
+        </template>
+        <template v-else>
 
-        <f7-fab position="right-bottom" class="margin-right" color="bluemagenta" @click="clickPayment">
-            <f7-icon ios="f7:arrow_forward" aurora="f7:arrow_forward" md="material:arrow_forward"></f7-icon>
-        </f7-fab>
-    </f7-page>
+            <header-layout :title="geTitle" hrefBack="/list-items-sale/" :overwriteBackRoute="true"></header-layout>
+
+            <f7-block>
+                <template v-if="document_types.length > 0">
+                    <f7-segmented raised>
+                        <template v-for="(row, index) in document_types">
+                            <f7-button @click="clickChangeDocumentType(row.id)" :class="form.document_type_id === row.id ? 'button-active':''">{{row.text}}</f7-button>
+                        </template>
+                    </f7-segmented>
+                </template>
+                <template v-else>
+                    <f7-button class="button-active">NO TIENE PERMISOS ASIGNADOS</f7-button>
+                </template>
+    
+                <div class="data-table margin-bottom padding-top">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="numeric-only">#</th>
+                                <th class="label-cell">Producto</th>
+                                <th class="label-cell">P. Unitario</th>
+                                <th class="numeric-only text-align-center">Cantidad</th>
+                                <th class="numeric-only">M. Descuento</th>
+                                <th class="numeric-only">Total</th>
+                                <th class="numeric-only"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(row, index) in form.items" :key="index">
+                                <td class="numeric-only">{{ index + 1 }}</td>
+                                <td class="label-cell">{{ row.item.description }}</td>
+                                <td class="numeric-only">
+                                    <input class="input-quantity-table" required validate v-model="row.unit_price" type="number"  @change="changeUnitPrice(index)" />
+                                </td>
+                                <td class="numeric-only padding">
+                                    
+                                    <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
+                                        <div class="stepper-button-minus" @click="calculateQuantity(-1, index)"></div>
+                                        <div class="stepper-input-wrap">
+                                            <input type="number" v-model="row.quantity" min="0" step="1" @change="changeQuantity(index)" />
+                                        </div>
+                                        <div class="stepper-button-plus" @click="calculateQuantity(1, index)"></div>
+                                    </div>
+
+                                </td>
+                                <td class="numeric-only">
+                                    <input class="input-quantity-table" required validate v-model="row.input_discount" type="number"  @change="changeInputDiscount(index)" />
+                                </td>
+                                <td class="numeric-only">{{ row.total }}</td> 
+                                <td>
+                                    <a @click="clickDelete(index)">
+                                        <f7-icon ios="f7:delete" color="red" aurora="f7:delete" md="material:delete" ></f7-icon>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="no-padding-horizontal padding-top">
+                    <f7-block class="bg-white-shade block-strong inset no-margin">
+                        <f7-row>
+                            <f7-col>
+                                <h3>OP. Gravada</h3>
+                                <h3>IGV</h3>
+                                <h3>Descuentos</h3>
+                            </f7-col>
+                            <f7-col class="text-align-right">
+                                <h3>{{currency_type.symbol}} {{form.total_taxed}}</h3>
+                                <h3>{{currency_type.symbol}} {{form.total_igv}}</h3>
+                                <h3>{{currency_type.symbol}} {{form.total_discount}}</h3>
+                            </f7-col>
+                        </f7-row>
+                    </f7-block>
+                </div>
+            </f7-block>
+    
+            <f7-fab position="left-bottom" class="margin-right" color="red" @click="clickDeleteItems">
+                <f7-icon ios="f7:delete" aurora="f7:delete" md="material:delete"></f7-icon>
+            </f7-fab>
+
+            <f7-fab position="right-bottom" class="margin-right" color="bluemagenta" @click="clickPayment">
+                <f7-icon ios="f7:arrow_forward" aurora="f7:arrow_forward" md="material:arrow_forward"></f7-icon>
+            </f7-fab>
+
+        </template>
+
+    </div>
+
 </template>
 
 <script>
@@ -99,6 +182,13 @@
     import {calculateRowItem} from "js_/helpers/functions"
 
     export default {
+        props: {
+            landscapeMode: {
+                type: Boolean,
+                required: false,
+                default: false
+            },
+        },
         name: 'SaleDetailPos',
         components: {
             HeaderLayout
@@ -135,8 +225,42 @@
             await this.getTables()
             await this.initForm()
             await this.initData()
+            await this.initFormLandscapeMode()
+            await this.inputEventsSaleDetail()
+
+        },
+        async mounted()
+        {
         },
         methods: {
+            inputEventsSaleDetail()
+            {
+                //Modo Landscape - evento para actualizar items en SaleDetail al agregar/modificar en este listado de productos
+                this.$eventHub.$on('eventSelectedItem', () => {
+                    this.initData(true)
+                })
+
+                // evento que inicializa los datos cuando se culmina el registro del documento en Payment
+                this.$eventHub.$on('initializeDataLandscape', ()=>{
+                    console.log("detai initializeDataLandscape")
+                    this.getTables()
+                    this.initForm()
+                    this.saveFormInStorage()
+                    this.eventInitDataPayment() //todo
+                })
+            },
+            eventInitDataPayment()
+            {
+                this.$eventHub.$emit('eventInitDataPayment')
+            },
+            async initFormLandscapeMode()
+            {
+                if(this.landscapeMode) 
+                {
+                    await this.saveFormInStorage()
+                    this.$emit('mountedSaleDetailPos')
+                }
+            },
             loadConfiguration(){
                 this.configuration = this.getInitialConfiguration()
             },
@@ -152,6 +276,11 @@
             clickChangeDocumentType(document_type_id)
             {
                 this.form.document_type_id = document_type_id
+
+                if(this.landscapeMode)
+                {
+                    this.$eventHub.$emit('eventChangeDocumentType', document_type_id)
+                }
             },
             getShortDescriptionDocumentType(document_type)
             {
@@ -447,13 +576,22 @@
                 return calculateRowItem(form_item, 'PEN', 1)
 
             },
-            async initData()
+            async initData(from_event = false)
             {
                 this.list_items_sale = this.getStorage('list_items_sale', true)
 
-                this.form.items = await this.getTransformDataItem(this.list_items_sale)
-
-                this.calculateTotal()
+                if(this.list_items_sale)
+                {
+                    this.form.items = await this.getTransformDataItem(this.list_items_sale)
+    
+                    this.calculateTotal()
+    
+                    // evento a Payment para actualizar form con datos de calculos, se dispara cuando modifican productos en el listado
+                    if(from_event)
+                    {
+                        this.emitEventFormSale()
+                    }
+                }
 
             },
             calculateTotal()
@@ -529,11 +667,24 @@
                 item_sale.quantity = parseFloat(quantity)
 
                 this.saveListItemsSale()
+                
             },
             saveListItemsSale()
             {
                 this.setStorage('list_items_sale', this.list_items_sale, true)
+                
+                if(this.landscapeMode) 
+                {
+                    // evento para actualizar datos en listado
+                    this.$emit('updateDataInListItem') 
+                    this.emitEventFormSale()
+                }
             },
+            emitEventFormSale()
+            {
+                // evento para actualizar datos en el componente Payment
+                this.$eventHub.$emit('eventUpdateDataFormSale', this.form) 
+            }
         }
     }
 </script>

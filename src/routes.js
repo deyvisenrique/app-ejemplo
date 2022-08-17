@@ -22,8 +22,12 @@ import AdvancedConfiguration from './assets/vue/pages/panels/advanced_configurat
 
 
 import ListItemsSale from './assets/vue/pages/pos/components/ListItemsSale.vue'
-import SaleDetailPos from './assets/vue/pages/pos/sale_detail.vue'
-import SalePaymentPos from './assets/vue/pages/pos/payment.vue'
+// import SaleDetailPos from './assets/vue/pages/pos/sale_detail.vue'
+import SaleDetailPosPage from './assets/vue/pages/pos/pages/sale_detail_page.vue'
+
+// import SalePaymentPos from './assets/vue/pages/pos/payment.vue'
+import SalePaymentPosPage from './assets/vue/pages/pos/pages/payment_page.vue'
+
 import LandscapePos from './assets/vue/pages/pos/landscape_pos.vue'
 
 // import PreviewPdf2 from './assets/vue/components/document/PreviewPdf2';
@@ -99,13 +103,22 @@ export default [
     path: '/list-items-sale/',
     component: ListItemsSale
   },
+  // {
+  //   path: '/sale-detail-pos/',
+  //   component: SaleDetailPos
+    
+  // },
   {
     path: '/sale-detail-pos/',
-    component: SaleDetailPos
+    component: SaleDetailPosPage
   },
+  // {
+  //   path: '/sale-payment-pos/:document_type_description',
+  //   component: SalePaymentPos
+  // },
   {
     path: '/sale-payment-pos/:document_type_description',
-    component: SalePaymentPos
+    component: SalePaymentPosPage
   },
   {
     path: '/landscape-pos/',

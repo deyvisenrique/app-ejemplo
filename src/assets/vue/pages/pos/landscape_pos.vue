@@ -1,11 +1,11 @@
 <template>
     <f7-page class="" color="bluemagenta">
 
-        <header-layout :title="geTitle" hrefBack="/list-items-sale/" :overwriteBackRoute="false"></header-layout>
+        <header-layout :title="geTitle" hrefBack="/list-items-sale/" :overwriteBackRoute="false" :showButtonBack="false"></header-layout>
 
         <f7-block >
             <f7-row>
-                <f7-col width="70" style="height:auto"> 
+                <f7-col width="65" style="height:auto"> 
                     <f7-card class="card-100 padding no-shadow" color="red" style="min-height: 90%">
                         <f7-block class="">
                             <f7-row>
@@ -23,7 +23,7 @@
                                     <span class="" style="font-size: 10px;line-height: 10px !important;">BUSCAR</span>
                                 </f7-col>
                                 <f7-col width="15" class="text-align-center">
-                                    <f7-button @click="clickCreate()" color="bluemagenta" fill small open-panel="right" icon="fas fa-plus"></f7-button>
+                                    <f7-button @click="clickCreateItem()" color="bluemagenta" fill small open-panel="right" icon="fas fa-plus"></f7-button>
                                     <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
                                 </f7-col>
                             </f7-row>
@@ -121,75 +121,31 @@
                     </f7-card>
                      
                 </f7-col>
-                <f7-col  width="30">
-                    <f7-card class="card-100 padding no-shadow" >
-
+                <f7-col  width="35">
+                    <f7-card class="card-100 padding-top no-shadow" >
                         <f7-block>
-                            <!-- <SaleDetailPos ></SaleDetailPos> -->
-                            
-                            <template v-if="document_types.length > 0">
-                                <f7-segmented raised>
-                                    <template v-for="(row, index) in document_types">
-                                        <f7-button @click="clickChangeDocumentType(row.id)" :class="form.document_type_id === row.id ? 'button-active':''">{{row.text}}</f7-button>
-                                    </template>
-                                </f7-segmented>
-                            </template>
-                            <template v-else>
-                                <f7-button class="button-active">NO TIENE PERMISOS ASIGNADOS</f7-button>
-                            </template>
-                            
-                            <div class="data-table margin-bottom padding-top">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th class="numeric-only">#</th>
-                                            <th class="label-cell">Producto</th>
-                                            <th class="label-cell">P. Unitario</th>
-                                            <th class="numeric-only text-align-center">Cantidad</th>
-                                            <th class="numeric-only">M. Descuento</th>
-                                            <th class="numeric-only">Total</th>
-                                            <th class="numeric-only"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="(row, index) in form.items" :key="index">
-                                            <td class="numeric-only">{{ index + 1 }}</td>
-                                            <td class="label-cell">{{ row.item.description }}</td>
-                                            <td class="numeric-only">
-                                                <input class="input-quantity-table" required validate v-model="row.unit_price" type="number"  @change="changeUnitPrice(index)" />
-                                            </td>
-                                            <td class="numeric-only padding">
-                                                
-                                                <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
-                                                    <div class="stepper-button-minus" @click="calculateQuantity(-1, index)"></div>
-                                                    <div class="stepper-input-wrap">
-                                                        <input type="number" v-model="row.quantity" min="0" step="1" @change="changeQuantity(index)" />
-                                                    </div>
-                                                    <div class="stepper-button-plus" @click="calculateQuantity(1, index)"></div>
-                                                </div>
-
-                                            </td>
-                                            <td class="numeric-only">
-                                                <input class="input-quantity-table" required validate v-model="row.input_discount" type="number"  @change="changeInputDiscount(index)" />
-                                            </td>
-                                            <td class="numeric-only">{{ row.total }}</td> 
-                                            <td>
-                                                <a @click="clickDelete(index)">
-                                                    <f7-icon ios="f7:delete" color="red" aurora="f7:delete" md="material:delete" ></f7-icon>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-
+                            <sale-detail-pos
+                                ref="refSaleDetailPos"
+                                :landscape-mode="true"
+                                @mountedSaleDetailPos="mountedSaleDetailPos"
+                                @updateDataInListItem="updateDataInListItem">
+                            </sale-detail-pos>
                         </f7-block>
+
+                        
+                        <f7-block v-if="load_sale_detail_pos">
+                            <payment-pos
+                                :landscape-mode="true">
+                            </payment-pos>
+                        </f7-block>
+ 
                     </f7-card>
                 </f7-col>
             </f7-row>
         </f7-block>
  
+        <item-form :showDialog.sync="showDialogItem"
+                    :recordId="recordItemId"></item-form>
     </f7-page>
 </template>
 <script>
@@ -198,22 +154,25 @@
     import {auth} from 'mixins_/auth'
     import {general_functions, operations} from 'mixins_/general_functions'
     import HeaderLayout from 'components/layout/Header'
-    import SaleDetailPos from './sale_detail.vue'
+    import SaleDetailPos from './components/SaleDetail.vue'
+    import PaymentPos from './components/Payment.vue'
+    import ItemForm from '../items/partials/form.vue'
 
-    import {fn_list_items_sale, fn_sale_detail} from "./mixins/pos_functions"
+    import {fn_list_items_sale} from "./mixins/pos_functions"
 
     export default {
         name: 'LandscapePos',
         components: {
             HeaderLayout,
-            SaleDetailPos
+            SaleDetailPos,
+            PaymentPos,
+            ItemForm,
         },
         mixins: [
             auth, 
             general_functions, 
             operations,
             fn_list_items_sale,
-            fn_sale_detail,
         ],
         data: function () {
             return {
@@ -233,28 +192,23 @@
                     total: 0
                 },
                 loading_text: null,
-                recordId: null,
+                recordItemId: null,
                 configuration: {},
                 categories: [],
                 // list item sale
 
-                // sale_details
-
-                document_types: [],
-                pos_document_types: [],
-
-                // sale_details
+                load_sale_detail_pos: false,
+                showDialogItem: false,
 
             }
         },
         computed: {
             geTitle(){
-                return `Vista Landscape`
+                return `Punto de venta`
             }
         },
         async created() {
             // list item sale
-
             await this.loadConfiguration()
             await this.checkOrientation()
             await this.initFormSearch()
@@ -262,18 +216,47 @@
             await this.getCategories()
             await this.getRecords()
             await this.events()
+            await this.inputEventsLandscapePos()
 
             // list item sale
 
-            // sale detail
-            await this.getTablesSaleDetail()
-            await this.initForm()
-            await this.initDataSaleDetail()
-
-            // sale detail
-
+        },
+        async mounted()
+        {
+            // await this.checkLoadPayment()
         },
         methods: {
+            inputEventsLandscapePos()
+            {
+                // evento que inicializa los datos cuando se culmina el registro del documento en Payment
+                this.$eventHub.$on('initializeDataLandscape', ()=>{
+
+                    this.initFormSearch()
+                    this.initLoadingText()
+                    this.getRecords()
+
+                })
+            },
+            clickCreateItem(recordItemId = null)
+            {
+                this.recordItemId = recordItemId
+                this.showDialogItem = true
+            },
+            async updateDataInListItem()
+            {
+                await this.initializeQuantityRecords()
+                this.checkSelectedRecords()
+            },
+            async initializeQuantityRecords()
+            {
+                await this.records.forEach(element => {
+                    element.quantity=0
+                })
+            },
+            async mountedSaleDetailPos()
+            {
+                this.load_sale_detail_pos = true
+            },
             loadConfiguration()
             {
                 this.configuration = this.getInitialConfiguration()
