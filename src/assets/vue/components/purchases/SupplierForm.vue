@@ -7,7 +7,7 @@
                     <i class="fas fa-angle-left custom-icon-back-form"></i>
                 </a>
             </f7-col>
-            <f7-col width="70" :class="theme.class_menu_text_color">
+            <f7-col width="70" :class="theme.class_menu_text_color" class="custom-title-form">
                 Listado de proveedores
             </f7-col>
             <f7-col width="10">
@@ -42,13 +42,20 @@
         </f7-block>
     </f7-card>
 
-    <f7-sheet style="height:75%;" class="demo-sheet" :opened="addForm" @sheet:closed="addForm = false">
-        <f7-page-content>
-            <f7-block class="text-align-right no-margin-vertical no-padding-vertical">
-                <f7-link sheet-close class="no-padding text-color-gray">
+    <f7-sheet class="demo-sheet default-h-modal" :opened="addForm" @sheet:closed="addForm = false">
+        <f7-toolbar class="bg-white">
+            <div class="left padding-horizontal">
+                <div class="custom-title-form padding-left text-color-gray">
+                    Nuevo Proveedor
+                </div>
+            </div>
+            <div class="right padding-horizontal">
+                <f7-link small sheet-close class="no-margin no-padding text-color-gray">
                     <f7-icon material="close"></f7-icon>
                 </f7-link>
-            </f7-block>
+            </div>
+        </f7-toolbar>
+        <f7-page-content>
             <f7-block style="margin-top: 0px !important;" :color="theme.name_color_theme">
                 <form class="list no-hairlines-md" id="demo-form-customer">
                     <ul>

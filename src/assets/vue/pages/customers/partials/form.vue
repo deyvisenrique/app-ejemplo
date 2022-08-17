@@ -1,12 +1,21 @@
 <template>
-<f7-sheet :color="theme.name_color_theme" :class="theme.class_bg_body" class="demo-sheet default-h-modal padding-top" :opened="showDialog" @sheet:closed="close">
-    <f7-page-content>
-        <f7-block class="text-align-right no-margin-vertical no-padding-vertical">
+<f7-sheet :color="theme.name_color_theme" :class="theme.class_bg_body" class="demo-sheet default-h-modal" :opened="showDialog" @sheet:closed="close">
+    <f7-toolbar class="bg-white">
+        <div class="left padding-horizontal">
+            <div class="custom-title-form padding-left text-color-gray">
+                <span v-if="recordId">Editar</span>
+                <span v-else>Nuevo</span>
+                Cliente
+            </div>
+        </div>
+        <div class="right padding-horizontal">
             <f7-link small sheet-close class="no-margin no-padding text-color-gray">
                 <f7-icon material="close"></f7-icon>
             </f7-link>
-        </f7-block>
-        <f7-block style="margin-top: 0px !important" color="green">
+        </div>
+    </f7-toolbar>
+    <f7-page-content>
+        <f7-block style="margin-top: 0px !important" :color="theme.name_color_theme">
             <form class="list no-hairlines-md" id="demo-form-customer">
                 <ul>
                     <li class="item-content item-input">
@@ -94,7 +103,7 @@
                     </li>
 
                     <li class="item-content item-input">
-                        <f7-button style="width: 40%;" fill round color="green" @click="submit">Guardar</f7-button>
+                        <f7-button style="width: 40%;" fill round :color="theme.name_color_theme" @click="submit">Guardar</f7-button>
                     </li>
                 </ul>
             </form>

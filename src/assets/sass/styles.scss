@@ -138,6 +138,9 @@
 .default-h40-modal{
   height:40%;
 }
+.default-h50-modal{
+  height:50%;
+}
 
 .mt-15{
   margin-top:15px
@@ -218,7 +221,7 @@
 }
 
 .default-h-modal{
-  height:55%;
+  height:76%;
 }
 
 .default-h35-modal{
@@ -340,3 +343,8 @@
   --f7-theme-color-shade: #006d63;
   --f7-theme-color-tint: #00bfad;
 }
+/* blue */
+// .bg-blue.box-gradient {
+//   background: rgb(56,39,180);
+//   background: linear-gradient(41deg, rgba(56,39,180,1) 0%, rgba(33,150,243,1) 100%);
+// }
