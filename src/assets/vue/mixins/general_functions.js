@@ -120,6 +120,10 @@ export const general_functions = {
         {
             this.$f7router.navigate(route)
         },
+        reloadCurrentPage()
+        {
+            this.$f7router.refreshPage()
+        },
         redirectMainRoute(route)
         {
             this.$f7.views.main.router.navigate(route)

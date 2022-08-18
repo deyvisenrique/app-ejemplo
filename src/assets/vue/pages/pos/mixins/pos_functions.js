@@ -2,6 +2,7 @@
 
 import queryString from "query-string"
 
+// funciones para el listado de productos, en modo portrait y landscape, diferentes vistas, mismas funciones
 export const fn_list_items_sale = {
     
     data: function () {

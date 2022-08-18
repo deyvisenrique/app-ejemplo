@@ -208,6 +208,8 @@ export default {
       if (val && !this.customerId) {
         this.cleanItemsSelected()
       }
+
+      this.initItems()
     }
   },
   methods: {

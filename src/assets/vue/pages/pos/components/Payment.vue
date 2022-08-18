@@ -23,6 +23,13 @@
                             </f7-block>
                         </li>
 
+                        <div class="padding-top margin-top">
+                            <document-type
+                                @changeDocumentType="clickChangeDocumentType"
+                                >
+                            </document-type>
+                        </div>
+
                         <f7-row class="padding-top">
                             <f7-col width="50">
                                 <div class="item-content item-input no-padding-horizontal">
@@ -139,7 +146,7 @@
                                                 <td>
                                                     <template v-if="index === 0">
                                                         <a @click="clickAddPayment">
-                                                            <f7-icon class="" ios="f7:add_circle" aurora="f7:add_circle" md="material:add_circle"></f7-icon>
+                                                            <f7-icon  ios="f7:add_circle" aurora="f7:add_circle" md="material:add_circle"></f7-icon>
                                                         </a>
                                                     </template>
                                                     <template v-else>
@@ -192,36 +199,18 @@
                             </template>
                         </f7-row>
 
-                        <div class="no-padding-horizontal padding-top">
-                            <f7-block class="bg-white-shade block-strong inset no-margin">
-                                <f7-row>
-                                    <f7-col>
-                                        <h4>Total</h4>
-                                        <template v-if="payment_change > 0 && isCashPayment">
-                                            <p>Vuelto</p>
-                                        </template>
-                                    </f7-col>
-                                    <f7-col class="text-align-right">
-                                        <h4>{{currency_type.symbol}} {{form.total}}</h4>
-                                        <template v-if="payment_change > 0 && isCashPayment">
-                                            <p>{{currency_type.symbol}} {{payment_change}}</p>
-                                        </template>
-                                    </f7-col>
-                                </f7-row>
-                            </f7-block>
-                        </div>
-    
+                        <document-totals
+                            :currency-type-symbol="currency_type.symbol"
+                            :show-all-totals="true"
+                            :payment-change="payment_change"
+                            :is-cash-payment="isCashPayment"
+                            :form="form">
+                        </document-totals>
+
                     </ul>
                 </form>
-
-                <!-- <body id="html_print_document"></body> -->
-                <pdf-direct-print ref="pdf_direct_print"></pdf-direct-print>
-
             </f7-block>
 
-            <f7-fab position="center-bottom" class="margin-right" color="bluemagenta" @click.prevent="clickSubmit">
-                <f7-icon ios="f7:check" aurora="f7:check" md="material:check"></f7-icon>
-            </f7-fab>
         </template>
         <template v-else>
             
@@ -417,40 +406,29 @@
                                 </template>
                             </template>
                         </f7-row>
-
-                        <div class="no-padding-horizontal padding-top">
-                            <f7-block class="bg-white-shade block-strong inset no-margin">
-                                <f7-row>
-                                    <f7-col>
-                                        <h4>Total</h4>
-                                        <template v-if="payment_change > 0 && isCashPayment">
-                                            <p>Vuelto</p>
-                                        </template>
-                                    </f7-col>
-                                    <f7-col class="text-align-right">
-                                        <h4>{{currency_type.symbol}} {{form.total}}</h4>
-                                        <template v-if="payment_change > 0 && isCashPayment">
-                                            <p>{{currency_type.symbol}} {{payment_change}}</p>
-                                        </template>
-                                    </f7-col>
-                                </f7-row>
-                            </f7-block>
-                        </div>
+                         
+                        <document-totals
+                            :currency-type-symbol="currency_type.symbol"
+                            :show-only-totals="true"
+                            :payment-change="payment_change"
+                            :is-cash-payment="isCashPayment"
+                            :form="form">
+                        </document-totals>
     
                     </ul>
                 </form>
 
-                <!-- <body id="html_print_document"></body> -->
-                <pdf-direct-print ref="pdf_direct_print"></pdf-direct-print>
-
             </f7-block>
     
 
-            <f7-fab position="center-bottom" class="margin-right" color="bluemagenta" @click.prevent="clickSubmit">
-                <f7-icon ios="f7:check" aurora="f7:check" md="material:check"></f7-icon>
-            </f7-fab>
 
         </template>
+
+        <f7-fab position="center-bottom" class="margin-right" color="bluemagenta" @click.prevent="clickSubmit">
+            <f7-icon ios="f7:check" aurora="f7:check" md="material:check"></f7-icon>
+        </f7-fab>
+
+        <pdf-direct-print ref="pdf_direct_print"></pdf-direct-print>
 
         <f7-popup class="demo-popup" :opened="popupCustomerOpened" @popup:closed="popupCustomerOpened = false">
             <customer-form :codeType="form.document_type_id" :customerId="form.customer_id" :showDialog.sync="popupCustomerOpened" ref="form_customer_car" @addCustomerCar="addCustomer"></customer-form>
@@ -473,6 +451,8 @@
     // import * as htmlToImage from 'html-to-image'
     import PdfDirectPrint from 'components/document/PdfDirectPrint'
 
+    import DocumentTotals from './partials/DocumentTotals.vue'
+    import DocumentType from './partials/DocumentType.vue'
 
     export default {
         props: {
@@ -486,7 +466,9 @@
         components: {
             CustomerForm,
             HeaderLayout,
-            PdfDirectPrint
+            PdfDirectPrint,
+            DocumentTotals,
+            DocumentType
         },
         mixins: [
             auth, 
@@ -544,23 +526,26 @@
             await this.initData()
             await this.inputEventsPayment()
         },
+        mounted()
+        {
+            
+        },
         methods: {
+            clickChangeDocumentType(document_type_id)
+            {
+                this.form.document_type_id = document_type_id
+
+                if(this.landscapeMode)
+                {
+                    this.setDataFromChangeDocumentType(document_type_id)
+                }
+            },
             inputEventsPayment()
             {
-                this.$eventHub.$on('eventChangeDocumentType', (document_type_id) => {
-                    this.setDataFromChangeDocumentType(document_type_id)
-                })
-
                 // para cambio en datos del documento - tipo documento, totales, items... Obs: no usar para consultas a api
                 this.$eventHub.$on('eventUpdateDataFormSale', (form_sale) => {
                     this.setUpdateDataFormSale(form_sale)
                 })
-
-                this.$eventHub.$on('eventInitDataPayment', () => {
-                    this.loadForm()
-                    this.initData()
-                })
-                
             },
             setUpdateDataFormSale(form_sale)
             {
@@ -578,8 +563,10 @@
                 this.form.total_unaffected = form_sale.total_unaffected
                 this.form.total_value = form_sale.total_value
 
+                // console.log("upd form_sale", form_sale)
 
-                console.log("upd form_sale", form_sale)
+                this.calculateAmountPayments()
+                this.calculatePaymentFee()
             },
             async setDataFromChangeDocumentType(document_type_id)
             {
@@ -598,6 +585,8 @@
             //generar documento
             clickSubmit()
             {
+                if(!this.form.document_type_id) return this.showAlert('No ha seleccionado un tipo de documento, no puede continuar.')
+
                 if(this.isInvoiceDocument)
                 {
                     this.sendInvoice()
@@ -697,9 +686,8 @@
 
                     if(this.landscapeMode)
                     {
-                        // location.reload()
-                        //para inicializar los componentes landscape_pos y SaleDetail
-                        this.$eventHub.$emit('initializeDataLandscape')
+                        //para inicializar los componentes 
+                        this.reloadCurrentPage()
                     }
                     else
                     {

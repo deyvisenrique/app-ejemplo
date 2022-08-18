@@ -12,7 +12,7 @@
                                 <f7-col width="70">
                                     <div class="searchbar searchbar-inline" style="margin:4%">
                                         <div class="searchbar-input-wrap">
-                                            <input type="search" placeholder="Buscar" style="font-size:12px" v-model="form.input" @input="searchRecords"/>
+                                            <input type="search" placeholder="Buscar" style="font-size:12px" v-model="form_search.input" @input="searchRecords"/>
                                             <i class="searchbar-icon"></i>
                                             <button  class="input-clear-button" @click="clickClearInput"></button>
                                         </div>
@@ -32,7 +32,7 @@
                         <f7-row class="padding-horizontal">
 
                             <f7-col width="10">
-                                <template v-if="form.favorite == 1">
+                                <template v-if="form_search.favorite == 1">
                                     <span class="padding-top margin-top material-icons text-color-purple" @click="clickFavorite">favorite</span>
                                 </template>
                                 <template v-else>
@@ -132,8 +132,8 @@
                             </sale-detail-pos>
                         </f7-block>
 
-                        
-                        <f7-block v-if="load_sale_detail_pos">
+                        <!-- mostrar si el componente sale detail pos se encuentra creado -->
+                        <f7-block v-if="load_sale_detail_pos" class="padding-bottom">
                             <payment-pos
                                 :landscape-mode="true">
                             </payment-pos>
@@ -154,11 +154,11 @@
     import {auth} from 'mixins_/auth'
     import {general_functions, operations} from 'mixins_/general_functions'
     import HeaderLayout from 'components/layout/Header'
-    import SaleDetailPos from './components/SaleDetail.vue'
-    import PaymentPos from './components/Payment.vue'
-    import ItemForm from '../items/partials/form.vue'
+    import SaleDetailPos from '../components/SaleDetail.vue'
+    import PaymentPos from '../components/Payment.vue'
+    import ItemForm from '../../items/partials/form.vue'
 
-    import {fn_list_items_sale} from "./mixins/pos_functions"
+    import {fn_list_items_sale} from "../mixins/pos_functions"
 
     export default {
         name: 'LandscapePos',
@@ -180,7 +180,7 @@
                 records: [],
                 loading_text: null,
                 show_preloader: true,
-                form: {},
+                form_search: {},
                 current_page: 1,
                 pagination: {
                     current_page: 0,
@@ -228,14 +228,6 @@
         methods: {
             inputEventsLandscapePos()
             {
-                // evento que inicializa los datos cuando se culmina el registro del documento en Payment
-                this.$eventHub.$on('initializeDataLandscape', ()=>{
-
-                    this.initFormSearch()
-                    this.initLoadingText()
-                    this.getRecords()
-
-                })
             },
             clickCreateItem(recordItemId = null)
             {

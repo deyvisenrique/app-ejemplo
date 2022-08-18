@@ -28,7 +28,7 @@ import SaleDetailPosPage from './assets/vue/pages/pos/pages/sale_detail_page.vue
 // import SalePaymentPos from './assets/vue/pages/pos/payment.vue'
 import SalePaymentPosPage from './assets/vue/pages/pos/pages/payment_page.vue'
 
-import LandscapePos from './assets/vue/pages/pos/landscape_pos.vue'
+import LandscapePosPage from './assets/vue/pages/pos/pages/landscape_pos_page.vue'
 
 // import PreviewPdf2 from './assets/vue/components/document/PreviewPdf2';
 
@@ -122,7 +122,7 @@ export default [
   },
   {
     path: '/landscape-pos/',
-    component: LandscapePos
+    component: LandscapePosPage
   },
   
   // {

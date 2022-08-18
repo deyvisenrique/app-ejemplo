@@ -5,16 +5,6 @@
         <template v-if="landscapeMode">
             
             <f7-block>
-                <template v-if="document_types.length > 0">
-                    <f7-segmented raised>
-                        <template v-for="(row, index) in document_types">
-                            <f7-button @click="clickChangeDocumentType(row.id)" :class="form.document_type_id === row.id ? 'button-active':''">{{row.text}}</f7-button>
-                        </template>
-                    </f7-segmented>
-                </template>
-                <template v-else>
-                    <f7-button class="button-active">NO TIENE PERMISOS ASIGNADOS</f7-button>
-                </template>
     
                 <div class="data-table margin-bottom padding-top">
                     <table>
@@ -23,60 +13,56 @@
                                 <th class="numeric-only">#</th>
                                 <th class="label-cell">Producto</th>
                                 <th class="label-cell">P. Unitario</th>
-                                <th class="numeric-only text-align-center">Cantidad</th>
+                                <th class="numeric-only text-align-left">Cantidad</th>
                                 <th class="numeric-only">M. Descuento</th>
                                 <th class="numeric-only">Total</th>
                                 <th class="numeric-only"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(row, index) in form.items" :key="index">
-                                <td class="numeric-only">{{ index + 1 }}</td>
-                                <td class="label-cell">{{ row.item.description }}</td>
-                                <td class="numeric-only">
-                                    <input class="input-quantity-table" required validate v-model="row.unit_price" type="number"  @change="changeUnitPrice(index)" />
-                                </td>
-                                <td class="numeric-only padding">
-                                    
-                                    <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
-                                        <div class="stepper-button-minus" @click="calculateQuantity(-1, index)"></div>
-                                        <div class="stepper-input-wrap">
-                                            <input type="number" v-model="row.quantity" min="0" step="1" @change="changeQuantity(index)" />
-                                        </div>
-                                        <div class="stepper-button-plus" @click="calculateQuantity(1, index)"></div>
-                                    </div>
+                            <template v-if="form.items.length === 0">
+                                <tr>
+                                    <td colspan="6" class="padding margin"><strong>No tiene productos agregados</strong></td>
+                                </tr>
+                            </template>
+                            <template v-else>
+                                <tr v-for="(row, index) in form.items" :key="index">
+                                    <td class="numeric-only">{{ index + 1 }}</td>
+                                    <td class="label-cell">{{ row.item.description }}</td>
+                                    <td class="numeric-only">
+                                        <input class="input-quantity-table" required validate v-model="row.unit_price" type="number"  @change="changeUnitPrice(index)" />
+                                    </td>
+                                    <td class="numeric-only padding text-align-center">
+                                        
+                                        <!--
+                                        @todo Genera problemas en la propiedad quantity (no se actualiza)
+                                        <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
+                                            <div class="stepper-button-minus" @click="calculateQuantity(-1, index)"></div>
+                                            <div class="stepper-input-wrap">
+                                                <input type="number" v-model="row.quantity" min="0" step="1" @change="changeQuantity(index)" />
+                                            </div>
+                                            <div class="stepper-button-plus" @click="calculateQuantity(1, index)"></div>
+                                        </div> -->
+                                        <!-- {{ row.quantity }} -->
+                                        <input class="input-quantity-table" required validate v-model="row.quantity" type="number"  @change="changeQuantity(index)" />
 
-                                </td>
-                                <td class="numeric-only">
-                                    <input class="input-quantity-table" required validate v-model="row.input_discount" type="number"  @change="changeInputDiscount(index)" />
-                                </td>
-                                <td class="numeric-only">{{ row.total }}</td> 
-                                <td>
-                                    <a @click="clickDelete(index)">
-                                        <f7-icon ios="f7:delete" color="red" aurora="f7:delete" md="material:delete" ></f7-icon>
-                                    </a>
-                                </td>
-                            </tr>
+                                    </td>
+                                    <td class="numeric-only">
+                                        <input class="input-quantity-table" required validate v-model="row.input_discount" type="number"  @change="changeInputDiscount(index)" />
+                                    </td>
+                                    <td class="numeric-only">{{ row.total }}</td> 
+                                    <td>
+                                        <a @click="clickDelete(index)">
+                                            <f7-icon ios="f7:delete" color="red" aurora="f7:delete" md="material:delete" ></f7-icon>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </template>
+
                         </tbody>
                     </table>
                 </div>
-
-                <div class="no-padding-horizontal padding-top">
-                    <f7-block class="bg-white-shade block-strong inset no-margin">
-                        <f7-row>
-                            <f7-col>
-                                <h3>OP. Gravada</h3>
-                                <h3>IGV</h3>
-                                <h3>Descuentos</h3>
-                            </f7-col>
-                            <f7-col class="text-align-right">
-                                <h3>{{currency_type.symbol}} {{form.total_taxed}}</h3>
-                                <h3>{{currency_type.symbol}} {{form.total_igv}}</h3>
-                                <h3>{{currency_type.symbol}} {{form.total_discount}}</h3>
-                            </f7-col>
-                        </f7-row>
-                    </f7-block>
-                </div>
+ 
             </f7-block>
         </template>
         <template v-else>
@@ -84,15 +70,14 @@
             <header-layout :title="geTitle" hrefBack="/list-items-sale/" :overwriteBackRoute="true"></header-layout>
 
             <f7-block>
-                <template v-if="document_types.length > 0">
-                    <f7-segmented raised>
-                        <template v-for="(row, index) in document_types">
-                            <f7-button @click="clickChangeDocumentType(row.id)" :class="form.document_type_id === row.id ? 'button-active':''">{{row.text}}</f7-button>
-                        </template>
-                    </f7-segmented>
-                </template>
-                <template v-else>
-                    <f7-button class="button-active">NO TIENE PERMISOS ASIGNADOS</f7-button>
+
+                <!-- se mostrara cuando carga los tipos de documentos, y envia como prop all_document_types para no realizar otra consulta en el componente -->
+                <template v-if="all_document_types.length > 0">
+                    <document-type
+                        :all-document-types="all_document_types"
+                        @changeDocumentType="clickChangeDocumentType"
+                        >
+                    </document-type>
                 </template>
     
                 <div class="data-table margin-bottom padding-top">
@@ -140,22 +125,11 @@
                     </table>
                 </div>
 
-                <div class="no-padding-horizontal padding-top">
-                    <f7-block class="bg-white-shade block-strong inset no-margin">
-                        <f7-row>
-                            <f7-col>
-                                <h3>OP. Gravada</h3>
-                                <h3>IGV</h3>
-                                <h3>Descuentos</h3>
-                            </f7-col>
-                            <f7-col class="text-align-right">
-                                <h3>{{currency_type.symbol}} {{form.total_taxed}}</h3>
-                                <h3>{{currency_type.symbol}} {{form.total_igv}}</h3>
-                                <h3>{{currency_type.symbol}} {{form.total_discount}}</h3>
-                            </f7-col>
-                        </f7-row>
-                    </f7-block>
-                </div>
+                <document-totals
+                    :currency-type-symbol="currency_type.symbol"
+                    :form="form">
+                </document-totals>
+
             </f7-block>
     
             <f7-fab position="left-bottom" class="margin-right" color="red" @click="clickDeleteItems">
@@ -181,6 +155,9 @@
     import HeaderLayout from 'components/layout/Header'
     import {calculateRowItem} from "js_/helpers/functions"
 
+    import DocumentTotals from './partials/DocumentTotals.vue'
+    import DocumentType from './partials/DocumentType.vue'
+
     export default {
         props: {
             landscapeMode: {
@@ -191,7 +168,9 @@
         },
         name: 'SaleDetailPos',
         components: {
-            HeaderLayout
+            HeaderLayout,
+            DocumentTotals,
+            DocumentType
         },
         mixins: [
             auth, 
@@ -201,16 +180,16 @@
         data: function () {
             return {
                 affectation_igv_types: [],
-                document_types: [],
+                all_document_types: [],
                 form:{
-                    total: 0
+                    total: 0,
+                    items: []
                 },
                 currency_type: {
                     symbol: 'S/'
                 },
                 list_items_sale: [],
                 resource: 'documents',
-                pos_document_types: [],
                 item_discount_types: [],
                 configuration: {},
             }
@@ -220,19 +199,23 @@
                 return `Total ${this.currency_type.symbol} ${this.form.total}`
             }
         },
-        async created() {
+        async created() 
+        {
             await this.loadConfiguration()
-            await this.getTables()
             await this.initForm()
+            await this.getTables()
             await this.initData()
             await this.initFormLandscapeMode()
             await this.inputEventsSaleDetail()
-
         },
         async mounted()
         {
         },
         methods: {
+            clickChangeDocumentType(document_type_id)
+            {
+                this.form.document_type_id = document_type_id
+            },
             inputEventsSaleDetail()
             {
                 //Modo Landscape - evento para actualizar items en SaleDetail al agregar/modificar en este listado de productos
@@ -240,18 +223,6 @@
                     this.initData(true)
                 })
 
-                // evento que inicializa los datos cuando se culmina el registro del documento en Payment
-                this.$eventHub.$on('initializeDataLandscape', ()=>{
-                    console.log("detai initializeDataLandscape")
-                    this.getTables()
-                    this.initForm()
-                    this.saveFormInStorage()
-                    this.eventInitDataPayment() //todo
-                })
-            },
-            eventInitDataPayment()
-            {
-                this.$eventHub.$emit('eventInitDataPayment')
             },
             async initFormLandscapeMode()
             {
@@ -266,71 +237,7 @@
             },
             getDocumentType(id)
             {
-                return _.find(this.document_types, {id:id})
-            },
-            getPosDocumentTypes()
-            {
-                const generals = this.getStorage('generals', true)
-                return generals ? generals.pos_document_types : []
-            },
-            clickChangeDocumentType(document_type_id)
-            {
-                this.form.document_type_id = document_type_id
-
-                if(this.landscapeMode)
-                {
-                    this.$eventHub.$emit('eventChangeDocumentType', document_type_id)
-                }
-            },
-            getShortDescriptionDocumentType(document_type)
-            {
-                let description = null
-
-                switch (document_type.id) 
-                {
-                    case '01':
-                        description = 'FACTURA'
-                        break
-                    case '03':
-                        description = 'BOLETA'
-                        break
-                    case '80':
-                        description = 'N. VENTA'
-                        break
-                }
-
-                return description
-            },
-            getDocumentTypesToButtons(document_types)
-            {
-                this.pos_document_types = this.getPosDocumentTypes()
-                const permissions = this.getStoragePermissions()
-                let allowed_document_types = []
-
-                document_types.forEach(row => {
-                    
-                    const doc_permission = _.find(this.pos_document_types, {document_type_id : row.id})
-
-                    if(doc_permission)
-                    {
-                        const has_permission = this.hasPermissionInModule(doc_permission.module, permissions)
-
-                        if(has_permission)
-                        {
-                            const text = this.getShortDescriptionDocumentType(row)
-
-                            allowed_document_types.push({
-                                id: row.id,
-                                text: text,
-                                cssClass: 'text-align-center',
-                                description: row.description,
-                            })
-                        }
-
-                    }
-                })
-
-                return allowed_document_types
+                return _.find(this.all_document_types, {id:id})
             },
             validateData()
             {
@@ -427,11 +334,11 @@
             {
                 // se elimina item del listado de ventas, registra en storage
                 _.remove(this.list_items_sale, {item_id : this.form.items[index].item_id})
-                this.saveListItemsSale()
 
                 // se elimina item del form para facturacion
                 this.form.items.splice(index, 1)
                 this.calculateTotal()
+                this.saveListItemsSale()
 
             },
             async getTables() {
@@ -440,7 +347,7 @@
 
                 await this.$http.get(`${this.returnBaseUrl()}/${this.resource}/tables-sale-detail`, this.getHeaderConfig())
                             .then(response => {
-                                this.document_types = this.getDocumentTypesToButtons(response.data.document_types)
+                                this.all_document_types = response.data.document_types
                                 this.affectation_igv_types = response.data.affectation_igv_types
                                 this.item_discount_types = response.data.item_discount_types
                             })
@@ -481,23 +388,6 @@
                     payments: [],
                 }
 
-                this.setDefaultDocumentType()
-
-            },
-            setDefaultDocumentType()
-            {
-                if(this.configuration.default_document_type)
-                {
-                    this.form.document_type_id = (_.some(this.document_types, {id : this.configuration.default_document_type})) ? this.configuration.default_document_type : this.setInitialDefaultDocumentType()
-                }
-                else
-                {
-                    this.setInitialDefaultDocumentType()
-                }
-            },
-            setInitialDefaultDocumentType()
-            {
-                this.form.document_type_id = this.document_types.length > 0 ? this.document_types[0].id : null
             },
             getFormItem() 
             {
@@ -652,7 +542,7 @@
                 
                 const item_sale = this.findItemInListSale(this.form.items[index].item_id)
                 item_sale.quantity = quantity
-
+            
                 this.form.items[index] = this.calculateDataItem(item_sale)
                 this.calculateTotal()
                 this.updateQuantityItemsStorage(index)
