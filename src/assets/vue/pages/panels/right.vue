@@ -17,7 +17,7 @@
                     <p v-show="notifications.documents_not_sent > 0">
                         <a href="#" class="link navbar-tooltip-not-sent" :class="theme.class_menu_text_color">
                             <f7-icon material="notifications" size="22px">
-                                <span class="badge bg-color-red-shade elevation-8">{{ notifications.documents_not_sent }}</span>
+                                <span :class="theme.theme_color == 'red' ? 'bg-secondary' : ''" class="badge color-red elevation-8">{{ notifications.documents_not_sent }}</span>
                             </f7-icon>
                         </a>
                     </p>
@@ -25,7 +25,7 @@
                     <p v-show="notifications.documents_regularize_shipping > 0">
                         <a href="#" class="link navbar-tooltip-regularize-shipping" :class="theme.class_header_text_color">
                             <f7-icon material="warning" size="22px">
-                                <span class="badge color-red">{{ notifications.documents_regularize_shipping }}</span>
+                                <span :class="theme.theme_color == 'red' ? 'bg-secondary' : ''" class="badge color-red">{{ notifications.documents_regularize_shipping }}</span>
                             </f7-icon>
                         </a>
                     </p>
@@ -113,7 +113,7 @@
 
     <div class="footer bg-color-white">
         <f7-block>
-            <f7-button class="padding-horizontal" @click="logout" :class="theme.class_button_color" fill round>
+            <f7-button class="padding-horizontal bg-secondary" @click="logout" :color="theme.name_color_theme" fill round>
                 Cerrar sesión
             </f7-button>
         </f7-block>

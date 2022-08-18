@@ -116,7 +116,7 @@
         <f7-block class="display-flex justify-content-center">
             <f7-row tag="p">
                 <f7-col>
-                    <f7-button class="padding-horizontal" @click="login" :color="theme.name_color_theme" large fill round>Iniciar sesión</f7-button>
+                    <f7-button class="padding-horizontal" @click="login" :color="theme.name_color_theme" :class="theme.theme_color == 'blue' ? 'bg-secondary' : ''" large fill round>Iniciar sesión</f7-button>
                 </f7-col>
             </f7-row>
         </f7-block>

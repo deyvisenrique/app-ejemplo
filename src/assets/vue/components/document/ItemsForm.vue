@@ -33,12 +33,12 @@
                     </div>
                 </f7-col>
                 <f7-col width="15" class="text-align-center">
-                    <f7-button @click="clickSearchBarcode" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-camera"></f7-button>
+                    <f7-button @click="clickSearchBarcode" :color="theme.name_color_theme" class="bg-secondary" fill small open-panel="right" icon="fas fa-camera"></f7-button>
                     <span class="" style="font-size: 10px;line-height: 10px !important;">BUSCAR</span>
                 </f7-col>
 
                 <f7-col width="15" class="text-align-center">
-                    <f7-button @click="addForm = !addForm" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-plus"></f7-button>
+                    <f7-button @click="addForm = !addForm" :color="theme.name_color_theme" class="bg-secondary" fill small open-panel="right" icon="fas fa-plus"></f7-button>
                     <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
                 </f7-col>
             </f7-row>
@@ -47,7 +47,7 @@
                 <f7-col width="100">
                     <div class="c-horizontal-scroll c-h-50 mp-div-category padding-vertical" >
                         <template v-for="(category, index) in categories">
-                            <span class="padding c-span-card margin-right" :key="index" @click="clickSearchByCategory(category.id)"><b>{{ getCategoryName(category) }}</b></span>
+                            <span class="c-span-card" :key="index" @click="clickSearchByCategory(category.id)"><b>{{ getCategoryName(category) }}</b></span>
                         </template>
                     </div>
                 </f7-col>
@@ -282,7 +282,7 @@
 
                         <li class="item-content item-input">
                             <div class="item-inner">
-                                <f7-button fill round :color="theme.name_color_theme" @click="submit" class="padding-horizontal">Guardar</f7-button>
+                                <f7-button fill round :color="theme.name_color_theme" @click="submit" class="padding-horizontal bg-secondary">Guardar</f7-button>
                             </div>
                         </li>
                     </ul>
@@ -326,7 +326,7 @@
 
     <f7-fab position="right-bottom" class="margin-right" :color="theme.name_color_theme" v-if="countCar > 0" @click="send">
         <f7-icon ios="f7:plus" aurora="f7:plus" md="material:shopping_cart" >
-            <f7-badge :color="theme.name_color_theme">
+            <f7-badge class="bg-secondary" :color="theme.name_color_theme">
                 {{ countCar }}
             </f7-badge>
         </f7-icon>

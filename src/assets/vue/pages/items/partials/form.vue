@@ -133,7 +133,7 @@
 
                         <li class="item-content item-input">
                             <div class="item-inner">
-                                <f7-button fill round :color="theme.name_color_theme" class="padding-horizontal" @click="submit">Guardar</f7-button>
+                                <f7-button fill round :color="theme.name_color_theme" class="bg-secondary padding-horizontal" @click="submit">Guardar</f7-button>
                             </div>
                         </li>
                     </ul>

@@ -40,7 +40,7 @@
                     </li>
 
                     <li class="item-content item-input">
-                        <f7-button style="width: 40%;" fill round :color="theme.name_color_theme"  @click="submit">Guardar</f7-button>
+                        <f7-button style="width: 40%;" fill round class="bg-secondary" :color="theme.name_color_theme"  @click="submit">Guardar</f7-button>
                     </li>
                 </ul>
             </form>

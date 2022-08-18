@@ -64,7 +64,7 @@
     </f7-card>
     <div class="footer">
       <f7-block>
-        <f7-button class="padding-horizontal" :color="theme.name_color_theme" @click="submit" fill round>
+        <f7-button class="padding-horizontal bg-secondary" :color="theme.name_color_theme" @click="submit" fill round>
           Guardar
         </f7-button>
       </f7-block>

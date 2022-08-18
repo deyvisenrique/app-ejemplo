@@ -93,7 +93,7 @@
 
         <f7-fab position="right-bottom" class="margin-right" :color="theme.name_color_theme" v-if="quantitySelectedRecords() > 0" @click="sendListItems">
             <f7-icon ios="f7:plus" aurora="f7:plus" md="material:shopping_cart" >
-                <f7-badge color="red">
+                <f7-badge class="bg-secondary" :color="theme.name_color_theme">
                     {{ quantitySelectedRecords() }}
                 </f7-badge>
             </f7-icon>

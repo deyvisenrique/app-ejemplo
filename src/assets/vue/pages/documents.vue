@@ -6,10 +6,10 @@
         <f7-button
             :outline="!activeClass.invoices"
             small
-            :color="activeClass.invoices ? 'green' : 'gray'"
+            :color="activeClass.invoices ? theme.name_color_theme : 'gray'"
             :fill="activeClass.invoices"
             href="#tab-invoices"
-            class="tab-link"
+            class="tab-link bg-secondary"
             @click="show('invoices')"
             style="text-transform:capitalize; font-weight: 400;">
             Factura
@@ -17,10 +17,10 @@
         <f7-button
             :outline="!activeClass.tickets"
             small
-            :color="activeClass.tickets ? 'green' : 'gray'"
+            :color="activeClass.tickets ? theme.name_color_theme : 'gray'"
             :fill="activeClass.tickets"
             href="#tab-tickets"
-            class="tab-link"
+            class="tab-link bg-secondary"
             @click="show('tickets')"
             style="text-transform:capitalize; font-weight: 400;">
             Boleta
@@ -28,10 +28,10 @@
         <f7-button
             :outline="!activeClass.notes"
             small
-            :color="activeClass.notes ? 'green' : 'gray'"
+            :color="activeClass.notes ? theme.name_color_theme : 'gray'"
             :fill="activeClass.notes"
             href="#tab-notes"
-            class="tab-link"
+            class="tab-link bg-secondary"
             @click="show('notes')"
             style="text-transform:capitalize; font-weight: 400;">
             Nota
@@ -39,10 +39,10 @@
         <f7-button
             :outline="!activeClass.orderNotes"
             small
-            :color="activeClass.orderNotes ? 'green' : 'gray'"
+            :color="activeClass.orderNotes ? theme.name_color_theme : 'gray'"
             :fill="activeClass.orderNotes"
             href="#tab-order-notes"
-            class="tab-link"
+            class="tab-link bg-secondary"
             @click="show('order_notes')"
             style="text-transform:capitalize; font-weight: 400;">
             Pedidos
@@ -50,10 +50,10 @@
         <f7-button
             :outline="!activeClass.purchases"
             small
-            :color="activeClass.purchases ? 'green' : 'gray'"
+            :color="activeClass.purchases ? theme.name_color_theme : 'gray'"
             :fill="activeClass.purchases"
             href="#tab-purchases"
-            class="tab-link"
+            class="tab-link bg-secondary"
             @click="show('purchases')"
             style="text-transform:capitalize; font-weight: 400;">
             Compras
@@ -61,10 +61,10 @@
         <f7-button
             :outline="!activeClass.quotations"
             small
-            :color="activeClass.quotations ? 'green' : 'gray'"
+            :color="activeClass.quotations ? theme.name_color_theme : 'gray'"
             :fill="activeClass.quotations"
             href="#tab-quotations"
-            class="tab-link"
+            class="tab-link bg-secondary"
             @click="show('quotations')"
             style="text-transform:capitalize; font-weight: 400;">
             Cotización
@@ -740,7 +740,7 @@
                 state_types: [],
                 showDialogVoided: false,
                 source_quotations: [],
-
+                theme: {},
             };
         },
         watch: {
@@ -760,6 +760,7 @@
             await this.checkPermissions()
             await this.getTables()
             this.loadConfiguration()
+            await this.getInitialSettings()
             this.initFormEmail()
             this.getDataDocuments()
             this.events()
@@ -1263,7 +1264,10 @@
                 }
 
                 return status;
-            }
+            },
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
+            },
         }
     };
 </script>

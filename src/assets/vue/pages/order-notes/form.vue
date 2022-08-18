@@ -131,7 +131,7 @@
                                 </f7-button>
                             </f7-col>
                             <f7-col>
-                                <f7-button fill round small :color="theme.name_color_theme" @click="send">
+                                <f7-button fill round small class="bg-secondary" :color="theme.name_color_theme" @click="send">
                                     Aceptar
                                 </f7-button>
                             </f7-col>

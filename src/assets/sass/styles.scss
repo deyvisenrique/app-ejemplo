@@ -35,6 +35,9 @@
   .ripple-bluemagenta {
     --f7-theme-color-ripple-color: rgba(255, 59, 48, 0.3);
   }
+  .color-bluemagenta.bg-secondary {
+    background-color: #B722E5;
+  }
 
 //tema
 .page-blue-magenta,
@@ -84,7 +87,7 @@
 }
 
 .c-span-card{
-  background: #6E28C9;
+  background: #0c82df;
   color: #fff;
   position: relative;
   border-radius: var(--f7-card-border-radius);
@@ -94,6 +97,7 @@
   margin-left: calc(var(--f7-card-margin-horizontal) + var(--f7-safe-area-left));
   margin-right: calc(var(--f7-card-margin-horizontal) + var(--f7-safe-area-right));
   box-shadow: var(--f7-card-box-shadow);
+  padding: 10px !important;
   width: 100% !important;
   white-space: nowrap;
 }
@@ -279,6 +283,9 @@
 .waves .shape-fill-black {
   fill: $dark;
 }
+.color-black.bg-secondary {
+  background-color: #009688;
+}
 /* red */
 .color-red {
   --f7-theme-color: #cb2027;
@@ -303,6 +310,9 @@
 }
 .waves .shape-fill-red {
   fill: $red;
+}
+.color-red.bg-secondary {
+  background-color: #800A0E;
 }
 /* white */
 .color-white {
@@ -329,12 +339,14 @@
 .waves .shape-fill-white {
   fill: var(--f7-color-white-shade);
 }
-/* white */
 .bg-color-blue-shade {
   --f7-theme-color-bg-color: #331B83;
 }
 .bg-color-blue-tint {
   --f7-theme-color-bg-color: #6E28C9;
+}
+.color-teal.bg-secondary {
+  background-color: #B722E5;
 }
 /* green */
 .color-green {
