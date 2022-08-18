@@ -145,7 +145,7 @@ export const general_functions = {
                 this.setStorage('app_configuration', theme, true)
             }
             const config = this.getStorage('app_configuration', true)
-            const theme_color = 'white' // config.theme_color //   white | blue | red | dark
+            const theme_color = config.theme_color // white | blue | red | dark
             const is_unicolor_boxes = config.card_color == 'unicolor' ? true : false
             // logo
             const css_color_fill = theme_color == 'white' ? '#00B19A' : '#fff'
@@ -159,7 +159,7 @@ export const general_functions = {
             // estilos en home
             let class_box_color = 'bg-blue'
             let class_box_color_shade = is_unicolor_boxes ? 'bg-blue' :'bg-color-blue-shade'
-            let class_box_color_tint = is_unicolor_boxes ? 'bg-blue' :'bg-color-blue-shade'
+            let class_box_color_tint = is_unicolor_boxes ? 'bg-blue' :'bg-color-blue-tint'
             let class_text_color = theme_color == 'white' ? '' : 'text-color-white'
             // estilos de contenido
             let name_color_theme = 'bluemagenta'
