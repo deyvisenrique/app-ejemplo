@@ -31,7 +31,14 @@
                                         <span class="item-title item-label custom-w20 custom-label-top-input">URL</span>
                                         <div class="item-content item-input">
                                             <div class="item-inner">
-                                                <div class="item-title item-label custom-w20">{{ internet_protocol }}</div>
+                                                <div class="item-title item-label custom-w20">
+                                                    <!-- {{ internet_protocol }} -->
+                                                    
+                                                    <select v-model="internet_protocol">
+                                                        <option value="https://">https://</option>
+                                                        <option value="http://">http://</option>
+                                                    </select>
+                                                </div>
                                                 <div class="item-input-wrap">
                                                     <input type="text" placeholder="demo.facturalo.pro" required validate v-model="url"><span class="input-clear-button"></span>
                                                 </div>
@@ -159,7 +166,7 @@
 
                 if (storage_api_url)
                 {
-                    if(storage_api_url.includes(this.internet_protocol))
+                    if(storage_api_url.includes(this.internet_protocol) || storage_api_url.includes('http://'))
                     {
                         const parse_url = storage_api_url.split('//')
                         if(parse_url.length == 2) this.url = parse_url[1]
