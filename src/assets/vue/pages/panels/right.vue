@@ -1,32 +1,31 @@
 <template>
 <f7-page class="">
-
-    <f7-block class="bg-blue-magenta no-margin-top elevation-9">
+    <f7-block class="no-margin-top" :class="theme.class_bg_header">
         <f7-block class="text-align-right no-margin-top padding-top">
-            <f7-link panel-close class="text-color-white"><i class="fas fa-times"></i></f7-link>
+            <f7-link panel-close :class="theme.class_menu_text_color"><i class="fas fa-times"></i></f7-link>
         </f7-block>
         <f7-block class="no-margin-vertical">
 
             <f7-row>
                 <f7-col width="75">
-                    <p class="text-color-white">
+                    <p :class="theme.class_header_text_color">
                         <f7-icon material="check_circle" size="48px"></f7-icon>
                     </p>
 
                 </f7-col>
                 <f7-col width="25">
                     <p v-show="notifications.documents_not_sent > 0">
-                        <a href="#" class="link navbar-tooltip-not-sent text-color-white">
+                        <a href="#" class="link navbar-tooltip-not-sent" :class="theme.class_menu_text_color">
                             <f7-icon material="notifications" size="22px">
-                                <span class="badge color-red">{{ notifications.documents_not_sent }}</span>
+                                <span :class="theme.theme_color == 'red' ? 'bg-secondary' : ''" class="badge color-red elevation-8">{{ notifications.documents_not_sent }}</span>
                             </f7-icon>
                         </a>
                     </p>
-                    
-                    <p v-show="notifications.documents_regularize_shipping > 0"> 
-                        <a href="#" class="link navbar-tooltip-regularize-shipping text-color-white">
+
+                    <p v-show="notifications.documents_regularize_shipping > 0">
+                        <a href="#" class="link navbar-tooltip-regularize-shipping" :class="theme.class_header_text_color">
                             <f7-icon material="warning" size="22px">
-                                <span class="badge color-red">{{ notifications.documents_regularize_shipping }}</span>
+                                <span :class="theme.theme_color == 'red' ? 'bg-secondary' : ''" class="badge color-red">{{ notifications.documents_regularize_shipping }}</span>
                             </f7-icon>
                         </a>
                     </p>
@@ -35,10 +34,10 @@
 
         </f7-block>
         <f7-block class="no-margin-top padding-bottom">
-            <p class="text-color-white">{{user}} <br> {{email}}</p>
+            <p :class="theme.class_header_text_color">{{user}} <br> {{email}}</p>
         </f7-block>
     </f7-block>
-    <f7-block class="bg-color-white margin-left">
+    <f7-block class="margin-left">
 
         <template v-if="checkPermissions('configuration')">
         <!-- <template v-if="check_configuration"> -->
@@ -115,7 +114,7 @@
 
     <div :class="showBlockFooter ? 'block-footer bg-color-white pt-1' : 'footer bg-color-white'">
         <f7-block>
-            <f7-button class="padding-horizontal" @click="logout" color="pink" fill round>
+            <f7-button class="padding-horizontal bg-secondary" @click="logout" :color="theme.name_color_theme" fill round>
                 Cerrar sesión
             </f7-button>
         </f7-block>
@@ -155,11 +154,14 @@
                 check_configuration: false,
                 check_is_pos_mode: false,
                 current_permissions: [],
+                theme: {},
             }
         },
         mounted() {
             this.createTooltips()
             this.getNotifications()
+            this.getInitialSettings()
+            this.checkConfiguration()
         },
         created(){
             this.events()
@@ -200,14 +202,18 @@
                 })
 
             },
+            checkConfiguration(permissions)
+            {
+                this.check_configuration = this.hasPermissionInModule('configuration', permissions)
+            },
             getNotifications(){
 
                 if(!this.getStorage('api_token')) return
-                
+
                 this.showLoading()
                 this.$http.get(`${this.returnBaseUrl()}/documents/notifications`, this.getHeaderConfig())
                     .then(response => {
-                        
+
                         if(response.data.success)
                         {
                             this.notifications = response.data.data
@@ -222,7 +228,7 @@
                     })
             },
             createTooltips(){
-                
+
                 this.$f7.tooltip.create({
                     targetEl: '.navbar-tooltip-regularize-shipping',
                     text: 'Comprobantes pendientes de rectificación'
@@ -308,7 +314,10 @@
                 //localStorage.removeItem('url_logo')
                 location.reload();
                 // this.$f7router.navigate("/");
-            }
+            },
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
+            },
         }
     };
 </script>

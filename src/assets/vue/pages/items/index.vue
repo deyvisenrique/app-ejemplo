@@ -1,12 +1,12 @@
 <template>
-    <f7-page infinite :infinite-distance="50" :infinite-preloader="show_preloader" @infinite="loadMoreRecords" ptr  @ptr:refresh="pullToRefresh">
+    <f7-page :color="theme.name_color_theme" :class="theme.class_bg_body" infinite :infinite-distance="50" :infinite-preloader="show_preloader" @infinite="loadMoreRecords" ptr  @ptr:refresh="pullToRefresh">
 
         <header-layout title="Productos"></header-layout>
 
-        <f7-card class="card-100 padding-top no-shadow" color="red" style="min-height: 90%">
-            <f7-block class="">
+        <f7-card class="card-100 padding-top no-shadow" :class="theme.class_bg_body" :color="theme.name_color_theme" style="min-height: 90%">
+            <f7-card class="padding" no-shadow>
                 <f7-row>
-                    <f7-col width="70">
+                    <f7-col width="70" style="border: 1px solid #8e8e93;border-radius: 5px;">
                         <div class="searchbar searchbar-inline" style="margin:4%">
                             <div class="searchbar-input-wrap">
                                 <input type="search" placeholder="Buscar" style="font-size:12px" v-model="form.input" @input="searchRecords"/>
@@ -16,17 +16,17 @@
                         </div>
                     </f7-col>
                     <f7-col width="15" class="text-align-center">
-                        <f7-button @click="clickSearchBarcode" color="bluemagenta" fill small open-panel="right" icon="fas fa-camera"></f7-button>
+                        <f7-button @click="clickSearchBarcode" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-camera" class="bg-secondary"></f7-button>
                         <span class="" style="font-size: 10px;line-height: 10px !important;">BUSCAR</span>
                     </f7-col>
                     <f7-col width="15" class="text-align-center">
-                        <f7-button @click="clickCreate()" color="bluemagenta" fill small open-panel="right" icon="fas fa-plus"></f7-button>
+                        <f7-button @click="clickCreate()" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-plus" class="bg-secondary"></f7-button>
                         <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
                     </f7-col>
                 </f7-row>
-            </f7-block>
+            </f7-card>
 
-            <f7-block>
+            <f7-block style="padding-left: 8px;padding-right: 8px;">
                 <div>
                     <div class="row" v-if="records.length > 0">
                         <div class="col-50" v-for="(row, index) in records" :key="index">
@@ -128,13 +128,15 @@
                 loading_text: null,
                 showDialog: false,
                 recordId: null,
-                configuration: {}
+                configuration: {},
+                theme: {},
             }
         },
         computed: {
         },
         async created() {
             await this.loadConfiguration()
+            await this.getInitialSettings()
             await this.initForm()
             await this.initLoadingText()
             await this.getRecords()
@@ -298,6 +300,9 @@
                     ...this.form
                 })
 
+            },
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
             },
         }
     }

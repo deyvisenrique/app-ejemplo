@@ -1,18 +1,18 @@
 <template>
-<f7-page class="bg-blue-magenta" color="bluemagenta">
+<f7-page :class="theme.class_bg_header" :color="theme.name_color_theme">
 
     <f7-block>
         <f7-row class="display-flex align-items-center">
-            <f7-col width="20" class="text-color-white">
-                <a @click="closePopup" class="link text-color-white">
+            <f7-col width="20" :class="theme.class_menu_text_color">
+                <a @click="closePopup" class="link" :class="theme.class_menu_text_color">
                     <i class="fas fa-angle-left custom-icon-back-form"></i>
                 </a>
             </f7-col>
-            <f7-col width="70" class="text-color-white">
+            <f7-col width="70" :class="theme.class_menu_text_color" class="custom-title-form">
                 Listado de Productos
             </f7-col>
             <f7-col width="10">
-                <a href="#" class="link navbar-tooltip text-color-white">
+                <a href="#" class="link navbar-tooltip" :class="theme.class_menu_text_color">
                     <i class="icon f7-icons if-not-md">info</i>
                     <i class="icon material-icons if-md">info_outline</i>
                 </a>
@@ -20,10 +20,10 @@
         </f7-row>
     </f7-block>
 
-    <f7-card class="card-100 padding no-shadow" color="bluemagenta" style="min-height: 90%">
-        <f7-block style="padding:0px">
+    <f7-card class="card-100 no-padding no-shadow" :class="theme.class_bg_body" :color="theme.name_color_theme" style="min-height: 90%">
+        <f7-card class="padding" no-shadow>
             <f7-row>
-                <f7-col width="70">
+                <f7-col width="70" style="border: 1px solid #8e8e93;border-radius: 5px;">
                     <div class="searchbar searchbar-inline" style="margin:4%">
                         <div class="searchbar-input-wrap">
                             <input type="search" placeholder="Buscar" style="font-size:12px" v-model="search_item" @input="inputSearchItem"/>
@@ -33,12 +33,12 @@
                     </div>
                 </f7-col>
                 <f7-col width="15" class="text-align-center">
-                    <f7-button @click="clickSearchBarcode" color="bluemagenta" fill small open-panel="right" icon="fas fa-camera"></f7-button>
+                    <f7-button @click="clickSearchBarcode" :color="theme.name_color_theme" class="bg-secondary" fill small open-panel="right" icon="fas fa-camera"></f7-button>
                     <span class="" style="font-size: 10px;line-height: 10px !important;">BUSCAR</span>
                 </f7-col>
 
                 <f7-col width="15" class="text-align-center">
-                    <f7-button @click="addForm = !addForm" color="bluemagenta" fill small open-panel="right" icon="fas fa-plus"></f7-button>
+                    <f7-button @click="addForm = !addForm" :color="theme.name_color_theme" class="bg-secondary" fill small open-panel="right" icon="fas fa-plus"></f7-button>
                     <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
                 </f7-col>
             </f7-row>
@@ -47,12 +47,14 @@
                 <f7-col width="100">
                     <div class="c-horizontal-scroll c-h-50 mp-div-category padding-vertical" >
                         <template v-for="(category, index) in categories">
-                            <span class="padding c-span-card margin-right" :key="index" @click="clickSearchByCategory(category.id)"><b>{{ getCategoryName(category) }}</b></span>
+                            <span class="c-span-card" :key="index" @click="clickSearchByCategory(category.id)"><b>{{ getCategoryName(category) }}</b></span>
                         </template>
                     </div>
                 </f7-col>
             </f7-row>
+        </f7-card>
 
+        <f7-block style="padding-left: 8px;padding-right: 8px;">
             <div class="list inset ">
                 <p v-if="items_car.length == 0">
                     No tienes productos agregados
@@ -117,7 +119,7 @@
                                     <f7-icon :material="item.quantity > 0 ? 'check_box' : 'check_box_outline_blank'" class="text-color-bluemagenta"></f7-icon>
                                 </div>
                                 <div class="item-inner">
-                                    <div class="item-title text-color-blue" style="font-size: .9em">
+                                    <div class="item-title" :color="theme.name_color_theme" style="font-size: .9em">
                                         {{ item.full_description }}
 
                                         <div class="item-content">
@@ -146,14 +148,21 @@
         </f7-block>
     </f7-card>
 
-    <f7-sheet style="height:55%;" class="demo-sheet" :opened="addForm" @sheet:closed="addForm = false">
-        <f7-page-content>
-            <f7-block class="text-align-right no-margin-vertical no-padding-vertical">
+    <f7-sheet class="demo-sheet default-h-modal" :opened="addForm" @sheet:closed="addForm = false">
+        <f7-toolbar class="bg-white">
+            <div class="left padding-horizontal">
+                <div class="custom-title-form padding-left text-color-gray">
+                    Nuevo Producto
+                </div>
+            </div>
+            <div class="right padding-horizontal">
                 <f7-link small sheet-close class="no-margin no-padding text-color-gray">
                     <f7-icon material="close"></f7-icon>
                 </f7-link>
-            </f7-block>
-            <f7-block style="margin-top: 0px !important;" color="bluemagenta">
+            </div>
+        </f7-toolbar>
+        <f7-page-content>
+            <f7-block style="margin-top: 0px !important;" :color="theme.name_color_theme">
                 <form class="list no-hairlines-md" id="demo-form-item">
                     <ul>
                         <li class="item-content item-input">
@@ -201,7 +210,7 @@
                                 </div>
                             </div>
                         </li>
-                        
+
                         <f7-row>
                             <f7-col width="70">
                                 <li class="item-content item-input">
@@ -273,7 +282,7 @@
 
                         <li class="item-content item-input">
                             <div class="item-inner">
-                                <f7-button fill round color="pink" @click="submit" class="padding-horizontal">Guardar</f7-button>
+                                <f7-button fill round :color="theme.name_color_theme" @click="submit" class="padding-horizontal bg-secondary">Guardar</f7-button>
                             </div>
                         </li>
                     </ul>
@@ -289,7 +298,7 @@
                     <f7-icon material="close"></f7-icon>
                 </f7-link>
             </f7-block>
-            <f7-block color="red">
+            <f7-block :color="theme.name_color_theme">
                 <div class="data-table margin-bottom">
                     <table>
                         <thead>
@@ -308,16 +317,16 @@
                         </tbody>
                     </table>
                 </div>
-                <f7-button color="red" @click="send" small fill>
+                <f7-button :color="theme.name_color_theme" @click="send" small fill>
                     Confirmar
                 </f7-button>
             </f7-block>
         </f7-page-content>
     </f7-sheet>
 
-    <f7-fab position="right-bottom" class="margin-right" color="bluemagenta" v-if="countCar > 0" @click="send">
+    <f7-fab position="right-bottom" class="margin-right" :color="theme.name_color_theme" v-if="countCar > 0" @click="send">
         <f7-icon ios="f7:plus" aurora="f7:plus" md="material:shopping_cart" >
-            <f7-badge color="pink">
+            <f7-badge class="bg-secondary" :color="theme.name_color_theme">
                 {{ countCar }}
             </f7-badge>
         </f7-icon>
@@ -373,6 +382,7 @@
                 form: {},
                 configuration: {},
                 search_category_id: null,
+                theme: {},
             };
         },
         computed: {
@@ -398,6 +408,7 @@
         },
         created() {
             this.loadConfiguration()
+            this.getInitialSettings()
             this.initForm();
             this.getTables();
         },
@@ -754,6 +765,9 @@
                     }
                 })
 
+            },
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
             },
         }
     };

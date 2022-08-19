@@ -105,7 +105,7 @@ export const general_functions = {
         {
             const _permissions = permissions ? permissions : this.getStorage('permissions', true)
             const row = _.find(_permissions, {value: module})
-            
+
             return !_.isEmpty(row)
         },
         getStoragePermissions()
@@ -158,6 +158,92 @@ export const general_functions = {
         generalSleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         },
+        getThemeSettings() {
+            const theme = {
+                theme_color: 'blue',
+                card_color: 'multicolor'
+            }
+            if(this.getStorage('app_configuration') === null) {
+                this.setStorage('app_configuration', theme, true)
+            }
+            const config = this.getStorage('app_configuration', true)
+            const theme_color = config.theme_color // white | blue | red | dark
+            const is_unicolor_boxes = config.card_color == 'unicolor' ? true : false
+            // logo
+            const css_color_fill = theme_color == 'white' ? '#00B19A' : '#fff'
+            let css_color_fill_dark = '#4A2CB3'
+            // estilos en header
+            let class_bg_header = 'bg-blue-magenta'
+            let class_bg_body = 'bg-color-white'
+            let class_waves_color_fill = 'shape-fill'
+            let class_menu_text_color = theme_color == 'white' ? 'text-color-teal' : 'text-color-white'
+            const class_header_text_color = theme_color == 'white' ? 'text-color-teal' : 'text-color-white'
+            // estilos en home
+            let class_box_color = 'bg-blue'
+            let class_box_color_shade = is_unicolor_boxes ? 'bg-blue' :'bg-color-blue-shade'
+            let class_box_color_tint = is_unicolor_boxes ? 'bg-blue' :'bg-color-blue-tint'
+            let class_text_color = theme_color == 'white' ? '' : 'text-color-white'
+            // estilos de contenido
+            let name_color_theme = 'bluemagenta'
+            // panel
+            let class_button_color = 'bg-blue'
+
+
+            switch (theme_color) {
+                case 'white':
+                    css_color_fill_dark = '#00B19A'
+                    class_bg_header = 'bg-color-white-shade'
+                    class_bg_body = 'bg-color-white-shade'
+                    class_waves_color_fill = 'shape-fill-white'
+                    class_box_color = 'bg-color-white'
+                    class_box_color_shade = 'bg-color-white'
+                    class_box_color_tint = 'bg-color-white'
+                    name_color_theme = 'teal'
+                    class_button_color = 'bg-color-teal'
+                    break;
+                case 'red':
+                    css_color_fill_dark = '#cb2027'
+                    class_bg_header = 'bg-color-red'
+                    class_waves_color_fill = 'shape-fill-red'
+                    class_box_color = 'bg-color-red'
+                    class_box_color_shade = is_unicolor_boxes ? 'bg-color-red' :'bg-color-red-shade'
+                    class_box_color_tint = is_unicolor_boxes ? 'bg-color-red' :'bg-color-red-tint'
+                    name_color_theme = 'red'
+                    class_button_color = 'bg-color-red'
+                    break;
+                case 'dark':
+                    css_color_fill_dark = '#1A1F1D'
+                    class_bg_header = 'bg-color-black'
+                    class_waves_color_fill = 'shape-fill-black'
+                    class_box_color = 'bg-color-black'
+                    class_box_color_shade = is_unicolor_boxes ? 'bg-color-black' :'bg-color-black-shade'
+                    class_box_color_tint = is_unicolor_boxes ? 'bg-color-black' :'bg-color-black-tint'
+                    name_color_theme = 'black'
+                    class_button_color = 'bg-color-black'
+                    break;
+                default:
+                    break;
+            }
+
+            return {
+                theme_color: theme_color,
+                is_unicolor_boxes: is_unicolor_boxes,
+                class_bg_home_icon : 'home-icon home-icon-'+theme_color,
+                class_bg_header: class_bg_header,
+                class_bg_body: class_bg_body,
+                css_color_fill: css_color_fill,
+                class_waves_color_fill: class_waves_color_fill,
+                class_menu_text_color: class_menu_text_color,
+                class_box_color: class_box_color,
+                class_box_color_shade: class_box_color_shade,
+                class_box_color_tint: class_box_color_tint,
+                class_text_color: class_text_color,
+                css_color_fill_dark: css_color_fill_dark,
+                class_header_text_color: class_header_text_color,
+                name_color_theme: name_color_theme,
+                class_button_color: class_button_color,
+            }
+        }
     }
 }
 

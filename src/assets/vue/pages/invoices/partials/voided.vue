@@ -1,14 +1,14 @@
 <template>
- 
-    <f7-sheet class="demo-sheet default-h35-modal padding-top" color="bluemagenta" :opened="showDialog" @sheet:closed="close">
+
+    <f7-sheet class="demo-sheet default-h35-modal padding-top" color="green" :opened="showDialog" @sheet:closed="close">
         <f7-page-content>
             <f7-block class="text-align-right no-margin-vertical no-padding-vertical padding-top">
                 <f7-link small sheet-close class="no-margin-horizontal  text-color-gray">
                     <f7-icon material="close"></f7-icon>
                 </f7-link>
             </f7-block>
-                
-            <f7-block style="margin-top: 0px !important;" color="bluemagenta">
+
+            <f7-block style="margin-top: 0px !important;" color="green">
                 <form class="list no-hairlines-md" id="demo-form-item">
                     <h3 class="padding-horizontal">{{title}}</h3>
                     <ul>
@@ -21,7 +21,7 @@
                                 </div>
                             </div>
                         </li>
-                        
+
                         <li class="item-content item-input">
                             <div class="item-inner">
                                 <f7-button fill round color="red" class="padding-horizontal" @click="submit">Anular</f7-button>
@@ -71,7 +71,7 @@
                     documentos.push({
                         external_id: document.external_id,
                         motivo_anulacion: document.description
-                    })    
+                    })
                 })
 
                 return {
@@ -94,7 +94,7 @@
 
                         // console.log(response)
 
-                        if (response.data.success) 
+                        if (response.data.success)
                         {
                             this.voidedQuery(response.data.data)
                         }
@@ -130,7 +130,7 @@
 
                         // console.log(response)
 
-                        if (response.data.success) 
+                        if (response.data.success)
                         {
                             this.showAlert(response.data.response.description)
                         }
@@ -174,7 +174,7 @@
                 this.form.date_of_reference = document.date_of_issue
                 this.form.documents[0].document_id = document.id
                 this.form.documents[0].external_id = document.external_id
-                
+
                 this.title = `Anular comprobante: ${document.number}`
 
             },

@@ -8,7 +8,7 @@
                         <f7-block class="bg-white-shade block-strong inset no-margin">
                             <f7-row @click="popupCustomerOpened = true">
                                 <f7-col width="15" class="align-self-center">
-                                    <f7-icon icon="fas fa-user" size="24" color="deeppurple"></f7-icon>
+                                    <f7-icon icon="fas fa-user" size="24" :color="theme.name_color_theme"></f7-icon>
                                 </f7-col>
                                 <f7-col width="75" class="text-align-left">
                                     <small>CLIENTE</small><br>
@@ -55,7 +55,7 @@
                                 </div>
                             </div>
                         </f7-col>
-                        
+
                         <template v-if="isInvoiceDocument">
 
                             <!-- <f7-col width="50" >
@@ -440,12 +440,10 @@
                 </form>
 
             </f7-block>
-    
-
 
         </template>
 
-        <f7-fab position="center-bottom" class="margin-right" color="bluemagenta" @click.prevent="clickSubmit">
+        <f7-fab position="center-bottom" class="margin-right" color="green" @click.prevent="clickSubmit">
             <f7-icon ios="f7:check" aurora="f7:check" md="material:check"></f7-icon>
         </f7-fab>
 
@@ -492,8 +490,8 @@
             DocumentType
         },
         mixins: [
-            auth, 
-            general_functions, 
+            auth,
+            general_functions,
             operations,
             download_file,
             store_cash,
@@ -509,7 +507,7 @@
                 },
                 resource: 'documents',
                 customers: [],
-                series: [], 
+                series: [],
                 payment_destinations: [],
                 payment_conditions: [],
                 popupCustomerOpened: false,
@@ -523,6 +521,7 @@
                 default_customer: null,
                 configuration: {},
                 payment_destination_id: null,
+                theme: {},
             }
         },
         computed: {
@@ -542,6 +541,7 @@
         },
         async created() {
             await this.loadConfiguration()
+            await this.getInitialSettings()
             await this.loadForm()
             await this.getTables()
             await this.initData()
@@ -631,12 +631,12 @@
 
                         const data = response.data
 
-                        if (data.success) 
+                        if (data.success)
                         {
                             this.showDialogOptions(data)
                             this.storeCashDocument(data.data.id)
-                        } 
-                        else 
+                        }
+                        else
                         {
                             this.showAlert('Ocurrió un error al registrar la venta.')
                         }
@@ -745,12 +745,12 @@
 
                         const data = response.data
 
-                        if (data.success) 
+                        if (data.success)
                         {
                             this.showDialogOptions(data)
                             this.storeCashDocument(data.data.id)
-                        } 
-                        else 
+                        }
+                        else
                         {
                             this.showAlert('Ocurrió un error al registrar la venta.')
                         }
@@ -843,7 +843,7 @@
 
                 return []
             },
-            validate() 
+            validate()
             {
                 const self = this
 
@@ -881,7 +881,7 @@
             {
                 await this.filterSeries()
                 await this.setDefaultCustomer()
-                
+
                 await this.setDefaultSeries()
                 await this.initPayments()
                 await this.initFormFee()
@@ -1195,7 +1195,9 @@
                 this.payment_change = this.roundNumber(this.getTotalPayments() - parseFloat(this.form.total))
             },
             // pagos
-
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
+            },
         }
     }
 </script>

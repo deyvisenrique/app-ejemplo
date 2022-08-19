@@ -1,18 +1,18 @@
 <template>
-    <f7-page class="">
-        <f7-block class="bg-blue-magenta no-margin-top elevation-9">
+    <f7-page>
+        <f7-block class="no-margin-top" :class="theme.class_bg_header">
             <f7-block class="text-align-right no-margin-top padding-top">
-                <f7-link class="transparent panel-previous" color="white" @click="back">
+                <f7-link class="transparent panel-previous" :class="theme.class_menu_text_color" @click="back">
                 <i class="fas fa-times"></i>
                 </f7-link>
             </f7-block>
             <f7-block class="no-margin-vertical">
-                <p class="text-color-white">
+                <p :class="theme.class_header_text_color">
                 <f7-icon material="settings" size="44px" class="padding-right"></f7-icon>
                 </p>
             </f7-block>
             <f7-block class="no-margin-top padding-bottom">
-                <p class="text-color-white">Configuración</p>
+                <p :class="theme.class_header_text_color">Configuración</p>
             </f7-block>
         </f7-block>
         <f7-block class="no-padding-horizontal">
@@ -131,13 +131,15 @@
                     {id: '01', description: 'FACTURA'},
                     {id: '03', description: 'BOLETA'},
                     {id: '80', description: 'N. VENTA'},
-                ]
+                ],
+                theme: {},
             }
         },
         async created() {
             await this.events()
             await this.checkPosMode()
             await this.initForm()
+            await this.getInitialSettings()
             await this.initData()
             await this.initDirectPrint() 
         },
@@ -349,6 +351,9 @@
             },
             back() {
                 this.$f7router.navigate("/panel-right/")
+            },
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
             },
         }
     }
