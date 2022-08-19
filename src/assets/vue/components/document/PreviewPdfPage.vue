@@ -1,6 +1,6 @@
 <template>
     <f7-page class="page-red-white" color="white"  >
-        
+
     <f7-block>
         <f7-row>
             <f7-col width="90">
@@ -15,11 +15,11 @@
         </f7-row>
     </f7-block>
     <f7-card class="card-100 padding-top padding-horizontal no-shadow" color="red" v-if="url_preview">
-        <iframe 
+        <iframe
             :src="url_preview"
             frameborder="0"
-            scrolling="no" 
-            width="100%" 
+            scrolling="no"
+            width="100%"
             height="800px"
             >
         </iframe>
@@ -47,7 +47,7 @@
         async created() {
             this.loadConfiguration()
             this.open()
-            
+
         },
         methods: {
 
@@ -71,7 +71,7 @@
                     case 'document':
                         url = `${this.gview}${this.getBaseUrl()}/print/${this.documentType}/${this.record.external_id}/${this.getPrintFormatPdf()}&embedded=true`
                         break
-                
+
                     case 'sale_note':
                     case 'order_note':
                         url = `${this.gview}${this.record.print_ticket}&embedded=true`

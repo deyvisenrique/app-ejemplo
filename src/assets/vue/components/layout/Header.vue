@@ -1,24 +1,31 @@
 <template>
 <div>
-    <f7-block class="bg-blue-magenta no-margin-vertical padding-vertical elevation-9">
+    <f7-block :class="theme.class_bg_header" class="no-margin-vertical padding-vertical">
         <f7-row class="display-flex align-items-center">
-            <f7-col width="50">
-                <f7-link href="/">
-                    <img v-if="logo" :src="logo" alt="FacturaloPeru" width="100%" style="max-height: 80px;" />
+            <f7-col width="33">
+                <f7-link href="/" v-if="theme.theme_color != 'white'">
+                    <logo heightLogo="60"></logo>
+                </f7-link>
+                <!-- tema: {{ theme.theme_color }} <br>
+                unicolor: {{ theme.is_unicolor_boxes }} <br> -->
+            </f7-col>
+            <f7-col width="33" class="text-align-center">
+                <f7-link href="/" v-if="theme.theme_color == 'white'">
+                    <logo heightLogo="60"></logo>
                 </f7-link>
             </f7-col>
-            <f7-col width="50" class="">
-                <f7-button panel-open="right" class="text-align-right text-color-white"><i class="fas fa-bars"></i></f7-button>
+            <f7-col width="33" class="">
+                <f7-button panel-open="right" class="text-align-right" :class="theme.class_menu_text_color"><i class="fas fa-bars"></i></f7-button>
             </f7-col>
         </f7-row>
     </f7-block>
-    <f7-block class="bg-blue-magenta padding-vertical no-margin-vertical" v-if="title">
+    <f7-block :class="theme.class_bg_header" class="padding-vertical no-margin-vertical" v-if="title">
         <f7-row class="display-flex align-items-center">
             <f7-col width="10">
 
                 <template v-if="overwriteRoute">
 
-                    <a class="text-color-white" @click="clickRedirectBack">
+                    <a :class="theme.class_header_text_color" @click="clickRedirectBack">
                         <template v-if="showBackHome">
                             <i class="fas fa-angle-left custom-icon-back-form"></i>
                         </template>
@@ -27,7 +34,7 @@
                 </template>
                 <template v-else>
 
-                    <a class="link back text-color-white" href="/">
+                    <a class="link back" :class="theme.class_header_text_color" href="/">
                         <template v-if="showBackHome">
                             <i class="fas fa-angle-left custom-icon-back-form"></i>
                         </template>
@@ -36,13 +43,13 @@
                 </template>
 
             </f7-col>
-            <f7-col width="80" class="text-color-white text-align-center custom-title-form">
+            <f7-col width="80" class="text-align-center custom-title-form" :class="theme.class_header_text_color">
                 {{ title }}
             </f7-col>
             <f7-col width="10"></f7-col>
         </f7-row>
     </f7-block>
-    <header-waves :title="title"></header-waves>
+    <header-waves :title="title" v-if="theme.theme_color != 'white'"></header-waves>
 </div>
 </template>
 
@@ -50,6 +57,7 @@
 
     import logoOficialLight from "assets/images/logo/logo-light.svg"
     import HeaderWaves from "./HeaderWaves.vue"
+    import Logo from "./Logo.vue"
     import {general_functions, set_logo} from "mixins_/general_functions"
 
     export default {
@@ -58,16 +66,19 @@
         props: ["title", 'showButtonBack', 'hrefBack', 'overwriteBackRoute'],
         components: {
             HeaderWaves,
-            logoOficialLight
+            logoOficialLight,
+            Logo
         },
         data: function () {
             return {
                 logo: logoOficialLight,
+                theme: {},
             };
         },
         async created() {
             await this.events()
             await this.checkAppLogo()
+            await this.checkTheme()
         },
         computed:{
             overwriteRoute()
@@ -92,7 +103,7 @@
                 return this.redirectRoute(this.hrefBackHome)
             },
             checkAppLogo(){
-                
+
                 const url_logo = this.getStorage('url_logo')
                 if (url_logo) this.logo = url_logo
 
@@ -103,6 +114,9 @@
                     this.setAppLogo(generals)
                 })
 
+            },
+            checkTheme() {
+                this.theme = this.getThemeSettings()
             }
         }
     }

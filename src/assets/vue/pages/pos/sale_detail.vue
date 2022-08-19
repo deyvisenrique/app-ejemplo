@@ -1,5 +1,5 @@
 <template>
-    <f7-page class="" color="bluemagenta">
+    <f7-page class="" :color="theme.name_color_theme">
 
         <header-layout :title="geTitle" hrefBack="/list-items-sale/" :overwriteBackRoute="true"></header-layout>
 
@@ -21,7 +21,7 @@
                             <td class="label-cell">{{ row.item.description }}</td>
                             <td class="numeric-only">{{ row.unit_price }}</td>
                             <td class="numeric-only padding">
-                                
+
                                 <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
                                     <div class="stepper-button-minus" @click="calculateQuantity(-1, index)"></div>
                                     <div class="stepper-input-wrap">
@@ -52,12 +52,12 @@
                 </f7-block>
             </div>
         </f7-block>
- 
+
         <f7-fab position="left-bottom" class="margin-right" color="red" @click="clickDeleteItems">
             <f7-icon ios="f7:delete" aurora="f7:delete" md="material:delete"></f7-icon>
         </f7-fab>
 
-        <f7-fab position="right-bottom" class="margin-right" color="bluemagenta" @click="clickPayment">
+        <f7-fab position="right-bottom" class="margin-right" color="green" @click="clickPayment">
             <f7-icon ios="f7:arrow_forward" aurora="f7:arrow_forward" md="material:arrow_forward"></f7-icon>
         </f7-fab>
     </f7-page>
@@ -78,8 +78,8 @@
             HeaderLayout
         },
         mixins: [
-            auth, 
-            general_functions, 
+            auth,
+            general_functions,
             operations
         ],
         data: function () {
@@ -94,6 +94,7 @@
                 },
                 list_items_sale: [],
                 resource: 'documents',
+                theme: {},
             }
         },
         computed: {
@@ -103,6 +104,7 @@
         },
         async created() {
             await this.getAffectationIgvTypes()
+            await this.getInitialSettings()
             await this.initForm()
             await this.initData()
         },
@@ -162,7 +164,7 @@
                             })
 
             },
-            initForm() 
+            initForm()
             {
                 this.form = {
                     prefix: 'NV',
@@ -192,7 +194,7 @@
                 };
 
             },
-            getFormItem() 
+            getFormItem()
             {
                 return {
                     item_id: null,
@@ -264,7 +266,7 @@
             {
                 this.generalCalculateTotal() //definido en mixin operations
             },
-            calculateQuantity(value, index) 
+            calculateQuantity(value, index)
             {
                 let quantity = parseFloat(this.form.items[index].quantity)
                 let result = (quantity += parseFloat(value))
@@ -294,7 +296,7 @@
             },
             calculateQuantityItem(index, quantity)
             {
-                
+
                 const item_sale = _.find(this.list_items_sale, {item_id : this.form.items[index].item_id})
                 item_sale.quantity = quantity
 
@@ -308,10 +310,13 @@
                 const quantity = this.form.items[index].quantity
 
                 const item_sale = _.find(this.list_items_sale, {item_id: this.form.items[index].item_id})
-                
+
                 item_sale.quantity = parseFloat(quantity)
 
                 this.setStorage('list_items_sale', this.list_items_sale, true)
+            },
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
             },
         }
     }

@@ -1,22 +1,22 @@
 <template>
-  <f7-page class="bg-blue-magenta" color="bluemagenta">
-    <f7-block class="">
+  <f7-page :class="theme.class_bg_header" :color="theme.name_color_theme">
+    <f7-block>
       <f7-row class="display-flex align-items-center">
-        <f7-col width="20" class="text-color-white">
-            <a @click="closePopup" class="link text-color-white">
+        <f7-col width="20" :class="theme.class_menu_text_color">
+            <a @click="closePopup" class="link" :class="theme.class_menu_text_color">
                 <i class="fas fa-angle-left custom-icon-back-form"></i>
             </a>
         </f7-col>
-        <f7-col width="70" class="text-color-white">
+        <f7-col width="70" :class="theme.class_menu_text_color" class="custom-title-form">
             Listado de clientes
         </f7-col>
         <f7-col width="10">
-          <f7-link @click="addForm = !addForm" class="text-color-white text-align-right" open-panel="right" icon="fas fa-plus"></f7-link>
+          <f7-link @click="addForm = !addForm" :class="theme.class_menu_text_color" class="text-align-right" open-panel="right" icon="fas fa-plus"></f7-link>
         </f7-col>
       </f7-row>
     </f7-block>
 
-    <f7-card class="card-100 padding no-shadow" color="bluemagenta" style="min-height: 90%">
+    <f7-card class="card-100 padding no-shadow" :color="theme.name_color_theme" style="min-height: 90%">
       <f7-block style="padding:0px">
         <div class="searchbar searchbar-inline padding">
           <div class="searchbar-input-wrap">
@@ -46,16 +46,24 @@
     </f7-card>
 
     <f7-sheet
-      style="height:85%;"
-      class="demo-sheet"
+      class="demo-sheet default-h-modal"
       :opened="addForm"
       @sheet:closed="addForm = false">
       <!-- Scrollable sheet content -->
+      <f7-toolbar class="bg-white">
+        <div class="left padding-horizontal">
+          <div class="custom-title-form padding-left text-color-gray">
+            Nuevo Cliente
+          </div>
+        </div>
+        <div class="right padding-horizontal">
+          <f7-link small sheet-close class="no-margin no-padding text-color-gray">
+            <f7-icon material="close"></f7-icon>
+          </f7-link>
+        </div>
+      </f7-toolbar>
       <f7-page-content>
-        <f7-block class="text-align-right no-margin-vertical no-padding-vertical">
-          <f7-link sheet-close class="no-padding text-color-gray"><f7-icon material="close"></f7-icon></f7-link>
-        </f7-block>
-        <f7-block style="margin-top: 0px !important;" color="bluemagenta">
+        <f7-block style="margin-top: 0px !important;" :color="theme.name_color_theme">
           <form class="list no-hairlines-md" id="demo-form-customer">
             <ul>
               <li class="item-content item-input">
@@ -148,7 +156,7 @@
               </li>
 
               <li class="item-content item-input">
-                <f7-button fill round color="pink" class="padding-horizontal" @click="submit">Guardar</f7-button>
+                <f7-button fill round :color="theme.name_color_theme" class="bg-secondary padding-horizontal" @click="submit">Guardar</f7-button>
               </li>
             </ul>
           </form>
@@ -165,11 +173,12 @@
 </style>
 
 <script>
-import { auth } from "mixins_/auth";
+import { auth } from "mixins_/auth"
+import {general_functions} from "mixins_/general_functions"
 import _ from "lodash";
 
 export default {
-  mixins: [auth],
+  mixins: [auth,general_functions],
   name: "CustomerForm",
   components: {},
   props: ["showDialog", "codeType", 'customerId'],
@@ -179,7 +188,8 @@ export default {
       addForm: false,
       items: [],
       items_base: [],
-      form: {}
+      form: {},
+      theme: {},
     };
   },
   computed: {
@@ -192,9 +202,10 @@ export default {
       }
     }
   },
-  created() {
-    this.initForm();
-    this.getData();
+  async created() {
+    await this.initForm()
+    await this.getInitialSettings()
+    await this.getData()
   },
   watch: {
     search_item: function(val) {
@@ -437,7 +448,10 @@ export default {
       else{
        // this.initItems()
       }
-    }
+    },
+    getInitialSettings() {
+      this.theme = this.getThemeSettings()
+    },
   }
 };
 </script>

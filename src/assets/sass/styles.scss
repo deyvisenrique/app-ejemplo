@@ -35,6 +35,9 @@
   .ripple-bluemagenta {
     --f7-theme-color-ripple-color: rgba(255, 59, 48, 0.3);
   }
+  .color-bluemagenta.bg-secondary {
+    background-color: #B722E5;
+  }
 
 //tema
 .page-blue-magenta,
@@ -42,7 +45,7 @@
   background-color: $blue-magenta;
 }
 .bg-blue {
-  background-color: $blue;
+  background-color: $blue-magenta;
 }
 .bg-dark-blue {
   background-color: $dark-blue;
@@ -84,7 +87,7 @@
 }
 
 .c-span-card{
-  background: #6E28C9;
+  background: #0c82df;
   color: #fff;
   position: relative;
   border-radius: var(--f7-card-border-radius);
@@ -94,6 +97,7 @@
   margin-left: calc(var(--f7-card-margin-horizontal) + var(--f7-safe-area-left));
   margin-right: calc(var(--f7-card-margin-horizontal) + var(--f7-safe-area-right));
   box-shadow: var(--f7-card-box-shadow);
+  padding: 10px !important;
   width: 100% !important;
   white-space: nowrap;
 }
@@ -137,6 +141,9 @@
 
 .default-h40-modal{
   height:40%;
+}
+.default-h50-modal{
+  height:50%;
 }
 
 .mt-15{
@@ -218,7 +225,7 @@
 }
 
 .default-h-modal{
-  height:55%;
+  height:76%;
 }
 
 .default-h35-modal{
@@ -236,4 +243,138 @@
 
 .fs-14{
   font-size:14px
+}
+
+.font-w-500 {
+  font-weight: 500;
+}
+
+.md {
+  --f7-input-text-color: #5b5b5b;
+  --f7-text-color: #5b5b5b;
+  --f7-label-text-color: #1b1b1b;
+}
+
+/*====================
+  Color Overrides
+==================== */
+/* black */
+.color-black {
+  --f7-theme-color: #1A1F1D;
+  --f7-theme-color-rgb: 26, 31, 29;
+  --f7-theme-color-shade: #000000;
+  --f7-theme-color-tint: #141414;
+}
+.text-color-black {
+  --f7-theme-color-text-color: #1A1F1D;
+}
+.bg-color-black {
+  --f7-theme-color-bg-color: #1A1F1D;
+}
+.bg-color-black-shade {
+  --f7-theme-color-bg-color: #000000;
+}
+.bg-color-black-tint {
+  --f7-theme-color-bg-color: #141414;
+}
+.border-color-black {
+  --f7-theme-color-border-color: #1A1F1D;
+}
+.waves .shape-fill-black {
+  fill: $dark;
+}
+.color-black.bg-secondary {
+  background-color: #009688;
+}
+/* red */
+.color-red {
+  --f7-theme-color: #cb2027;
+  --f7-theme-color-rgb: 189, 13, 38;
+  --f7-theme-color-shade: #CC0D00;
+  --f7-theme-color-tint: #A30B00;
+}
+.text-color-red {
+  --f7-theme-color-text-color: #cb2027;
+}
+.bg-color-red {
+  --f7-theme-color-bg-color: #cb2027;
+}
+.bg-color-red-shade {
+  --f7-theme-color-bg-color: #CC0D00;
+}
+.bg-color-red-tint {
+  --f7-theme-color-bg-color: #A30B00;
+}
+.border-color-red {
+  --f7-theme-color-border-color: #cb2027;
+}
+.waves .shape-fill-red {
+  fill: $red;
+}
+.color-red.bg-secondary {
+  background-color: #800A0E;
+}
+/* white */
+.color-white {
+  --f7-color-white: #ffffff;
+  --f7-color-white-rgb: 255, 255, 255;
+  --f7-color-white-shade: #ebebeb;
+  --f7-color-white-tint: #ffffff;
+}
+.text-color-white {
+  --f7-theme-color-text-color: #ffffff;
+}
+.bg-color-white {
+  --f7-theme-color-bg-color: #ffffff;
+}
+.bg-color-white-shade {
+  --f7-theme-color-bg-color: #ebebeb;
+}
+.bg-color-white-tint {
+  --f7-theme-color-bg-color: #f5f5f5;
+}
+.border-color-white {
+  --f7-theme-color-border-color: #ffffff;
+}
+.waves .shape-fill-white {
+  fill: var(--f7-color-white-shade);
+}
+.bg-color-blue-shade {
+  --f7-theme-color-bg-color: #331B83;
+}
+.bg-color-blue-tint {
+  --f7-theme-color-bg-color: #6E28C9;
+}
+.color-teal.bg-secondary {
+  background-color: #B722E5;
+}
+
+/* gradients */
+
+/* green */
+.color-green {
+  --f7-theme-color: #009688;
+  --f7-theme-color-rgb: 0,150,136;
+  --f7-theme-color-shade: #006d63;
+  --f7-theme-color-tint: #00bfad;
+}
+/* blue */
+.bg-blue.box-gradient {
+  background-image: radial-gradient(circle at 85.36% -11.24%, #391e9a 0, #4a2cb3 50%, #4a2cb3 100%);
+}
+.bg-color-blue-shade.box-gradient {
+  background-image: radial-gradient(circle at 85.36% -11.24%, #1f0c60 0, #331b83 50%, #331b83 100%);
+}
+.bg-color-blue-tint.box-gradient {
+  background-image: radial-gradient(circle at 85.36% -11.24%, #6b1ab2 0, #6e27c9 50%, #6e27c9 100%);
+}
+/* red */
+.bg-color-red.box-gradient {
+  background-image: radial-gradient(circle at 85.36% -11.24%, #a70a10 0, #cb2027 50%, #cb2027 100%);
+}
+.bg-color-red-shade.box-gradient {
+  background-image: radial-gradient(circle at 85.36% -11.24%, #b70c00 0, #CC0D00 50%, #CC0D00 100%);
+}
+.bg-color-red-tint.box-gradient {
+  background-image: radial-gradient(circle at 85.36% -11.24%, #8b0900 0, #A30B00 50%, #A30B00 100%);
 }

@@ -1,5 +1,5 @@
 <template>
-    <f7-page class="" color="bluemagenta">
+    <f7-page :color="theme.name_color_theme" :class="theme.class_bg_body">
 
         <header-layout title="Reporte"></header-layout>
 
@@ -133,7 +133,7 @@
             <f7-row class="padding-bottom">
                 <f7-col class="padding-bottom">
                     <h4>
-                        <i class="icon material-icons if-md">info_outline</i> 
+                        <i class="icon material-icons if-md">info_outline</i>
                         No incluye pedidos
                     </h4>
                     <x-graph-line :all-data="general.graph"></x-graph-line>
@@ -170,10 +170,12 @@
                 resource: 'reports',
                 establishments: [],
                 user_data: {},
+                theme: {},
             }
         },
         async created() {
             await this.initForm()
+            await this.getInitialSettings()
             await this.getUserData()
             await this.filters()
             await this.getData()
@@ -206,7 +208,7 @@
                 {
                     this.form.establishment_id = null
                 }
-                
+
             },
             changeMonth(){
                 this.getData()
@@ -293,7 +295,10 @@
                                 this.hideLoading()
                             })
 
-            }
+            },
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
+            },
 
         }
     }

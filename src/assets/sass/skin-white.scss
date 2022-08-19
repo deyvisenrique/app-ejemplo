@@ -1,0 +1,42 @@
+.page-blue-magenta,
+.bg-blue-magenta {
+  background-color: #fff;
+}
+
+.color-bluemagenta {
+  --f7-theme-color: #fff;
+  --f7-theme-color-rgb: 233, 233, 230;
+  --f7-theme-color-shade: #A8A8A7;
+  --f7-theme-color-tint: #696968;
+}
+
+:root {
+  --f7-color-bluemagenta: #fff;
+}
+.text-color-white {
+  color: #00B19A !important;
+  font-weight: 500;
+}
+
+.text-color-white:hover {
+  color: #008D7E !important;
+}
+
+.color-green {
+  --f7-theme-color: #00B19A;
+  --f7-theme-color-rgb: 255,45,85;
+  --f7-theme-color-shade: #008D7E;
+  --f7-theme-color-tint: #00B19A;
+}
+
+
+.md {
+  --f7-page-bg-color: #ebebeb;
+  --f7-input-text-color: #5b5b5b;
+  --f7-text-color: #5b5b5b;
+  --f7-label-text-color: #1b1b1b;
+}
+
+.font-w-500 {
+  font-weight: 500;
+}

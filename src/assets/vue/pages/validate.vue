@@ -1,5 +1,5 @@
 <template>
-  <f7-page class="" color="">
+  <f7-page :color="theme.name_color_theme" :class="theme.class_bg_body">
     <header-layout title="Validador de comprobantes"></header-layout>
 
     <f7-block>
@@ -7,7 +7,7 @@
         <f7-col>
           <f7-button class="padding-horizontal"
             @click="openScanner"
-            color="pink"
+            :color="theme.name_color_theme"
             large
             fill
             round>
@@ -79,10 +79,12 @@ export default {
     data() {
       return {
         form: {},
+        theme: {},
       }
     },
     created() {
       this.initForm()
+      this.getInitialSettings()
     },
     methods: {
       initForm() {
@@ -137,7 +139,10 @@ export default {
           .then(() => {
             this.hideLoading()
           })
-      }
+      },
+      getInitialSettings() {
+          this.theme = this.getThemeSettings()
+      },
     }
   }
 </script>

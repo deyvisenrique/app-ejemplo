@@ -1,5 +1,5 @@
 <template>
-    <f7-page class="" color="bluemagenta">
+    <f7-page class="" :color="theme.name_color_theme">
 
         <header-layout :title="geTitle" hrefBack="/sale-detail-pos/" :overwriteBackRoute="true"></header-layout>
 
@@ -10,7 +10,7 @@
                         <f7-block class="bg-white-shade block-strong inset no-margin">
                             <f7-row @click="popupCustomerOpened = true">
                                 <f7-col width="15" class="align-self-center">
-                                    <f7-icon icon="fas fa-user" size="24" color="deeppurple"></f7-icon>
+                                    <f7-icon icon="fas fa-user" size="24" :color="theme.name_color_theme"></f7-icon>
                                 </f7-col>
                                 <f7-col width="75" class="text-align-left">
                                     <small>CLIENTE</small><br>
@@ -50,7 +50,7 @@
                                 </div>
                             </div>
                         </f7-col>
-                        
+
                         <template v-if="isInvoiceDocument">
 
                             <f7-col width="50" >
@@ -201,11 +201,11 @@
                             </f7-row>
                         </f7-block>
                     </div>
-   
+
                 </ul>
             </form>
         </f7-block>
- 
+
         <f7-popup class="demo-popup" :opened="popupCustomerOpened" @popup:closed="popupCustomerOpened = false">
             <customer-form :codeType="form.document_type_id" :customerId="form.customer_id" :showDialog.sync="popupCustomerOpened" ref="form_customer_car" @addCustomerCar="addCustomer"></customer-form>
         </f7-popup>
@@ -214,7 +214,7 @@
             <f7-icon ios="f7:delete" aurora="f7:delete" md="material:delete"></f7-icon>
         </f7-fab> -->
 
-        <f7-fab position="center-bottom" class="margin-right" color="bluemagenta" @click.prevent="clickSubmit">
+        <f7-fab position="center-bottom" class="margin-right" color="green" @click.prevent="clickSubmit">
             <f7-icon ios="f7:check" aurora="f7:check" md="material:check"></f7-icon>
         </f7-fab>
 
@@ -240,8 +240,8 @@
             HeaderLayout
         },
         mixins: [
-            auth, 
-            general_functions, 
+            auth,
+            general_functions,
             operations,
             download_file,
             store_cash
@@ -256,7 +256,7 @@
                 },
                 resource: 'documents',
                 customers: [],
-                series: [], 
+                series: [],
                 payment_destinations: [],
                 payment_conditions: [],
                 popupCustomerOpened: false,
@@ -270,6 +270,7 @@
                 credit_payment_method_types: [],
                 default_customer: null,
                 configuration: {},
+                theme: {},
             }
         },
         computed: {
@@ -289,6 +290,7 @@
         },
         async created() {
             await this.loadConfiguration()
+            await this.getInitialSettings()
             await this.loadForm()
             await this.getTables()
             await this.initData()
@@ -323,12 +325,12 @@
 
                         const data = response.data
 
-                        if (data.success) 
+                        if (data.success)
                         {
                             this.showDialogOptions(data)
                             this.storeCashDocument(data.data.id)
-                        } 
-                        else 
+                        }
+                        else
                         {
                             this.showAlert('Ocurrió un error al registrar la venta.')
                         }
@@ -342,7 +344,7 @@
 
             },
             getFormSaleNote()
-            {   
+            {
                 let new_form = this.form
 
                 new_form.payments = this.getFormPaymentSaleNote()
@@ -450,12 +452,12 @@
 
                         const data = response.data
 
-                        if (data.success) 
+                        if (data.success)
                         {
                             this.showDialogOptions(data)
                             this.storeCashDocument(data.data.id)
-                        } 
-                        else 
+                        }
+                        else
                         {
                             this.showAlert('Ocurrió un error al registrar la venta.')
                         }
@@ -557,7 +559,7 @@
 
                 return []
             },
-            validate() 
+            validate()
             {
                 const self = this
 
@@ -627,7 +629,7 @@
             {
                 await this.filterSeries()
                 await this.setDefaultCustomer()
-                
+
                 await this.setDefaultSeries()
                 await this.initFormPayment()
                 await this.initFormFee()
@@ -842,6 +844,9 @@
                 this.series = _.filter(this.all_series, {
                     document_type_id: this.form.document_type_id
                 })
+            },
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
             },
         }
     }
