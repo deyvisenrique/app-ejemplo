@@ -1,17 +1,21 @@
 <template>
 <div>
-    <f7-block class="bg-blue-magenta no-margin-vertical padding-vertical elevation-9">
-        <f7-row class="display-flex align-items-center">
-            <f7-col width="50">
-                <f7-link href="/">
-                    <img v-if="logo" :src="logo" alt="FacturaloPeru" width="100%" style="max-height: 80px;" />
-                </f7-link>
-            </f7-col>
-            <f7-col width="50" class="">
-                <f7-button panel-open="right" class="text-align-right text-color-white"><i class="fas fa-bars"></i></f7-button>
-            </f7-col>
-        </f7-row>
-    </f7-block>
+    
+    <template v-if="currentShowLogoConfiguration">
+        <f7-block class="bg-blue-magenta no-margin-vertical padding-vertical elevation-9">
+            <f7-row class="display-flex align-items-center">
+                <f7-col width="50">
+                    <f7-link href="/">
+                        <img v-if="logo" :src="logo" alt="FacturaloPeru" width="100%" style="max-height: 80px;" />
+                    </f7-link>
+                </f7-col>
+                <f7-col width="50" class="">
+                    <f7-button panel-open="right" class="text-align-right text-color-white"><i class="fas fa-bars"></i></f7-button>
+                </f7-col>
+            </f7-row>
+        </f7-block>
+    </template>
+
     <f7-block class="bg-blue-magenta padding-vertical no-margin-vertical" v-if="title">
         <f7-row class="display-flex align-items-center">
             <f7-col width="10">
@@ -55,7 +59,7 @@
     export default {
         mixins: [general_functions, set_logo],
         name: "HeaderLayout",
-        props: ["title", 'showButtonBack', 'hrefBack', 'overwriteBackRoute'],
+        props: ["title", 'showButtonBack', 'hrefBack', 'overwriteBackRoute', 'showLogoConfiguration'],
         components: {
             HeaderWaves,
             logoOficialLight
@@ -79,6 +83,11 @@
             showBackHome()
             {
                 if(this.showButtonBack !== undefined) return this.showButtonBack
+                return true
+            },
+            currentShowLogoConfiguration()
+            {
+                if(this.showLogoConfiguration !== undefined) return this.showLogoConfiguration
                 return true
             },
             hrefBackHome()

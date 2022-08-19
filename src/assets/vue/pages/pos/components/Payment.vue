@@ -1,215 +1,214 @@
 <template>
     <div>
         <template v-if="landscapeMode">
-            <f7-block>
-                <form class="list no-hairlines-md" id="demo-form">
-                    <ul>
-                        <li class="no-padding-horizontal margin-top">
-                            <f7-block class="bg-white-shade block-strong inset no-margin">
-                                <f7-row @click="popupCustomerOpened = true">
-                                    <f7-col width="15" class="align-self-center">
-                                        <f7-icon icon="fas fa-user" size="24" color="deeppurple"></f7-icon>
-                                    </f7-col>
-                                    <f7-col width="75" class="text-align-left">
-                                        <small>CLIENTE</small><br>
-                                        <small class="no-margin">{{this.form.datos_del_cliente_o_receptor ? this.form.datos_del_cliente_o_receptor.apellidos_y_nombres_o_razon_social : ''}}</small>
-                                    </f7-col>
-                                    <f7-col width="10" class="align-self-center">
-                                        <div class="badge bg-color-white text-align-right color-blue">
-                                            <f7-link style="color:#0f233c;" icon="fas fa-arrow-right"></f7-link>
+            
+            <form class="list no-hairlines-md padding-bottom" id="demo-form">
+                <ul>
+                    <li class="no-padding-horizontal margin-top">
+                        <f7-block class="bg-white-shade block-strong inset no-margin">
+                            <f7-row @click="popupCustomerOpened = true">
+                                <f7-col width="15" class="align-self-center">
+                                    <f7-icon icon="fas fa-user" size="24" color="deeppurple"></f7-icon>
+                                </f7-col>
+                                <f7-col width="75" class="text-align-left">
+                                    <small>CLIENTE</small><br>
+                                    <small class="no-margin">{{this.form.datos_del_cliente_o_receptor ? this.form.datos_del_cliente_o_receptor.apellidos_y_nombres_o_razon_social : ''}}</small>
+                                </f7-col>
+                                <f7-col width="10" class="align-self-center">
+                                    <div class="badge bg-color-white text-align-right color-blue">
+                                        <f7-link style="color:#0f233c;" icon="fas fa-arrow-right"></f7-link>
+                                    </div>
+                                </f7-col>
+                            </f7-row>
+                        </f7-block>
+                    </li>
+
+                    <div class="padding-top margin-top">
+                        <document-type
+                            @changeDocumentType="clickChangeDocumentType"
+                            >
+                        </document-type>
+                    </div>
+
+                    <f7-row class="padding-top">
+                        <f7-col width="50">
+                            <div class="item-content item-input no-padding-horizontal">
+                                <div class="item-inner no-padding-horizontal">
+                                    <div class="item-title item-label">Serie</div>
+                                    <div class="item-input-wrap input-dropdown-wrap">
+                                        <select v-model="form.series_id" placeholder="Please choose...">
+                                            <template v-for="(row, index) in series">
+                                                <option :value="row.id" :key="index">{{row.number}}</option>
+                                            </template>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </f7-col>
+                        <f7-col width="50">
+                            <div class="item-content item-input no-padding-horizontal">
+                                <div class="item-inner no-padding-horizontal">
+                                    <div class="item-title item-label">Fecha Emisión</div>
+                                    <div class="item-input-wrap">
+                                        <input name="date" v-model="form.date_of_issue" type="date" />
+                                    </div>
+                                </div>
+                            </div>
+                        </f7-col>
+                        
+                        <template v-if="isInvoiceDocument">
+
+                            <!-- <f7-col width="50" >
+                                <div class="item-content item-input no-padding-horizontal">
+                                    <div class="item-inner no-padding-horizontal">
+                                        <div class="item-title item-label">Orden de Compra</div>
+                                        <div class="item-input-wrap">
+                                            <input required validate v-model="form.numero_orden_de_compra" type="text" />
+                                            <span class="input-clear-button"></span>
                                         </div>
-                                    </f7-col>
-                                </f7-row>
-                            </f7-block>
-                        </li>
+                                    </div>
+                                </div>
+                            </f7-col>
 
-                        <div class="padding-top margin-top">
-                            <document-type
-                                @changeDocumentType="clickChangeDocumentType"
-                                >
-                            </document-type>
-                        </div>
-
-                        <f7-row class="padding-top">
                             <f7-col width="50">
                                 <div class="item-content item-input no-padding-horizontal">
                                     <div class="item-inner no-padding-horizontal">
-                                        <div class="item-title item-label">Serie</div>
+                                        <div class="item-title item-label">Fecha Vencimiento</div>
+                                        <div class="item-input-wrap">
+                                            <input name="date" v-model="form.date_of_due" type="date" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </f7-col> -->
+
+                            <f7-col width="50">
+                                <div class="item-content item-input no-padding-horizontal">
+                                    <div class="item-inner no-padding-horizontal">
+                                        <div class="item-title item-label">Condición de pago</div>
                                         <div class="item-input-wrap input-dropdown-wrap">
-                                            <select v-model="form.series_id" placeholder="Please choose...">
-                                                <template v-for="(row, index) in series">
-                                                    <option :value="row.id" :key="index">{{row.number}}</option>
-                                                </template>
+                                            <select v-model="form.payment_condition_id" @change="changePaymentCondition">
+                                                <option :value="row.id" v-for="(row, index) in payment_conditions" :key="index">{{ row.name }}</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                             </f7-col>
-                            <f7-col width="50">
-                                <div class="item-content item-input no-padding-horizontal">
-                                    <div class="item-inner no-padding-horizontal">
-                                        <div class="item-title item-label">Fecha Emisión</div>
-                                        <div class="item-input-wrap">
-                                            <input name="date" v-model="form.date_of_issue" type="date" />
-                                        </div>
+                            
+                        </template>
+                        
+                        <f7-col :width="isInvoiceDocument ? '50' : '100'">
+                            <div class="item-content item-input no-padding-horizontal">
+                                <div class="item-inner no-padding-horizontal">
+                                    <div class="item-title item-label">Destino</div>
+                                    <div class="item-input-wrap input-dropdown-wrap">
+                                        <select v-model="payment_destination_id" @change="changePaymentDestination">
+                                            <template v-for="(row, index) in payment_destinations">
+                                                <option :value="row.id" :key="index">{{row.description}}</option>
+                                            </template>
+                                        </select>
                                     </div>
                                 </div>
-                            </f7-col>
-                            
-                            <template v-if="isInvoiceDocument">
+                            </div>
+                        </f7-col>
 
-                                <f7-col width="50" >
-                                    <div class="item-content item-input no-padding-horizontal">
-                                        <div class="item-inner no-padding-horizontal">
-                                            <div class="item-title item-label">Orden de Compra</div>
-                                            <div class="item-input-wrap">
-                                                <input required validate v-model="form.numero_orden_de_compra" type="text" />
-                                                <span class="input-clear-button"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </f7-col>
+                        <template>
+                            <template v-if="isCashPayment">
+                                <table>
+                                    <tbody>
+                                        <tr v-for="(row, index) in form.payments">
+                                            <td>
+                                            
+                                                <div class="item-content item-input no-padding-horizontal">
+                                                    <div class="item-inner no-padding-horizontal">
+                                                        <div class="item-title item-label" v-if="index === 0"> <strong>Metodo de pago</strong></div>
+                                                        <div class="item-input-wrap input-dropdown-wrap">
+                                                            <select v-model="row.payment_method_type_id">
+                                                                <template v-for="(row, index) in cash_payment_method_types">
+                                                                    <option :value="row.id" :key="index">{{row.description}}</option>
+                                                                </template>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
 
+                                                <div class="item-content item-input no-padding-horizontal">
+                                                    <div class="item-inner no-padding-horizontal">
+                                                        <div class="item-title item-label" v-if="index === 0"> <strong>Monto a pagar</strong></div>
+                                                        <div class="item-input-wrap">
+                                                            <input required validate v-model="row.payment" type="number" @input="inputPayment" min="0"/>
+                                                            <!-- <span class="input-clear-button"></span> -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <template v-if="index === 0">
+                                                    <a @click="clickAddPayment">
+                                                        <f7-icon  ios="f7:add_circle" aurora="f7:add_circle" md="material:add_circle"></f7-icon>
+                                                    </a>
+                                                </template>
+                                                <template v-else>
+                                                    <a @click="clickAddDeletePayment(index)">
+                                                        <f7-icon ios="f7:delete" color="red" aurora="f7:delete" md="material:delete" ></f7-icon>
+                                                    </a>
+                                                </template>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </template>
+
+                            <template v-if="isCreditPayment">
                                 <f7-col width="50">
                                     <div class="item-content item-input no-padding-horizontal">
                                         <div class="item-inner no-padding-horizontal">
-                                            <div class="item-title item-label">Fecha Vencimiento</div>
-                                            <div class="item-input-wrap">
-                                                <input name="date" v-model="form.date_of_due" type="date" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </f7-col>
-
-                                <f7-col width="50">
-                                    <div class="item-content item-input no-padding-horizontal">
-                                        <div class="item-inner no-padding-horizontal">
-                                            <div class="item-title item-label">Condición de pago</div>
+                                            <div class="item-title item-label">Metodo de pago</div>
                                             <div class="item-input-wrap input-dropdown-wrap">
-                                                <select v-model="form.payment_condition_id" @change="changePaymentCondition">
-                                                    <option :value="row.id" v-for="(row, index) in payment_conditions" :key="index">{{ row.name }}</option>
+                                                <select v-model="form_fee.payment_method_type_id" @change="changePaymentMethodTypeFee">
+                                                    <template v-for="(row, index) in credit_payment_method_types">
+                                                        <option :value="row.id" :key="index">{{row.description}}</option>
+                                                    </template>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
                                 </f7-col>
-                                
-                            </template>
-                            
-                            <f7-col :width="isInvoiceDocument ? '50' : '100'">
-                                <div class="item-content item-input no-padding-horizontal">
-                                    <div class="item-inner no-padding-horizontal">
-                                        <div class="item-title item-label">Destino</div>
-                                        <div class="item-input-wrap input-dropdown-wrap">
-                                            <select v-model="payment_destination_id" @change="changePaymentDestination">
-                                                <template v-for="(row, index) in payment_destinations">
-                                                    <option :value="row.id" :key="index">{{row.description}}</option>
-                                                </template>
-                                            </select>
+                                <f7-col width="50">
+                                    <div class="item-content item-input no-padding-horizontal">
+                                        <div class="item-inner no-padding-horizontal">
+                                            <div class="item-title item-label">Fecha pago</div>
+                                            <div class="item-input-wrap">
+                                                <input name="date" v-model="form_fee.date" type="date" disabled/>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </f7-col>
-
-                            <template>
-                                <template v-if="isCashPayment">
-                                    <table>
-                                        <tbody>
-                                            <tr v-for="(row, index) in form.payments">
-                                                <td>
-                                                
-                                                    <div class="item-content item-input no-padding-horizontal">
-                                                        <div class="item-inner no-padding-horizontal">
-                                                            <div class="item-title item-label" v-if="index === 0"> <strong>Metodo de pago</strong></div>
-                                                            <div class="item-input-wrap input-dropdown-wrap">
-                                                                <select v-model="row.payment_method_type_id">
-                                                                    <template v-for="(row, index) in cash_payment_method_types">
-                                                                        <option :value="row.id" :key="index">{{row.description}}</option>
-                                                                    </template>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-
-                                                    <div class="item-content item-input no-padding-horizontal">
-                                                        <div class="item-inner no-padding-horizontal">
-                                                            <div class="item-title item-label" v-if="index === 0"> <strong>Monto a pagar</strong></div>
-                                                            <div class="item-input-wrap">
-                                                                <input required validate v-model="row.payment" type="number" @input="inputPayment" min="0"/>
-                                                                <!-- <span class="input-clear-button"></span> -->
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <template v-if="index === 0">
-                                                        <a @click="clickAddPayment">
-                                                            <f7-icon  ios="f7:add_circle" aurora="f7:add_circle" md="material:add_circle"></f7-icon>
-                                                        </a>
-                                                    </template>
-                                                    <template v-else>
-                                                        <a @click="clickAddDeletePayment(index)">
-                                                            <f7-icon ios="f7:delete" color="red" aurora="f7:delete" md="material:delete" ></f7-icon>
-                                                        </a>
-                                                    </template>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </template>
-
-                                <template v-if="isCreditPayment">
-                                    <f7-col width="50">
-                                        <div class="item-content item-input no-padding-horizontal">
-                                            <div class="item-inner no-padding-horizontal">
-                                                <div class="item-title item-label">Metodo de pago</div>
-                                                <div class="item-input-wrap input-dropdown-wrap">
-                                                    <select v-model="form_fee.payment_method_type_id" @change="changePaymentMethodTypeFee">
-                                                        <template v-for="(row, index) in credit_payment_method_types">
-                                                            <option :value="row.id" :key="index">{{row.description}}</option>
-                                                        </template>
-                                                    </select>
-                                                </div>
+                                </f7-col>
+                                <f7-col width="50">
+                                    <div class="item-content item-input no-padding-horizontal">
+                                        <div class="item-inner no-padding-horizontal">
+                                            <div class="item-title item-label">Monto de la cuota</div>
+                                            <div class="item-input-wrap">
+                                                <input required validate v-model="form_fee.amount" type="number" min="0"/>
                                             </div>
                                         </div>
-                                    </f7-col>
-                                    <f7-col width="50">
-                                        <div class="item-content item-input no-padding-horizontal">
-                                            <div class="item-inner no-padding-horizontal">
-                                                <div class="item-title item-label">Fecha pago</div>
-                                                <div class="item-input-wrap">
-                                                    <input name="date" v-model="form_fee.date" type="date" disabled/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </f7-col>
-                                    <f7-col width="50">
-                                        <div class="item-content item-input no-padding-horizontal">
-                                            <div class="item-inner no-padding-horizontal">
-                                                <div class="item-title item-label">Monto de la cuota</div>
-                                                <div class="item-input-wrap">
-                                                    <input required validate v-model="form_fee.amount" type="number" min="0"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </f7-col>
-                                </template>
+                                    </div>
+                                </f7-col>
                             </template>
-                        </f7-row>
+                        </template>
+                    </f7-row>
 
-                        <document-totals
-                            :currency-type-symbol="currency_type.symbol"
-                            :show-all-totals="true"
-                            :payment-change="payment_change"
-                            :is-cash-payment="isCashPayment"
-                            :form="form">
-                        </document-totals>
+                    <document-totals
+                        :currency-type-symbol="currency_type.symbol"
+                        :show-all-totals="true"
+                        :payment-change="payment_change"
+                        :is-cash-payment="isCashPayment"
+                        :form="form">
+                    </document-totals>
 
-                    </ul>
-                </form>
-            </f7-block>
+                </ul>
+            </form>
 
         </template>
         <template v-else>
@@ -219,26 +218,8 @@
             <f7-block>
                 <form class="list no-hairlines-md" id="demo-form">
                     <ul>
-                        <li class="no-padding-horizontal margin-top">
-                            <f7-block class="bg-white-shade block-strong inset no-margin">
-                                <f7-row @click="popupCustomerOpened = true">
-                                    <f7-col width="15" class="align-self-center">
-                                        <f7-icon icon="fas fa-user" size="24" color="deeppurple"></f7-icon>
-                                    </f7-col>
-                                    <f7-col width="75" class="text-align-left">
-                                        <small>CLIENTE</small><br>
-                                        <small class="no-margin">{{this.form.datos_del_cliente_o_receptor ? this.form.datos_del_cliente_o_receptor.apellidos_y_nombres_o_razon_social : ''}}</small>
-                                    </f7-col>
-                                    <f7-col width="10" class="align-self-center">
-                                        <div class="badge bg-color-white text-align-right color-blue">
-                                            <f7-link style="color:#0f233c;" icon="fas fa-arrow-right"></f7-link>
-                                        </div>
-                                    </f7-col>
-                                </f7-row>
-                            </f7-block>
-                        </li>
-
-                        <f7-row class="padding-top">
+                        
+                        <f7-row class="">
                             <f7-col width="50">
                                 <div class="item-content item-input no-padding-horizontal">
                                     <div class="item-inner no-padding-horizontal">
@@ -263,10 +244,32 @@
                                     </div>
                                 </div>
                             </f7-col>
+                        </f7-row>
+
+                        <li class="no-padding-horizontal margin-top">
+                            <f7-block class="bg-white-shade block-strong inset no-margin">
+                                <f7-row @click="popupCustomerOpened = true">
+                                    <f7-col width="15" class="align-self-center">
+                                        <f7-icon icon="fas fa-user" size="24" color="deeppurple"></f7-icon>
+                                    </f7-col>
+                                    <f7-col width="75" class="text-align-left">
+                                        <small>CLIENTE</small><br>
+                                        <small class="no-margin">{{this.form.datos_del_cliente_o_receptor ? this.form.datos_del_cliente_o_receptor.apellidos_y_nombres_o_razon_social : ''}}</small>
+                                    </f7-col>
+                                    <f7-col width="10" class="align-self-center">
+                                        <div class="badge bg-color-white text-align-right color-blue">
+                                            <f7-link style="color:#0f233c;" icon="fas fa-arrow-right"></f7-link>
+                                        </div>
+                                    </f7-col>
+                                </f7-row>
+                            </f7-block>
+                        </li>
+
+                        <f7-row class="padding-top">
                             
                             <template v-if="isInvoiceDocument">
 
-                                <f7-col width="50" >
+                                <!-- <f7-col width="50" >
                                     <div class="item-content item-input no-padding-horizontal">
                                         <div class="item-inner no-padding-horizontal">
                                             <div class="item-title item-label">Orden de Compra</div>
@@ -287,7 +290,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </f7-col>
+                                </f7-col> -->
 
                                 <f7-col width="50">
                                     <div class="item-content item-input no-padding-horizontal">
@@ -321,11 +324,11 @@
 
                             <template>
                                 <template v-if="isCashPayment">
-                                    <table>
+                                    <table style="width:100% !important">
                                         <tbody>
-                                            <tr v-for="(row, index) in form.payments">
-                                                <td>
-                                                
+                                            <tr v-for="(row, index) in form.payments" >
+
+                                                <td  style="width:50% !important">
                                                     <div class="item-content item-input no-padding-horizontal">
                                                         <div class="item-inner no-padding-horizontal">
                                                             <div class="item-title item-label" v-if="index === 0"> <strong>Metodo de pago</strong></div>
@@ -339,20 +342,27 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>
+                                                <td  style="width:50% !important">
 
                                                     <div class="item-content item-input no-padding-horizontal">
                                                         <div class="item-inner no-padding-horizontal">
                                                             <div class="item-title item-label" v-if="index === 0"> <strong>Monto a pagar</strong></div>
-                                                            <div class="item-input-wrap">
-                                                                <input required validate v-model="row.payment" type="number" @input="inputPayment" min="0"/>
+                                                            <div class="item-input-wrap" >
+                                                                <input required validate v-model="row.payment" class="input-bg-white-shade"  type="number" @input="inputPayment" min="0"/>
                                                                 <!-- <span class="input-clear-button"></span> -->
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <template v-if="index === 0">
+                                                    
+                                                    <template v-if="index > 0">
+                                                        <a @click="clickAddDeletePayment(index)">
+                                                            <f7-icon ios="f7:delete" color="red" aurora="f7:delete" md="material:delete" ></f7-icon>
+                                                        </a>
+                                                    </template>
+
+                                                    <!-- <template v-if="index === 0">
                                                         <a @click="clickAddPayment">
                                                             <f7-icon class="" ios="f7:add_circle" aurora="f7:add_circle" md="material:add_circle"></f7-icon>
                                                         </a>
@@ -361,11 +371,20 @@
                                                         <a @click="clickAddDeletePayment(index)">
                                                             <f7-icon ios="f7:delete" color="red" aurora="f7:delete" md="material:delete" ></f7-icon>
                                                         </a>
-                                                    </template>
+                                                    </template> -->
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
+
+                                    <f7-col width="85">
+                                    </f7-col>
+                                    <f7-col width="15"class="text-align-center">
+                                        <a @click="clickAddPayment">
+                                            <f7-icon class="" ios="f7:add_circle" aurora="f7:add_circle" md="material:add_circle"></f7-icon>
+                                        </a>
+                                    </f7-col>
+
                                 </template>
 
                                 <template v-if="isCreditPayment">
@@ -407,13 +426,15 @@
                             </template>
                         </f7-row>
                          
-                        <document-totals
-                            :currency-type-symbol="currency_type.symbol"
-                            :show-only-totals="true"
-                            :payment-change="payment_change"
-                            :is-cash-payment="isCashPayment"
-                            :form="form">
-                        </document-totals>
+                        <template v-if="payment_change > 0 && isCashPayment">
+                            <document-totals
+                                :currency-type-symbol="currency_type.symbol"
+                                :show-only-totals="true"
+                                :payment-change="payment_change"
+                                :is-cash-payment="isCashPayment"
+                                :form="form">
+                            </document-totals>
+                        </template>
     
                     </ul>
                 </form>

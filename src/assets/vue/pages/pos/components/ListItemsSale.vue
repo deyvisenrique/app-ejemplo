@@ -1,7 +1,7 @@
 <template>
     <f7-page infinite :infinite-distance="50" :infinite-preloader="show_preloader" @infinite="loadMoreRecords" ptr  @ptr:refresh="pullToRefresh">
 
-        <header-layout title="Productos" :showButtonBack="false"></header-layout>
+        <header-layout :title="header_title" :showButtonBack="false"></header-layout>
 
         <f7-card class="card-100 padding-top no-shadow" color="red" style="min-height: 90%">
             <f7-block class="">
@@ -28,18 +28,19 @@
 
             <f7-row class="padding-horizontal">
 
-                <f7-col width="10">
+                <!-- <f7-col width="10">
                     <template v-if="form_search.favorite == 1">
                         <span class="padding-top margin-top material-icons text-color-purple" @click="clickFavorite">favorite</span>
                     </template>
                     <template v-else>
                         <span class="padding-top margin-top material-icons text-color-purple" @click="clickFavorite">favorite_border</span>
                     </template>
-                </f7-col>
+                </f7-col> -->
 
-                <f7-col width="90">
+                <f7-col width="100">
                     <div class="c-horizontal-scroll c-h-50 mp-div-category">
                         <template v-for="(category, index) in categories">
+
                             <span 
                                 class="c-padding-span-card c-span-card c-margin-span-card"
                                 :class="category.selected ? 'selected-span-card' : ''" 
@@ -47,6 +48,7 @@
                                 @click="clickSearchByCategory(index, category.id)">
                                 <b>{{ getCategoryName(category) }}</b>
                             </span>
+
                         </template>
                     </div>
                 </f7-col>
@@ -61,9 +63,7 @@
 
                                 <div @click="selected(index)">
 
-                                    <template v-if="configuration.show_image_item">
-                                        <div :style="'background-image:url('+row.image_url+')'" class="card-header align-items-flex-end image-max-width"></div>
-                                    </template>
+                                    <div :style="'background-image:url('+row.image_url+')'" class="card-header align-items-flex-end image-max-width"></div>
 
                                     <div class="card-content card-content-padding">
                                         <div class="item-input-wrap">

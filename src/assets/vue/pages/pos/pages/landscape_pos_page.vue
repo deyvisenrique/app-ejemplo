@@ -1,46 +1,45 @@
 <template>
     <f7-page class="" color="bluemagenta">
 
-        <header-layout :title="geTitle" hrefBack="/list-items-sale/" :overwriteBackRoute="false" :showButtonBack="false"></header-layout>
+        <header-layout :title="header_title" :showLogoConfiguration="false" hrefBack="/list-items-sale/" :overwriteBackRoute="false" :showButtonBack="false"></header-layout>
 
-        <f7-block >
+        <f7-block class="no-padding no-margin-vertical" >
             <f7-row>
                 <f7-col width="65" style="height:auto"> 
                     <f7-card class="card-100 padding no-shadow" color="red" style="min-height: 90%">
-                        <f7-block class="">
-                            <f7-row>
-                                <f7-col width="70">
-                                    <div class="searchbar searchbar-inline" style="margin:4%">
-                                        <div class="searchbar-input-wrap">
-                                            <input type="search" placeholder="Buscar" style="font-size:12px" v-model="form_search.input" @input="searchRecords"/>
-                                            <i class="searchbar-icon"></i>
-                                            <button  class="input-clear-button" @click="clickClearInput"></button>
-                                        </div>
+                        
+                        <f7-row>
+                            <f7-col width="70">
+                                <div class="searchbar searchbar-inline pt-1" style="margin-left:-5px">
+                                    <div class="searchbar-input-wrap">
+                                        <input type="search" placeholder="Buscar" style="font-size:12px;" v-model="form_search.input" @input="searchRecords"/>
+                                        <i class="searchbar-icon"></i>
+                                        <button  class="input-clear-button" @click="clickClearInput"></button>
                                     </div>
-                                </f7-col>
-                                <f7-col width="15" class="text-align-center">
-                                    <f7-button @click="clickSearchBarcode" color="bluemagenta" fill small open-panel="right" icon="fas fa-camera"></f7-button>
-                                    <span class="" style="font-size: 10px;line-height: 10px !important;">BUSCAR</span>
-                                </f7-col>
-                                <f7-col width="15" class="text-align-center">
-                                    <f7-button @click="clickCreateItem()" color="bluemagenta" fill small open-panel="right" icon="fas fa-plus"></f7-button>
-                                    <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
-                                </f7-col>
-                            </f7-row>
-                        </f7-block>
+                                </div>
+                            </f7-col>
+                            <f7-col width="15" class="text-align-center">
+                                <f7-button @click="clickSearchBarcode" color="bluemagenta" fill small open-panel="right" icon="fas fa-camera"></f7-button>
+                                <span class="" style="font-size: 10px;line-height: 10px !important;">BUSCAR</span>
+                            </f7-col>
+                            <f7-col width="15" class="text-align-center">
+                                <f7-button @click="clickCreateItem()" color="bluemagenta" fill small open-panel="right" icon="fas fa-plus"></f7-button>
+                                <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
+                            </f7-col>
+                        </f7-row>
                 
-                        <f7-row class="padding-horizontal">
+                        <f7-row class="">
 
-                            <f7-col width="10">
+                            <!-- <f7-col width="10">
                                 <template v-if="form_search.favorite == 1">
                                     <span class="padding-top margin-top material-icons text-color-purple" @click="clickFavorite">favorite</span>
                                 </template>
                                 <template v-else>
                                     <span class="padding-top margin-top material-icons text-color-purple" @click="clickFavorite">favorite_border</span>
                                 </template>
-                            </f7-col>
+                            </f7-col> -->
 
-                            <f7-col width="90">
+                            <f7-col width="100">
                                 <div class="c-horizontal-scroll c-h-50 mp-div-category">
                                     <template v-for="(category, index) in categories">
                                         <span 
@@ -122,22 +121,23 @@
                      
                 </f7-col>
                 <f7-col  width="35">
-                    <f7-card class="card-100 padding-top no-shadow" >
-                        <f7-block>
+                    <f7-card class="card-100 no-padding no-margin no-shadow" >
+
+                        <div class="margin-right">
                             <sale-detail-pos
                                 ref="refSaleDetailPos"
                                 :landscape-mode="true"
                                 @mountedSaleDetailPos="mountedSaleDetailPos"
                                 @updateDataInListItem="updateDataInListItem">
                             </sale-detail-pos>
-                        </f7-block>
+                        </div>
 
                         <!-- mostrar si el componente sale detail pos se encuentra creado -->
-                        <f7-block v-if="load_sale_detail_pos" class="padding-bottom">
+                        <div class="margin-right" v-if="load_sale_detail_pos">
                             <payment-pos
                                 :landscape-mode="true">
                             </payment-pos>
-                        </f7-block>
+                        </div>
  
                     </f7-card>
                 </f7-col>

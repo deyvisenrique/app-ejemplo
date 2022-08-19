@@ -79,7 +79,7 @@ export const general_functions = {
                 printer_name: null,
                 direct_print: false,
                 direct_print: false,
-                default_document_type: '01',
+                default_document_type: '03',
                 // number_columns_list_items_sale: 2,
             }
 

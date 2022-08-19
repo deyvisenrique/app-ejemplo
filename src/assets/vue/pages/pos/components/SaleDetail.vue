@@ -4,7 +4,7 @@
 
         <template v-if="landscapeMode">
             
-            <f7-block>
+            <!-- <f7-block> -->
     
                 <div class="data-table margin-bottom padding-top">
                     <table>
@@ -30,7 +30,14 @@
                                     <td class="numeric-only">{{ index + 1 }}</td>
                                     <td class="label-cell">{{ row.item.description }}</td>
                                     <td class="numeric-only">
-                                        <input class="input-quantity-table" required validate v-model="row.unit_price" type="number"  @change="changeUnitPrice(index)" />
+                                        
+                                        <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
+                                            <div class="stepper-input-wrap">
+                                                <input class="input-amount-table" required validate v-model="row.unit_price" type="number"  @change="changeUnitPrice(index)" />
+                                            </div>
+                                        </div>
+
+                                        <!-- <input class="input-quantity-table" required validate v-model="row.unit_price" type="number"  @change="changeUnitPrice(index)" /> -->
                                     </td>
                                     <td class="numeric-only padding text-align-center">
                                         
@@ -44,11 +51,25 @@
                                             <div class="stepper-button-plus" @click="calculateQuantity(1, index)"></div>
                                         </div> -->
                                         <!-- {{ row.quantity }} -->
-                                        <input class="input-quantity-table" required validate v-model="row.quantity" type="number"  @change="changeQuantity(index)" />
+                                        
+                                        <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
+                                            <div class="stepper-input-wrap">
+                                                <input class="input-amount-table" required validate v-model="row.quantity" type="number"  @change="changeQuantity(index)" />
+                                            </div>
+                                        </div>
+
+                                        <!-- <input class="input-quantity-table" required validate v-model="row.quantity" type="number"  @change="changeQuantity(index)" /> -->
 
                                     </td>
                                     <td class="numeric-only">
-                                        <input class="input-quantity-table" required validate v-model="row.input_discount" type="number"  @change="changeInputDiscount(index)" />
+                                        
+                                        <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
+                                            <div class="stepper-input-wrap">
+                                                <input class="input-amount-table" required validate v-model="row.input_discount" type="number"  @change="changeInputDiscount(index)" />
+                                            </div>
+                                        </div>
+
+                                        <!-- <input class="input-quantity-table" required validate v-model="row.input_discount" type="number"  @change="changeInputDiscount(index)" /> -->
                                     </td>
                                     <td class="numeric-only">{{ row.total }}</td> 
                                     <td>
@@ -63,7 +84,7 @@
                     </table>
                 </div>
  
-            </f7-block>
+            <!-- </f7-block> -->
         </template>
         <template v-else>
 
@@ -84,7 +105,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th class="numeric-only">#</th>
+                                <th class="xsmall-only">#</th>
                                 <th class="label-cell">Producto</th>
                                 <th class="label-cell">P. Unitario</th>
                                 <th class="numeric-only text-align-center">Cantidad</th>
@@ -95,14 +116,21 @@
                         </thead>
                         <tbody>
                             <tr v-for="(row, index) in form.items" :key="index">
-                                <td class="numeric-only">{{ index + 1 }}</td>
+                                <td class="xsmall-only">{{ index + 1 }}</td>
                                 <td class="label-cell">{{ row.item.description }}</td>
-                                <td class="numeric-only">
-                                    <input class="input-quantity-table" required validate v-model="row.unit_price" type="number"  @change="changeUnitPrice(index)" />
+                                <td class="numeric-only ">
+
+                                    <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
+                                        <div class="stepper-input-wrap">
+                                            <input class="input-amount-table" required validate v-model="row.unit_price" type="number"  @change="changeUnitPrice(index)" />
+                                        </div>
+                                    </div>
+                                    <!-- <input class="input-quantity-table" required validate v-model="row.unit_price" type="number"  @change="changeUnitPrice(index)" /> -->
+
                                 </td>
                                 <td class="numeric-only padding">
                                     
-                                    <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
+                                    <div class="stepper stepper-small stepper-raised stepper-init full-max-width mt-5">
                                         <div class="stepper-button-minus" @click="calculateQuantity(-1, index)"></div>
                                         <div class="stepper-input-wrap">
                                             <input type="number" v-model="row.quantity" min="0" step="1" @change="changeQuantity(index)" />
@@ -112,7 +140,14 @@
 
                                 </td>
                                 <td class="numeric-only">
-                                    <input class="input-quantity-table" required validate v-model="row.input_discount" type="number"  @change="changeInputDiscount(index)" />
+                                    
+                                    <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
+                                        <div class="stepper-input-wrap">
+                                            <input class="input-amount-table" required validate v-model="row.input_discount" type="number"  @change="changeInputDiscount(index)" />
+                                        </div>
+                                    </div>
+
+                                    <!-- <input class="input-quantity-table" required validate v-model="row.input_discount" type="number"  @change="changeInputDiscount(index)" /> -->
                                 </td>
                                 <td class="numeric-only">{{ row.total }}</td> 
                                 <td>
@@ -145,7 +180,6 @@
     </div>
 
 </template>
-
 <script>
 
     import moment from 'moment'

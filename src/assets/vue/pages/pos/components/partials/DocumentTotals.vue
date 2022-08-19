@@ -5,16 +5,16 @@
             <template v-if="showOnlyTotals">
                 <f7-row>
                     <f7-col>
-                        <h4>Total</h4>
-                        <template v-if="paymentChange > 0 && isCashPayment">
+                        <!-- <h4>Total</h4> -->
+                        <!-- <template v-if="paymentChange > 0 && isCashPayment"> -->
                             <p>Vuelto</p>
-                        </template>
+                        <!-- </template> -->
                     </f7-col>
                     <f7-col class="text-align-right">
-                        <h4>{{currencyTypeSymbol}} {{form.total}}</h4>
-                        <template v-if="paymentChange > 0 && isCashPayment">
+                        <!-- <h4>{{currencyTypeSymbol}} {{form.total}}</h4> -->
+                        <!-- <template v-if="paymentChange > 0 && isCashPayment"> -->
                             <p>{{currencyTypeSymbol}} {{paymentChange}}</p>
-                        </template>
+                        <!-- </template> -->
                     </f7-col>
                 </f7-row>
             </template>

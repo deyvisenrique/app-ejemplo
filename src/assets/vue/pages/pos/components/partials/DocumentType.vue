@@ -66,7 +66,8 @@
             },
             setInitialDefaultDocumentType()
             {
-                this.document_type_id = this.document_types.length > 0 ? this.document_types[0].id : null
+                const document_type = _.find(this.document_types, { id : '03'})
+                this.document_type_id = document_type ? document_type.id : null
             },
             async getDocumentTypes() 
             {

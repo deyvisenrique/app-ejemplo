@@ -7,9 +7,14 @@ export const fn_list_items_sale = {
     
     data: function () {
         return {
+            header_title: 'PRODUCTOS'
         }
     },
     methods: { 
+        setHeaderTitle(new_title = null)
+        {
+            this.header_title = new_title ? new_title.toUpperCase() : 'PRODUCTOS'
+        },
         async searchRecords()
         {
             if(this.form_search.input.length > 2)
@@ -51,8 +56,21 @@ export const fn_list_items_sale = {
         clickSearchByCategory(index, category_id)
         {
             this.selectedCategory(index)
-            this.form_search.category_id = category_id
-            this.initDataListItems()
+
+            //filtro para favoritos
+            if(this.categories[index].favorite)
+            {
+                this.clickFavorite()
+            }
+            else
+            {
+                this.selectedCategory(index)
+                this.form_search.category_id = category_id
+                this.form_search.favorite = null
+                this.initDataListItems()
+            }
+
+            this.setHeaderTitle(!category_id ? null : this.categories[index].name)
         },
         selectedCategory(index)
         {
@@ -71,6 +89,9 @@ export const fn_list_items_sale = {
                         .then(response => {
                             this.categories = response.data
                             this.categories.unshift({id: null, name: 'TODOS', selected: false})
+                            
+                            //se agrega favoritos como categoria para que no distorsione el card en vista
+                            this.categories.unshift({id: -1, name: 'FAVORITOS', selected: false, favorite: true})
                         })
                         .then(() => {
                             this.hideLoading()
@@ -79,6 +100,7 @@ export const fn_list_items_sale = {
         },
         clickFavorite()
         {
+            this.form_search.category_id = null
             this.form_search.favorite = (this.form_search.favorite === 1) ? 0 : 1
             this.initDataListItems()
         },

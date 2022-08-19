@@ -62,7 +62,7 @@
                         <input style="width: 40px !important;" class="input-quantity-table" required validate v-model="form.number_columns_list_items_sale" type="number"  @change="saveOnlyConfigStorage" />
                     </f7-list-item> -->
  
-                    <f7-list-item title="Conectar impresora bluetooth">
+                    <f7-list-item title="Agregar impresora bluetooth">
                         <template #after>
                             <label class="toggle toggle-init color-blue">
                                 <input type="checkbox" v-model="form.direct_print" @change="changeDirectPrint"/>
@@ -152,7 +152,7 @@
         methods: { 
             getSelectedDocumentType()
             {
-                const default_document_type_id = '01'
+                const default_document_type_id = '03'
                 this.form.default_document_type = this.form.default_document_type ? this.form.default_document_type : default_document_type_id
 
                 const document_type = _.find(this.default_document_types, {id : this.form.default_document_type})
@@ -291,7 +291,7 @@
                     print_format_pdf: 'ticket',
                     direct_print: false,
                     printer_name: null,
-                    default_document_type: '01',
+                    default_document_type: '03',
                     // number_columns_list_items_sale: 2
                 }
             },

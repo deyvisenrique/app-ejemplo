@@ -255,6 +255,20 @@
   padding-top: 1px;
 }
 
+.mt-5{
+  margin-top: 5px;
+}
+
 .input-quantity-table{
   width: 70px;
+}
+
+
+.input-amount-table{
+  width: 90px !important;
+}
+
+
+.input-bg-white-shade {
+  background-color: $white-shade !important;
 }
