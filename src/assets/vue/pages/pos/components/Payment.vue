@@ -250,7 +250,7 @@
                             <f7-block class="bg-white-shade block-strong inset no-margin">
                                 <f7-row @click="popupCustomerOpened = true">
                                     <f7-col width="15" class="align-self-center">
-                                        <f7-icon icon="fas fa-user" size="24" color="deeppurple"></f7-icon>
+                                        <f7-icon icon="fas fa-user" size="24" :color="theme.name_color_theme"></f7-icon>
                                     </f7-col>
                                     <f7-col width="75" class="text-align-left">
                                         <small>CLIENTE</small><br>
