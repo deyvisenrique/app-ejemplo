@@ -16,11 +16,11 @@
                         </div>
                     </f7-col>
                     <f7-col width="15" class="text-align-center">
-                        <f7-button @click="clickSearchBarcode" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-camera"></f7-button>
+                        <f7-button @click="clickSearchBarcode" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-camera" class="bg-secondary"></f7-button>
                         <span class="" style="font-size: 10px;line-height: 10px !important;">BUSCAR</span>
                     </f7-col>
                     <f7-col width="15" class="text-align-center">
-                        <f7-button @click="clickCreate()" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-plus"></f7-button>
+                        <f7-button @click="clickCreate()" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-plus" class="bg-secondary"></f7-button>
                         <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
                     </f7-col>
                 </f7-row>
@@ -41,10 +41,10 @@
                     <div class="c-horizontal-scroll c-h-50 mp-div-category">
                         <template v-for="(category, index) in categories">
 
-                            <span 
+                            <span
                                 class="c-padding-span-card c-span-card c-margin-span-card"
-                                :class="category.selected ? 'selected-span-card' : ''" 
-                                :key="index" 
+                                :class="category.selected ? 'selected-span-card' : ''"
+                                :key="index"
                                 @click="clickSearchByCategory(index, category.id)">
                                 <b>{{ getCategoryName(category) }}</b>
                             </span>

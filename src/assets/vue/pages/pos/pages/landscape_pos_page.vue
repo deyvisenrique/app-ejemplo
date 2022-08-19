@@ -5,9 +5,9 @@
 
         <f7-block class="no-padding no-margin-vertical" >
             <f7-row>
-                <f7-col width="65" style="height:auto"> 
+                <f7-col width="65" style="height:auto">
                     <f7-card class="card-100 padding no-shadow" color="red" style="min-height: 90%">
-                        
+
                         <f7-row>
                             <f7-col width="70">
                                 <div class="searchbar searchbar-inline pt-1" style="margin-left:-5px">
@@ -19,15 +19,15 @@
                                 </div>
                             </f7-col>
                             <f7-col width="15" class="text-align-center">
-                                <f7-button @click="clickSearchBarcode" color="bluemagenta" fill small open-panel="right" icon="fas fa-camera"></f7-button>
+                                <f7-button @click="clickSearchBarcode" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-camera" class="bg-secondary"></f7-button>
                                 <span class="" style="font-size: 10px;line-height: 10px !important;">BUSCAR</span>
                             </f7-col>
                             <f7-col width="15" class="text-align-center">
-                                <f7-button @click="clickCreateItem()" color="bluemagenta" fill small open-panel="right" icon="fas fa-plus"></f7-button>
+                                <f7-button @click="clickCreateItem()" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-plus" class="bg-secondary"></f7-button>
                                 <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
                             </f7-col>
                         </f7-row>
-                
+
                         <f7-row class="">
 
                             <!-- <f7-col width="10">
@@ -42,10 +42,10 @@
                             <f7-col width="100">
                                 <div class="c-horizontal-scroll c-h-50 mp-div-category">
                                     <template v-for="(category, index) in categories">
-                                        <span 
+                                        <span
                                             class="c-padding-span-card c-span-card c-margin-span-card"
-                                            :class="category.selected ? 'selected-span-card' : ''" 
-                                            :key="index" 
+                                            :class="category.selected ? 'selected-span-card' : ''"
+                                            :key="index"
                                             @click="clickSearchByCategory(index, category.id)">
                                             <b>{{ getCategoryName(category) }}</b>
                                         </span>
@@ -90,7 +90,7 @@
                                                 <div class="stepper-button-plus" @click="calculateQuantity(1, index)"></div>
                                             </div>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -118,7 +118,7 @@
                             </div>
                         </div>
                     </f7-card>
-                     
+
                 </f7-col>
                 <f7-col  width="35">
                     <f7-card class="card-100 no-padding no-margin no-shadow" >
@@ -138,12 +138,12 @@
                                 :landscape-mode="true">
                             </payment-pos>
                         </div>
- 
+
                     </f7-card>
                 </f7-col>
             </f7-row>
         </f7-block>
- 
+
         <item-form :showDialog.sync="showDialogItem"
                     :recordId="recordItemId"></item-form>
     </f7-page>
@@ -169,8 +169,8 @@
             ItemForm,
         },
         mixins: [
-            auth, 
-            general_functions, 
+            auth,
+            general_functions,
             operations,
             fn_list_items_sale,
         ],
@@ -199,6 +199,7 @@
 
                 load_sale_detail_pos: false,
                 showDialogItem: false,
+                theme: {}
 
             }
         },
@@ -217,6 +218,7 @@
             await this.getRecords()
             await this.events()
             await this.inputEventsLandscapePos()
+            await this.getInitialSettings()
 
             // list item sale
 
@@ -259,7 +261,7 @@
                 this.getRecords()
             },
             nextPage()
-            {   
+            {
                 this.current_page++
                 this.getRecords()
             },
@@ -286,6 +288,9 @@
 
                         })
 
+            },
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
             },
         }
     }

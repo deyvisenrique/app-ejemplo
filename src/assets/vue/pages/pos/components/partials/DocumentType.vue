@@ -3,7 +3,7 @@
         <template v-if="document_types.length > 0">
             <f7-segmented raised>
                 <template v-for="(row, index) in document_types">
-                    <f7-button @click="clickChangeDocumentType(row.id)" :class="document_type_id === row.id ? 'button-active':''">{{row.text}}</f7-button>
+                    <f7-button @click="clickChangeDocumentType(row.id)" :class="[document_type_id === row.id ? 'button-active':'', 'color-'+theme.name_color_theme]"  :key="index">{{row.text}}</f7-button>
                 </template>
             </f7-segmented>
         </template>
@@ -36,6 +36,7 @@
                 pos_document_types: [],
                 document_type_id: null,
                 configuration: {},
+                theme: {}
             }
         },
         computed: {
@@ -44,6 +45,7 @@
             await this.loadConfiguration()
             await this.getDocumentTypes()
             await this.setDefaultDocumentType()
+            await this.getInitialSettings()
         },
         methods: {
             loadConfiguration()
@@ -62,19 +64,19 @@
                 }
 
                 this.clickChangeDocumentType(this.document_type_id)
-                
+
             },
             setInitialDefaultDocumentType()
             {
                 const document_type = _.find(this.document_types, { id : '03'})
                 this.document_type_id = document_type ? document_type.id : null
             },
-            async getDocumentTypes() 
+            async getDocumentTypes()
             {
                 if(!this.allDocumentTypes)
                 {
                     this.showLoading()
-    
+
                     await this.$http.get(`${this.returnBaseUrl()}/documents/table/document_types`, this.getHeaderConfig())
                                 .then(response => {
                                     this.document_types = this.getDocumentTypesToButtons(response.data)
@@ -98,7 +100,7 @@
             {
                 let description = null
 
-                switch (document_type.id) 
+                switch (document_type.id)
                 {
                     case '01':
                         description = 'FACTURA'
@@ -120,7 +122,7 @@
                 let allowed_document_types = []
 
                 document_types.forEach(row => {
-                    
+
                     const doc_permission = _.find(this.pos_document_types, {document_type_id : row.id})
 
                     if(doc_permission)
@@ -148,7 +150,10 @@
             {
                 this.document_type_id = document_type_id
                 this.$emit('changeDocumentType', document_type_id)
-            }
+            },
+            getInitialSettings() {
+                this.theme = this.getThemeSettings()
+            },
         }
     }
 </script>

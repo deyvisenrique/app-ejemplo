@@ -167,7 +167,7 @@ export const general_functions = {
                 this.setStorage('app_configuration', theme, true)
             }
             const config = this.getStorage('app_configuration', true)
-            const theme_color = config.theme_color // white | blue | red | dark
+            const theme_color = 'red' //config.theme_color // white | blue | red | dark
             const is_unicolor_boxes = config.card_color == 'unicolor' ? true : false
             // logo
             const css_color_fill = theme_color == 'white' ? '#00B19A' : '#fff'
@@ -265,21 +265,21 @@ export const functions_direct_print = {
             const context = this
 
             BTPrinter.connected(
-                function (data) 
+                function (data)
                 {
                     // si esta conectada la impresora
                     if(data)
                     {
                         //este método debe declararse en el componente que usa este mixin e implementar la función "generalPrinterDocument()" que realizará la impresión
-                        context.generalPrinterDocument() 
+                        context.generalPrinterDocument()
                     }
                     else
                     {
                         context.showAlert('Impresora desconectada.')
                     }
 
-                }, 
-                function (error) 
+                },
+                function (error)
                 {
                     context.showAlert(`Ocurrió un error al imprimir: ${error}`)
                 }

@@ -1,7 +1,7 @@
 <template>
     <div>
         <template v-if="landscapeMode">
-            
+
             <form class="list no-hairlines-md padding-bottom" id="demo-form">
                 <ul>
                     <li class="no-padding-horizontal margin-top">
@@ -93,9 +93,9 @@
                                     </div>
                                 </div>
                             </f7-col>
-                            
+
                         </template>
-                        
+
                         <f7-col :width="isInvoiceDocument ? '50' : '100'">
                             <div class="item-content item-input no-padding-horizontal">
                                 <div class="item-inner no-padding-horizontal">
@@ -117,7 +117,7 @@
                                     <tbody>
                                         <tr v-for="(row, index) in form.payments">
                                             <td>
-                                            
+
                                                 <div class="item-content item-input no-padding-horizontal">
                                                     <div class="item-inner no-padding-horizontal">
                                                         <div class="item-title item-label" v-if="index === 0"> <strong>Metodo de pago</strong></div>
@@ -212,13 +212,13 @@
 
         </template>
         <template v-else>
-            
+
             <header-layout :title="geTitle" hrefBack="/sale-detail-pos/" :overwriteBackRoute="true"></header-layout>
 
             <f7-block>
                 <form class="list no-hairlines-md" id="demo-form">
                     <ul>
-                        
+
                         <f7-row class="">
                             <f7-col width="50">
                                 <div class="item-content item-input no-padding-horizontal">
@@ -266,7 +266,7 @@
                         </li>
 
                         <f7-row class="padding-top">
-                            
+
                             <template v-if="isInvoiceDocument">
 
                                 <!-- <f7-col width="50" >
@@ -304,9 +304,9 @@
                                         </div>
                                     </div>
                                 </f7-col>
-                                
+
                             </template>
-                            
+
                             <f7-col :width="isInvoiceDocument ? '50' : '100'">
                                 <div class="item-content item-input no-padding-horizontal">
                                     <div class="item-inner no-padding-horizontal">
@@ -326,7 +326,7 @@
                                 <template v-if="isCashPayment">
                                     <table style="width:100% !important">
                                         <tbody>
-                                            <tr v-for="(row, index) in form.payments" >
+                                            <tr v-for="(row, index) in form.payments" :key="index">
 
                                                 <td  style="width:50% !important">
                                                     <div class="item-content item-input no-padding-horizontal">
@@ -355,7 +355,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    
+
                                                     <template v-if="index > 0">
                                                         <a @click="clickAddDeletePayment(index)">
                                                             <f7-icon ios="f7:delete" color="red" aurora="f7:delete" md="material:delete" ></f7-icon>
@@ -379,7 +379,7 @@
 
                                     <f7-col width="85">
                                     </f7-col>
-                                    <f7-col width="15"class="text-align-center">
+                                    <f7-col width="15" class="text-align-center">
                                         <a @click="clickAddPayment">
                                             <f7-icon class="" ios="f7:add_circle" aurora="f7:add_circle" md="material:add_circle"></f7-icon>
                                         </a>
@@ -391,7 +391,7 @@
                                     <f7-col width="50">
                                         <div class="item-content item-input no-padding-horizontal">
                                             <div class="item-inner no-padding-horizontal">
-                                                <div class="item-title item-label">Metodo de pago</div>
+                                                <div class="item-title item-label">Método de pago</div>
                                                 <div class="item-input-wrap input-dropdown-wrap">
                                                     <select v-model="form_fee.payment_method_type_id" @change="changePaymentMethodTypeFee">
                                                         <template v-for="(row, index) in credit_payment_method_types">
@@ -425,7 +425,7 @@
                                 </template>
                             </template>
                         </f7-row>
-                         
+
                         <template v-if="payment_change > 0 && isCashPayment">
                             <document-totals
                                 :currency-type-symbol="currency_type.symbol"
@@ -435,7 +435,7 @@
                                 :form="form">
                             </document-totals>
                         </template>
-    
+
                     </ul>
                 </form>
 
@@ -443,7 +443,7 @@
 
         </template>
 
-        <f7-fab position="center-bottom" class="margin-right" color="green" @click.prevent="clickSubmit">
+        <f7-fab position="center-bottom" class="margin-right" :color="theme.name_color_theme" @click.prevent="clickSubmit">
             <f7-icon ios="f7:check" aurora="f7:check" md="material:check"></f7-icon>
         </f7-fab>
 
@@ -549,7 +549,7 @@
         },
         mounted()
         {
-            
+
         },
         methods: {
             clickChangeDocumentType(document_type_id)
@@ -707,7 +707,7 @@
 
                     if(this.landscapeMode)
                     {
-                        //para inicializar los componentes 
+                        //para inicializar los componentes
                         this.reloadCurrentPage()
                     }
                     else
@@ -829,7 +829,7 @@
                 {
                     if(row.discounts.length > 0)
                     {
-                        return row.discounts.map((discount) => {                            
+                        return row.discounts.map((discount) => {
                             return {
                                 codigo: discount.discount_type_id,
                                 descripcion: discount.description,
@@ -1001,7 +1001,7 @@
                 })
             },
             // pagos
-            
+
             initPayments()
             {
                 this.form.payments = []
@@ -1136,7 +1136,7 @@
                     row.payment_destination_id = this.payment_destination_id
                 })
             },
-            clickAddPayment() 
+            clickAddPayment()
             {
                 const payment_method_type_id = (this.cash_payment_method_types.length > 0) ? this.cash_payment_method_types[0].id:null
 
@@ -1151,7 +1151,7 @@
                 this.calculateAmountPayments()
 
             },
-            calculateAmountPayments() 
+            calculateAmountPayments()
             {
                 const amount = _.round(this.form.total / this.form.payments.length, 2)
 
