@@ -9,10 +9,10 @@
                     <f7-card class="card-100 padding no-shadow" color="red" style="min-height: 90%">
 
                         <f7-row>
-                            <f7-col width="70">
-                                <div class="searchbar searchbar-inline pt-1" style="margin-left:-5px">
+                            <f7-col width="70" style="border: 1px solid #8e8e93;border-radius: 5px;">
+                                <div class="searchbar searchbar-inline" style="margin-left:-5px; margin: 5px">
                                     <div class="searchbar-input-wrap">
-                                        <input type="search" placeholder="Buscar" style="font-size:12px;" v-model="form_search.input" @input="searchRecords"/>
+                                        <input type="search" placeholder="Buscar" v-model="form_search.input" @input="searchRecords"/>
                                         <i class="searchbar-icon"></i>
                                         <button  class="input-clear-button" @click="clickClearInput"></button>
                                     </div>
