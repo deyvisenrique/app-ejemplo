@@ -45,9 +45,14 @@
 
             <f7-row class="no-padding-horizontal">
                 <f7-col width="100">
-                    <div class="c-horizontal-scroll c-h-50 mp-div-category padding-vertical" >
+                    <div class="c-horizontal-scroll mp-div-category padding-vertical" >
                         <template v-for="(category, index) in categories">
-                            <span class="c-span-card" :key="index" @click="clickSearchByCategory(category.id)"><b>{{ getCategoryName(category) }}</b></span>
+                            <!-- <span class="c-span-card" :key="index" @click="clickSearchByCategory(category.id)"><b>{{ getCategoryName(category) }}</b></span> -->
+                            <span :key="index" style="display: table-cell; padding-right: 5px">
+                                <f7-button :key="index" @click="clickSearchByCategory(category.id)" :color="theme.name_color_theme" fill medium :class="category.selected ? 'bg-secondary' : ''">
+                                    {{ getCategoryName(category) }}
+                                </f7-button>
+                            </span>
                         </template>
                     </div>
                 </f7-col>
@@ -421,6 +426,13 @@
             },
             clickSearchByCategory(category_id){
                 console.log(category_id)
+                this.categories.map(function(element) {
+                    if(element.id == category_id) {
+                        element.selected = true
+                    } else {
+                        element.selected = false
+                    }
+                })
                 this.search_category_id = category_id
                 this.searchItems()
             },

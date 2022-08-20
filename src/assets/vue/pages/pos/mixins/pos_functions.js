@@ -4,13 +4,13 @@ import queryString from "query-string"
 
 // funciones para el listado de productos, en modo portrait y landscape, diferentes vistas, mismas funciones
 export const fn_list_items_sale = {
-    
+
     data: function () {
         return {
             header_title: 'PRODUCTOS'
         }
     },
-    methods: { 
+    methods: {
         setHeaderTitle(new_title = null)
         {
             this.header_title = new_title ? new_title.toUpperCase() : 'PRODUCTOS'
@@ -38,7 +38,7 @@ export const fn_list_items_sale = {
         {
             this.loading_text = 'Sin datos'
         },
-        quantitySelectedRecords() 
+        quantitySelectedRecords()
         {
             return this.getListItemsSale().length
         },
@@ -89,7 +89,7 @@ export const fn_list_items_sale = {
                         .then(response => {
                             this.categories = response.data
                             this.categories.unshift({id: null, name: 'TODOS', selected: false})
-                            
+
                             //se agrega favoritos como categoria para que no distorsione el card en vista
                             this.categories.unshift({id: -1, name: 'FAVORITOS', selected: false, favorite: true})
                         })
@@ -167,7 +167,7 @@ export const fn_list_items_sale = {
             this.saveSelectedItems(this.records[index])
             this.quantitySelectedRecords()
         },
-        calculateQuantity(value, index) 
+        calculateQuantity(value, index)
         {
             let quantity = parseFloat(this.records[index].quantity)
             let result = (quantity += parseFloat(value))
@@ -185,7 +185,7 @@ export const fn_list_items_sale = {
             if(selected_records)
             {
                 selected_records.forEach(sr_row => {
-                    
+
                     const find_item = this.findItem(sr_row.item_id)
 
                     if(find_item)
@@ -246,7 +246,7 @@ export const fn_list_items_sale = {
             const context = this
 
             portrait.addEventListener('change', function(e) {
-                if(e.matches) 
+                if(e.matches)
                 {
                     context.redirectRoute('/list-items-sale/')
                 }

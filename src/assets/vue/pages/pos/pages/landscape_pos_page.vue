@@ -40,14 +40,19 @@
                             </f7-col> -->
 
                             <f7-col width="100">
-                                <div class="c-horizontal-scroll c-h-50 mp-div-category">
+                                <div class="c-horizontal-scroll mp-div-category">
                                     <template v-for="(category, index) in categories">
-                                        <span
+                                        <!-- <span
                                             class="c-padding-span-card c-span-card c-margin-span-card"
                                             :class="category.selected ? 'selected-span-card' : ''"
                                             :key="index"
                                             @click="clickSearchByCategory(index, category.id)">
                                             <b>{{ getCategoryName(category) }}</b>
+                                        </span> -->
+                                        <span :key="index" style="display: table-cell; padding-right: 5px">
+                                            <f7-button :key="index" @click="clickSearchByCategory(index, category.id)" :color="theme.name_color_theme" fill medium :class="category.selected ? 'bg-secondary' : ''">
+                                                {{ getCategoryName(category) }}
+                                            </f7-button>
                                         </span>
                                     </template>
                                 </div>
