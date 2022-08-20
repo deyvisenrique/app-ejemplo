@@ -101,7 +101,7 @@ export const fn_list_items_sale = {
         clickFavorite()
         {
             this.form_search.category_id = null
-            this.form_search.favorite = (this.form_search.favorite === 1) ? 0 : 1
+            this.form_search.favorite = 1 // siempre que se pulse retorna los favoritos
             this.initDataListItems()
         },
         getSelectedRecords()

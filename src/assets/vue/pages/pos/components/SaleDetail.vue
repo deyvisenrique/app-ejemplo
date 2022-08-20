@@ -1,90 +1,89 @@
 <template>
-    
+
     <div>
 
         <template v-if="landscapeMode">
-            
-            <!-- <f7-block> -->
-    
-                <div class="data-table margin-bottom padding-top">
-                    <table>
-                        <thead>
+            <div class="data-table margin-bottom" style="margin-top: var(--f7-card-margin-vertical);">
+                <table class="table-items">
+                    <thead>
+                        <tr>
+                            <th class="numeric-only no-padding-left">#</th>
+                            <th class="label-cell no-padding-left">
+                                Producto
+                                <span class="padding margin"></span>
+                                <span class="padding"></span>
+                            </th>
+                            <th class="label-cell no-padding-left">P. Unitario</th>
+                            <th class="numeric-only text-align-left no-padding-left">Cantidad</th>
+                            <th class="numeric-only no-padding-left">M. Descuento</th>
+                            <th class="numeric-only no-padding-left">Total</th>
+                            <th class="numeric-only no-padding"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template v-if="form.items.length === 0">
                             <tr>
-                                <th class="numeric-only">#</th>
-                                <th class="label-cell">Producto</th>
-                                <th class="label-cell">P. Unitario</th>
-                                <th class="numeric-only text-align-left">Cantidad</th>
-                                <th class="numeric-only">M. Descuento</th>
-                                <th class="numeric-only">Total</th>
-                                <th class="numeric-only"></th>
+                                <td colspan="6" class="padding margin"><strong>No tiene productos agregados</strong></td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <template v-if="form.items.length === 0">
-                                <tr>
-                                    <td colspan="6" class="padding margin"><strong>No tiene productos agregados</strong></td>
-                                </tr>
-                            </template>
-                            <template v-else>
-                                <tr v-for="(row, index) in form.items" :key="index">
-                                    <td class="numeric-only">{{ index + 1 }}</td>
-                                    <td class="label-cell">{{ row.item.description }}</td>
-                                    <td class="numeric-only">
-                                        
-                                        <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
-                                            <div class="stepper-input-wrap">
-                                                <input class="input-amount-table" required validate v-model="row.unit_price" type="number"  @change="changeUnitPrice(index)" />
-                                            </div>
+                        </template>
+                        <template v-else>
+                            <tr v-for="(row, index) in form.items" :key="index">
+                                <td class="numeric-only no-padding-left">{{ index + 1 }}</td>
+                                <td class="label-cell no-padding-left">{{ row.item.description }}</td>
+                                <td class="numeric-only no-padding-left">
+
+                                    <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
+                                        <div class="stepper-input-wrap">
+                                            <input class="input-amount-table" required validate v-model="row.unit_price" type="number"  @change="changeUnitPrice(index)" />
                                         </div>
+                                    </div>
 
-                                        <!-- <input class="input-quantity-table" required validate v-model="row.unit_price" type="number"  @change="changeUnitPrice(index)" /> -->
-                                    </td>
-                                    <td class="numeric-only padding text-align-center">
-                                        
-                                        <!--
-                                        @todo Genera problemas en la propiedad quantity (no se actualiza)
-                                        <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
-                                            <div class="stepper-button-minus" @click="calculateQuantity(-1, index)"></div>
-                                            <div class="stepper-input-wrap">
-                                                <input type="number" v-model="row.quantity" min="0" step="1" @change="changeQuantity(index)" />
-                                            </div>
-                                            <div class="stepper-button-plus" @click="calculateQuantity(1, index)"></div>
-                                        </div> -->
-                                        <!-- {{ row.quantity }} -->
-                                        
-                                        <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
-                                            <div class="stepper-input-wrap">
-                                                <input class="input-amount-table" required validate v-model="row.quantity" type="number"  @change="changeQuantity(index)" />
-                                            </div>
+                                    <!-- <input class="input-quantity-table" required validate v-model="row.unit_price" type="number"  @change="changeUnitPrice(index)" /> -->
+                                </td>
+                                <td class="numeric-only padding text-align-center no-padding-left">
+
+                                    <!--
+                                    @todo Genera problemas en la propiedad quantity (no se actualiza)
+                                    <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
+                                        <div class="stepper-button-minus" @click="calculateQuantity(-1, index)"></div>
+                                        <div class="stepper-input-wrap">
+                                            <input type="number" v-model="row.quantity" min="0" step="1" @change="changeQuantity(index)" />
                                         </div>
+                                        <div class="stepper-button-plus" @click="calculateQuantity(1, index)"></div>
+                                    </div> -->
+                                    <!-- {{ row.quantity }} -->
 
-                                        <!-- <input class="input-quantity-table" required validate v-model="row.quantity" type="number"  @change="changeQuantity(index)" /> -->
-
-                                    </td>
-                                    <td class="numeric-only">
-                                        
-                                        <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
-                                            <div class="stepper-input-wrap">
-                                                <input class="input-amount-table" required validate v-model="row.input_discount" type="number"  @change="changeInputDiscount(index)" />
-                                            </div>
+                                    <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
+                                        <div class="stepper-input-wrap">
+                                            <input class="input-amount-table" required validate v-model="row.quantity" type="number"  @change="changeQuantity(index)" />
                                         </div>
+                                    </div>
 
-                                        <!-- <input class="input-quantity-table" required validate v-model="row.input_discount" type="number"  @change="changeInputDiscount(index)" /> -->
-                                    </td>
-                                    <td class="numeric-only">{{ row.total }}</td> 
-                                    <td>
-                                        <a @click="clickDelete(index)">
-                                            <f7-icon ios="f7:delete" color="red" aurora="f7:delete" md="material:delete" ></f7-icon>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </template>
+                                    <!-- <input class="input-quantity-table" required validate v-model="row.quantity" type="number"  @change="changeQuantity(index)" /> -->
 
-                        </tbody>
-                    </table>
-                </div>
- 
-            <!-- </f7-block> -->
+                                </td>
+                                <td class="numeric-only no-padding-left">
+
+                                    <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
+                                        <div class="stepper-input-wrap">
+                                            <input class="input-amount-table" required validate v-model="row.input_discount" type="number"  @change="changeInputDiscount(index)" />
+                                        </div>
+                                    </div>
+
+                                    <!-- <input class="input-quantity-table" required validate v-model="row.input_discount" type="number"  @change="changeInputDiscount(index)" /> -->
+                                </td>
+                                <td class="numeric-only no-padding-left">{{ row.total }}</td>
+                                <td class="no-padding">
+                                    <a @click="clickDelete(index)">
+                                        <f7-icon ios="f7:delete" color="red" aurora="f7:delete" md="material:delete" ></f7-icon>
+                                    </a>
+                                </td>
+                            </tr>
+                        </template>
+
+                    </tbody>
+                </table>
+            </div>
         </template>
         <template v-else>
 
@@ -100,25 +99,29 @@
                         >
                     </document-type>
                 </template>
-    
+
                 <div class="data-table margin-bottom padding-top">
                     <table>
                         <thead>
                             <tr>
-                                <th class="xsmall-only">#</th>
-                                <th class="label-cell">Producto</th>
-                                <th class="label-cell">P. Unitario</th>
-                                <th class="numeric-only text-align-center">Cantidad</th>
-                                <th class="numeric-only">M. Descuento</th>
-                                <th class="numeric-only">Total</th>
-                                <th class="numeric-only"></th>
+                                <th class="numeric-only no-padding-left">#</th>
+                                <th class="label-cell no-padding-left">
+                                    Producto
+                                    <span class="padding margin"></span>
+                                    <span class="padding"></span>
+                                </th>
+                                <th class="label-cell no-padding-left">P. Unitario</th>
+                                <th class="numeric-only text-align-left no-padding-left">Cantidad</th>
+                                <th class="numeric-only no-padding-left">M. Descuento</th>
+                                <th class="numeric-only no-padding-left">Total</th>
+                                <th class="numeric-only no-padding"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(row, index) in form.items" :key="index">
-                                <td class="xsmall-only">{{ index + 1 }}</td>
-                                <td class="label-cell">{{ row.item.description }}</td>
-                                <td class="numeric-only ">
+                                <td class="xsmall-only no-padding-left">{{ index + 1 }}</td>
+                                <td class="label-cell no-padding-left">{{ row.item.description }}</td>
+                                <td class="numeric-only no-padding-left">
 
                                     <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
                                         <div class="stepper-input-wrap">
@@ -128,8 +131,8 @@
                                     <!-- <input class="input-quantity-table" required validate v-model="row.unit_price" type="number"  @change="changeUnitPrice(index)" /> -->
 
                                 </td>
-                                <td class="numeric-only padding">
-                                    
+                                <td class="numeric-only no-padding-left">
+
                                     <div class="stepper stepper-small stepper-raised stepper-init full-max-width mt-5">
                                         <div class="stepper-button-minus" @click="calculateQuantity(-1, index)"></div>
                                         <div class="stepper-input-wrap">
@@ -139,8 +142,8 @@
                                     </div>
 
                                 </td>
-                                <td class="numeric-only">
-                                    
+                                <td class="numeric-only no-padding-left">
+
                                     <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
                                         <div class="stepper-input-wrap">
                                             <input class="input-amount-table" required validate v-model="row.input_discount" type="number"  @change="changeInputDiscount(index)" />
@@ -149,8 +152,8 @@
 
                                     <!-- <input class="input-quantity-table" required validate v-model="row.input_discount" type="number"  @change="changeInputDiscount(index)" /> -->
                                 </td>
-                                <td class="numeric-only">{{ row.total }}</td> 
-                                <td>
+                                <td class="numeric-only no-padding-left">{{ row.total }}</td>
+                                <td class="no-padding">
                                     <a @click="clickDelete(index)">
                                         <f7-icon ios="f7:delete" color="red" aurora="f7:delete" md="material:delete" ></f7-icon>
                                     </a>
@@ -166,7 +169,7 @@
                 </document-totals>
 
             </f7-block>
-    
+
             <f7-fab position="left-bottom" class="margin-right" color="red" @click="clickDeleteItems">
                 <f7-icon ios="f7:delete" aurora="f7:delete" md="material:delete"></f7-icon>
             </f7-fab>
@@ -207,8 +210,8 @@
             DocumentType
         },
         mixins: [
-            auth, 
-            general_functions, 
+            auth,
+            general_functions,
             operations
         ],
         data: function () {
@@ -233,7 +236,7 @@
                 return `Total ${this.currency_type.symbol} ${this.form.total}`
             }
         },
-        async created() 
+        async created()
         {
             await this.loadConfiguration()
             await this.initForm()
@@ -260,7 +263,7 @@
             },
             async initFormLandscapeMode()
             {
-                if(this.landscapeMode) 
+                if(this.landscapeMode)
                 {
                     await this.saveFormInStorage()
                     this.$emit('mountedSaleDetailPos')
@@ -335,7 +338,7 @@
                     const discount_type = _.find(this.item_discount_types, { id : discount_type_id})
 
                     if(!discount_type) this.showAlert('No se ubicó el tipo de descuento, verifique que el servicio en el facturador se encuentre disponible.')
-                    
+
                     item_sale.discounts.push({
                         discount_type_id: discount_type_id,
                         discount_type: discount_type,
@@ -347,7 +350,7 @@
                         is_amount: true
                     })
                 }
-            
+
                 // procesar descuento o inicializar valores
                 this.form.items[index] = this.calculateDataItem(item_sale)
                 this.calculateTotal()
@@ -390,7 +393,7 @@
                             })
 
             },
-            initForm() 
+            initForm()
             {
                 this.form = {
                     prefix: 'NV',
@@ -423,7 +426,7 @@
                 }
 
             },
-            getFormItem() 
+            getFormItem()
             {
                 return {
                     item_id: null,
@@ -492,7 +495,7 @@
                         form_item.input_discount = row.input_discount
 
                         //se asigna monto de descuento al campo "percentage", ya que este se usa para calculos en functions
-                        form_item.discounts[0].percentage = row.input_discount 
+                        form_item.discounts[0].percentage = row.input_discount
                     }
                 }
                 // data descuentos
@@ -507,9 +510,9 @@
                 if(this.list_items_sale)
                 {
                     this.form.items = await this.getTransformDataItem(this.list_items_sale)
-    
+
                     this.calculateTotal()
-    
+
                     // evento a Payment para actualizar form con datos de calculos, se dispara cuando modifican productos en el listado
                     if(from_event)
                     {
@@ -543,7 +546,7 @@
                 this.saveListItemsSale()
 
             },
-            calculateQuantity(value, index) 
+            calculateQuantity(value, index)
             {
                 let quantity = parseFloat(this.form.items[index].quantity)
                 let result = (quantity += parseFloat(value))
@@ -573,10 +576,10 @@
             },
             calculateQuantityItem(index, quantity)
             {
-                
+
                 const item_sale = this.findItemInListSale(this.form.items[index].item_id)
                 item_sale.quantity = quantity
-            
+
                 this.form.items[index] = this.calculateDataItem(item_sale)
                 this.calculateTotal()
                 this.updateQuantityItemsStorage(index)
@@ -587,27 +590,27 @@
                 const quantity = this.form.items[index].quantity
 
                 const item_sale = this.findItemInListSale(this.form.items[index].item_id)
-                
+
                 item_sale.quantity = parseFloat(quantity)
 
                 this.saveListItemsSale()
-                
+
             },
             saveListItemsSale()
             {
                 this.setStorage('list_items_sale', this.list_items_sale, true)
-                
-                if(this.landscapeMode) 
+
+                if(this.landscapeMode)
                 {
                     // evento para actualizar datos en listado
-                    this.$emit('updateDataInListItem') 
+                    this.$emit('updateDataInListItem')
                     this.emitEventFormSale()
                 }
             },
             emitEventFormSale()
             {
                 // evento para actualizar datos en el componente Payment
-                this.$eventHub.$emit('eventUpdateDataFormSale', this.form) 
+                this.$eventHub.$emit('eventUpdateDataFormSale', this.form)
             }
         }
     }

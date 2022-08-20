@@ -115,12 +115,12 @@
                             <template v-if="isCashPayment">
                                 <table>
                                     <tbody>
-                                        <tr v-for="(row, index) in form.payments">
+                                        <tr v-for="(row, index) in form.payments" :key="index">
                                             <td>
 
                                                 <div class="item-content item-input no-padding-horizontal">
                                                     <div class="item-inner no-padding-horizontal">
-                                                        <div class="item-title item-label" v-if="index === 0"> <strong>Metodo de pago</strong></div>
+                                                        <div class="item-title item-label" v-if="index === 0">Método de pago</div>
                                                         <div class="item-input-wrap input-dropdown-wrap">
                                                             <select v-model="row.payment_method_type_id">
                                                                 <template v-for="(row, index) in cash_payment_method_types">
@@ -135,7 +135,7 @@
 
                                                 <div class="item-content item-input no-padding-horizontal">
                                                     <div class="item-inner no-padding-horizontal">
-                                                        <div class="item-title item-label" v-if="index === 0"> <strong>Monto a pagar</strong></div>
+                                                        <div class="item-title item-label" v-if="index === 0">Monto a pagar</div>
                                                         <div class="item-input-wrap">
                                                             <input required validate v-model="row.payment" type="number" @input="inputPayment" min="0"/>
                                                             <!-- <span class="input-clear-button"></span> -->
@@ -144,16 +144,18 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <template v-if="index === 0">
-                                                    <a @click="clickAddPayment">
-                                                        <f7-icon  ios="f7:add_circle" aurora="f7:add_circle" md="material:add_circle"></f7-icon>
-                                                    </a>
-                                                </template>
-                                                <template v-else>
+                                                <template v-if="index !== 0">
                                                     <a @click="clickAddDeletePayment(index)">
                                                         <f7-icon ios="f7:delete" color="red" aurora="f7:delete" md="material:delete" ></f7-icon>
                                                     </a>
                                                 </template>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                <f7-button small @click="clickAddPayment" :color="theme.name_color_theme" icon-md="material:add_circle">
+                                                    Nuevo Pago
+                                                </f7-button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -164,7 +166,7 @@
                                 <f7-col width="50">
                                     <div class="item-content item-input no-padding-horizontal">
                                         <div class="item-inner no-padding-horizontal">
-                                            <div class="item-title item-label">Metodo de pago</div>
+                                            <div class="item-title item-label">Método de pago</div>
                                             <div class="item-input-wrap input-dropdown-wrap">
                                                 <select v-model="form_fee.payment_method_type_id" @change="changePaymentMethodTypeFee">
                                                     <template v-for="(row, index) in credit_payment_method_types">

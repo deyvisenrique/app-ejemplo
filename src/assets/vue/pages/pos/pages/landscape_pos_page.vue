@@ -1,12 +1,12 @@
 <template>
-    <f7-page class="" color="bluemagenta">
+    <f7-page :class="theme.class_bg_body" :color="theme.name_color_theme">
 
         <header-layout :title="header_title" :showLogoConfiguration="false" hrefBack="/list-items-sale/" :overwriteBackRoute="false" :showButtonBack="false"></header-layout>
 
-        <f7-block class="no-padding no-margin-vertical" >
+        <f7-block class="no-padding no-margin-vertical">
             <f7-row>
-                <f7-col width="65" style="height:auto">
-                    <f7-card class="card-100 padding no-shadow" color="red" style="min-height: 90%">
+                <f7-col width="60" class="">
+                    <f7-card class="card-100 no-padding no-margin-bottom no-shadow" :color="theme.name_color_theme">
 
                         <f7-row>
                             <f7-col width="70" style="border: 1px solid #8e8e93;border-radius: 5px;">
@@ -28,16 +28,7 @@
                             </f7-col>
                         </f7-row>
 
-                        <f7-row class="">
-
-                            <!-- <f7-col width="10">
-                                <template v-if="form_search.favorite == 1">
-                                    <span class="padding-top margin-top material-icons text-color-purple" @click="clickFavorite">favorite</span>
-                                </template>
-                                <template v-else>
-                                    <span class="padding-top margin-top material-icons text-color-purple" @click="clickFavorite">favorite_border</span>
-                                </template>
-                            </f7-col> -->
+                        <f7-row class="margin-bottom">
 
                             <f7-col width="100">
                                 <div class="c-horizontal-scroll mp-div-category">
@@ -58,75 +49,77 @@
                                 </div>
                             </f7-col>
                         </f7-row>
-                        <div class="list inset">
-                            <div class="row" v-if="records.length > 0">
-                                <div class="col-25" v-for="(row, index) in records" :key="index">
+                        <div style="overflow-y: scroll;height: calc(100vh - 235px);">
+                            <div class="list inset">
+                                <div class="row" v-if="records.length > 0">
+                                    <div class="col-33" v-for="(row, index) in records" :key="index">
 
-                                    <div class="card no-margin-horizontal no-padding-horizontal" :class="isSelectedRecord(index) ? 'custom-border-selected-item bg-white-shade' : ''">
+                                        <div class="card no-margin-horizontal no-padding-horizontal" :class="isSelectedRecord(index) ? 'custom-border-selected-item bg-white-shade' : ''">
 
-                                        <div @click="selected(index)">
+                                            <div @click="selected(index)">
 
-                                            <div :style="'background-image:url('+row.image_url+')'" class="card-header align-items-flex-end image-max-width"></div>
+                                                <div :style="'background-image:url('+row.image_url+')'" class="card-header align-items-flex-end image-max-width"></div>
 
-                                            <div class="card-content card-content-padding">
-                                                <div class="item-input-wrap">
-                                                    <span class="text-align-center"><b>{{row.full_description}}</b></span>
+                                                <div class="card-content card-content-padding">
+                                                    <div class="item-input-wrap">
+                                                        <span class="text-align-center"><b>{{row.full_description}}</b></span>
 
-                                                    <span class="">
-                                                        <div class="item-content no-padding-left">
-                                                            <div class="item-media">{{ row.currency_type_symbol }} {{row.sale_unit_price}}</div>
-                                                        </div>
-                                                    </span>
+                                                        <span class="">
+                                                            <div class="item-content no-padding-left">
+                                                                <div class="item-media">{{ row.currency_type_symbol }} {{row.sale_unit_price}}</div>
+                                                            </div>
+                                                        </span>
 
-                                                    <template v-if="row.unit_type_id !== 'ZZ'">
-                                                        <span class="text-align-center"><b>Stock: {{row.stock}}</b></span><br>
-                                                    </template>
+                                                        <template v-if="row.unit_type_id !== 'ZZ'">
+                                                            <span class="text-align-center"><b>Stock: {{row.stock}}</b></span><br>
+                                                        </template>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="card-footer display-flex justify-content-center">
+                                                <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
+                                                    <div class="stepper-button-minus" @click="calculateQuantity(-1, index)"></div>
+                                                    <div class="stepper-input-wrap">
+                                                        <input type="number" v-model="row.quantity" min="0" step="1" />
+                                                    </div>
+                                                    <div class="stepper-button-plus" @click="calculateQuantity(1, index)"></div>
                                                 </div>
                                             </div>
 
                                         </div>
-
-                                        <div class="card-footer display-flex justify-content-center">
-                                            <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
-                                                <div class="stepper-button-minus" @click="calculateQuantity(-1, index)"></div>
-                                                <div class="stepper-input-wrap">
-                                                    <input type="number" v-model="row.quantity" min="0" step="1" />
-                                                </div>
-                                                <div class="stepper-button-plus" @click="calculateQuantity(1, index)"></div>
-                                            </div>
-                                        </div>
-
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row" v-else>
-                                <div class="col-100">
-                                    <h3 class="text-align-center">
-                                        {{ loading_text }}
-                                    </h3>
+                                <div class="row" v-else>
+                                    <div class="col-100">
+                                        <h3 class="text-align-center">
+                                            {{ loading_text }}
+                                        </h3>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="data-table-footer text-align-center">
-                                <div class="data-table-pagination">
-                                    <span class="data-table-pagination-label">Total {{ pagination.total }}</span>
-                                    <a href="#" class="link" :class="pagination.current_page == pagination.from ? 'disabled' : ''" @click="prevPage">
-                                        <i class="icon icon-prev color-gray"></i>
-                                    </a>
-                                    <a>
-                                        {{ pagination.current_page }}
-                                    </a>
-                                    <a href="#" class="link" :class="pagination.current_page === pagination.last_page ? 'disabled' : ''" @click="nextPage">
-                                        <i class="icon icon-next color-gray"></i>
-                                    </a>
+                                <div class="data-table-footer text-align-center">
+                                    <div class="data-table-pagination">
+                                        <span class="data-table-pagination-label">Total {{ pagination.total }}</span>
+                                        <a href="#" class="link" :class="pagination.current_page == pagination.from ? 'disabled' : ''" @click="prevPage">
+                                            <i class="icon icon-prev color-gray"></i>
+                                        </a>
+                                        <a>
+                                            {{ pagination.current_page }}
+                                        </a>
+                                        <a href="#" class="link" :class="pagination.current_page === pagination.last_page ? 'disabled' : ''" @click="nextPage">
+                                            <i class="icon icon-next color-gray"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </f7-card>
 
                 </f7-col>
-                <f7-col  width="35">
-                    <f7-card class="card-100 no-padding no-margin no-shadow" >
+                <f7-col  width="40" style="overflow-y: scroll;height: calc(100vh - 95px);">
+                    <f7-card class="card-100 no-padding no-margin no-shadow">
 
                         <div class="margin-right">
                             <sale-detail-pos
