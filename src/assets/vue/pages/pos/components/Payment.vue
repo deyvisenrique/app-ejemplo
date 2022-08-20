@@ -143,12 +143,15 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>
-                                                <template v-if="index !== 0">
+                                            <td class="no-padding">
+                                                <!-- <template v-if="index !== 0">
                                                     <a @click="clickAddDeletePayment(index)">
                                                         <f7-icon ios="f7:delete" color="red" aurora="f7:delete" md="material:delete" ></f7-icon>
                                                     </a>
-                                                </template>
+                                                </template> -->
+                                                <f7-button @click="clickAddDeletePayment(index)" :disabled="index == 0" small class="no-padding-horizontal">
+                                                    <f7-icon ios="f7:delete" :color="index == 0? 'gray' : 'red'" aurora="f7:delete" md="material:delete" ></f7-icon>
+                                                </f7-button>
                                             </td>
                                         </tr>
                                         <tr>
@@ -333,7 +336,7 @@
                                                 <td  style="width:50% !important">
                                                     <div class="item-content item-input no-padding-horizontal">
                                                         <div class="item-inner no-padding-horizontal">
-                                                            <div class="item-title item-label" v-if="index === 0"> <strong>Metodo de pago</strong></div>
+                                                            <div class="item-title item-label" v-if="index === 0">Método de pago</div>
                                                             <div class="item-input-wrap input-dropdown-wrap">
                                                                 <select v-model="row.payment_method_type_id">
                                                                     <template v-for="(row, index) in cash_payment_method_types">
@@ -348,21 +351,19 @@
 
                                                     <div class="item-content item-input no-padding-horizontal">
                                                         <div class="item-inner no-padding-horizontal">
-                                                            <div class="item-title item-label" v-if="index === 0"> <strong>Monto a pagar</strong></div>
+                                                            <div class="item-title item-label" v-if="index === 0"> Monto a pagar</div>
                                                             <div class="item-input-wrap" >
-                                                                <input required validate v-model="row.payment" class="input-bg-white-shade"  type="number" @input="inputPayment" min="0"/>
+                                                                <input required validate v-model="row.payment" type="number" @input="inputPayment" min="0"/>
                                                                 <!-- <span class="input-clear-button"></span> -->
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>
+                                                <td class="no-padding-horizontal">
 
-                                                    <template v-if="index > 0">
-                                                        <a @click="clickAddDeletePayment(index)">
-                                                            <f7-icon ios="f7:delete" color="red" aurora="f7:delete" md="material:delete" ></f7-icon>
-                                                        </a>
-                                                    </template>
+                                                        <f7-button @click="clickAddDeletePayment(index)" :disabled="index == 0" small class="no-padding-horizontal">
+                                                            <f7-icon ios="f7:delete" :color="index == 0? 'gray' : 'red'" aurora="f7:delete" md="material:delete" ></f7-icon>
+                                                        </f7-button>
 
                                                     <!-- <template v-if="index === 0">
                                                         <a @click="clickAddPayment">
@@ -378,13 +379,10 @@
                                             </tr>
                                         </tbody>
                                     </table>
-
-                                    <f7-col width="85">
-                                    </f7-col>
-                                    <f7-col width="15" class="text-align-center">
-                                        <a @click="clickAddPayment">
-                                            <f7-icon class="" ios="f7:add_circle" aurora="f7:add_circle" md="material:add_circle"></f7-icon>
-                                        </a>
+                                    <f7-col class="text-align-center">
+                                        <f7-button small @click="clickAddPayment" :color="theme.name_color_theme" icon-md="material:add_circle">
+                                            Nuevo Pago
+                                        </f7-button>
                                     </f7-col>
 
                                 </template>
@@ -428,10 +426,10 @@
                             </template>
                         </f7-row>
 
-                        <template v-if="payment_change > 0 && isCashPayment">
+                        <template v-if="isCashPayment">
                             <document-totals
                                 :currency-type-symbol="currency_type.symbol"
-                                :show-only-totals="true"
+                                :show-all-totals="true"
                                 :payment-change="payment_change"
                                 :is-cash-payment="isCashPayment"
                                 :form="form">
@@ -445,9 +443,11 @@
 
         </template>
 
-        <f7-fab position="center-bottom" class="margin-right" :color="theme.name_color_theme" @click.prevent="clickSubmit">
-            <f7-icon ios="f7:check" aurora="f7:check" md="material:check"></f7-icon>
-        </f7-fab>
+        <div style="position: relative">
+            <f7-fab style="position: fixed" position="right-bottom" class="margin-right no-margin-bottom" :color="theme.name_color_theme" @click.prevent="clickSubmit" v-if="form.total">
+                <f7-icon ios="f7:check" aurora="f7:check" md="material:check"></f7-icon>
+            </f7-fab>
+        </div>
 
         <pdf-direct-print ref="pdf_direct_print"></pdf-direct-print>
 

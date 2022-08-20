@@ -1,7 +1,7 @@
 <template>
-    <div class="no-padding-horizontal padding-top">
+    <div class="no-padding-horizontal padding-vertical">
         <f7-block class="bg-white-shade block-strong inset no-margin">
-            
+
             <template v-if="showOnlyTotals">
                 <f7-row>
                     <f7-col>
@@ -19,7 +19,7 @@
                 </f7-row>
             </template>
             <template v-else-if="showAllTotals">
-                
+
                 <f7-row>
                     <f7-col>
                         <h4>OP. Gravada</h4>
@@ -42,7 +42,7 @@
                 </f7-row>
 
             </template>
-    
+
             <!-- para mostrar totales modo portrait pantalla 2 - detalle -->
             <template v-else>
                 <f7-row>
