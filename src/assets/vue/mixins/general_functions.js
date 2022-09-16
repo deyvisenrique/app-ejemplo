@@ -1,5 +1,27 @@
 
+import {functions_theme_premiun} from "mixins_/functions_theme_premiun"
+
 export const general_functions = {
+    mixins: [functions_theme_premiun],
+    data(){
+        return {
+            general_theme: {
+                css_color_fill: null,
+                class_menu_text_color: null,
+                class_header_text_color: null,
+                class_text_color: null,
+                css_color_fill_dark: null,
+                class_bg_header: null,
+                class_bg_body: null,
+                class_waves_color_fill: null,
+                class_box_color: null,
+                class_box_color_shade: null,
+                class_box_color_tint: null,
+                name_color_theme: null,
+                class_button_color: null,
+            }
+        }
+    },
     computed: {
     },
     methods: {
@@ -158,91 +180,143 @@ export const general_functions = {
         generalSleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         },
-        getThemeSettings() {
+        getThemeSettings() 
+        {
+            const custom_theme_premiun = this.existThemePremiun()
+            const allowed_theme_premiun = this.allowedThemePremiun(custom_theme_premiun)
+
             const theme = {
                 theme_color: 'blue',
                 card_color: 'multicolor'
             }
-            if(this.getStorage('app_configuration') === null) {
+
+            if(this.getStorage('app_configuration') === null) 
+            {
                 this.setStorage('app_configuration', theme, true)
             }
+
             const config = this.getStorage('app_configuration', true)
-            const theme_color = config.theme_color // blue | red | dark
+
+            // const theme_color = config.theme_color // blue | red | dark
+            this.general_theme.theme_color = config.theme_color
+
+            // asigna tema premiun
+            if(allowed_theme_premiun) this.setThemePremiun()
+
+
             const is_unicolor_boxes = config.card_color == 'unicolor' ? true : false
+
             // logo
-            const css_color_fill = theme_color == 'white' ? '#00B19A' : '#fff'
-            let css_color_fill_dark = '#4A2CB3'
+            // const css_color_fill = theme_color == 'white' ? '#00B19A' : '#fff'
+            this.general_theme.css_color_fill = '#fff'
+
+
+            // let css_color_fill_dark = '#4A2CB3'
+            this.general_theme.css_color_fill_dark = '#4A2CB3'
+
             // estilos en header
-            let class_bg_header = 'bg-blue-magenta'
-            let class_bg_body = 'bg-color-white'
-            let class_waves_color_fill = 'shape-fill'
-            let class_menu_text_color = theme_color == 'white' ? 'text-color-teal' : 'text-color-white'
-            const class_header_text_color = theme_color == 'white' ? 'text-color-teal' : 'text-color-white'
+            // let class_bg_header = 'bg-blue-magenta'
+            // let class_bg_body = 'bg-color-white'
+            // let class_waves_color_fill = 'shape-fill'
+            this.general_theme.class_bg_header = 'bg-blue-magenta'
+            this.general_theme.class_bg_body = 'bg-color-white'
+            this.general_theme.class_waves_color_fill = 'shape-fill'
+
+
+            // let class_menu_text_color = theme_color == 'white' ? 'text-color-teal' : 'text-color-white'
+            // const class_header_text_color = theme_color == 'white' ? 'text-color-teal' : 'text-color-white'
+            this.general_theme.class_menu_text_color = 'text-color-white'
+            this.general_theme.class_header_text_color = 'text-color-white'
+
+
             // estilos en home
-            let class_box_color = 'bg-blue'
-            let class_box_color_shade = is_unicolor_boxes ? 'bg-blue' :'bg-color-blue-shade'
-            let class_box_color_tint = is_unicolor_boxes ? 'bg-blue' :'bg-color-blue-tint'
-            let class_text_color = theme_color == 'white' ? '' : 'text-color-white'
+            // let class_box_color = 'bg-blue'
+            // let class_box_color_shade = is_unicolor_boxes ? 'bg-blue' :'bg-color-blue-shade'
+            // let class_box_color_tint = is_unicolor_boxes ? 'bg-blue' :'bg-color-blue-tint'
+
+            this.general_theme.class_box_color = 'bg-blue'
+            this.general_theme.class_box_color_shade = is_unicolor_boxes ? 'bg-blue' :'bg-color-blue-shade'
+            this.general_theme.class_box_color_tint = is_unicolor_boxes ? 'bg-blue' :'bg-color-blue-tint'
+
+            // let class_text_color = theme_color == 'white' ? '' : 'text-color-white'
+            this.general_theme.class_text_color = 'text-color-white'
+            
             // estilos de contenido
-            let name_color_theme = 'bluemagenta'
+            // let name_color_theme = 'bluemagenta'
+            this.general_theme.name_color_theme = 'bluemagenta'
+
             // panel
-            let class_button_color = 'bg-blue'
+            // let class_button_color = 'bg-blue'
+            this.general_theme.class_button_color = 'bg-blue'
+            
 
-
-            switch (theme_color) {
-                case 'white':
-                    css_color_fill_dark = '#00B19A'
-                    class_bg_header = 'bg-color-white-shade'
-                    class_bg_body = 'bg-color-white-shade'
-                    class_waves_color_fill = 'shape-fill-white'
-                    class_box_color = 'bg-color-white'
-                    class_box_color_shade = 'bg-color-white'
-                    class_box_color_tint = 'bg-color-white'
-                    name_color_theme = 'teal'
-                    class_button_color = 'bg-color-teal'
-                    break;
+            switch (this.general_theme.theme_color) {
+            // switch (theme_color) {
                 case 'red':
-                    css_color_fill_dark = '#cb2027'
-                    class_bg_header = 'bg-color-red'
-                    class_waves_color_fill = 'shape-fill-red'
-                    class_box_color = 'bg-color-red'
-                    class_box_color_shade = is_unicolor_boxes ? 'bg-color-red' :'bg-color-red-shade'
-                    class_box_color_tint = is_unicolor_boxes ? 'bg-color-red' :'bg-color-red-tint'
-                    name_color_theme = 'red'
-                    class_button_color = 'bg-color-red'
+                    this.general_theme.css_color_fill_dark = '#cb2027'
+                    this.general_theme.class_bg_header = 'bg-color-red'
+                    this.general_theme.class_waves_color_fill = 'shape-fill-red'
+                    this.general_theme.class_box_color = 'bg-color-red'
+                    this.general_theme.class_box_color_shade = is_unicolor_boxes ? 'bg-color-red' :'bg-color-red-shade'
+                    this.general_theme.class_box_color_tint = is_unicolor_boxes ? 'bg-color-red' :'bg-color-red-tint'
+                    this.general_theme.name_color_theme = 'red'
+                    this.general_theme.class_button_color = 'bg-color-red'
                     break;
                 case 'dark':
-                    css_color_fill_dark = '#1A1F1D'
-                    class_bg_header = 'bg-color-black'
-                    class_waves_color_fill = 'shape-fill-black'
-                    class_box_color = 'bg-color-black'
-                    class_box_color_shade = is_unicolor_boxes ? 'bg-color-black' :'bg-color-black-shade'
-                    class_box_color_tint = is_unicolor_boxes ? 'bg-color-black' :'bg-color-black-tint'
-                    name_color_theme = 'black'
-                    class_button_color = 'bg-color-black'
+                    this.general_theme.css_color_fill_dark = '#1A1F1D'
+                    this.general_theme.class_bg_header = 'bg-color-black'
+                    this.general_theme.class_waves_color_fill = 'shape-fill-black'
+                    this.general_theme.class_box_color = 'bg-color-black'
+                    this.general_theme.class_box_color_shade = is_unicolor_boxes ? 'bg-color-black' :'bg-color-black-shade'
+                    this.general_theme.class_box_color_tint = is_unicolor_boxes ? 'bg-color-black' :'bg-color-black-tint'
+                    this.general_theme.name_color_theme = 'black'
+                    this.general_theme.class_button_color = 'bg-color-black'
                     break;
                 default:
                     break;
             }
 
+            // asigna datos para tema premiun
+            if(allowed_theme_premiun) this.setValuesThemePremiun()
+            
+
             return {
-                theme_color: theme_color,
+                theme_color: this.general_theme.theme_color,
                 is_unicolor_boxes: is_unicolor_boxes,
-                class_bg_home_icon : 'home-icon home-icon-'+theme_color,
-                class_bg_header: class_bg_header,
-                class_bg_body: class_bg_body,
-                css_color_fill: css_color_fill,
-                class_waves_color_fill: class_waves_color_fill,
-                class_menu_text_color: class_menu_text_color,
-                class_box_color: class_box_color,
-                class_box_color_shade: class_box_color_shade,
-                class_box_color_tint: class_box_color_tint,
-                class_text_color: class_text_color,
-                css_color_fill_dark: css_color_fill_dark,
-                class_header_text_color: class_header_text_color,
-                name_color_theme: name_color_theme,
-                class_button_color: class_button_color,
+                class_bg_home_icon : 'home-icon home-icon-'+this.general_theme.theme_color,
+                class_bg_header: this.general_theme.class_bg_header,
+                class_bg_body: this.general_theme.class_bg_body,
+                css_color_fill: this.general_theme.css_color_fill,
+                class_waves_color_fill: this.general_theme.class_waves_color_fill,
+                class_menu_text_color: this.general_theme.class_menu_text_color,
+                class_box_color: this.general_theme.class_box_color,
+                class_box_color_shade: this.general_theme.class_box_color_shade,
+                class_box_color_tint: this.general_theme.class_box_color_tint,
+                class_text_color: this.general_theme.class_text_color,
+                css_color_fill_dark: this.general_theme.css_color_fill_dark,
+                class_header_text_color: this.general_theme.class_header_text_color,
+                name_color_theme: this.general_theme.name_color_theme,
+                class_button_color: this.general_theme.class_button_color,
             }
+
+            // return {
+            //     theme_color: theme_color,
+            //     is_unicolor_boxes: is_unicolor_boxes,
+            //     class_bg_home_icon : 'home-icon home-icon-'+theme_color,
+            //     class_bg_header: class_bg_header,
+            //     class_bg_body: class_bg_body,
+            //     css_color_fill: css_color_fill,
+            //     class_waves_color_fill: class_waves_color_fill,
+            //     class_menu_text_color: class_menu_text_color,
+            //     class_box_color: class_box_color,
+            //     class_box_color_shade: class_box_color_shade,
+            //     class_box_color_tint: class_box_color_tint,
+            //     class_text_color: class_text_color,
+            //     css_color_fill_dark: css_color_fill_dark,
+            //     class_header_text_color: class_header_text_color,
+            //     name_color_theme: name_color_theme,
+            //     class_button_color: class_button_color,
+            // }
         }
     }
 }
