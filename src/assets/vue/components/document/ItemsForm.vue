@@ -121,7 +121,7 @@
                         <li v-for="(item, index) in items_car" :key="index" class="list-documents">
                             <div class="item-content padding-horizontal margin-vertical">
                                 <div @click="add(index)" class="item-media" style="min-width: 0px !important;">
-                                    <f7-icon :material="item.quantity > 0 ? 'check_box' : 'check_box_outline_blank'" class="text-color-bluemagenta"></f7-icon>
+                                    <f7-icon :material="item.quantity > 0 ? 'check_box' : 'check_box_outline_blank'" :class="theme.name_color_theme"></f7-icon>
                                 </div>
                                 <div class="item-inner">
                                     <div class="item-title" :color="theme.name_color_theme" style="font-size: .9em">

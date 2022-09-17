@@ -472,7 +472,10 @@
                 form_item.has_igv = form_item.item.has_igv
                 form_item.affectation_igv_type_id = form_item.item.sale_affectation_igv_type_id
 
-                const unit_price = this.roundNumber((form_item.has_igv ? form_item.unit_price_value : form_item.unit_price_value * 1.18), 6)
+                console.log(this.configuration)
+                form_item.igv_31556_percentage = this.configuration.has_igv_31556 ? (this.configuration.igv_31556_percentage * 100) : 18
+
+                const unit_price = this.roundNumber((form_item.has_igv ? form_item.unit_price_value : (form_item.unit_price_value * (1 + form_item.igv_31556_percentage))), 6)
 
                 form_item.unit_price = unit_price
                 form_item.item.unit_price = unit_price

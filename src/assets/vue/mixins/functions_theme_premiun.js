@@ -1,11 +1,11 @@
 export const functions_theme_premiun = {
-    
+
     data: function () {
         return {
             external_functions_theme_premium: null
         }
     },
-    methods: { 
+    methods: {
         setThemePremiun()
         {
             this.general_theme.theme_color = this.external_functions_theme_premium.getThemePremiun()
@@ -34,16 +34,16 @@ export const functions_theme_premiun = {
         },
         existThemePremiun()
         {
-            try 
+            try
             {
                 this.external_functions_theme_premium = require(`assets/premium_assets/theme_premium.js`)
-                
+
                 return {
                     success: true,
                     data: this.external_functions_theme_premium
                 }
             }
-            catch(error) 
+            catch(error)
             {
                 return this.generalResponse(false, 'No existe el tema')
             }
