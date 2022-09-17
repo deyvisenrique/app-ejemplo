@@ -8,7 +8,7 @@
                 <br><br><br>
             </f7-block>
             <f7-block class="padding-vertical display-flex justify-content-center no-margin-vertical" v-if="logo" :class="theme.class_bg_body">
-                <logo heightLogo="80" :isDark="true"></logo>
+                <logo heightLogo="80" :isDark="true" class="display-flex justify-content-center"></logo>
                 <!-- <img :width="width_img" :height="height_img" class="center padding-vertical margin-vertical margin-horizontal" :src="logo" alt /> -->
             </f7-block>
             <f7-block class="display-flex justify-content-center no-margin" :class="theme.class_bg_body">
@@ -227,7 +227,7 @@
             });
 
             this.checkDirectPrint()
- 
+
         },
         mounted() {
             setTimeout(this.verifytoken, 1000); // 2500);
@@ -243,7 +243,7 @@
                 if(this.is_pos_mode)
                 {
                     const configuration = this.getInitialConfiguration()
-    
+
                     if(this.isAllowedDirectPrint(configuration))
                     {
                         this.printerDisconnect(configuration.printer_name)
@@ -321,12 +321,12 @@
             {
                 const context = this
 
-                if (window.matchMedia('(orientation: portrait)').matches) 
+                if (window.matchMedia('(orientation: portrait)').matches)
                 {
                     context.redirectRoute('/list-items-sale/')
                 }
-                
-                if (window.matchMedia('(orientation: landscape)').matches) 
+
+                if (window.matchMedia('(orientation: landscape)').matches)
                 {
                     context.redirectRoute('/landscape-pos/')
                 }

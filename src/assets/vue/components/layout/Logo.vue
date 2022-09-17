@@ -1,7 +1,8 @@
 <template>
-  <div style="max-height:80px;">
-    <svg xmlns="http://www.w3.org/2000/svg" :viewBox="theme.theme_color == 'white' ? '0 0 387 387' : '0 0 1318.11 387'" :height="heightLogo">
-      <g id="Layer_2" data-name="Layer 2">
+  <div>
+    <template v-if="!alternative_logo" style="max-height:80px;">
+      <svg xmlns="http://www.w3.org/2000/svg" :viewBox="theme.theme_color == 'white' ? '0 0 387 387' : '0 0 1318.11 387'" :height="heightLogo">
+        <g id="Layer_2" data-name="Layer 2">
         <g id="Layer_1-2" data-name="Layer 1">
           <path v-if="theme.theme_color != 'white'" :fill="fill_color" d="M539.75,265.2H495.89v45.31H473V199.63h72.19v18.51H495.89v28.63h43.86Z"/>
           <path v-if="theme.theme_color != 'white'" :fill="fill_color" d="M606.09,310.51a24.38,24.38,0,0,1-2.2-7.39q-8,8.91-20.8,8.91Q571,312,563,305a22.53,22.53,0,0,1-8-17.67q0-13.1,9.71-20.11t28.06-7.08H603v-4.72q0-5.72-2.93-9.14t-9.25-3.42q-5.56,0-8.72,2.66a9.06,9.06,0,0,0-3.16,7.31h-22a22.13,22.13,0,0,1,4.41-13.25,29.23,29.23,0,0,1,12.5-9.56,45.67,45.67,0,0,1,18.12-3.46q15.23,0,24.18,7.65t8.95,21.51v35.72q.08,11.73,3.27,17.74v1.3Zm-18.2-15.31a18.93,18.93,0,0,0,9-2.17,14.3,14.3,0,0,0,6.09-5.82V273h-8.22q-16.53,0-17.6,11.43l-.07,1.29a8.82,8.82,0,0,0,2.89,6.78C581.9,294.32,584.54,295.2,587.89,295.2Z"/>
@@ -34,8 +35,10 @@
           <path :fill="fill_color" d="M387,387H0V0H387ZM27.82,359.18H359.18V27.82H27.82Z"/>
           <rect :fill="fill_color" x="1110.76" y="190.87" width="22.47" height="18.57"/>
       </g>
-      </g>
-    </svg>
+        </g>
+      </svg>
+    </template>
+    <img v-else :src="alternative_logo" alt="FacturaloPeru" width="40%" />
   </div>
 </template>
 
@@ -51,9 +54,13 @@
       return {
         theme: {},
         fill_color: '#fff',
+        alternative_logo: ''
       }
     },
     created() {
+      if (localStorage.url_logo) {
+          this.alternative_logo = localStorage.url_logo
+      }
       this.theme =  this.getThemeSettings()
       this.fill_color = this.isDark ? this.theme.css_color_fill_dark : this.theme.css_color_fill
     }
