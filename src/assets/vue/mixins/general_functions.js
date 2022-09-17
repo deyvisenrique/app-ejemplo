@@ -102,6 +102,8 @@ export const general_functions = {
                 direct_print: false,
                 direct_print: false,
                 default_document_type: '03',
+                has_igv_31556: false,
+                igv_31556_percentage: 0.10
                 // number_columns_list_items_sale: 2,
             }
 
@@ -180,7 +182,7 @@ export const general_functions = {
         generalSleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         },
-        getThemeSettings() 
+        getThemeSettings()
         {
             const custom_theme_premiun = this.existThemePremiun()
             const allowed_theme_premiun = this.allowedThemePremiun(custom_theme_premiun)
@@ -190,7 +192,7 @@ export const general_functions = {
                 card_color: 'multicolor'
             }
 
-            if(this.getStorage('app_configuration') === null) 
+            if(this.getStorage('app_configuration') === null)
             {
                 this.setStorage('app_configuration', theme, true)
             }
@@ -240,7 +242,7 @@ export const general_functions = {
 
             // let class_text_color = theme_color == 'white' ? '' : 'text-color-white'
             this.general_theme.class_text_color = 'text-color-white'
-            
+
             // estilos de contenido
             // let name_color_theme = 'bluemagenta'
             this.general_theme.name_color_theme = 'bluemagenta'
@@ -248,7 +250,7 @@ export const general_functions = {
             // panel
             // let class_button_color = 'bg-blue'
             this.general_theme.class_button_color = 'bg-blue'
-            
+
 
             switch (this.general_theme.theme_color) {
             // switch (theme_color) {
@@ -278,7 +280,7 @@ export const general_functions = {
 
             // asigna datos para tema premiun
             if(allowed_theme_premiun) this.setValuesThemePremiun()
-            
+
 
             return {
                 theme_color: this.general_theme.theme_color,

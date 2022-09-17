@@ -45,15 +45,15 @@
                 </f7-list-item>
 
                 <template v-if="check_is_pos_mode">
-                    
+
                     <f7-list-item smart-select :smart-select-params="{openIn: 'popover'}">
                         <template #title>
                             Documento por defecto
                             <span class="badge">{{ getSelectedDocumentType() }}</span>
                         </template>
                         <select v-model="form.default_document_type" @change="saveOnlyConfigStorage" class="full-width bg-color-blue">
-                            <template v-for="(option, index) in default_document_types">
-                                <option :value="option.id">{{ option.description }}</option>
+                            <template v-for="(option, index) in default_document_types" >
+                                <option :value="option.id" :key="index">{{ option.description }}</option>
                             </template>
                         </select>
                     </f7-list-item>
@@ -61,7 +61,7 @@
                     <!-- <f7-list-item  :title="`N° columnas en productos`">
                         <input style="width: 40px !important;" class="input-quantity-table" required validate v-model="form.number_columns_list_items_sale" type="number"  @change="saveOnlyConfigStorage" />
                     </f7-list-item> -->
- 
+
                     <f7-list-item title="Agregar impresora bluetooth">
                         <template #after>
                             <label class="toggle toggle-init color-blue">
@@ -72,7 +72,7 @@
                     </f7-list-item>
 
                     <template v-if="form.direct_print">
-                    
+
                         <f7-list-item v-if="form.printer_name" :title="`Impresora: ${form.printer_name}`">
                             <f7-button @click="testPrint">
                                 Prueba
@@ -114,8 +114,8 @@
 
     export default {
         mixins: [
-            auth, 
-            general_functions, 
+            auth,
+            general_functions,
             functions_direct_print
         ],
         name: "AdvancedConfiguration",
@@ -141,7 +141,7 @@
             await this.initForm()
             await this.getInitialSettings()
             await this.initData()
-            await this.initDirectPrint() 
+            await this.initDirectPrint()
         },
         mounted(){
         },
@@ -151,7 +151,7 @@
                 return this.form.direct_print
             },
         },
-        methods: { 
+        methods: {
             getSelectedDocumentType()
             {
                 const default_document_type_id = '03'
@@ -190,19 +190,19 @@
                 const text_test = context.getTextTest()
 
                 BTPrinter.printTextSizeAlign(
-                    function (data) 
+                    function (data)
                     {
                         if(data)
                         {
                             context.showAlert('Prueba realizada, verifique los datos del usuario en la impresión.')
                         }
-                    }, 
-                    function (error) 
+                    },
+                    function (error)
                     {
                         context.showAlert(`Ocurrió un error al imprimir: ${error}`)
-                    }, 
-                    text_test, 
-                    '00', 
+                    },
+                    text_test,
+                    '00',
                     '1'
                 )
             },
@@ -225,7 +225,7 @@
                         printer.selected = true
                     }
                 }
-            }, 
+            },
             async setDevicesData(data)
             {
                 if(data && _.isArray(data))
@@ -233,7 +233,7 @@
                     const parse_data = _.chunk(data, 3)
 
                     await parse_data.forEach(device => {
-                        
+
                         if(device.length === 3)
                         {
                             this.devices.push({
@@ -286,7 +286,7 @@
                     }
                 }
             },
-            initForm() 
+            initForm()
             {
                 this.form = {
                     show_image_item: false,
@@ -322,7 +322,7 @@
                 this.generalSuccessNotification('Configuración actualizada')
                 this.saveConfigStorage()
             },
-            submit() 
+            submit()
             {
 
                 this.showLoading()

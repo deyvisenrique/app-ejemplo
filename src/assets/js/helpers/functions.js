@@ -31,7 +31,7 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
         affectation_igv_type_id: row_old.affectation_igv_type_id,
         affectation_igv_type: row_old.affectation_igv_type,
         total_base_igv: 0,
-        percentage_igv: 18,
+        percentage_igv: row_old.igv_31556_percentage,
         total_igv: 0,
         system_isc_type_id: null,
         total_base_isc: 0,
@@ -56,7 +56,7 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
         input_discount: row_old.input_discount,
     };
 
-    let percentage_igv = 18
+    let percentage_igv = row_old.igv_31556_percentage
     let unit_value = row.unit_price
 
     if (row.affectation_igv_type_id === '10') {
@@ -72,12 +72,12 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
     /* Discounts */
     let discount_base = 0
     let discount_no_base = 0
-    
+
     row.discounts.forEach((discount, index) => {
 
-        if (discount.is_amount) 
+        if (discount.is_amount)
         {
-            if (discount.discount_type.base) 
+            if (discount.discount_type.base)
             {
                 discount.base = _.round(total_value_partial, 2)
 
@@ -90,8 +90,8 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
 
                 discount_base += discount.amount
 
-            } 
-            else 
+            }
+            else
             {
                 let aux_total_line = row.unit_price * row.quantity
 
@@ -104,9 +104,9 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
             }
 
         }
-        else 
+        else
         {
-            if (discount.discount_type.base) 
+            if (discount.discount_type.base)
             {
                 discount.percentage = parseFloat(discount.percentage)
                 discount.factor = discount.percentage / 100
@@ -114,8 +114,8 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
                 discount.amount = _.round(discount.base * discount.factor, 2)
                 discount_base += discount.amount
 
-            } 
-            else 
+            }
+            else
             {
                 let aux_total_line = row.unit_price * row.quantity
                 discount.factor = _.round(discount.percentage / 100, 5)
@@ -181,9 +181,9 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
     row.total_taxes = _.round(total_taxes, 2)
     row.total = _.round(total, 2)
 
-    
+
     // descuentos, se modifica precio unitario y total descuentos
-    if (row.discounts.length > 0) 
+    if (row.discounts.length > 0)
     {
         let sum_discount_no_base = 0
         let sum_discount_base = 0
@@ -214,7 +214,7 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
     if(row_old.has_plastic_bag_taxes){
         row.total_plastic_bag_taxes = _.round(row.quantity * row.item.amount_plastic_bag_taxes, 1)
     }
-    
+
     // console.log(row)
     return row
 }
@@ -222,7 +222,7 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
 
 function findGeneralDefaultSerie(series, document_type_id)
 {
-    return _.find(series, {document_type_id : document_type_id, is_default : true }) 
+    return _.find(series, {document_type_id : document_type_id, is_default : true })
 }
 
 

@@ -663,6 +663,11 @@
 
                         let unit_price = obj.has_igv ? obj.unit_price_value : obj.unit_price_value * 1.18;
 
+                        if(this.configuration.has_igv_31556) {
+                            unit_price = obj.has_igv ? obj.unit_price_value : obj.unit_price_value * (1 + this.configuration.igv_31556_percentage)
+                        }
+                        obj.igv_31556_percentage = this.configuration.has_igv_31556 ? (this.configuration.igv_31556_percentage * 100) : 18
+
                         obj.unit_price = unit_price;
                         obj.item.unit_price = unit_price;
                         obj.item.presentation = null;
