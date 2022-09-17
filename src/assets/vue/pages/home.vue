@@ -8,7 +8,7 @@
                 <br><br><br>
             </f7-block>
             <f7-block class="padding-vertical display-flex justify-content-center no-margin-vertical" v-if="logo" :class="theme.class_bg_body">
-                <logo heightLogo="80" :isDark="true" class="display-flex justify-content-center"></logo>
+                <logo heightLogo="80" alternativePercentage="40%" :isDark="true" class="display-flex justify-content-center"></logo>
                 <!-- <img :width="width_img" :height="height_img" class="center padding-vertical margin-vertical margin-horizontal" :src="logo" alt /> -->
             </f7-block>
             <f7-block class="display-flex justify-content-center no-margin" :class="theme.class_bg_body">

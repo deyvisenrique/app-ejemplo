@@ -38,7 +38,7 @@
         </g>
       </svg>
     </template>
-    <img v-else :src="alternative_logo" alt="FacturaloPeru" width="40%" />
+    <img v-else :src="alternative_logo" alt="FacturaloPeru" :width="alternativePercentage" />
   </div>
 </template>
 
@@ -49,7 +49,7 @@
   export default {
     mixins: [general_functions],
     name: "Logo",
-    props: ["isDark", "heightLogo"],
+    props: ["isDark", "heightLogo", "alternativePercentage"],
     data: function () {
       return {
         theme: {},

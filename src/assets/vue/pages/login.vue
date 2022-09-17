@@ -3,9 +3,7 @@
         <f7-block class="no-margin-vertical padding-vertical" :class="theme.class_bg_header" :color="theme.name_color_theme">
             <f7-row>
                 <f7-col width="100">
-                    <p class="text-align-center">
-                        <logo heightLogo="60"></logo>
-                    </p>
+                        <logo heightLogo="40" alternativePercentage="25%" class="display-flex justify-content-center"></logo>
                 </f7-col>
             </f7-row>
         </f7-block>
