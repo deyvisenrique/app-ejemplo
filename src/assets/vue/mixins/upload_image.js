@@ -18,7 +18,8 @@ export const upload_image = {
 
                             if(response.data.success)
                             {
-                                this.form.temp_path = data.temp_image
+                                this.form.temp_path = data.temp_path
+                                // this.form.temp_path = data.temp_image
                                 this.form.image_url = data.temp_image
                                 this.form.image = data.filename
                             }
