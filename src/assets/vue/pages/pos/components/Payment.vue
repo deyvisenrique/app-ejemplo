@@ -449,7 +449,7 @@
             </f7-fab>
         </div>
 
-        <pdf-direct-print ref="pdf_direct_print"></pdf-direct-print>
+        <pdf-direct-print ref="pdf_direct_print" :document="form" :response="response_data" :payments="payment_conditions"></pdf-direct-print>
 
         <f7-popup class="demo-popup" :opened="popupCustomerOpened" @popup:closed="popupCustomerOpened = false">
             <customer-form :codeType="form.document_type_id" :customerId="form.customer_id" :showDialog.sync="popupCustomerOpened" ref="form_customer_car" @addCustomerCar="addCustomer"></customer-form>
@@ -524,6 +524,8 @@
                 configuration: {},
                 payment_destination_id: null,
                 theme: {},
+
+                response_data: {},
             }
         },
         computed: {
@@ -635,6 +637,7 @@
 
                         if (data.success)
                         {
+                            this.response_data = data.data
                             this.showDialogOptions(data)
                             this.storeCashDocument(data.data.id)
                         }
@@ -749,6 +752,7 @@
 
                         if (data.success)
                         {
+                            this.response_data = data.data
                             this.showDialogOptions(data)
                             this.storeCashDocument(data.data.id)
                         }
