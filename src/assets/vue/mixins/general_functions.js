@@ -283,7 +283,7 @@ export const general_functions = {
                 name_color_theme: this.general_theme.name_color_theme,
                 class_button_color: this.general_theme.class_button_color,
             }
-        }
+        },
     }
 }
 

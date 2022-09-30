@@ -105,36 +105,67 @@
             },
             printFromText()
             {
-                console.log(this.document)
-                console.log(this.response)
+                const company = this.getStorage('company', true)
+                let customer_document_type = 'RUC'
+                switch (this.document.datos_del_cliente_o_receptor.codigo_tipo_documento_identidad) {
+                    case 1:
+                        customer_document_type = 'DNI'
+                        break;
+                    case 0:
+                        customer_document_type = 'Doc.trib.no.dom.sin.ruc'
+                        break;
+                    default:
+                        customer_document_type = 'RUC'
+                        break;
+                }
+                let document_type_description = 'FACTURA ELECTRÓNICA'
+                switch (this.document.document_type_id) {
+                    case '03':
+                        customer_document_type = 'BOLETA DE VENTA ELECTRÓNICA'
+                        break;
+                    case '80':
+                        customer_document_type = 'NOTA DE VENTA'
+                        break;
+                    default:
+                        document_type_description = 'FACTURA ELECTRÓNICA'
+                        break;
+                }
+                // console.log(this.document)
+                // console.log(this.response)
 
                 // logo
-                BTPrinter.printImageUrl(function(data){
-                    console.log(data);
-                },function(err){
-                    console.log(err);
-                }, `${this.getStorage('url_logo')}`,'1'); // url, centro
+                // BTPrinter.printBase64(function(data){
+                //     console.log(data);
+                // },function(err){
+                //     console.log(err);
+                // }, this.getStorage('app_logo_base64'),'1'); // url, centro
 
                 // empresa ruc
-                const document_header = `${this.getStorage('api_url')} \n ${this.getStorage('ruc')} \n\n`
+                const document_header = `${company.name} \n ${this.getStorage('ruc')} \n\n`
                 BTPrinter.printTextSizeAlign(function(data){
                     console.log(data)
                 },function(err){
                     console.log(err)
-                }, document_header,'11','1')//string, size:Reduzided Double height size, align:centro
+                }, document_header,'10','1') //string, size:Reduzided Double height size, align:centro
 
-                // empresa info (no obtenido todavia)
+                // empresa info
+                const document_company = `DIRECCION: ${company.address} \nCENTRAL TELEFONICA: ${company.phone} \nEMAIL: ${company.email} \n`
+                BTPrinter.printTextSizeAlign(function(data){
+                    console.log(data)
+                },function(err){
+                    console.log(err)
+                }, document_company,'0','1')//string, size:normal size, align:centro
 
                 // tipo y numero de documento
-                const document_number = `${this.response.number} \n\n`
+                const document_number = `${document_type_description} \n${this.response.number} \n\n`
                 BTPrinter.printTextSizeAlign(function(data){
                     console.log(data)
                 },function(err){
                     console.log(err)
-                }, document_number,'11','1')//string, size:Reduzided Double height size, align:centro
+                }, document_number,'10','1')//string, size: Double height size, align:centro
 
                 // cliente
-                const document_customer = `FECHA DE EMISIÓN: ${this.document.date_of_issue} \n F. VENCIMIENTO: ${this.document.date_of_issue} \n CLIENTE: ${this.document.datos_del_cliente_o_receptor.apellidos_y_nombres_o_razon_social} \n ${this.document.datos_del_cliente_o_receptor.codigo_tipo_documento_identidad}: ${this.document.datos_del_cliente_o_receptor.numero_documento}\n\n`
+                const document_customer = `FECHA DE EMISION: ${this.document.date_of_issue} \nF. VENCIMIENTO: ${this.document.date_of_issue} \nCLIENTE: ${this.document.datos_del_cliente_o_receptor.apellidos_y_nombres_o_razon_social} \n${customer_document_type}: ${this.document.datos_del_cliente_o_receptor.numero_documento}\n\n`
                 BTPrinter.printText(function(data){
                     console.log(data)
                 },function(err){
@@ -143,7 +174,7 @@
 
                 // items
                 this.document.items.forEach(element => {
-                    let item_desc = `${element.item.description}`
+                    let item_desc = `${element.item.description}\n`
                     let item_amounts = `${element.quantity} ${element.item.unit_type_id}    ${element.item.unit_price}    ${element.total}`
 
                     BTPrinter.printText(function(data){
@@ -159,7 +190,7 @@
                 })
 
                 // totales
-                const document_totals = `OP. GRAVADAS: ${this.document.currency_type_id == 'PEN' ? 'S/' : this.document.currency_type_id} ${this.document.total_taxed} \n IGV: ${this.document.currency_type_id == 'PEN' ? 'S/' : this.document.currency_type_id} ${this.document.total_taxes} \n TOTAL: ${this.document.currency_type_id == 'PEN' ? 'S/' : this.document.currency_type_id} ${this.document.total}`
+                const document_totals = `OP. GRAVADAS: ${this.document.currency_type_id == 'PEN' ? 'S/' : this.document.currency_type_id} ${this.document.total_taxed}\nIGV: ${this.document.currency_type_id == 'PEN' ? 'S/' : this.document.currency_type_id} ${this.document.total_taxes}\nTOTAL: ${this.document.currency_type_id == 'PEN' ? 'S/' : this.document.currency_type_id} ${this.document.total}`
                 BTPrinter.printTextSizeAlign(function(data){
                     console.log(data)
                 },function(err){
@@ -167,19 +198,19 @@
                 }, document_totals,'0','2') // string, normal size, align: right
 
                 // info extra
-                const document_footer = `SON: ${this.response.number_to_letter} \n VENDEDOR: ${this.getStorage('user_name')} \n HASH: ${this.response.hash}`
-                BTPrinter.printText(function(data){
+                const document_footer = `SON: ${this.response.number_to_letter} \nVENDEDOR: ${this.getStorage('user_name')} \nHASH: ${this.response.hash}`
+                BTPrinter.printTextSizeAlign(function(data){
                     console.log(data)
                 },function(err){
                     console.log(err)
-                }, document_footer)
+                }, document_footer, '1', '0')
 
                 // pagos
                 BTPrinter.printText(function(data){
                     console.log(data)
                 },function(err){
                     console.log(err)
-                }, "Pagos")
+                }, 'PAGOS\n')
                 this.document.payments.forEach(element => {
                     let payment = this.payments.find(pay => pay.id == this.document.payment_condition_id)
                     let pay_description = `${payment.name} - ${element.payment}`
@@ -187,7 +218,7 @@
                         console.log(data)
                     },function(err){
                         console.log(err)
-                    }, pay_description,'0','1') // string, normal size, align: left
+                    }, pay_description,'1','0') // string, normal size, align: left
                 })
 
                 // qr code
@@ -196,6 +227,14 @@
                 },function(err){
                     console.log(err);
                 }, this.response.qr,'1'); //base64 string, align:center
+
+                // buscar
+                const document_search = `\nPara consultar el comprobante ingresar a ${this.getStorage('api_url')}/buscar\n\n\n`
+                BTPrinter.printTextSizeAlign(function(data){
+                    console.log(data)
+                },function(err){
+                    console.log(err)
+                }, document_search, '1', '0')
 
             },
             getFormatPdf(document_type, param_format)

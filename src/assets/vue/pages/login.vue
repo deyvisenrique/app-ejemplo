@@ -149,10 +149,11 @@
                 }
 
             },
-            saveToken(token, name, email, ruc = null, logo = null) {
+            saveToken(token, name, email, ruc = null, logo = null, app_logo_base64 = null) {
                 localStorage.api_token = token;
                 localStorage.user_name = name;
                 localStorage.user_email = email;
+                localStorage.app_logo_base64 = app_logo_base64;
 
                 localStorage.api_url = `${this.internet_protocol}${this.url}`
 
@@ -194,9 +195,10 @@
 
                         if (data.success)
                         {
-                            self.saveToken(data.token, data.name, data.email, data.ruc, data.app_logo);
+                            self.saveToken(data.token, data.name, data.email, data.ruc, data.app_logo, data.app_logo_base64)
+                            self.setStorage('company', data.company, true)
                             if (data.app_configuration) self.setStorage('app_configuration', data.app_configuration, true)
-                            self.$f7router.navigate("/");
+                            self.$f7router.navigate("/")
                         }
                         else
                         {
