@@ -2,7 +2,7 @@
 <div>
 
     <template v-if="currentShowLogoConfiguration">
-        <f7-block :class="theme.class_bg_header" class="no-margin-vertical padding-vertical">
+        <f7-block :class="theme.class_bg_header" class="no-margin-vertical padding-top">
             <f7-row class="display-flex align-items-center">
                 <f7-col width="33">
                     <f7-link href="/" v-if="theme.theme_color != 'white'">
@@ -23,7 +23,7 @@
         </f7-block>
     </template>
 
-    <f7-block :class="theme.class_bg_header" class="padding-vertical no-margin-vertical" v-if="title">
+    <f7-block :class="theme.class_bg_header" class="no-margin-vertical padding-bottom" v-if="title">
         <f7-row class="display-flex align-items-center">
             <f7-col width="10">
 

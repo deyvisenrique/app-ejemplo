@@ -68,7 +68,7 @@
                                                     <input :type="is_type_password ? 'password':'text'" placeholder="Contraseña" required validate v-model="password">
                                                 </div>
                                                 <div class="item-title item-label custom-w10">
-                                                    <i class="f7-icons field-icon" @click="clickShowPassword">eye</i>
+                                                    <i class="fas" :class="icon_class_eye" @click="clickShowPassword"></i>
                                                 </div>
                                             </div>
 
@@ -114,6 +114,7 @@
                 internet_protocol: 'https://',
                 is_type_password: true,
                 theme: {},
+                icon_class_eye: 'fa-eye-slash'
             };
         },
         created() {
@@ -130,6 +131,11 @@
         methods: {
             clickShowPassword(){
                 this.is_type_password = !this.is_type_password
+                if(this.is_type_password){
+                    this.icon_class_eye = 'fa-eye-slash'
+                } else {
+                    this.icon_class_eye = 'fa-eye'
+                }
             },
             setStorageApiUrl(){
 
