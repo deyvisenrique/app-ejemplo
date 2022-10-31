@@ -2,7 +2,7 @@
   "_from": "cordova-plugin-zip@>=3.1.0",
   "_id": "cordova-plugin-zip@3.1.0",
   "_inBundle": false,
-  "_integrity": "sha1-F2yCSOog058c+VnvXmFWrMqWshc=",
+  "_integrity": "sha512-N+8G3KlBlVV4GcGubyhz0Z+mZ8UiLsJknoLL4KcmlLxpb6RnndheXusCWt1G999+y+O88P1fpcr77+lKq55QZQ==",
   "_location": "/cordova-plugin-zip",
   "_phantomChildren": {},
   "_requested": {
@@ -16,13 +16,13 @@
     "fetchSpec": ">=3.1.0"
   },
   "_requiredBy": [
-    "#USER",
-    "/"
+    "#DEV:/",
+    "#USER"
   ],
   "_resolved": "https://registry.npmjs.org/cordova-plugin-zip/-/cordova-plugin-zip-3.1.0.tgz",
   "_shasum": "176c8248ea20d39f1cf959ef5e6156acca96b217",
   "_spec": "cordova-plugin-zip@>=3.1.0",
-  "_where": "D:\\Proyectos\\softwarefactory\\facturalo_app",
+  "_where": "C:\\laragon\\www\\app-2.0",
   "author": "",
   "bugs": {
     "url": "https://github.com/MobileChromeApps/zip/issues"

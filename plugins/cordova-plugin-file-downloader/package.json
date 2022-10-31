@@ -16,13 +16,13 @@
     "fetchSpec": "latest"
   },
   "_requiredBy": [
-    "#USER",
-    "/"
+    "#DEV:/",
+    "#USER"
   ],
   "_resolved": "https://registry.npmjs.org/cordova-plugin-file-downloader/-/cordova-plugin-file-downloader-0.4.0.tgz",
   "_shasum": "72d95be57a396cba181bffde6541d17c55bf8857",
   "_spec": "cordova-plugin-file-downloader",
-  "_where": "D:\\Proyectos\\softwarefactory\\facturalo_app",
+  "_where": "C:\\laragon\\www\\app-2.0",
   "author": {
     "name": "Fabian Strachanski, Manuel Ramon Lopez Torres"
   },

@@ -16,13 +16,13 @@
     "fetchSpec": "~0.3.3"
   },
   "_requiredBy": [
-    "#USER",
-    "/"
+    "#DEV:/",
+    "#USER"
   ],
   "_resolved": "https://registry.npmjs.org/cordova-plugin-file-md5/-/cordova-plugin-file-md5-0.3.3.tgz",
   "_shasum": "bff81be92b252a66b278dde7502d23972a8f146d",
   "_spec": "cordova-plugin-file-md5@~0.3.3",
-  "_where": "D:\\Proyectos\\softwarefactory\\facturalo_app",
+  "_where": "C:\\laragon\\www\\app-2.0",
   "author": {
     "name": "Fabian Strachanski, Manuel Ramon Lopez Torres"
   },

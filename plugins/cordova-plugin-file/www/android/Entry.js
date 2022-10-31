@@ -19,12 +19,15 @@
  *
 */
 
-/* global FILESYSTEM_PREFIX: true, module */
-
-FILESYSTEM_PREFIX = 'file:///';
-
 module.exports = {
-    __format__: function (fullPath) {
-        return (FILESYSTEM_PREFIX + this.name + (fullPath[0] === '/' ? '' : '/') + FileSystem.encodeURIPath(fullPath));
+    /**
+   * Return a URL that can be used to identify this entry.
+   * Use a URL that can be used to as the src attribute of a <video> or
+   * <audio> tag. If that is not possible, construct a http(s)://(localhost) URL.
+   */
+    toURL: function () {
+        return window.location.origin.includes('file://')
+            ? this.nativeURL
+            : this.toInternalURL();
     }
 };

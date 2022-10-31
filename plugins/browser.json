@@ -8,51 +8,48 @@
   },
   "installed_plugins": {
     "cordova-plugin-android-permissions": {
-      "PACKAGE_NAME": "com.example.facturalo"
+      "PACKAGE_NAME": "io.cordova.hellocordova"
+    },
+    "cordova-plugin-androidx-adapter": {
+      "PACKAGE_NAME": "io.cordova.hellocordova"
     },
     "cordova-plugin-btprinter": {
-      "PACKAGE_NAME": "com.example.facturalo"
+      "PACKAGE_NAME": "io.cordova.hellocordova"
     },
     "cordova-plugin-downloadmanager": {
-      "PACKAGE_NAME": "com.example.facturalo"
+      "PACKAGE_NAME": "io.cordova.hellocordova"
     },
     "cordova-plugin-file-downloader": {
-      "PACKAGE_NAME": "com.example.facturalo"
+      "PACKAGE_NAME": "io.cordova.hellocordova"
     },
     "cordova-plugin-file-opener2": {
-      "PACKAGE_NAME": "com.example.facturalo"
+      "PACKAGE_NAME": "io.cordova.hellocordova"
     },
     "cordova-plugin-file-transfer": {
-      "PACKAGE_NAME": "com.example.facturalo"
+      "PACKAGE_NAME": "io.cordova.hellocordova"
     },
     "cordova-plugin-inappbrowser": {
-      "PACKAGE_NAME": "com.example.facturalo"
+      "PACKAGE_NAME": "io.cordova.hellocordova"
     },
     "cordova-plugin-printer": {
-      "PACKAGE_NAME": "com.example.facturalo"
-    },
-    "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "com.example.facturalo"
-    },
-    "phonegap-plugin-barcodescanner": {
-      "PACKAGE_NAME": "com.example.facturalo"
+      "PACKAGE_NAME": "io.cordova.hellocordova"
     }
   },
   "dependent_plugins": {
     "cordova-plugin-camera": {
-      "PACKAGE_NAME": "com.example.facturalo"
+      "PACKAGE_NAME": "io.cordova.hellocordova"
     },
     "cordova-plugin-file": {
-      "PACKAGE_NAME": "com.example.facturalo"
+      "PACKAGE_NAME": "io.cordova.hellocordova"
     },
     "cordova-plugin-network-information": {
-      "PACKAGE_NAME": "com.example.facturalo"
+      "PACKAGE_NAME": "io.cordova.hellocordova"
     },
     "cordova-plugin-zip": {
-      "PACKAGE_NAME": "com.example.facturalo"
+      "PACKAGE_NAME": "io.cordova.hellocordova"
     },
     "cordova-plugin-file-md5": {
-      "PACKAGE_NAME": "com.example.facturalo"
+      "PACKAGE_NAME": "io.cordova.hellocordova"
     }
   }
 }

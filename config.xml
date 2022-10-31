@@ -1,15 +1,17 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.example.facturalo" version="2.2.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <preference name="android-minSdkVersion" value="19"/>
+    <widget id="com.facturaloperu.appfacturalo" android-packageName="com.facturaloperu.appfacturalo" version="2.2.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <preference name="android-minSdkVersion" value="31"/>
+    <preference name="android-targetSdkVersion" value="32"/>
+    <preference name="android-compileSdkVersion" value="32"/>
     <preference name="DisallowOverscroll" value="true"/>
     <hook src="hooks/hookers.js" type="before_prepare"/>
     <hook src="hooks/beforedep.js" type="before_deploy"/>
-    <name>Facturalo</name>
+    <name>FacturaloPeru</name>
     <description>
-        Brand new cordova project!
+        Aplicacion de facturacion electronica
     </description>
     <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+        Facturalo Peru Team
     </author>
     <content src="index.html"/>
     <access origin="*"/>
@@ -22,8 +24,8 @@
     <platform name="android">
         <allow-intent href="market:*"/>
         <icon src="res/icon/icon.png"/>
-        <preference name="android-targetSdkVersion" value="22"/>
-        <preference name="android-minSdkVersion" value="22"/>
+        <preference name="android-targetSdkVersion" value="32"/>
+        <preference name="android-minSdkVersion" value="31"/>
         <access launch-external="yes" origin="whatsapp//*"/>
     </platform>
     <platform name="ios">
