@@ -1,40 +1,40 @@
 <template>
 <f7-page class="">
     <f7-block class="no-margin-top" :class="theme.class_bg_header">
-        <f7-block class="text-align-right no-margin-top padding-top">
-            <f7-link panel-close :class="theme.class_menu_text_color"><i class="fas fa-times"></i></f7-link>
-        </f7-block>
         <f7-block class="no-margin-vertical">
-
             <f7-row>
                 <f7-col width="75">
                     <p :class="theme.class_header_text_color">
                         <f7-icon material="check_circle" size="48px"></f7-icon>
                     </p>
-
                 </f7-col>
                 <f7-col width="25">
-                    <p v-show="notifications.documents_not_sent > 0">
-                        <a href="#" class="link navbar-tooltip-not-sent" :class="theme.class_menu_text_color">
-                            <f7-icon material="notifications" size="22px">
-                                <span :class="theme.theme_color == 'red' ? 'bg-secondary' : ''" class="badge color-red elevation-8">{{ notifications.documents_not_sent }}</span>
-                            </f7-icon>
-                        </a>
-                    </p>
-
-                    <p v-show="notifications.documents_regularize_shipping > 0">
-                        <a href="#" class="link navbar-tooltip-regularize-shipping" :class="theme.class_header_text_color">
-                            <f7-icon material="warning" size="22px">
-                                <span :class="theme.theme_color == 'red' ? 'bg-secondary' : ''" class="badge color-red">{{ notifications.documents_regularize_shipping }}</span>
-                            </f7-icon>
-                        </a>
-                    </p>
+                    <f7-block class="text-align-right no-margin-top padding-top">
+                        <f7-link panel-close :class="theme.class_menu_text_color"><i class="fas fa-times"></i></f7-link>
+                    </f7-block>
                 </f7-col>
             </f7-row>
-
         </f7-block>
         <f7-block class="no-margin-top padding-bottom">
             <p :class="theme.class_header_text_color">{{user}} <br> {{email}}</p>
+        </f7-block>
+        <f7-block class="padding-bottom">
+            <template v-if="notifications.documents_not_sent > 0 || notifications.documents_regularize_shipping > 0">
+                Notificaciones
+            </template>
+            <p v-show="notifications.documents_not_sent > 0">
+                <a href="#" class="link" :class="theme.class_menu_text_color">
+                    <span :class="theme.theme_color == 'red' ? 'bg-secondary' : ''" class="badge color-red elevation-8">{{ notifications.documents_not_sent }}</span>
+                    &nbsp;Comprobantes pendiente de envío
+                </a>
+            </p>
+
+            <p v-show="notifications.documents_regularize_shipping > 0">
+                <a href="#" class="link navbar-tooltip-regularize-shipping" :class="theme.class_header_text_color">
+                    <span :class="theme.theme_color == 'red' ? 'bg-secondary' : ''" class="badge color-red">{{ notifications.documents_regularize_shipping }}</span>
+                    &nbsp;Comprobantes pendientes de rectificación
+                </a>
+            </p>
         </f7-block>
     </f7-block>
     <f7-block class="margin-left">
@@ -167,12 +167,12 @@
             this.events()
             this.checkPosMode()
         },
-        computed: { 
+        computed: {
             showBlockFooter()
             {
                 const all_permissions = this.getAllPermissions()
                 const check_all_permissions = all_permissions ? all_permissions : []
-                
+
                 return this.check_is_pos_mode && check_all_permissions.length > 5
             }
         },
@@ -196,7 +196,7 @@
                 this.$eventHub.$on('updatePermissions', (permissions) => {
                     this.current_permissions = permissions
                 })
-                
+
                 this.$eventHub.$on('appMode', (is_pos_mode) => {
                     this.checkPosMode(is_pos_mode)
                 })
@@ -240,9 +240,9 @@
                 })
 
             },
-            go(type) 
+            go(type)
             {
-                switch (type) 
+                switch (type)
                 {
                     case 'login':
                         this.redirectRoute('/configuration/')
@@ -263,7 +263,7 @@
             {
                 if(this.check_is_pos_mode)
                 {
-                    switch(type) 
+                    switch(type)
                     {
                         case 'pos':
                             this.redirectMainRoute('/list-items-sale/')
@@ -297,7 +297,7 @@
                             break
                     }
 
-            
+
                     if(this.isRedirectMainView(type))
                     {
                         this.$eventHub.$emit('closePanel')

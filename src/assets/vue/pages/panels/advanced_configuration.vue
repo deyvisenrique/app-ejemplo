@@ -1,18 +1,22 @@
 <template>
     <f7-page>
         <f7-block class="no-margin-top" :class="theme.class_bg_header">
-            <f7-block class="text-align-right no-margin-top padding-top">
-                <f7-link class="transparent panel-previous" :class="theme.class_menu_text_color" @click="back">
-                <i class="fas fa-times"></i>
-                </f7-link>
-            </f7-block>
             <f7-block class="no-margin-vertical">
-                <p :class="theme.class_header_text_color">
-                <f7-icon material="settings" size="44px" class="padding-right"></f7-icon>
-                </p>
-            </f7-block>
-            <f7-block class="no-margin-top padding-bottom">
-                <p :class="theme.class_header_text_color">Configuración</p>
+                <f7-row>
+                    <f7-col width="75">
+                        <p :class="theme.class_header_text_color">
+                            <f7-icon material="settings" size="44px" class="padding-right"></f7-icon>
+                        </p>
+                        <p :class="theme.class_header_text_color">Configuración</p>
+                    </f7-col>
+                    <f7-col width="25">
+                        <f7-block class="text-align-right no-margin-top padding-top">
+                            <f7-link class="transparent panel-previous" :class="theme.class_menu_text_color" @click="back">
+                                <i class="fas fa-times"></i>
+                            </f7-link>
+                        </f7-block>
+                    </f7-col>
+                </f7-row>
             </f7-block>
         </f7-block>
         <f7-block class="no-padding-horizontal">

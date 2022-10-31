@@ -116,7 +116,7 @@
                                 <table>
                                     <tbody>
                                         <tr v-for="(row, index) in form.payments" :key="index">
-                                            <td>
+                                            <td width="49%">
 
                                                 <div class="item-content item-input no-padding-horizontal">
                                                     <div class="item-inner no-padding-horizontal">
@@ -133,7 +133,7 @@
                                             </td>
                                             <td>
 
-                                                <div class="item-content item-input no-padding-horizontal">
+                                                <div class="item-content item-input no-padding-horizontal" style="margin-left:10px;">
                                                     <div class="item-inner no-padding-horizontal">
                                                         <div class="item-title item-label" v-if="index === 0">Monto a pagar</div>
                                                         <div class="item-input-wrap">
@@ -333,7 +333,7 @@
                                         <tbody>
                                             <tr v-for="(row, index) in form.payments" :key="index">
 
-                                                <td  style="width:50% !important">
+                                                <td  style="width:52% !important">
                                                     <div class="item-content item-input no-padding-horizontal">
                                                         <div class="item-inner no-padding-horizontal">
                                                             <div class="item-title item-label" v-if="index === 0">Método de pago</div>
@@ -349,7 +349,7 @@
                                                 </td>
                                                 <td  style="width:50% !important">
 
-                                                    <div class="item-content item-input no-padding-horizontal">
+                                                    <div class="item-content item-input no-padding-horizontal" style="margin-left:15px;">
                                                         <div class="item-inner no-padding-horizontal">
                                                             <div class="item-title item-label" v-if="index === 0"> Monto a pagar</div>
                                                             <div class="item-input-wrap" >
