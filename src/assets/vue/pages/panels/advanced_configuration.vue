@@ -136,12 +136,14 @@
             }
         },
         async created() {
+
             await this.events()
             await this.checkPosMode()
             await this.initForm()
             await this.getInitialSettings()
             await this.initData()
             await this.initDirectPrint()
+
         },
         mounted(){
         },
@@ -255,10 +257,10 @@
                     this.listDevices()
                 }
             },
-            listDevices()
+            btPrinterList()
             {
                 const context = this
-
+                
                 BTPrinter.list(
                     function(data)
                     {
@@ -269,6 +271,58 @@
                         context.showAlert(`Ocurrió un error al listar los dispositivos: ${error}`)
                     }
                 )
+            },
+            listDevices()
+            {
+                const context = this
+                const permissions = cordova.plugins.permissions
+
+                // alert("xd:  "+JSON.stringify(permissions))
+                // alert("BLUETOOTH_SCAN:  "+permissions.BLUETOOTH_SCAN)
+                // alert("BLUETOOTH_CONNECT:  "+permissions.BLUETOOTH_CONNECT)
+                
+                
+                permissions.hasPermission(
+                    permissions.BLUETOOTH_CONNECT, 
+                    function(status)
+                    {
+                        if (status.hasPermission) 
+                        {
+                            // alert("Yes :D ")
+                            context.btPrinterList()
+                        }
+                        else
+                        {
+                            // alert("No :( ")
+
+                            permissions.requestPermission(
+                                permissions.BLUETOOTH_CONNECT, 
+                                function(status)
+                                {
+                                    if(!status.hasPermission) return alert("Error al solicitar permiso: "+JSON.stringify(status))
+                                    context.btPrinterList()
+                                }
+                                , 
+                                function()
+                                {
+                                    alert('El permiso BLUETOOTH no está activado.')
+                                }
+                            )
+
+                        }
+                    }
+                )
+
+                // BTPrinter.list(
+                //     function(data)
+                //     {
+                //         context.setDevicesData(data)
+                //     },
+                //     function(error)
+                //     {
+                //         context.showAlert(`Ocurrió un error al listar los dispositivos: ${error}`)
+                //     }
+                // )
             },
             initData()
             {

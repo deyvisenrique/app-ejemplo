@@ -1,6 +1,6 @@
 {
   "name": "com.facturaloperu.appfacturalo",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "Brand new cordova project with framework7 - vue - webpack!",
   "scripts": {
     "default": "echo \"There is no scripts you can run with npm run command.\" && exit 1"
