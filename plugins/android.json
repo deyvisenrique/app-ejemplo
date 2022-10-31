@@ -19,9 +19,6 @@
     "cordova-plugin-downloadmanager": {
       "PACKAGE_NAME": "com.facturaloperu.appfacturalo"
     },
-    "cordova-plugin-file-downloader": {
-      "PACKAGE_NAME": "com.facturaloperu.appfacturalo"
-    },
     "cordova-plugin-file-opener2": {
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
       "PACKAGE_NAME": "com.facturaloperu.appfacturalo"
@@ -44,15 +41,6 @@
     },
     "cordova-plugin-file": {
       "ANDROIDX_WEBKIT_VERSION": "1.4.0",
-      "PACKAGE_NAME": "com.facturaloperu.appfacturalo"
-    },
-    "cordova-plugin-network-information": {
-      "PACKAGE_NAME": "com.facturaloperu.appfacturalo"
-    },
-    "cordova-plugin-zip": {
-      "PACKAGE_NAME": "com.facturaloperu.appfacturalo"
-    },
-    "cordova-plugin-file-md5": {
       "PACKAGE_NAME": "com.facturaloperu.appfacturalo"
     }
   }

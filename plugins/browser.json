@@ -19,9 +19,6 @@
     "cordova-plugin-downloadmanager": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
-    "cordova-plugin-file-downloader": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
     "cordova-plugin-file-opener2": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
@@ -40,15 +37,6 @@
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
     "cordova-plugin-file": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
-    "cordova-plugin-network-information": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
-    "cordova-plugin-zip": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
-    "cordova-plugin-file-md5": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     }
   }
