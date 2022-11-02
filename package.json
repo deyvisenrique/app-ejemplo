@@ -35,6 +35,7 @@
     "html-webpack-plugin": "^3.2.0",
     "node-sass": "^4.12.0",
     "path": "^0.12.7",
+    "phonegap-plugin-barcodescanner": "^8.1.0",
     "sass-loader": "^8.0.0",
     "style-loader": "^1.0.2",
     "svg-url-loader": "^3.0.3",
@@ -83,7 +84,10 @@
       "cordova-plugin-printer": {
         "ANDROID_SUPPORT_V4_VERSION": "28.+"
       },
-      "cordova-plugin-file-transfer": {}
+      "cordova-plugin-file-transfer": {},
+      "phonegap-plugin-barcodescanner": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      }
     },
     "platforms": [
       "browser",

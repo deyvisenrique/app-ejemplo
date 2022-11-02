@@ -30,6 +30,9 @@
     },
     "cordova-plugin-printer": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
+    },
+    "phonegap-plugin-barcodescanner": {
+      "PACKAGE_NAME": "io.cordova.hellocordova"
     }
   },
   "dependent_plugins": {

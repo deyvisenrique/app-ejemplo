@@ -32,6 +32,10 @@
     "cordova-plugin-printer": {
       "ANDROID_SUPPORT_V4_VERSION": "28.+",
       "PACKAGE_NAME": "com.facturaloperu.appfacturalo"
+    },
+    "phonegap-plugin-barcodescanner": {
+      "ANDROID_SUPPORT_V4_VERSION": "27.+",
+      "PACKAGE_NAME": "com.facturaloperu.appfacturalo"
     }
   },
   "dependent_plugins": {
