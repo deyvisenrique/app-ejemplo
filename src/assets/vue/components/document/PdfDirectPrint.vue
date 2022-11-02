@@ -147,7 +147,7 @@
                 },function(err){
                     console.log(err)
                 }, title,'20','1') //string, size: Double height size, align:centro
-                const title = `${this.getStorage('ruc')} \n\n`
+                // const title = `${this.getStorage('ruc')} \n\n`
                 BTPrinter.printTextSizeAlign(function(data){
                     console.log(data)
                 },function(err){
