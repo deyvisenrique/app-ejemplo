@@ -147,12 +147,12 @@
                 },function(err){
                     console.log(err)
                 }, title,'20','1') //string, size: Double height size, align:centro
-                // const title = `${this.getStorage('ruc')} \n\n`
+                const ruc = `${this.getStorage('ruc')} \n\n`
                 BTPrinter.printTextSizeAlign(function(data){
                     console.log(data)
                 },function(err){
                     console.log(err)
-                }, document_header,'10','1') //string, size:Reduzided Double height size, align:centro
+                }, ruc,'10','1') //string, size:Reduzided Double height size, align:centro
 
                 // empresa info
                 const document_company = `DIRECCION: ${company.address} \nCENTRAL TELEFONICA: ${company.phone} \nEMAIL: ${company.email} \n`
