@@ -141,7 +141,13 @@
                 // }, this.getStorage('app_logo_base64'),'1'); // url, centro
 
                 // empresa ruc
-                const document_header = `${company.name} \n ${this.getStorage('ruc')} \n\n`
+                const title = `${company.name} \n`
+                BTPrinter.printTextSizeAlign(function(data){
+                    console.log(data)
+                },function(err){
+                    console.log(err)
+                }, title,'20','1') //string, size: Double height size, align:centro
+                const title = `${this.getStorage('ruc')} \n\n`
                 BTPrinter.printTextSizeAlign(function(data){
                     console.log(data)
                 },function(err){

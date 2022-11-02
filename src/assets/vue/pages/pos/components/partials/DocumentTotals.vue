@@ -22,22 +22,28 @@
 
                 <f7-row>
                     <f7-col>
-                        <h4>OP. Gravada</h4>
-                        <h4>IGV</h4>
-                        <h4>Descuentos</h4>
-                        <h4>Total</h4>
+                        <h4 class="no-margin-vertical">OP. Gravada</h4>
+                        <h4 class="no-margin-vertical">IGV</h4>
+                        <h4 class="no-margin-vertical">Descuentos</h4>
                         <template v-if="paymentChange > 0 && isCashPayment">
-                            <p>Vuelto</p>
+                            <p class="no-margin-vertical">Vuelto</p>
                         </template>
                     </f7-col>
                     <f7-col class="text-align-right">
-                        <h4>{{currencyTypeSymbol}} {{form.total_taxed}}</h4>
-                        <h4>{{currencyTypeSymbol}} {{form.total_igv}}</h4>
-                        <h4>{{currencyTypeSymbol}} {{form.total_discount}}</h4>
-                        <h4>{{currencyTypeSymbol}} {{form.total}}</h4>
+                        <h4 class="no-margin-vertical text-white">{{currencyTypeSymbol}} {{form.total_taxed}}</h4>
+                        <h4 class="no-margin-vertical text-white">{{currencyTypeSymbol}} {{form.total_igv}}</h4>
+                        <h4 class="no-margin-vertical text-white">{{currencyTypeSymbol}} {{form.total_discount}}</h4>
                         <template v-if="paymentChange > 0 && isCashPayment">
-                            <p>{{currencyTypeSymbol}} {{paymentChange}}</p>
+                            <p class="no-margin-vertical text-white">{{currencyTypeSymbol}} {{paymentChange}}</p>
                         </template>
+                    </f7-col>
+                </f7-row>
+                <f7-row class="border">
+                    <f7-col>
+                        <h3 class="no-margin-bottom text-color-black">Total</h3>
+                    </f7-col>
+                    <f7-col class="text-align-right">
+                        <h3 class="no-margin-bottom text-color-black">{{currencyTypeSymbol}} {{form.total}}</h3>
                     </f7-col>
                 </f7-row>
 
