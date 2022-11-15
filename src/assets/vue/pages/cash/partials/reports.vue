@@ -68,8 +68,15 @@
             },
             async changeOption(option){
                 
+                // await this.showLoading()
+                // await this.generalSleep(300)
+                // await this.hideLoading()
+                // await this.downloadFileInAppBrowser(option.url)
+
                 await this.showLoading()
-                await this.downloadOpenFile(option.url, option.filename, true)
+                await this.generalSleep(500)
+                // await this.downloadOpenFile(option.url, option.filename, true)
+                await this.downloaFileToPrint(option.url, option.filename, true) //definido en mixin download_file
                 await this.hideLoading()
 
             },
@@ -85,12 +92,12 @@
                             {
                                 title: 'PDF A4',
                                 url: `${base_url}/general-report/${this.recordId}`,
-                                filename: `${this.recordId}-general-report-a4.${extension}`
+                                filename: `${this.recordId}_general_report_a4.${extension}`
                             },
                             {
                                 title: 'PDF Ticket',
                                 url: `${base_url}/general-report/${this.recordId}/ticket`,
-                                filename: `${this.recordId}-general-report-ticket.${extension}`
+                                filename: `${this.recordId}_general_report_ticket.${extension}`
                             }
                         ]
                     },
@@ -100,7 +107,7 @@
                             {
                                 title: 'PDF A4',
                                 url: `${base_url}/product-report/${this.recordId}`,
-                                filename: `${this.recordId}-product-report.${extension}`
+                                filename: `${this.recordId}_product_report.${extension}`
                             },
                         ]
                     },
@@ -110,12 +117,12 @@
                             {
                                 title: 'Ingresos',
                                 url: `${base_url}/income-summary-report/${this.recordId}`,
-                                filename: `${this.recordId}-income-summary-report.${extension}`
+                                filename: `${this.recordId}_income_summary_report.${extension}`
                             },
                             {
                                 title: 'Ingresos y egresos',
                                 url: `${base_url}/income-egress-report/${this.recordId}`,
-                                filename: `${this.recordId}-income-egress-report.${extension}`
+                                filename: `${this.recordId}_income_egress_report.${extension}`
                             },
                         ]
                     },

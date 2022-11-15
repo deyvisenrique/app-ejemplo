@@ -377,7 +377,7 @@
                                                 <f7-icon class="icon fas fa-envelope"></f7-icon>
                                             </f7-button>
                                         </f7-col>
-                                        <f7-col>
+                                        <!-- <f7-col>
                                             <f7-button @click="download(item.external_id, 'sale-notes', 'a4')" color="lightblue">
                                                 <f7-icon class="icon fas fa-file-pdf"></f7-icon>
                                             </f7-button>
@@ -386,7 +386,7 @@
                                             <f7-button @click="download(item.external_id, 'sale-notes')" color="deeppurple">
                                                 <f7-icon class="icon fas fa-receipt"></f7-icon>
                                             </f7-button>
-                                        </f7-col>
+                                        </f7-col> -->
                                     </f7-row>
                                 </f7-block>
                             </span>
@@ -464,7 +464,7 @@
                                                 <f7-icon class="icon fas fa-envelope"></f7-icon>
                                             </f7-button>
                                         </f7-col>
-                                        <f7-col>
+                                        <!-- <f7-col>
                                             <f7-button @click="download(item.external_id, 'order-notes', 'a4')" color="lightblue">
                                                 <f7-icon class="icon fas fa-file-pdf"></f7-icon>
                                             </f7-button>
@@ -473,7 +473,7 @@
                                             <f7-button @click="download(item.external_id, 'order-notes')" color="deeppurple">
                                                 <f7-icon class="icon fas fa-receipt"></f7-icon>
                                             </f7-button>
-                                        </f7-col>
+                                        </f7-col> -->
                                     </f7-row>
                                 </f7-block>
                             </span>
@@ -854,11 +854,23 @@
             },
             async clickDownloadPdf(row, documentType){
 
-                await this.showLoading()
-                const url =  this.getUrlDownload(row, documentType)
-                await this.downloadOpenFile(url, row.filename)
-                await this.hideLoading()
+                const url =  await this.getUrlDownload(row, documentType)
+                this.downloadFileInAppBrowser(url)
 
+                // await this.showLoading()
+                // const url =  await this.getUrlDownload(row, documentType)
+                // await this.generalSleep(500)
+
+                // const filename = row.id
+                // // const filename = _.replace(row.filename, /-/gi, '')
+                // // console.log("filename:", filename)
+
+                // await this.downloadOpenFile(
+                //     url, 
+                //     filename
+                // )
+
+                // await this.hideLoading()
             },
             setDataFormSearch(type, document_type_id = null, input = null){
 

@@ -54,6 +54,7 @@ export const download_file = {
                 file_url, 
                 (entry) => {
                     context.execFileOpener(file_url)
+                    // context.generalSuccessNotification('Archivo descargado')
                 },  
                 (error) => {
                     context.showAlert('Error al descargar'+JSON.stringify(error))
@@ -63,6 +64,14 @@ export const download_file = {
                 this.getDownloadAuthorization(authorization)
             )
 
+        },
+        downloadFileInAppBrowser(url)
+        {
+            cordova.InAppBrowser.open(
+                url,
+                "_system",
+                "location=yes"
+            )
         },
         execFileOpener(file_url){
 
