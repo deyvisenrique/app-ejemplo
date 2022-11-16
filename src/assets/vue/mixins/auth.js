@@ -20,7 +20,19 @@ export const auth = {
     returnUrLogo()
     {
       return localStorage.url_logo ? localStorage.url_logo : null
-    }
+    },
+    
+    getHttpHeadersDownload(response_type = 'blob') 
+    {
+        return {
+            headers: {
+                "Content-Type": "application/json;charset=UTF-8",
+                Accept: "application/json",
+                Authorization: `Bearer ${localStorage.api_token}`
+            },
+            responseType: response_type
+        }
+    },
 
   }
 }

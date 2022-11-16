@@ -63,21 +63,20 @@
             initData(){
                 this.data = []
             },
-            async open() {
+            async open() 
+            {
                 await this.setData()
             },
-            async changeOption(option){
-                
-                // await this.showLoading()
-                // await this.generalSleep(300)
-                // await this.hideLoading()
-                // await this.downloadFileInAppBrowser(option.url)
 
-                await this.showLoading()
-                await this.generalSleep(500)
-                // await this.downloadOpenFile(option.url, option.filename, true)
-                await this.downloaFileToPrint(option.url, option.filename, true) //definido en mixin download_file
-                await this.hideLoading()
+            async changeOption(option)
+            {
+                await this.saveFileInSystem(option.url, option.filename, true)
+
+                // await this.showLoading()
+                // await this.generalSleep(500)
+                // // await this.downloadOpenFile(option.url, option.filename, true)
+                // await this.downloaFileToPrint(option.url, option.filename, true) //definido en mixin download_file
+                // await this.hideLoading()
 
             },
             setData() {
