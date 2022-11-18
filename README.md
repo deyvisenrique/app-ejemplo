@@ -1,6 +1,6 @@
 <img src="icon_app.jpg" width="120">
 
-# FACTURALOPERU APP 2.0
+# FACTURALOPERU APP PREMIUM 2.2.4
 
 ### Soporte
 
@@ -8,7 +8,7 @@
 
 ### Documentación
 
-* Manual de desarrollo y generación de [APK](https://docs.google.com/document/d/14tM5YKt6GhhNwyEQA5b_EjMUC72XqGPXEPsfo-RDGFM/edit?usp=sharing)
+* Manual de desarrollo y generación de [APK](https://docs.google.com/document/d/1rE14GT34woM323x00DYU7gchYhWZ0DE5K0krubP_frg/edit?usp=share_link)
 
 ### Manual de usuario
 
