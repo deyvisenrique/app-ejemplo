@@ -280,11 +280,6 @@
             {
                 const context = this
                 const permissions = cordova.plugins.permissions
-
-                // alert("xd:  "+JSON.stringify(permissions))
-                // alert("BLUETOOTH_SCAN:  "+permissions.BLUETOOTH_SCAN)
-                // alert("BLUETOOTH_CONNECT:  "+permissions.BLUETOOTH_CONNECT)
-                
                 
                 permissions.hasPermission(
                     permissions.BLUETOOTH_CONNECT, 
@@ -292,13 +287,10 @@
                     {
                         if (status.hasPermission) 
                         {
-                            // alert("Yes :D ")
                             context.btPrinterList()
                         }
                         else
                         {
-                            // alert("No :( ")
-
                             permissions.requestPermission(
                                 permissions.BLUETOOTH_CONNECT, 
                                 function(status)
@@ -340,6 +332,7 @@
                         direct_print: data.direct_print,
                         printer_name: data.printer_name,
                         default_document_type: data.default_document_type,
+                        direct_send_documents_whatsapp: data.direct_send_documents_whatsapp,
                         // number_columns_list_items_sale: data.number_columns_list_items_sale ? data.number_columns_list_items_sale : 2,
                     }
                 }
@@ -352,6 +345,7 @@
                     direct_print: false,
                     printer_name: null,
                     default_document_type: '03',
+                    direct_send_documents_whatsapp: false,
                     // number_columns_list_items_sale: 2
                 }
             },

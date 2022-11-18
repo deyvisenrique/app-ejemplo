@@ -451,6 +451,13 @@
 
         <pdf-direct-print ref="pdf_direct_print" :document="form" :response="response_data" :payments="payment_conditions"></pdf-direct-print>
 
+        <send-document-whatsapp 
+            :showDialog.sync="showDialogSendDocumentWhatsapp" 
+            :params="params_send_document_whatsapp"
+            @closeSendDocumentWhatsapp="closeSendDocumentWhatsapp"
+            >
+        </send-document-whatsapp>
+
         <f7-popup class="demo-popup" :opened="popupCustomerOpened" @popup:closed="popupCustomerOpened = false">
             <customer-form :codeType="form.document_type_id" :customerId="form.customer_id" :showDialog.sync="popupCustomerOpened" ref="form_customer_car" @addCustomerCar="addCustomer"></customer-form>
         </f7-popup>
@@ -474,6 +481,7 @@
 
     import DocumentTotals from './partials/DocumentTotals.vue'
     import DocumentType from './partials/DocumentType.vue'
+    import SendDocumentWhatsapp from 'components/document/SendDocumentWhatsapp.vue'
 
     export default {
         props: {
@@ -489,7 +497,8 @@
             HeaderLayout,
             PdfDirectPrint,
             DocumentTotals,
-            DocumentType
+            DocumentType,
+            SendDocumentWhatsapp
         },
         mixins: [
             auth,
@@ -526,6 +535,9 @@
                 theme: {},
 
                 response_data: {},
+                showDialogSendDocumentWhatsapp: false,
+                params_send_document_whatsapp: {},
+                response_data_options: {},
             }
         },
         computed: {
@@ -543,19 +555,30 @@
                 return (['01', '03'].includes(this.form.document_type_id))
             }
         },
-        async created() {
+        async created() 
+        {
             await this.loadConfiguration()
             await this.getInitialSettings()
             await this.loadForm()
             await this.getTables()
             await this.initData()
             await this.inputEventsPayment()
+            await this.initParamsSendDocumentWhatsapp()
         },
         mounted()
         {
-
+            // console.log("applyDirectSendDocumentsWhatsapp", this.applyDirectSendDocumentsWhatsapp)
         },
         methods: {
+            initParamsSendDocumentWhatsapp()
+            {
+                this.params_send_document_whatsapp = {
+                    id: null,
+                    format: null,
+                    document_type_id: null,
+                    phone_number: null,
+                }
+            },
             clickChangeDocumentType(document_type_id)
             {
                 this.form.document_type_id = document_type_id
@@ -638,6 +661,7 @@
                         if (data.success)
                         {
                             this.response_data = data.data
+                            this.response_data_options = data
                             this.showDialogOptions(data)
                             this.storeCashDocument(data.data.id)
                         }
@@ -669,6 +693,10 @@
                 })
 
             },
+            closeSendDocumentWhatsapp()
+            {
+                this.showDialogOptions(this.response_data_options)
+            },
             sendDirectPrint(data)
             {
                 const document_type = this.isInvoiceDocument ? 'document' : 'saleNote'
@@ -698,6 +726,20 @@
                     }
                 }
             },
+            actionsForButtonContinue()
+            {
+                this.cleanDataStorage()
+
+                if(this.landscapeMode)
+                {
+                    //para inicializar los componentes
+                    this.reloadCurrentPage()
+                }
+                else
+                {
+                    this.redirectRoute('/list-items-sale/')
+                }
+            },
             clickOptionsButtons(dialog, index, data){
 
                 // Imprimir
@@ -708,21 +750,25 @@
                 // Continuar
                 else if (index === 1)
                 {
-                    this.cleanDataStorage()
-
-                    if(this.landscapeMode)
-                    {
-                        //para inicializar los componentes
-                        this.reloadCurrentPage()
-                    }
-                    else
-                    {
-                        this.redirectRoute('/list-items-sale/')
-                    }
+                    this.actionsForButtonContinue()
+                }
+                // opcional, si tiene envio de ws
+                else if (index === 2)
+                {
+                    this.sendDocumentMessageWhatsapp(data.data.id, this.form.document_type_id)
                 }
             },
-            getOptionsButtons(){
-                return [
+            sendDocumentMessageWhatsapp(id, document_type_id)
+            {
+                this.params_send_document_whatsapp.id = id
+                this.params_send_document_whatsapp.document_type_id = document_type_id
+                this.params_send_document_whatsapp.format = this.configuration.print_format_pdf
+                
+                this.showDialogSendDocumentWhatsapp = true
+            },
+            getOptionsButtons()
+            {
+                let options = [
                     {
                         text: 'Imprimir',
                         cssClass: 'text-align-center',
@@ -733,6 +779,16 @@
                         cssClass: 'text-align-center'
                     },
                 ]
+
+                if(this.applyDirectSendDocumentsWhatsapp)
+                {
+                    options.push({
+                        text: 'Enviar comprobante',
+                        cssClass: 'text-align-center'
+                    })
+                }
+
+                return options
             },
             sendInvoice()
             {
@@ -753,6 +809,7 @@
                         if (data.success)
                         {
                             this.response_data = data.data
+                            this.response_data_options = data
                             this.showDialogOptions(data)
                             this.storeCashDocument(data.data.id)
                         }
@@ -960,6 +1017,8 @@
                     correo_electronico: row.email,
                     telefono: row.telephone
                 }
+
+                this.params_send_document_whatsapp.phone_number = row.telephone
 
             },
             allowSetCustomer(customer){

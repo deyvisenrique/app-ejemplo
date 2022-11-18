@@ -1,4 +1,5 @@
 
+import _ from "lodash"
 import {functions_theme_premiun} from "mixins_/functions_theme_premiun"
 
 export const general_functions = {
@@ -23,6 +24,17 @@ export const general_functions = {
         }
     },
     computed: {
+        applyDirectSendDocumentsWhatsapp()
+        {
+            const config = this.getInitialConfiguration()
+
+            if(config != undefined && !_.isEmpty(config))  
+            {
+                if(config.direct_send_documents_whatsapp != undefined) return config.direct_send_documents_whatsapp
+            }
+
+            return false
+        }
     },
     methods: {
         isPosMode(app_mode = null)
@@ -37,6 +49,15 @@ export const general_functions = {
                 title:  title,
                 subtitle: message,
                 closeTimeout: 2000,
+            })
+        },
+        generalErrorNotification(message, close_timeout = 2000, title = 'Notificación')
+        {
+            this.showGeneralNotification({
+                icon: '<span class="material-icons text-color-red" style="font-size: 15px">highlight_off</span>',
+                title:  title,
+                subtitle: message,
+                closeTimeout: close_timeout,
             })
         },
         showAlert(message, title = 'Mensaje')
@@ -103,7 +124,8 @@ export const general_functions = {
                 direct_print: false,
                 default_document_type: '03',
                 has_igv_31556: false,
-                igv_31556_percentage: 0.10
+                igv_31556_percentage: 0.10,
+                direct_send_documents_whatsapp: false,
                 // number_columns_list_items_sale: 2,
             }
 
