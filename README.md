@@ -9,6 +9,7 @@
 ### Documentación
 
 * Manual de desarrollo y generación de [APK](https://docs.google.com/document/d/1rE14GT34woM323x00DYU7gchYhWZ0DE5K0krubP_frg/edit?usp=share_link)
+* Manual para crear cuenta desarrollador en google play [APK](https://docs.google.com/document/d/1L749xGACwn3BtFwwIe-534Q5Tw9dzWoyib0lZgGZsq0/edit?usp=share_link)
 
 ### Manual de usuario
 
