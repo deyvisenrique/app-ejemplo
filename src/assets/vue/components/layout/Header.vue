@@ -6,14 +6,14 @@
             <f7-row class="display-flex align-items-center">
                 <f7-col width="33">
                     <f7-link href="/" v-if="theme.theme_color != 'white'">
-                        <logo heightLogo="60" alternativePercentage="40%"></logo>
+                        <logo heightLogo="40" alternativePercentage="40%"></logo>
                     </f7-link>
                     <!-- tema: {{ theme.theme_color }} <br>
                     unicolor: {{ theme.is_unicolor_boxes }} <br> -->
                 </f7-col>
                 <f7-col width="33" class="text-align-center">
                     <f7-link href="/" v-if="theme.theme_color == 'white'">
-                        <logo heightLogo="60" alternativePercentage="40%"></logo>
+                        <logo heightLogo="40" alternativePercentage="40%"></logo>
                     </f7-link>
                 </f7-col>
                 <f7-col width="33" class="">

@@ -16,7 +16,7 @@
         </f7-block>
 
         <f7-block class="padding-top">
-            <f7-card class="padding-top padding-bottom">
+            <f7-card class="padding-top padding-bottom no-shadow">
             <f7-row no-gap>
                 <f7-col>
                     <form class="form-store-data" id="demo-form">
