@@ -19,3 +19,8 @@
 ### Manual de usuario
 
 * Ver [Manual](https://docs.google.com/document/d/1jLTnGiylAv8EB5mJPT3DTgIaDrI7S9SC/edit)
+
+
+### Apk compatible
+
+Si posee Android inferior a la version 12 [leer aqui](https://gitlab.com/facturaloperu/facturador/app-2-premium/-/wikis/apk-compatible)
