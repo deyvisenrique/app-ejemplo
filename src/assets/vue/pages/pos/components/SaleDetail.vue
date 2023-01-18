@@ -123,7 +123,10 @@
                         <tbody>
                             <tr v-for="(row, index) in form.items" :key="index">
                                 <td class="xsmall-only no-padding-left">{{ index + 1 }}</td>
-                                <td class="label-cell no-padding-left">{{ row.item.description }}</td>
+                                <td class="label-cell no-padding-left">
+                                    <!-- {{ row.item.description }} -->
+                                    <textarea class="" required validate v-model="row.input_description" type="text" @input="setInputDescription(row)" />
+                                </td>
                                 <td class="numeric-only no-padding-left">
 
                                     <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
