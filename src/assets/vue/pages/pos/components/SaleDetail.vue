@@ -29,7 +29,10 @@
                         <template v-else>
                             <tr v-for="(row, index) in form.items" :key="index">
                                 <td class="numeric-only no-padding-left">{{ index + 1 }}</td>
-                                <td class="label-cell no-padding-left">{{ row.item.description }}</td>
+                                <td class="no-padding">
+                                    <!-- {{ row.item.description }} -->
+                                    <textarea class="" required validate v-model="row.input_description" type="text" @input="setInputDescription(row)" />
+                                </td>
                                 <td class="numeric-only no-padding-left">
 
                                     <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
@@ -614,7 +617,19 @@
             {
                 // evento para actualizar datos en el componente Payment
                 this.$eventHub.$emit('eventUpdateDataFormSale', this.form)
-            }
+            },
+            setInputDescription(row){
+                console.log(row)
+                if(row.input_description != row.item.description)
+                {
+                    row.name_product_pdf = row.input_description
+                }
+                else
+                {
+                    row.name_product_pdf = null
+                }
+
+            },
         }
     }
 </script>

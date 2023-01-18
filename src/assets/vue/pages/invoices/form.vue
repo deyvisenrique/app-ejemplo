@@ -780,6 +780,10 @@
                 // Continuar
                 else if (index === 3)
                 {
+                    this.redirectRoute('/documents/')
+                }
+                else if (index === 4)
+                {
                     // self.$f7router.navigate("/documents/");
                 }
             },
@@ -801,7 +805,11 @@
                         close: false
                     },
                     {
-                        text: 'Continuar',
+                        text: 'Ver Listado',
+                        cssClass: 'text-center'
+                    },
+                    {
+                        text: 'Crear Nuevo',
                         cssClass: 'text-center'
                     },
                 ]

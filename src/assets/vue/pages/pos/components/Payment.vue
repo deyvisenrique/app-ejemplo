@@ -451,8 +451,8 @@
 
         <pdf-direct-print ref="pdf_direct_print" :document="form" :response="response_data" :payments="payment_conditions"></pdf-direct-print>
 
-        <send-document-whatsapp 
-            :showDialog.sync="showDialogSendDocumentWhatsapp" 
+        <send-document-whatsapp
+            :showDialog.sync="showDialogSendDocumentWhatsapp"
             :params="params_send_document_whatsapp"
             @closeSendDocumentWhatsapp="closeSendDocumentWhatsapp"
             >
@@ -555,7 +555,7 @@
                 return (['01', '03'].includes(this.form.document_type_id))
             }
         },
-        async created() 
+        async created()
         {
             await this.loadConfiguration()
             await this.getInitialSettings()
@@ -763,7 +763,7 @@
                 this.params_send_document_whatsapp.id = id
                 this.params_send_document_whatsapp.document_type_id = document_type_id
                 this.params_send_document_whatsapp.format = this.configuration.print_format_pdf
-                
+
                 this.showDialogSendDocumentWhatsapp = true
             },
             getOptionsButtons()
@@ -878,8 +878,8 @@
                             total_valor_item: x.total_value,
                             total_item: x.total,
                             total_descuentos: x.total_discount ? x.total_discount : 0,
-                            descuentos: context.getDiscountsDocument(x)
-                            // nombre_producto_pdf: x.name_product_pdf,
+                            descuentos: context.getDiscountsDocument(x),
+                            nombre_producto_pdf: x.name_product_pdf,
                         };
                     }),
                     pagos: this.getFormPaymentDocument(),
