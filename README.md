@@ -13,8 +13,15 @@
 * Manual para subir APP a [google play](https://docs.google.com/document/d/15StXTCkgSexD-5G7y6481WXp0d4zJDmjpo3hNDajRXo/edit?usp=sharing)
 * Data de [Plaza Vea](https://gitlab.com/facturaloperu/facturador/app-2-premium/-/wikis/Data-Plaza-vea)
 
+### Personalización
 
-
+Archivos modificables para personalizar el APP (nombre, accesos, imágenes)
+* config.xml
+* package.json
+* res/icon/icon.png
+* src/assets/vue/components/layout/Logo.vue
+* src/assets/vue/pages/login.vue
+* src/index.ejs
 
 ### Manual de usuario
 
