@@ -265,6 +265,20 @@
                         <li class="item-content item-input">
                             <div class="item-inner">
                                 <div class="item-title item-label">
+                                    Afectación
+                                </div>
+                                <div class="item-input-wrap">
+                                    <select v-model="form.sale_affectation_igv_type_id">
+                                        <option v-for="(option, index) in affectation_igv_types" :value="option.id" :key="index">{{ option.description }}</option>
+                                    </select>
+                                    <button class="input-clear-button" @click.prevent="clearCategories"></button>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">
                                     Cargar imágen
                                 </div>
                                 <div class="item-input-wrap">
@@ -388,6 +402,27 @@
                 configuration: {},
                 search_category_id: null,
                 theme: {},
+                affectation_igv_types: [
+                    {id:'10', description: 'Gravado - Operación Onerosa'},
+                    {id:'11', description: 'Gravado – Retiro por premio'},
+                    {id:'12', description: 'Gravado – Retiro por donación'},
+                    {id:'13', description: 'Gravado – Retiro'},
+                    {id:'14', description: 'Gravado – Retiro por publicidad'},
+                    {id:'15', description: 'Gravado – Bonificaciones'},
+                    {id:'16', description: 'Gravado – Retiro por entrega a trabajadores'},
+                    {id:'17', description: 'Gravado – IVAP'},
+                    {id:'20', description: 'Exonerado - Operación Onerosa'},
+                    {id:'21', description: 'Exonerado – Transferencia Gratuita'},
+                    {id:'30', description: 'Inafecto - Operación Onerosa'},
+                    {id:'31', description: 'Inafecto – Retiro por Bonificación'},
+                    {id:'32', description: 'Inafecto – Retiro'},
+                    {id:'33', description: 'Inafecto – Retiro por Muestras Médicas'},
+                    {id:'34', description: 'Inafecto - Retiro por Convenio Colectivo'},
+                    {id:'35', description: 'Inafecto – Retiro por premio'},
+                    {id:'36', description: 'Inafecto - Retiro por publicidad'},
+                    {id:'37', description: 'Inafecto - Transferencia gratuita'},
+                    {id:'40', description: 'Exportación de bienes o servicios'}
+                ],
             };
         },
         computed: {
