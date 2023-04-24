@@ -10,6 +10,21 @@
                     <f7-col width="50">
                         <div class="item-content item-input no-padding-horizontal">
                             <div class="item-inner no-padding-horizontal">
+                                <div class="item-title item-label">Serie</div>
+                                <div class="item-input-wrap input-dropdown-wrap">
+                                    <select v-model="form.series" placeholder="Please choose...">
+                                        <template v-for="(row, index) in series">
+                                            <option :value="row.number" :key="index">{{row.number}}</option>
+                                        </template>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </f7-col>
+
+                    <f7-col width="50">
+                        <div class="item-content item-input no-padding-horizontal">
+                            <div class="item-inner no-padding-horizontal">
                                 <div class="item-title item-label">Tiempo de Validez</div>
                                 <div class="item-input-wrap">
                                     <input v-model="form.date_of_due" type="text" />
@@ -29,7 +44,7 @@
                         </div>
                     </f7-col>
 
-                    <f7-col width="100">
+                    <f7-col width="50">
                         <div class="item-content item-input no-padding-horizontal">
                             <div class="item-inner no-padding-horizontal">
                                 <div class="item-title item-label">Dirección de envío</div>
@@ -175,17 +190,41 @@
                 form: {},
                 popupOpened: false,
                 default_customer: null,
+                series: [],
                 theme: {},
+                resource: 'quotations'
             }
         },
         computed: {},
         created() {
             this.initForm()
             this.getInitialSettings()
+            this.getOnlyCustomers()
             this.getTables()
         },
+        methods: 
+        {
+            async getTables()
+            {
+                this.showLoading()
 
-        methods: {
+                await this.$http.get(`${this.returnBaseUrl()}/${this.resource}/tables`, this.getHeaderConfig())
+                                .then(response => {
+                                    this.series = response.data.series
+                                    this.setDataFromTables()
+                                })
+                                .catch(err => {
+                                    console.log(err)
+                                    alert(`${err.message}`)
+                                })
+                                .then(() => {
+                                    this.hideLoading()
+                                })
+            },
+            setDataFromTables()
+            {
+                this.form.series = this.series.length > 0 ? this.series[0].number : null
+            },
             setDefaultCustomer(){
 
                 if(!this.default_customer)
@@ -261,6 +300,7 @@
                             {
                                 this.initForm()
                                 this.showDialogOptions(data)
+                                this.setDataFromTables()
                             }
                             else
                             {
@@ -316,6 +356,9 @@
             initForm(){
 
                 this.form = {
+                    document_type_id: "U5",
+                    series: null,
+                    number: "#",
                     prefix: 'COT',
                     establishment_id: null,
                     date_of_issue: moment().format('YYYY-MM-DD'),
@@ -350,8 +393,8 @@
                 this.setDefaultCustomer()
 
             },
-            getTables(){
-
+            getOnlyCustomers()
+            {
                 this.showLoading()
                 this.getGeneralCustomers()
                     .then(response => {

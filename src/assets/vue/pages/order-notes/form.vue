@@ -9,6 +9,21 @@
                     <f7-col width="50">
                         <div class="item-content item-input no-padding-horizontal">
                             <div class="item-inner no-padding-horizontal">
+                                <div class="item-title item-label">Serie</div>
+                                <div class="item-input-wrap input-dropdown-wrap">
+                                    <select v-model="form.series" placeholder="Please choose...">
+                                        <template v-for="(row, index) in series">
+                                            <option :value="row.number" :key="index">{{row.number}}</option>
+                                        </template>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </f7-col>
+
+                    <f7-col width="50">
+                        <div class="item-content item-input no-padding-horizontal">
+                            <div class="item-inner no-padding-horizontal">
                                 <div class="item-title item-label">Fecha Vencimiento</div>
                                 <div class="item-input-wrap">
                                     <input name="date" v-model="form.date_of_due" type="date" />
@@ -27,9 +42,7 @@
                         </div>
                     </f7-col>
 
-                </f7-row>
-                <f7-row>
-                    <f7-col width="100">
+                    <f7-col width="50">
                         <div class="item-content item-input no-padding-horizontal">
                             <div class="item-inner no-padding-horizontal">
                                 <div class="item-title item-label">Dirección de envío</div>
@@ -39,7 +52,8 @@
                             </div>
                         </div>
                     </f7-col>
-
+                </f7-row>
+                <f7-row>
                     <f7-col width="100">
                         <div class="item-content item-input no-padding-horizontal">
                             <div class="item-inner no-padding-horizontal">
@@ -180,21 +194,45 @@
                 popupCustomerOpened: false,
                 search_item: "",
                 customers: [],
+                series: [],
                 form: {},
                 popupOpened: false,
                 api_url: localStorage.api_url,
                 default_customer: null,
                 theme: {},
+                resource: 'order-notes'
             };
         },
         computed: {},
         created() {
             this.initForm()
             this.getInitialSettings()
+            this.getCustomers()
             this.getTables()
         },
 
         methods: {
+            async getTables()
+            {
+                this.showLoading()
+
+                await this.$http.get(`${this.returnBaseUrl()}/${this.resource}/tables`, this.getHeaderConfig())
+                                .then(response => {
+                                    this.series = response.data.series
+                                    this.setDataFromTables()
+                                })
+                                .catch(err => {
+                                    console.log(err)
+                                    alert(`${err.message}`)
+                                })
+                                .then(() => {
+                                    this.hideLoading()
+                                })
+            },
+            setDataFromTables()
+            {
+                this.form.series = this.series.length > 0 ? this.series[0].number : null
+            },
             setDefaultCustomer(){
 
                 if(!this.default_customer)
@@ -290,6 +328,7 @@
                         if (data.success) {
 
                             this.initForm()
+                            this.setDataFromTables()
                             self.showDialogOptions(data)
 
                         } else {
@@ -407,6 +446,9 @@
 
             initForm() {
                 this.form = {
+                    document_type_id: "U6",
+                    series: null,
+                    number: "#",
                     prefix: "PD",
                     establishment_id: 1,
                     delivery_date: '',
@@ -456,7 +498,7 @@
                 this.setDefaultCustomer()
 
             },
-            getTables() {
+            getCustomers() {
                 const self = this;
                 self.$f7.preloader.show();
                 this.$http
