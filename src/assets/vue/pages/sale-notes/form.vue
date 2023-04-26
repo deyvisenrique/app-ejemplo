@@ -539,6 +539,7 @@
             },
             initForm() {
                 this.form = {
+                    document_type_id: "80",
                     prefix: "NV",
                     series_id: null,
                     establishment_id: null,
