@@ -11,6 +11,11 @@
 * Manual de desarrollo y generación de [APK](https://docs.google.com/document/d/1rE14GT34woM323x00DYU7gchYhWZ0DE5K0krubP_frg/edit?usp=share_link) Logo: 1024px  x 500px, horizontal , Icono 512px X 512px
 * Manual para crear cuenta desarrollador en [google play](https://docs.google.com/document/d/1L749xGACwn3BtFwwIe-534Q5Tw9dzWoyib0lZgGZsq0/edit?usp=share_link)
 * Manual para subir APP a [google play](https://docs.google.com/document/d/15StXTCkgSexD-5G7y6481WXp0d4zJDmjpo3hNDajRXo/edit?usp=sharing)
+
+1. Valide su identidad en su cuenta de google play para poder publicar
+2. Debe responder los puntos relacionados a la info de la empresa, desde Configurar la aplicación.
+3. Genere las politicas de privacidad de su app y envio la url publica, o sino que envie los accesos de su hosting para crearla y publicarla ahi
+
 * Data de [Plaza Vea](https://gitlab.com/facturaloperu/facturador/app-2-premium/-/wikis/Data-Plaza-vea)
 
 ### Personalización
