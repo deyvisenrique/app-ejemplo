@@ -13,9 +13,7 @@
                                 <div class="item-title item-label">Serie</div>
                                 <div class="item-input-wrap input-dropdown-wrap">
                                     <select v-model="form.series" placeholder="Please choose...">
-                                        <template v-for="(row, index) in series">
-                                            <option :value="row.number" :key="index">{{row.number}}</option>
-                                        </template>
+                                        <option v-for="(row, index) in series" :value="row.number" :key="index">{{row.number}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -84,6 +82,7 @@
                         <table>
                             <thead>
                                 <tr>
+                                    <th class="numeric-cell" width="5%"></th>
                                     <th class="label-cell" width="5%">#</th>
                                     <th class="numeric-cell">Descripción</th>
                                     <th class="medium-only">Cantidad</th>
@@ -94,6 +93,11 @@
                             </thead>
                             <tbody>
                                 <tr v-for="(row, index) in form.items" :key="index">
+                                    <td class="no-padding numeric-cell">
+                                        <f7-button @click.native="deleteItem(row.item_id, index)">
+                                            <f7-icon color="red" material="cancel"></f7-icon>
+                                        </f7-button>
+                                    </td>
                                     <td class="no-padding label-cell">{{index + 1 }}</td>
                                     <td class="no-padding numeric-cell">{{row.item.description}}</td>
                                     <td class="no-padding numeric-cell">{{row.quantity}}</td>
@@ -202,7 +206,7 @@
             this.getOnlyCustomers()
             this.getTables()
         },
-        methods: 
+        methods:
         {
             async getTables()
             {
@@ -405,6 +409,13 @@
             },
             getInitialSettings() {
                 this.theme = this.getThemeSettings()
+            },
+            deleteItem(id, index) {
+                this.form.items.splice(index, 1);
+                this.calculateTotal()
+                // console.log(this.$refs.form_items_car.length);
+                this.$refs.form_items_car.delete_parent(id);
+                this.calculateTotal()
             },
         }
     }
