@@ -50,35 +50,22 @@
                         </f7-card-content>
                     </f7-card>
                 </f7-col>
-            </f7-row>
-
-            <f7-row>
                 <f7-col v-if="checkPermissions('sale-note')">
                     <f7-card no-shadow @click.native="go('sale_note')" :class="[theme.is_unicolor_boxes ? '' :'box-gradient',theme.class_box_color_shade]" style="cursor:pointer;">
                         <f7-card-content class="text-align-center">
                             <base-icon nameIcon="file-sale" widthIcon="25" clases="padding-top"></base-icon>
-                            <p class="font-w-500" :class="theme.class_text_color"><br> Nota de venta</p>
+                            <p class="font-w-500" :class="theme.class_text_color">Nota de venta</p>
                         </f7-card-content>
                     </f7-card>
                 </f7-col>
+            </f7-row>
+
+            <f7-row>
                 <f7-col v-if="checkPermissions('order-note')">
                     <f7-card no-shadow @click.native="go('order_note')" :class="[theme.is_unicolor_boxes ? '' :'box-gradient',theme.class_box_color_tint]" style="cursor:pointer;">
                         <f7-card-content class="text-align-center">
                             <base-icon nameIcon="file" widthIcon="25" clases="padding-top"></base-icon>
                             <p class="font-w-500" :class="theme.class_text_color"><br> Pedido</p>
-                        </f7-card-content>
-                    </f7-card>
-                </f7-col>
-            </f7-row>
-
-            <f7-row>
-                <f7-col v-if="checkPermissions('purchase')">
-                    <f7-card no-shadow @click.native="go('purchase')" :class="[theme.is_unicolor_boxes ? '' :'box-gradient',theme.class_box_color]" style="cursor:pointer;">
-                        <f7-card-content class="text-align-center">
-                            <base-icon nameIcon="car-sale" widthIcon="25" clases="padding-top"></base-icon>
-                            <p class="font-w-500" :class="theme.class_text_color">
-                                <br> Compra
-                            </p>
                         </f7-card-content>
                     </f7-card>
                 </f7-col>
@@ -95,11 +82,34 @@
             </f7-row>
 
             <f7-row>
+                <f7-col v-if="checkPermissions('invoice')">
+                    <f7-card no-shadow @click.native="go('dispatch')" :class="[theme.is_unicolor_boxes ? '' :'box-gradient',theme.class_box_color_shade]" style="cursor:pointer;">
+                        <f7-card-content class="text-align-center">
+                            <base-icon nameIcon="file-sale" widthIcon="25" clases="padding-top"></base-icon>
+                            <p class="font-w-500" :class="theme.class_text_color">
+                                Guía de remisión remitente
+                            </p>
+                        </f7-card-content>
+                    </f7-card>
+                </f7-col>
                 <f7-col v-if="checkPermissions('documents')">
                     <f7-card no-shadow @click.native="go('ls_doc')" :class="[theme.is_unicolor_boxes ? '' :'box-gradient',theme.class_box_color_tint]" style="cursor:pointer;">
                         <f7-card-content class="text-align-center">
                             <base-icon nameIcon="file-list" widthIcon="25" clases="padding-top"></base-icon>
                             <p class="font-w-500" :class="theme.class_text_color">Lista de <br> comprobantes</p>
+                        </f7-card-content>
+                    </f7-card>
+                </f7-col>
+            </f7-row>
+
+            <f7-row>
+                <f7-col v-if="checkPermissions('purchase')">
+                    <f7-card no-shadow @click.native="go('purchase')" :class="[theme.is_unicolor_boxes ? '' :'box-gradient',theme.class_box_color]" style="cursor:pointer;">
+                        <f7-card-content class="text-align-center">
+                            <base-icon nameIcon="car-sale" widthIcon="25" clases="padding-top"></base-icon>
+                            <p class="font-w-500" :class="theme.class_text_color">
+                                <br> Compra
+                            </p>
                         </f7-card-content>
                     </f7-card>
                 </f7-col>
@@ -408,6 +418,9 @@
                         break;
                     case "purchase":
                         self.$f7router.navigate("/form-purchase/");
+                        break;
+                    case "dispatch":
+                        self.$f7router.navigate("/form-dispatch/");
                         break;
                     case "items":
                         self.$f7router.navigate("/items/")

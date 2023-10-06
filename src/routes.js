@@ -4,8 +4,8 @@ import FormDocument from './assets/vue/pages/invoices/form.vue';
 import FormSaleNote from './assets/vue/pages/sale-notes/form.vue';
 import FormOrderNote from './assets/vue/pages/order-notes/form.vue';
 import FormPurchase from './assets/vue/pages/purchases/form.vue';
-import FormQuotation from './assets/vue/pages/quotations/form.vue'
-
+import FormQuotation from './assets/vue/pages/quotations/form.vue';
+import FormDispatch from './assets/vue/pages/dispatches/form.vue';
 
 import IndexItems from './assets/vue/pages/items/index.vue';
 import IndexCustomers from './assets/vue/pages/customers/index.vue';
@@ -20,18 +20,10 @@ import PanelRightPage from './assets/vue/pages/panels/right.vue';
 import Configuration from './assets/vue/pages/panels/configuration.vue';
 import AdvancedConfiguration from './assets/vue/pages/panels/advanced_configuration.vue';
 
-
 import ListItemsSale from './assets/vue/pages/pos/components/ListItemsSale.vue'
-// import SaleDetailPos from './assets/vue/pages/pos/sale_detail.vue'
 import SaleDetailPosPage from './assets/vue/pages/pos/pages/sale_detail_page.vue'
-
-// import SalePaymentPos from './assets/vue/pages/pos/payment.vue'
 import SalePaymentPosPage from './assets/vue/pages/pos/pages/payment_page.vue'
-
 import LandscapePosPage from './assets/vue/pages/pos/pages/landscape_pos_page.vue'
-
-// import PreviewPdf2 from './assets/vue/components/document/PreviewPdf2';
-
 
 
 export default [
@@ -103,19 +95,10 @@ export default [
     path: '/list-items-sale/',
     component: ListItemsSale
   },
-  // {
-  //   path: '/sale-detail-pos/',
-  //   component: SaleDetailPos
-    
-  // },
   {
     path: '/sale-detail-pos/',
     component: SaleDetailPosPage
   },
-  // {
-  //   path: '/sale-payment-pos/:document_type_description',
-  //   component: SalePaymentPos
-  // },
   {
     path: '/sale-payment-pos/:document_type_description',
     component: SalePaymentPosPage
@@ -124,10 +107,8 @@ export default [
     path: '/landscape-pos/',
     component: LandscapePosPage
   },
-  
-  // {
-  //   path: '/pdf2/',
-  //   component: PreviewPdf2
-  // },
-  
+  {
+    path: '/form-dispatch/',
+    component: FormDispatch
+  },
 ];

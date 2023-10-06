@@ -79,6 +79,11 @@
             &nbsp;Cotización
         </f7-link>
 
+        <f7-link v-if="checkPermissions('invoice')"  @click="go('dispatch')" color="black" class="display-block margin-vertical">
+            <f7-icon material="content_paste" size="18"> </f7-icon>
+            &nbsp;Guías de remisión
+        </f7-link>
+
         <f7-link v-if="checkPermissions('documents')"  @click="go('ls_doc')" color="black" class="display-block margin-vertical">
             <f7-icon material="format_list_numbered" size="18"> </f7-icon>
             &nbsp;Lista de comprobantes
@@ -294,6 +299,9 @@
                             break
                         case 'quotation':
                             this.redirectMainRoute('/form-quotation/')
+                            break
+                        case "dispatch":
+                            this.redirectMainRoute("/form-dispatch/");
                             break
                     }
 
