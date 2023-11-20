@@ -538,6 +538,8 @@
                 showDialogSendDocumentWhatsapp: false,
                 params_send_document_whatsapp: {},
                 response_data_options: {},
+                form_email: {},
+                hasSendMail: false,
             }
         },
         computed: {
@@ -741,7 +743,6 @@
                 }
             },
             clickOptionsButtons(dialog, index, data){
-
                 // Imprimir
                 if(index === 0)
                 {
@@ -752,15 +753,19 @@
                 {
                     this.actionsForButtonContinue()
                 }
-                // opcional, si tiene envio de ws
                 else if (index === 2)
                 {
-                    this.sendDocumentMessageWhatsapp(data.data.id, this.form.document_type_id)
+                    this.sendDocumentMessageWhatsapp(data.data.id, this.form.document_type_id, data.links.pdf)
+                }
+                else if (index === 3)
+                {
+                    this.sendToEmail(data.data.id, this.form.document_type_id)
                 }
             },
-            sendDocumentMessageWhatsapp(id, document_type_id)
+            sendDocumentMessageWhatsapp(id, document_type_id, url_pdf)
             {
                 this.params_send_document_whatsapp.id = id
+                this.params_send_document_whatsapp.url_pdf = url_pdf
                 this.params_send_document_whatsapp.document_type_id = document_type_id
                 this.params_send_document_whatsapp.format = this.configuration.print_format_pdf
 
@@ -778,17 +783,99 @@
                         text: 'Continuar',
                         cssClass: 'text-align-center'
                     },
+                    {
+                        text: 'Whatsapp',
+                        cssClass: 'text-align-center'
+                    },
+                    {
+                        text: 'Correo',
+                        cssClass: 'text-align-center'
+                    },
                 ]
 
-                if(this.applyDirectSendDocumentsWhatsapp)
-                {
-                    options.push({
-                        text: 'Enviar comprobante',
-                        cssClass: 'text-align-center'
-                    })
-                }
+                // if(this.applyDirectSendDocumentsWhatsapp)
+                // {
+                //     options.push({
+                //         text: 'Enviar comprobante',
+                //         cssClass: 'text-align-center'
+                //     })
+                // }
 
                 return options
+            },
+            initFormEmail() {
+                this.form_email = {
+                    email: null,
+                    id: null
+                };
+            },
+            sendToEmail(id, type, default_email = null) {
+                this.initFormEmail();
+                this.hasSendMail = true
+                this.form_email.id = id;
+                let response = this.response_data_options
+                const self = this;
+                let document_type = ''
+                switch (type) {
+                    case '80':
+                        document_type = 'sale-note'
+                        break;
+                    default:
+                        document_type = 'document'
+                        break;
+                }
+                self.$f7.dialog.prompt(
+                    "Ingresa el Email",
+                    "", //titulo
+                    function (value)
+                    {
+                        self.form_email.email = value;
+                        self.sendEmail(document_type)
+                    },
+                    ()=>{},
+                    default_email
+                ).on('dialogClose', function () {
+                    if(self.hasSendMail) {
+                        self.showDialogOptions(response)
+                    }
+                })
+            },
+            validateEmail(email) {
+                var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(email);
+            },
+            sendEmail(type) {
+                if (!this.form_email.email) {
+                    alert("Ingrese Email.");
+                    return false;
+                }
+                if (!this.validateEmail(this.form_email.email)) {
+                    alert("Ingrese un Email valido.");
+                    return false;
+                }
+                this.hasSendMail = false;
+
+                this.$f7.preloader.show();
+                this.$http
+                    .post(
+                        `${this.returnBaseUrl()}/${type}/email`,
+                        this.form_email,
+                        this.getHeaderConfig()
+                    )
+                    .then(response => {
+                        if (response.data.success) {
+                            this.showAlert(`${response.data.message}`)
+                            this.showDialogOptions(this.response_data_options)
+                            this.initFormEmail();
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err)
+                        alert("Sucedio un error.");
+                    })
+                    .finally(() => {
+                        this.$f7.preloader.hide();
+                    });
             },
             sendInvoice()
             {

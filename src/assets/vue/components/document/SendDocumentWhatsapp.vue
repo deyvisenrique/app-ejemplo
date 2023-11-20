@@ -31,6 +31,9 @@
                             <div class="item-inner">
                                 <f7-button fill round class="padding-horizontal" @click="submit">Enviar</f7-button>
                             </div>
+                            <div class="item-inner">
+                                <f7-button type="success" fill round class="padding-horizontal" @click="submit_message">Enviar Url</f7-button>
+                            </div>
                         </li>
 
                     </ul>
@@ -104,7 +107,7 @@
                                 this.hideLoading()
                             })
 
-            }, 
+            },
             initForm()
             {
                 this.form = {
@@ -128,13 +131,21 @@
                 this.form.format = this.params.format
 
                 if(this.params.phone_number) this.form.phone_number = this.params.phone_number
-                
+
             },
-            close() 
+            close()
             {
                 this.$emit('closeSendDocumentWhatsapp')
                 this.$emit('update:showDialog', false)
                 this.initForm()
+            },
+            submit_message() {
+                const validate_data = this.validateData()
+                if(!validate_data.success) return this.showAlert(validate_data.message)
+                // mensaje web de whatsapp
+                let message = `Hola, revisa tu comprobante ingresando a este link ${this.params.url_pdf}`;
+                let message_ = message.split(" ").join("%20");
+                window.open(`https://wa.me/51${this.form.phone_number}/?text=${message_}`, "_system");
             }
         }
     }
