@@ -9,7 +9,7 @@
                     <f7-card class="card-100 no-padding no-margin-bottom no-shadow" :color="theme.name_color_theme">
 
                         <f7-row>
-                            <f7-col width="70" style="border: 1px solid #8e8e93;border-radius: 5px;">
+                            <f7-col width="55" style="border: 1px solid #8e8e93;border-radius: 5px;">
                                 <div class="searchbar searchbar-inline" style="margin-left:-5px; margin: 5px">
                                     <div class="searchbar-input-wrap">
                                         <input type="search" placeholder="Buscar" v-model="form_search.input" @input="searchRecords"/>
@@ -26,10 +26,19 @@
                                 <f7-button @click="clickCreateItem()" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-plus" class="bg-secondary"></f7-button>
                                 <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
                             </f7-col>
+                            <f7-col width="15" class="text-align-center">
+                                <f7-button
+                                    @click="card_mode = !card_mode"
+                                    :color="theme.name_color_theme"
+                                    fill
+                                    small
+                                    open-panel="right"
+                                    :icon="[card_mode ? 'fas fa-grip-horizontal' : 'fas fa-list']"
+                                    class="bg-primary"></f7-button>
+                                <span class="" style="font-size: 10px;line-height: 10px !important;">{{ card_mode ? 'DETALLE' : 'LISTA' }}</span>
+                            </f7-col>
                         </f7-row>
-
                         <f7-row class="margin-bottom">
-
                             <f7-col width="100">
                                 <div class="c-horizontal-scroll mp-div-category">
                                     <template v-for="(category, index) in categories">
@@ -51,53 +60,76 @@
                         </f7-row>
                         <div style="overflow-y: scroll;height: calc(100vh - 235px);">
                             <div class="list inset">
-                                <div class="row" v-if="records.length > 0">
-                                    <div class="col-33" v-for="(row, index) in records" :key="index">
-
-                                        <div class="card no-margin-horizontal no-padding-horizontal" :class="isSelectedRecord(index) ? 'custom-border-selected-item bg-white-shade' : ''">
-
-                                            <div @click="selected(index)">
-
-                                                <div :style="'background-image:url('+row.image_url+')'" class="card-header align-items-flex-end image-max-width"></div>
-
-                                                <div class="card-content card-content-padding">
-                                                    <div class="item-input-wrap">
-                                                        <span class="text-align-center"><b>{{row.full_description}}</b></span>
-
-                                                        <span class="">
-                                                            <div class="item-content no-padding-left">
-                                                                <div class="item-media">{{ row.currency_type_symbol }} {{row.sale_unit_price}}</div>
-                                                            </div>
-                                                        </span>
-
-                                                        <template v-if="row.unit_type_id !== 'ZZ'">
-                                                            <span class="text-align-center"><b>Stock: {{row.stock}}</b></span><br>
-                                                        </template>
-                                                    </div>
-                                                </div>
-
+                                <template v-if="!card_mode">
+                                    <div class="item-content"
+                                        v-for="(row, index) in records"
+                                        :key="index"
+                                        @click="selected(index)"
+                                        :class="isSelectedRecord(index) ? 'custom-border-selected-item bg-white-shade' : ''">
+                                        <div class="item-media">
+                                            <div :style="'background-image:url('+row.image_url+')'" style="width: 30px;height: 30px;background-size: cover;"></div>
+                                        </div>
+                                        <div class="item-inner">
+                                            <div class="item-title">
+                                                <div class="item-header" v-if="row.unit_type_id !== 'ZZ'">Stock:{{row.stock}}</div>
+                                                {{ row.full_description }}
                                             </div>
-
-                                            <div class="card-footer display-flex justify-content-center">
-                                                <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
-                                                    <div class="stepper-button-minus" @click="calculateQuantity(-1, index)"></div>
-                                                    <div class="stepper-input-wrap">
-                                                        <input type="number" v-model="row.quantity" min="0" step="1" />
-                                                    </div>
-                                                    <div class="stepper-button-plus" @click="calculateQuantity(1, index)"></div>
-                                                </div>
-                                            </div>
-
+                                            <div class="item-after">{{row.currency_type_symbol+' '+row.sale_unit_price}}</div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row" v-else>
-                                    <div class="col-100">
-                                        <h3 class="text-align-center">
-                                            {{ loading_text }}
-                                        </h3>
+                                    <template v-if="form_search.input && records.length == 0">
+                                        <f7-button @click="clickCreateItem()" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-plus" class="bg-secondary"> Registrar Producto</f7-button>
+                                    </template>
+                                </template>
+                                <template v-else>
+                                    <div class="row" v-if="records.length > 0">
+                                        <div class="col-33" v-for="(row, index) in records" :key="index">
+
+                                            <div class="card no-margin-horizontal no-padding-horizontal" :class="isSelectedRecord(index) ? 'custom-border-selected-item bg-white-shade' : ''">
+
+                                                <div @click="selected(index)">
+
+                                                    <div :style="'background-image:url('+row.image_url+')'" class="card-header align-items-flex-end image-max-width"></div>
+
+                                                    <div class="card-content card-content-padding">
+                                                        <div class="item-input-wrap">
+                                                            <span class="text-align-center"><b>{{row.full_description}}</b></span>
+
+                                                            <span class="">
+                                                                <div class="item-content no-padding-left">
+                                                                    <div class="item-media">{{ row.currency_type_symbol }} {{row.sale_unit_price}}</div>
+                                                                </div>
+                                                            </span>
+
+                                                            <template v-if="row.unit_type_id !== 'ZZ'">
+                                                                <span class="text-align-center"><b>Stock: {{row.stock}}</b></span><br>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="card-footer display-flex justify-content-center">
+                                                    <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
+                                                        <div class="stepper-button-minus" @click="calculateQuantity(-1, index)"></div>
+                                                        <div class="stepper-input-wrap">
+                                                            <input type="number" v-model="row.quantity" min="0" step="1" />
+                                                        </div>
+                                                        <div class="stepper-button-plus" @click="calculateQuantity(1, index)"></div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                    <div class="row" v-else>
+                                        <div class="col-100">
+                                            <h3 class="text-align-center">
+                                                {{ loading_text }}
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </template>
 
                                 <div class="data-table-footer text-align-center">
                                     <div class="data-table-pagination">
@@ -143,7 +175,8 @@
         </f7-block>
 
         <item-form :showDialog.sync="showDialogItem"
-                    :recordId="recordItemId"></item-form>
+            :recordId="recordItemId"
+            :alternativeName="form_search.input"></item-form>
     </f7-page>
 </template>
 <script>
@@ -197,8 +230,8 @@
 
                 load_sale_detail_pos: false,
                 showDialogItem: false,
-                theme: {}
-
+                theme: {},
+                card_mode: true,
             }
         },
         computed: {

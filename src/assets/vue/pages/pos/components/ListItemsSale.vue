@@ -15,13 +15,24 @@
                             </div>
                         </div>
                     </f7-col>
-                    <f7-col width="15" class="text-align-center">
+                    <f7-col width="10" class="text-align-center">
                         <f7-button @click="clickSearchBarcode" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-camera" class="bg-secondary"></f7-button>
                         <span class="" style="font-size: 10px;line-height: 10px !important;">BUSCAR</span>
                     </f7-col>
-                    <f7-col width="15" class="text-align-center">
+                    <f7-col width="10" class="text-align-center">
                         <f7-button @click="clickCreate()" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-plus" class="bg-secondary"></f7-button>
                         <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
+                    </f7-col>
+                    <f7-col width="10" class="text-align-center">
+                        <f7-button
+                            @click="card_mode = !card_mode"
+                            :color="theme.name_color_theme"
+                            fill
+                            small
+                            open-panel="right"
+                            :icon="[card_mode ? 'fas fa-grip-horizontal' : 'fas fa-list']"
+                            class="bg-primary"></f7-button>
+                        <span class="" style="font-size: 10px;line-height: 10px !important;">{{ card_mode ? 'DETALLE' : 'LISTA' }}</span>
                     </f7-col>
                 </f7-row>
             </f7-block>
@@ -61,73 +72,96 @@
 
             <f7-block>
                 <div class="list inset">
-                    <div class="row">
-                        <template v-if="records.length > 0">
-                            <div class="col-50" v-for="(row, index) in records" :key="index">
+                    <template v-if="!card_mode">
+                        <div class="item-content"
+                            v-for="(row, index) in records"
+                            :key="index"
+                            @click="selected(index)"
+                            :class="isSelectedRecord(index) ? 'custom-border-selected-item bg-white-shade' : ''">
+                            <div class="item-media">
+                                <div :style="'background-image:url('+row.image_url+')'" style="width: 30px;height: 30px;background-size: cover;"></div>
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    <div class="item-header" v-if="row.unit_type_id !== 'ZZ'">Stock:{{row.stock}}</div>
+                                    {{ row.full_description }}
+                                </div>
+                                <div class="item-after">{{row.currency_type_symbol+' '+row.sale_unit_price}}</div>
+                            </div>
+                        </div>
+                        <template v-if="form_search.input && records.length == 0">
+                            <f7-button @click="clickCreate()" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-plus" class="bg-secondary"> Registrar Producto</f7-button>
+                        </template>
+                    </template>
+                    <template v-else>
+                        <div class="row">
+                            <template v-if="records.length > 0">
+                                <div class="col-50" v-for="(row, index) in records" :key="index">
 
-                                <div class="card no-margin-horizontal no-padding-horizontal" :class="isSelectedRecord(index) ? 'custom-border-selected-item bg-white-shade' : ''">
+                                    <div class="card no-margin-horizontal no-padding-horizontal" :class="isSelectedRecord(index) ? 'custom-border-selected-item bg-white-shade' : ''">
 
-                                    <div @click="selected(index)">
+                                        <div @click="selected(index)">
 
-                                        <div :style="'background-image:url('+row.image_url+')'" class="card-header align-items-flex-end image-max-width"></div>
+                                            <div :style="'background-image:url('+row.image_url+')'" class="card-header align-items-flex-end image-max-width"></div>
 
+                                            <div class="card-content card-content-padding">
+                                                <div class="item-input-wrap">
+                                                    <span class="text-align-center"><b>{{row.full_description}}</b></span>
+
+                                                    <span class="">
+                                                        <div class="item-content no-padding-left">
+                                                            <div class="item-media">{{ row.currency_type_symbol }} {{row.sale_unit_price}}</div>
+                                                            <!-- <input required validate v-model="row.sale_unit_price" type="number" /> -->
+                                                        </div>
+                                                    </span>
+
+                                                    <template v-if="row.unit_type_id !== 'ZZ'">
+                                                        <span class="text-align-center"><b>Stock: {{row.stock}}</b></span><br>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="card-footer display-flex justify-content-center">
+                                            <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
+                                                <div class="stepper-button-minus" @click="calculateQuantity(-1, index)"></div>
+                                                <div class="stepper-input-wrap">
+                                                    <input type="number" v-model="row.quantity" min="0" step="1" />
+                                                </div>
+                                                <div class="stepper-button-plus" @click="calculateQuantity(1, index)"></div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <div class="col-100">
+                                    <h3 class="text-align-center">
+                                        {{ loading_text }}
+                                    </h3>
+                                </div>
+                            </template>
+                            <template v-if="form_search.favorite == 1">
+                                <div class="col-50">
+                                    <div class="card no-margin-horizontal no-padding-horizontal">
                                         <div class="card-content card-content-padding">
-                                            <div class="item-input-wrap">
-                                                <span class="text-align-center"><b>{{row.full_description}}</b></span>
-
-                                                <span class="">
-                                                    <div class="item-content no-padding-left">
-                                                        <div class="item-media">{{ row.currency_type_symbol }} {{row.sale_unit_price}}</div>
-                                                        <!-- <input required validate v-model="row.sale_unit_price" type="number" /> -->
-                                                    </div>
-                                                </span>
-
-                                                <template v-if="row.unit_type_id !== 'ZZ'">
-                                                    <span class="text-align-center"><b>Stock: {{row.stock}}</b></span><br>
-                                                </template>
+                                            <div class="item-input-wrap text-align-center">
+                                                <span class=""><b>Como añadir productos Favoritos?</b></span>
+                                                <p>
+                                                    ve al listado <br> haz click al <br>
+                                                    <span class="material-icons text-color-purple">favorite_border</span>
+                                                </p>
+                                                <f7-button :color="theme.name_color_theme" fill medium class="bg-secondary" @click.native="goItems()">
+                                                Ir al listado
+                                                </f7-button>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="card-footer display-flex justify-content-center">
-                                        <div class="stepper stepper-small stepper-raised stepper-init full-max-width">
-                                            <div class="stepper-button-minus" @click="calculateQuantity(-1, index)"></div>
-                                            <div class="stepper-input-wrap">
-                                                <input type="number" v-model="row.quantity" min="0" step="1" />
-                                            </div>
-                                            <div class="stepper-button-plus" @click="calculateQuantity(1, index)"></div>
-                                        </div>
-                                    </div>
-
                                 </div>
-                            </div>
-                        </template>
-                        <template v-else>
-                            <div class="col-100">
-                                <h3 class="text-align-center">
-                                    {{ loading_text }}
-                                </h3>
-                            </div>
-                        </template>
-                        <template v-if="form_search.favorite == 1">
-                            <div class="col-50">
-                                <div class="card no-margin-horizontal no-padding-horizontal">
-                                    <div class="card-content card-content-padding">
-                                        <div class="item-input-wrap text-align-center">
-                                            <span class=""><b>Como añadir productos Favoritos?</b></span>
-                                            <p>
-                                                ve al listado <br> haz click al <br>
-                                                <span class="material-icons text-color-purple">favorite_border</span>
-                                            </p>
-                                            <f7-button :color="theme.name_color_theme" fill medium class="bg-secondary" @click.native="goItems()">
-                                            Ir al listado
-                                            </f7-button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </template>
-                    </div>
+                            </template>
+                        </div>
+                    </template>
                 </div>
             </f7-block>
         </f7-card>
@@ -141,7 +175,8 @@
         </f7-fab>
 
         <item-form :showDialog.sync="showDialog"
-                    :recordId="recordId"></item-form>
+            :recordId="recordId"
+            :alternativeName="form_search.input"></item-form>
 
     </f7-page>
 </template>
@@ -183,6 +218,7 @@
                 configuration: {},
                 categories: [],
                 theme: {},
+                card_mode: true,
             }
         },
         computed: {

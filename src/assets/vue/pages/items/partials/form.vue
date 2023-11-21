@@ -166,7 +166,7 @@
     import {common} from "../mixins/common"
 
     export default {
-        props: ['showDialog', 'recordId'],
+        props: ['showDialog', 'recordId', 'alternativeName'],
         mixins: [auth, upload_image, general_functions, common],
         data: function () {
             return {
@@ -252,6 +252,9 @@
                                 this.hideLoading()
                             })
 
+                } else {
+                    this.form.name = this.alternativeName
+                    this.form.description = this.alternativeName
                 }
 
             },
