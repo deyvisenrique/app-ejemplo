@@ -50,6 +50,9 @@
                         </f7-card-content>
                     </f7-card>
                 </f7-col>
+            </f7-row>
+
+            <f7-row>
                 <f7-col v-if="checkPermissions('sale-note')">
                     <f7-card no-shadow @click.native="go('sale_note')" :class="[theme.is_unicolor_boxes ? '' :'box-gradient',theme.class_box_color_shade]" style="cursor:pointer;">
                         <f7-card-content class="text-align-center">
@@ -58,24 +61,11 @@
                         </f7-card-content>
                     </f7-card>
                 </f7-col>
-            </f7-row>
-
-            <f7-row>
                 <f7-col v-if="checkPermissions('order-note')">
                     <f7-card no-shadow @click.native="go('order_note')" :class="[theme.is_unicolor_boxes ? '' :'box-gradient',theme.class_box_color_tint]" style="cursor:pointer;">
                         <f7-card-content class="text-align-center">
                             <base-icon nameIcon="file" widthIcon="25" clases="padding-top"></base-icon>
                             <p class="font-w-500" :class="theme.class_text_color"><br> Pedido</p>
-                        </f7-card-content>
-                    </f7-card>
-                </f7-col>
-                <f7-col v-if="checkPermissions('quotation')">
-                    <f7-card no-shadow @click.native="go('quotation')" :class="[theme.is_unicolor_boxes ? '' :'box-gradient',theme.class_box_color_shade]" style="cursor:pointer;">
-                        <f7-card-content class="text-align-center">
-                            <base-icon nameIcon="file-sale" widthIcon="25" clases="padding-top"></base-icon>
-                            <p class="font-w-500" :class="theme.class_text_color">
-                                <br> Cotización
-                            </p>
                         </f7-card-content>
                     </f7-card>
                 </f7-col>
@@ -87,7 +77,30 @@
                         <f7-card-content class="text-align-center">
                             <base-icon nameIcon="file-sale" widthIcon="25" clases="padding-top"></base-icon>
                             <p class="font-w-500" :class="theme.class_text_color">
-                                Guía de remisión remitente
+                                Guía de remisión<br>  remitente
+                            </p>
+                        </f7-card-content>
+                    </f7-card>
+                </f7-col>
+                <f7-col v-if="checkPermissions('invoice')">
+                    <f7-card no-shadow @click.native="go('dispatch-carrier')" :class="[theme.is_unicolor_boxes ? '' :'box-gradient',theme.class_box_color_shade]" style="cursor:pointer;">
+                        <f7-card-content class="text-align-center">
+                            <base-icon nameIcon="file-sale" widthIcon="25" clases="padding-top"></base-icon>
+                            <p class="font-w-500" :class="theme.class_text_color">
+                                Guía de remisión transportista
+                            </p>
+                        </f7-card-content>
+                    </f7-card>
+                </f7-col>
+            </f7-row>
+
+            <f7-row>
+                <f7-col v-if="checkPermissions('quotation')">
+                    <f7-card no-shadow @click.native="go('quotation')" :class="[theme.is_unicolor_boxes ? '' :'box-gradient',theme.class_box_color_shade]" style="cursor:pointer;">
+                        <f7-card-content class="text-align-center">
+                            <base-icon nameIcon="file-sale" widthIcon="25" clases="padding-top"></base-icon>
+                            <p class="font-w-500" :class="theme.class_text_color">
+                                <br> Cotización
                             </p>
                         </f7-card-content>
                     </f7-card>
@@ -421,6 +434,9 @@
                         break;
                     case "dispatch":
                         self.$f7router.navigate("/form-dispatch/");
+                        break;
+                    case "dispatch-carrier":
+                        self.$f7router.navigate("/form-dispatch-carrier/");
                         break;
                     case "items":
                         self.$f7router.navigate("/items/")

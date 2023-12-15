@@ -23,6 +23,8 @@ function calculateRowItem(row_old, currency_type_id_new, exchange_rate_sale) {
 
     let row = {
         item_id: row_old.item.id,
+        codigo_interno: row_old.item.internal_id,//dispatch_carrier
+        cantidad: row_old.quantity,//dispatch_carrier
         // item_description: row_old.item.description,
         item: row_old.item,
         currency_type_id: currency_type_id_new,

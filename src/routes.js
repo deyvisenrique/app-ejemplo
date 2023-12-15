@@ -6,6 +6,7 @@ import FormOrderNote from './assets/vue/pages/order-notes/form.vue';
 import FormPurchase from './assets/vue/pages/purchases/form.vue';
 import FormQuotation from './assets/vue/pages/quotations/form.vue';
 import FormDispatch from './assets/vue/pages/dispatches/form.vue';
+import FormDispatchCarrier from './assets/vue/pages/dispatch-carriers/form.vue';
 
 import IndexItems from './assets/vue/pages/items/index.vue';
 import IndexCustomers from './assets/vue/pages/customers/index.vue';
@@ -111,4 +112,8 @@ export default [
     path: '/form-dispatch/',
     component: FormDispatch
   },
+  {
+    path: '/form-dispatch-carrier',
+    component: FormDispatchCarrier
+  }
 ];
