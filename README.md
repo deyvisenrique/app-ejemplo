@@ -1,6 +1,6 @@
 <img src="icon_app.jpg" width="120">
 
-# FACTURALOPERU APP PREMIUM 2.2.4
+# FACTURALOPERU APP PREMIUM 3.0
 
 ### Soporte
 
