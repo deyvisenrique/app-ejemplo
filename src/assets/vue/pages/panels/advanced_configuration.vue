@@ -170,6 +170,35 @@
             {
                 this.check_is_pos_mode = this.isPosMode(is_pos_mode)
             },
+            setAppMode() {
+                let new_mode = this.check_is_pos_mode ? 'pos' : 'default'
+                this.setStorage('app_mode', new_mode)
+                this.is_pos_mode = this.isPosMode(new_mode)
+                if(this.is_pos_mode)
+                {
+                    this.checkCurrentOrientation()
+                    // this.redirectRoute('/list-items-sale/')
+                }
+                this.checkPosMode(this.check_is_pos_mode)
+                this.redirectRoute('/panel-right/')
+                this.redirectMainRoute('/')
+                this.$eventHub.$emit('closePanel')
+            },
+            checkCurrentOrientation()
+            {
+                const context = this
+
+                if (window.matchMedia('(orientation: portrait)').matches)
+                {
+                    context.redirectMainRoute('/list-items-sale/')
+                }
+
+                if (window.matchMedia('(orientation: landscape)').matches)
+                {
+                    context.redirectMainRoute('/landscape-pos/')
+                }
+
+            },
             events()
             {
                 this.$eventHub.$on('appMode', (is_pos_mode) => {
@@ -264,7 +293,7 @@
             btPrinterList()
             {
                 const context = this
-                
+
                 BTPrinter.list(
                     function(data)
                     {
@@ -280,25 +309,25 @@
             {
                 const context = this
                 const permissions = cordova.plugins.permissions
-                
+
                 permissions.hasPermission(
-                    permissions.BLUETOOTH_CONNECT, 
+                    permissions.BLUETOOTH_CONNECT,
                     function(status)
                     {
-                        if (status.hasPermission) 
+                        if (status.hasPermission)
                         {
                             context.btPrinterList()
                         }
                         else
                         {
                             permissions.requestPermission(
-                                permissions.BLUETOOTH_CONNECT, 
+                                permissions.BLUETOOTH_CONNECT,
                                 function(status)
                                 {
                                     if(!status.hasPermission) return alert("Error al solicitar permiso: "+JSON.stringify(status))
                                     context.btPrinterList()
                                 }
-                                , 
+                                ,
                                 function()
                                 {
                                     alert('El permiso BLUETOOTH no está activado.')

@@ -35,6 +35,14 @@
         <template v-if="!is_pos_mode">
             <f7-row>
                 <f7-col v-if="checkPermissions('invoice')">
+                    <f7-card no-shadow :class="[theme.is_unicolor_boxes ? '' :'box-gradient',theme.class_box_color_tint]" @click.native="setAppMode('pos')" style="cursor:pointer;">
+                        <f7-card-content class="text-align-center">
+                            <base-icon nameIcon="display" widthIcon="25" clases="padding-top"></base-icon>
+                            <p class="font-w-500" :class="theme.class_text_color">Modo <br> POS</p>
+                        </f7-card-content>
+                    </f7-card>
+                </f7-col>
+                <f7-col v-if="checkPermissions('invoice')">
                     <f7-card no-shadow :class="[theme.is_unicolor_boxes ? '' :'box-gradient',theme.class_box_color_tint]" @click.native="go('nw_doc')" style="cursor:pointer;">
                         <f7-card-content class="text-align-center">
                             <base-icon nameIcon="file-invoice" widthIcon="25" clases="padding-top"></base-icon>
@@ -317,28 +325,21 @@
 
             },
             async setInitialSettings(data){
-
-                await this.setAppMode(data)
-                // await this.setStyleThemeContent(data.style_settings)
-                // await this.setStyleCardContent(data.style_settings)
+                await this.setAppMode('pos')
                 await this.setPermissions(data)
                 await this.setAppLogo(data.generals)
                 await this.setGenerals(data)
 
             },
-            setAppMode(data){
-
-                this.setStorage('app_mode', data.style_settings.app_mode)
-                this.is_pos_mode = this.isPosMode(data.style_settings.app_mode)
-
+            setAppMode(new_mode){
+                this.setStorage('app_mode', new_mode)
+                this.is_pos_mode = this.isPosMode(new_mode)
                 if(this.is_pos_mode)
                 {
                     this.checkCurrentOrientation()
                     // this.redirectRoute('/list-items-sale/')
                 }
-
-                this.$eventHub.$emit('appMode', data.style_settings.app_mode)
-
+                this.$eventHub.$emit('appMode', new_mode)
             },
             checkCurrentOrientation()
             {

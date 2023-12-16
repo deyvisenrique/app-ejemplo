@@ -28,7 +28,7 @@ export const general_functions = {
         {
             const config = this.getInitialConfiguration()
 
-            if(config != undefined && !_.isEmpty(config))  
+            if(config != undefined && !_.isEmpty(config))
             {
                 if(config.direct_send_documents_whatsapp != undefined) return config.direct_send_documents_whatsapp
             }

@@ -50,7 +50,11 @@
             <f7-col width="80" class="text-align-center custom-title-form" :class="theme.class_header_text_color">
                 {{ title }}
             </f7-col>
-            <f7-col width="10"></f7-col>
+            <f7-col width="10">
+                <template v-if="menuPositionTwo">
+                    <f7-button panel-open="right" class="text-align-right" :class="theme.class_menu_text_color"><i class="fas fa-bars"></i></f7-button>
+                </template>
+            </f7-col>
         </f7-row>
     </f7-block>
     <header-waves :title="title" v-if="theme.theme_color != 'white'"></header-waves>
@@ -67,7 +71,7 @@
     export default {
         mixins: [general_functions, set_logo],
         name: "HeaderLayout",
-        props: ["title", 'showButtonBack', 'hrefBack', 'overwriteBackRoute', 'showLogoConfiguration'],
+        props: ["title", 'showButtonBack', 'hrefBack', 'overwriteBackRoute', 'showLogoConfiguration', 'menuPositionTwo'],
         components: {
             HeaderWaves,
             logoOficialLight,

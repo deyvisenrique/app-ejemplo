@@ -1,7 +1,7 @@
 <template>
     <f7-page :class="theme.class_bg_body" :color="theme.name_color_theme">
 
-        <header-layout :title="header_title" :showLogoConfiguration="false" hrefBack="/list-items-sale/" :overwriteBackRoute="false" :showButtonBack="false"></header-layout>
+        <header-layout :title="header_title" :showLogoConfiguration="false" hrefBack="/list-items-sale/" :overwriteBackRoute="false" :showButtonBack="false" :menuPositionTwo="true"></header-layout>
 
         <f7-block class="no-padding no-margin-vertical">
             <f7-row>

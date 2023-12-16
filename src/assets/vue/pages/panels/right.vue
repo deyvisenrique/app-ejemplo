@@ -4,117 +4,20 @@
         <f7-block class="no-margin-vertical">
             <f7-row>
                 <f7-col width="75">
-                    <p :class="theme.class_header_text_color">
-                        <f7-icon material="check_circle" size="48px"></f7-icon>
-                    </p>
+                    <p :class="theme.class_header_text_color">{{user}} <br> {{email}}</p>
                 </f7-col>
                 <f7-col width="25">
-                    <f7-block class="text-align-right no-margin-top padding-top">
-                        <f7-link panel-close :class="theme.class_menu_text_color"><i class="fas fa-times"></i></f7-link>
+                    <f7-block class="text-align-right no-margin no-padding">
+                        <f7-link panel-close :class="theme.class_menu_text_color"><h3><i class="fas fa-times"></i></h3></f7-link>
                     </f7-block>
                 </f7-col>
             </f7-row>
         </f7-block>
-        <f7-block class="no-margin-top padding-bottom">
-            <p :class="theme.class_header_text_color">{{user}} <br> {{email}}</p>
-        </f7-block>
-        <f7-block class="padding-bottom">
-            <template v-if="notifications.documents_not_sent > 0 || notifications.documents_regularize_shipping > 0">
-                Notificaciones
-            </template>
-            <p v-show="notifications.documents_not_sent > 0">
-                <a href="#" class="link" :class="theme.class_menu_text_color">
-                    <span :class="theme.theme_color == 'red' ? 'bg-secondary' : ''" class="badge color-red elevation-8">{{ notifications.documents_not_sent }}</span>
-                    &nbsp;Comprobantes pendiente de envío
-                </a>
-            </p>
-
-            <p v-show="notifications.documents_regularize_shipping > 0">
-                <a href="#" class="link navbar-tooltip-regularize-shipping" :class="theme.class_header_text_color">
-                    <span :class="theme.theme_color == 'red' ? 'bg-secondary' : ''" class="badge color-red">{{ notifications.documents_regularize_shipping }}</span>
-                    &nbsp;Comprobantes pendientes de rectificación
-                </a>
-            </p>
-        </f7-block>
+        <PartialMenu />
     </f7-block>
-    <f7-block class="margin-left">
-
-        <template v-if="checkPermissions('configuration')">
-        <!-- <template v-if="check_configuration"> -->
-            <f7-link @click="go('configuration')" color="black" class="display-block margin-vertical">
-                <f7-icon material="settings" size="18"> </f7-icon>
-                &nbsp;Configuración
-            </f7-link>
-        </template>
-
-        <f7-link @click="go('login')" color="black" class="display-block margin-vertical">
-            <f7-icon material="verified_user" size="18"> </f7-icon>
-            &nbsp;cuenta
-        </f7-link>
-
-    </f7-block>
-
-    <f7-block class="bg-color-white margin-left"  v-if="check_is_pos_mode">
-
-        <p>Menú</p>
-
-        <f7-link  @click="go('pos')" color="black" class="display-block margin-vertical">
-            <f7-icon material="shopping_cart" size="18"> </f7-icon>
-            &nbsp;Punto de venta
-        </f7-link>
-
-        <f7-link v-if="checkPermissions('order-note')"  @click="go('order-note')" color="black" class="display-block margin-vertical">
-            <f7-icon material="assignment" size="18"> </f7-icon>
-            &nbsp;Pedido
-        </f7-link>
-
-
-        <f7-link v-if="checkPermissions('purchase')"  @click="go('purchase')" color="black" class="display-block margin-vertical">
-            <f7-icon material="note_add" size="18"> </f7-icon>
-            &nbsp;Compra
-        </f7-link>
-
-        <f7-link v-if="checkPermissions('quotation')"  @click="go('quotation')" color="black" class="display-block margin-vertical">
-            <f7-icon material="content_paste" size="18"> </f7-icon>
-            &nbsp;Cotización
-        </f7-link>
-
-        <f7-link v-if="checkPermissions('invoice')"  @click="go('dispatch')" color="black" class="display-block margin-vertical">
-            <f7-icon material="content_paste" size="18"> </f7-icon>
-            &nbsp;Guías de remisión
-        </f7-link>
-
-        <f7-link v-if="checkPermissions('documents')"  @click="go('ls_doc')" color="black" class="display-block margin-vertical">
-            <f7-icon material="format_list_numbered" size="18"> </f7-icon>
-            &nbsp;Lista de comprobantes
-        </f7-link>
-
-        <f7-link v-if="checkPermissions('validate-document')"  @click="go('cpe')" color="black" class="display-block margin-vertical">
-            <f7-icon material="assignment_turned_in" size="18"> </f7-icon>
-            &nbsp;Validar cpe
-        </f7-link>
-
-        <f7-link v-if="checkPermissions('report-sales')"  @click="go('report-sales')" color="black" class="display-block margin-vertical">
-            <f7-icon material="equalizer" size="18"> </f7-icon>
-            &nbsp;Reportes
-        </f7-link>
-
-
-        <f7-link v-if="checkPermissions('cash')"  @click="go('cash')" color="black" class="display-block margin-vertical">
-            <f7-icon material="monetization_on" size="18"> </f7-icon>
-            &nbsp;Caja
-        </f7-link>
-
-        <f7-link v-if="checkPermissions('customers')"  @click="go('customers')" color="black" class="display-block margin-vertical">
-            <f7-icon material="people" size="18"> </f7-icon>
-            &nbsp;Clientes
-        </f7-link>
-
-        <f7-link v-if="checkPermissions('items')"  @click="go('items')" color="black" class="display-block margin-vertical">
-            <f7-icon material="add_shopping_cart" size="18"> </f7-icon>
-            &nbsp;Productos
-        </f7-link>
-
+    <f7-block class="">
+        <PartialNotifications :theme="theme" :notifications="notifications"/>
+        <PartialConfigurations />
     </f7-block>
 
     <div :class="showBlockFooter ? 'block-footer bg-color-white pt-1' : 'footer bg-color-white'">
@@ -144,10 +47,17 @@
 
     import {general_functions} from "mixins_/general_functions"
     import {auth} from "mixins_/auth"
+    import PartialMenu from  "./partials/menu.vue"
+    import PartialNotifications from  "./partials/notifications.vue"
+    import PartialConfigurations from  "./partials/configurations.vue"
 
     export default {
         mixins: [auth, general_functions],
-        components: {},
+        components: {
+            PartialMenu,
+            PartialNotifications,
+            PartialConfigurations
+        },
         data: function () {
             return {
                 email: localStorage.user_email,
