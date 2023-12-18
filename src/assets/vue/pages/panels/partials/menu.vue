@@ -1,6 +1,6 @@
 <template>
-    <f7-block class="no-margin-top padding-bottom">
-        <f7-row>
+    <f7-block class="no-margin-top no-padding">
+        <f7-row class="padding-bottom">
             <f7-col class="text-align-center">
                 <div @click="go('pos')" style="cursor:pointer;">
                     <base-icon nameIcon="display" widthIcon="20" clases="no-padding no-margin"></base-icon>
@@ -25,21 +25,21 @@
                 </div>
                 <small class="font-w-500" style="line-height: 1;" :class="theme.class_text_color">Nota de venta</small>
             </f7-col>
+        </f7-row>
+        <f7-row class="padding-bottom">
             <f7-col class="text-align-center" v-if="checkPermissions('order-note')">
                 <div @click="go('order-note')" style="cursor:pointer;">
                     <base-icon nameIcon="file" widthIcon="20" clases="no-padding no-margin"></base-icon>
                 </div>
                 <small class="font-w-500" style="line-height: 1;" :class="theme.class_text_color">Pedido</small>
             </f7-col>
-        </f7-row>
-        <f7-row>
             <f7-col class="text-align-center" v-if="checkPermissions('quotation')">
                 <div @click="go('quotation')" style="cursor:pointer;">
                     <base-icon nameIcon="file-sale" widthIcon="20" clases="no-padding no-margin"></base-icon>
                 </div>
                 <small class="font-w-500" style="line-height: 1;" :class="theme.class_text_color">Cotización</small>
             </f7-col>
-            <f7-col class="text-align-center margin-bottom" v-if="checkPermissions('invoice')">
+            <f7-col class="text-align-center" v-if="checkPermissions('invoice')">
                 <div @click="go('dispatch')" style="cursor:pointer;">
                     <base-icon nameIcon="file-sale" widthIcon="20" clases="no-padding no-margin"></base-icon>
                 </div>
@@ -51,6 +51,8 @@
                 </div>
                 <small class="font-w-500" style="line-height: 1;" :class="theme.class_text_color">G.R. transportista</small>
             </f7-col>
+        </f7-row>
+        <f7-row class="padding-bottom">
             <f7-col class="text-align-center" v-if="checkPermissions('documents')">
                 <div @click="go('ls_doc')" style="cursor:pointer;">
                     <base-icon nameIcon="file-list" widthIcon="20" clases="no-padding no-margin"></base-icon>
@@ -63,8 +65,6 @@
                 </div>
                 <small class="font-w-500" style="line-height: 1;" :class="theme.class_text_color">Compra</small>
             </f7-col>
-        </f7-row>
-        <f7-row>
             <f7-col class="text-align-center" v-if="checkPermissions('customers')">
                 <div @click="go('customers')" style="cursor:pointer;">
                     <base-icon nameIcon="users" widthIcon="20" clases="no-padding no-margin"></base-icon>
@@ -77,6 +77,8 @@
                 </div>
                 <small class="font-w-500 text-align-center" :class="theme.class_text_color">Caja</small>
             </f7-col>
+        </f7-row>
+        <f7-row class="padding-bottom">
             <f7-col class="text-align-center"  v-if="checkPermissions('items')">
                 <div @click="go('items')" style="cursor:pointer;">
                     <base-icon nameIcon="logistics" widthIcon="20" clases="no-padding no-margin"></base-icon>

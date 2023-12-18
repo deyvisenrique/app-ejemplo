@@ -33,8 +33,9 @@
                                     fill
                                     small
                                     open-panel="right"
-                                    :icon="[card_mode ? 'fas fa-grip-horizontal' : 'fas fa-list']"
-                                    class="bg-primary"></f7-button>
+                                    class="bg-primary">
+                                    <i :class="[card_mode ? 'fas fa-grip-horizontal' : 'fas fa-list']"></i>
+                                </f7-button>
                                 <span class="" style="font-size: 10px;line-height: 10px !important;">{{ card_mode ? 'DETALLE' : 'LISTA' }}</span>
                             </f7-col>
                         </f7-row>

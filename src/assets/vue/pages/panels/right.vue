@@ -8,7 +8,9 @@
                 </f7-col>
                 <f7-col width="25">
                     <f7-block class="text-align-right no-margin no-padding">
-                        <f7-link panel-close :class="theme.class_menu_text_color"><h3><i class="fas fa-times"></i></h3></f7-link>
+                        <f7-link panel-close :class="theme.class_menu_text_color">
+                            <h2><i class="fas fa-times"></i></h2>
+                        </f7-link>
                     </f7-block>
                 </f7-col>
             </f7-row>
@@ -16,10 +18,10 @@
         <PartialMenu />
     </f7-block>
     <f7-block class="">
-        <PartialNotifications :theme="theme" :notifications="notifications"/>
+        <PartialNotifications v-show="notifications.documents_not_sent > 0 ||
+notifications.documents_regularize_shipping > 0" :theme="theme" :notifications="notifications"/>
         <PartialConfigurations />
     </f7-block>
-
     <div :class="showBlockFooter ? 'block-footer bg-color-white pt-1' : 'footer bg-color-white'">
         <f7-block>
             <f7-button class="padding-horizontal bg-secondary" @click="logout" :color="theme.name_color_theme" fill round>
@@ -34,7 +36,6 @@
 .footer {
     text-align: center;
     z-index: 9999;
-    position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
