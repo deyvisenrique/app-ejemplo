@@ -1,10 +1,10 @@
 <template>
-<f7-page class="">
+<f7-page :show="user()"     >
     <f7-block class="no-margin-top" :class="theme.class_bg_header">
         <f7-block class="no-margin-vertical">
             <f7-row>
                 <f7-col width="75">
-                    <p :class="theme.class_header_text_color">{{user}} <br> {{email}}</p>
+                    <p :class="theme.class_header_text_color">{{username}} <br> {{email}}</p>
                 </f7-col>
                 <f7-col width="25">
                     <f7-block class="text-align-right no-margin no-padding">
@@ -61,8 +61,8 @@ notifications.documents_regularize_shipping > 0" :theme="theme" :notifications="
         },
         data: function () {
             return {
-                email: localStorage.user_email,
-                user: localStorage.user_name,
+                email: '',
+                username: '',
                 notifications: {
                     documents_not_sent: 0,
                     documents_regularize_shipping: 0,
@@ -93,6 +93,13 @@ notifications.documents_regularize_shipping > 0" :theme="theme" :notifications="
             }
         },
         methods: {
+            user()
+            {
+                if(this.username == '') {
+                    this.email = this.getStorage('user_email')
+                    this.username = this.getStorage('user_name')
+                }
+            },
             getAllPermissions()
             {
                 return this.current_permissions.length > 0 ? this.current_permissions : this.getStoragePermissions()

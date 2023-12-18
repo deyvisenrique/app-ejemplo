@@ -1,5 +1,5 @@
 <template>
-    <f7-block class="no-margin-top no-padding">
+    <f7-block class="no-margin-top no-padding" style="max-width: 450px; margin: 0 auto;">
         <f7-row class="padding-bottom">
             <f7-col class="text-align-center">
                 <div @click="go('pos')" style="cursor:pointer;">
@@ -146,7 +146,15 @@ export default {
                     this.redirectMainRoute("/form-document/03");
                     break;
                 case 'pos':
-                    this.redirectMainRoute('/list-items-sale/')
+                    if (window.matchMedia('(orientation: portrait)').matches)
+                    {
+                        this.redirectMainRoute('/list-items-sale/')
+                    }
+
+                    if (window.matchMedia('(orientation: landscape)').matches)
+                    {
+                        this.redirectMainRoute('/landscape-pos/')
+                    }
                     break
                 case 'ls_doc':
                     this.redirectMainRoute('/documents/')

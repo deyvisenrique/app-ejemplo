@@ -107,9 +107,9 @@
         components: { Logo },
         data: function () {
             return {
-                email: "demo@gmail.com",
-                password: "1234567",
-                url: "app.facturalo.pro",
+                email: "empresa1@gmail.com",
+                password: "11111111111",
+                url: "empresa1.demo4pro6.ibu.pe",
                 logo: '',
                 internet_protocol: 'https://',
                 is_type_password: true,
@@ -204,7 +204,7 @@
                             self.saveToken(data.token, data.name, data.email, data.ruc, data.app_logo, data.app_logo_base64)
                             self.setStorage('company', data.company, true)
                             if (data.app_configuration) self.setStorage('app_configuration', data.app_configuration, true)
-                            self.$f7router.navigate("/sale-detail-pos/")
+                            self.$f7router.navigate("/")
                         }
                         else
                         {
