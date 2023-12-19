@@ -20,7 +20,7 @@
                 <small class="font-w-500" style="line-height: 1;" :class="theme.class_text_color">Boleta</small>
             </f7-col>
             <f7-col class="text-align-center" v-if="checkPermissions('sale-note')">
-                <div @click="go('sale_note')" style="cursor:pointer;">
+                <div @click="go('sale-note')" style="cursor:pointer;">
                     <base-icon nameIcon="file-sale" widthIcon="20" clases="no-padding no-margin"></base-icon>
                 </div>
                 <small class="font-w-500" style="line-height: 1;" :class="theme.class_text_color">Nota de venta</small>
@@ -43,13 +43,13 @@
                 <div @click="go('dispatch')" style="cursor:pointer;">
                     <base-icon nameIcon="file-sale" widthIcon="20" clases="no-padding no-margin"></base-icon>
                 </div>
-                <small class="font-w-500" style="line-height: 1;" :class="theme.class_text_color">G.R. remitente</small>
+                <small class="font-w-500" style="line-height: 1;" :class="theme.class_text_color">G.R.<br> remitente</small>
             </f7-col>
             <f7-col class="text-align-center" v-if="checkPermissions('invoice')">
                 <div @click="go('dispatch-carrier')" style="cursor:pointer;">
                     <base-icon nameIcon="file-sale" widthIcon="20" clases="no-padding no-margin"></base-icon>
                 </div>
-                <small class="font-w-500" style="line-height: 1;" :class="theme.class_text_color">G.R. transportista</small>
+                <small class="font-w-500" style="line-height: 1;" :class="theme.class_text_color">G.R.<br> transportista</small>
             </f7-col>
         </f7-row>
         <f7-row class="padding-bottom">
@@ -97,6 +97,7 @@
                 </div>
                 <small class="font-w-500" style="line-height: 1;" :class="theme.class_text_color">Validador</small>
             </f7-col>
+            <f7-col></f7-col>
         </f7-row>
     </f7-block>
 </template>
@@ -185,6 +186,12 @@ export default {
                     break
                 case "dispatch":
                     this.redirectMainRoute("/form-dispatch/");
+                    break
+                case "dispatch-carrier":
+                    this.redirectMainRoute("/form-dispatch-carrier/");
+                    break
+                case "sale-note":
+                    this.redirectMainRoute("/form-sale-note/");
                     break
             }
             this.$eventHub.$emit('closePanel')

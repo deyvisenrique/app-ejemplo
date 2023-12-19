@@ -1,10 +1,10 @@
 <template>
-<f7-page :show="user()"     >
-    <f7-block class="no-margin-top" :class="theme.class_bg_header">
+<f7-page>
+    <f7-block class="no-margin-top no-margin-bottom" :class="theme.class_bg_header">
         <f7-block class="no-margin-vertical">
             <f7-row>
                 <f7-col width="75">
-                    <p :class="theme.class_header_text_color">{{username}} <br> {{email}}</p>
+                    <p :class="theme.class_header_text_color">{{userData.username}} <br> {{userData.email}}</p>
                 </f7-col>
                 <f7-col width="25">
                     <f7-block class="text-align-right no-margin no-padding">
@@ -17,7 +17,7 @@
         </f7-block>
         <PartialMenu />
     </f7-block>
-    <f7-block class="">
+    <f7-block class="no-margin-top">
         <PartialNotifications v-show="notifications.documents_not_sent > 0 ||
 notifications.documents_regularize_shipping > 0" :theme="theme" :notifications="notifications"/>
         <PartialConfigurations />
@@ -46,6 +46,7 @@ notifications.documents_regularize_shipping > 0" :theme="theme" :notifications="
 
 <script>
 
+    import {mapState} from 'vuex'
     import {general_functions} from "mixins_/general_functions"
     import {auth} from "mixins_/auth"
     import PartialMenu from  "./partials/menu.vue"
@@ -61,8 +62,6 @@ notifications.documents_regularize_shipping > 0" :theme="theme" :notifications="
         },
         data: function () {
             return {
-                email: '',
-                username: '',
                 notifications: {
                     documents_not_sent: 0,
                     documents_regularize_shipping: 0,
@@ -71,6 +70,7 @@ notifications.documents_regularize_shipping > 0" :theme="theme" :notifications="
                 check_is_pos_mode: false,
                 current_permissions: [],
                 theme: {},
+                user_data: this.userData,
             }
         },
         mounted() {
@@ -84,6 +84,7 @@ notifications.documents_regularize_shipping > 0" :theme="theme" :notifications="
             this.checkPosMode()
         },
         computed: {
+            ...mapState(['userData']),
             showBlockFooter()
             {
                 const all_permissions = this.getAllPermissions()
@@ -93,13 +94,6 @@ notifications.documents_regularize_shipping > 0" :theme="theme" :notifications="
             }
         },
         methods: {
-            user()
-            {
-                if(this.username == '') {
-                    this.email = this.getStorage('user_email')
-                    this.username = this.getStorage('user_name')
-                }
-            },
             getAllPermissions()
             {
                 return this.current_permissions.length > 0 ? this.current_permissions : this.getStoragePermissions()

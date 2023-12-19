@@ -1,17 +1,15 @@
 <template>
     <div>
-        <f7-block-title>Configuración</f7-block-title>
-        <f7-list>
-            <template v-if="!check_is_pos_mode">
-                <f7-list-item title="Imagen en productos">
-                    <template #after>
-                        <label class="toggle toggle-init color-blue">
-                            <input type="checkbox" v-model="form.show_image_item" @change="submit"/>
-                            <span class="toggle-icon"></span>
-                        </label>
-                    </template>
-                </f7-list-item>
-            </template>
+        <f7-list class="no-margin-top">
+            <f7-list-item title="Configuración de cuenta" @click.native="pageLogin()" link="#"></f7-list-item>
+            <f7-list-item title="Listado de productos con imagen">
+                <template #after>
+                    <label class="toggle toggle-init color-blue">
+                        <input type="checkbox" v-model="form.show_image_item" @change="submit"/>
+                        <span class="toggle-icon"></span>
+                    </label>
+                </template>
+            </f7-list-item>
             <f7-list-item smart-select :smart-select-params="{openIn: 'popover'}">
                 <template #title>
                     Formato PDF (CPE)
@@ -34,9 +32,7 @@
                         <span class="badge">{{ getSelectedDocumentType() }}</span>
                     </template>
                     <select v-model="form.default_document_type" @change="saveOnlyConfigStorage" class="full-width bg-color-blue">
-                        <template v-for="(option, index) in default_document_types" >
-                            <option :value="option.id" :key="index">{{ option.description }}</option>
-                        </template>
+                        <option v-for="(option, index) in default_document_types" :value="option.id" :key="index">{{ option.description }}</option>
                     </select>
                 </f7-list-item>
                 <f7-list-item title="Agregar impresora bluetooth">
@@ -63,7 +59,6 @@
                         <f7-block-header class="padding-horizontal">No tiene dispositivos sincronizados</f7-block-header>
                     </template>
                 </template>
-                <f7-list-item title="Cuenta" @click.native="pageLogin()" link="#"></f7-list-item>
             </template>
         </f7-list>
     </div>
@@ -71,11 +66,13 @@
 
 <script>
 import {general_functions, functions_direct_print} from "mixins_/general_functions"
+import {auth} from "mixins_/auth"
 
 export default {
     mixins: [
         general_functions,
-        functions_direct_print
+        functions_direct_print,
+        auth
     ],
     data: function () {
         return {

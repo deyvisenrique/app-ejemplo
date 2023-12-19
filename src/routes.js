@@ -113,7 +113,7 @@ export default [
     component: FormDispatch
   },
   {
-    path: '/form-dispatch-carrier',
+    path: '/form-dispatch-carrier/',
     component: FormDispatchCarrier
   }
 ];

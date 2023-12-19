@@ -7,66 +7,41 @@
             <f7-block class="">
                 <f7-row>
                     <f7-col width="70" style="border: 1px solid #8e8e93;border-radius: 5px;">
-                        <div class="searchbar searchbar-inline" style="margin:4%">
+                        <div class="searchbar searchbar-inline" style="margin:8px">
                             <div class="searchbar-input-wrap">
-                                <input type="search" placeholder="Buscar" style="font-size:12px" v-model="form_search.input" @input="searchRecords"/>
+                                <input type="search" placeholder="Buscar" style="font-size:16px;height: 19px;" v-model="form_search.input" @input="searchRecords"/>
                                 <i class="searchbar-icon"></i>
                                 <button  class="input-clear-button" @click="clickClearInput"></button>
                             </div>
                         </div>
                     </f7-col>
                     <f7-col width="10" class="text-align-center">
-                        <f7-button @click="clickSearchBarcode" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-camera" class="bg-secondary"></f7-button>
-                        <span class="" style="font-size: 10px;line-height: 10px !important;">BUSCAR</span>
+                        <f7-button @click="clickSearchBarcode" :color="theme.name_color_theme" fill  open-panel="right" icon="fas fa-camera" class="bg-secondary"></f7-button>
                     </f7-col>
                     <f7-col width="10" class="text-align-center">
-                        <f7-button @click="clickCreate()" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-plus" class="bg-secondary"></f7-button>
-                        <span class="" style="font-size: 10px;line-height: 10px !important;">NUEVO</span>
+                        <f7-button @click="clickCreate()" :color="theme.name_color_theme" fill  open-panel="right" icon="fas fa-plus" class="bg-secondary"></f7-button>
                     </f7-col>
                     <f7-col width="10" class="text-align-center">
                         <f7-button
                             @click="card_mode = !card_mode"
                             :color="theme.name_color_theme"
                             fill
-                            small
+                            :icon="iconGrid()"
                             open-panel="right"
                             class="bg-primary">
-                            <i :class="[card_mode ? 'fas fa-grip-horizontal' : 'fas fa-list']"></i>
                         </f7-button>
-                        <span class="" style="font-size: 10px;line-height: 10px !important;">{{ card_mode ? 'DETALLE' : 'LISTA' }}</span>
                     </f7-col>
                 </f7-row>
             </f7-block>
 
             <f7-row class="padding-horizontal">
-
-                <!-- <f7-col width="10">
-                    <template v-if="form_search.favorite == 1">
-                        <span class="padding-top margin-top material-icons text-color-purple" @click="clickFavorite">favorite</span>
-                    </template>
-                    <template v-else>
-                        <span class="padding-top margin-top material-icons text-color-purple" @click="clickFavorite">favorite_border</span>
-                    </template>
-                </f7-col> -->
-
                 <f7-col width="100">
-                    <div class="c-horizontal-scroll mp-div-category">
-                        <template v-for="(category, index) in categories">
-
-                            <!-- <span
-                                class="c-padding-span-card c-span-card c-margin-span-card"
-                                :class="category.selected ? 'selected-span-card' : ''"
-                                :key="index"
-                                @click="clickSearchByCategory(index, category.id)">
-                                <b>{{ getCategoryName(category) }}</b>
-                            </span> -->
-                            <span :key="index" style="display: table-cell; padding-right: 5px">
-                                <f7-button :key="index" @click="clickSearchByCategory(index, category.id)" :color="theme.name_color_theme" fill medium :class="category.selected ? 'bg-secondary' : ''">
-                                    {{ getCategoryName(category) }}
-                                </f7-button>
-                            </span>
-
-                        </template>
+                    <div class="c-horizontal-scroll mp-div-category margin-bottom">
+                        <span v-for="(category, index) in categories" :key="index" style="display: table-cell; padding-right: 5px">
+                            <f7-button :key="index" @click="clickSearchByCategory(index, category.id)" :color="theme.name_color_theme" fill medium :class="category.selected ? 'bg-secondary' : ''">
+                                {{ getCategoryName(category) }}
+                            </f7-button>
+                        </span>
                     </div>
                 </f7-col>
             </f7-row>
@@ -91,7 +66,7 @@
                             </div>
                         </div>
                         <template v-if="form_search.input && records.length == 0">
-                            <f7-button @click="clickCreate()" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-plus" class="bg-secondary"> Registrar Producto</f7-button>
+                            <f7-button @click="clickCreate()" :color="theme.name_color_theme" fill small open-panel="right" icon="fas fa-plus" class="bg-secondary"> Agregar Producto: {{ form_search.input }}</f7-button>
                         </template>
                     </template>
                     <template v-else>
@@ -311,6 +286,9 @@
             },
             goItems() {
                 this.$f7router.navigate("/items/")
+            },
+            iconGrid() {
+                return this.card_mode ? 'fas fa-grip-horizontal' : 'fas fa-list'
             }
         }
     }

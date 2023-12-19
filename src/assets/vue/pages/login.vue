@@ -101,6 +101,7 @@
     import logoLight from "assets/images/logo/logo-light.svg";
     import {general_functions} from "mixins_/general_functions"
     import Logo from "components/layout/Logo.vue"
+    import {mapState, mapActions} from 'vuex'
 
     export default {
         mixins: [auth, general_functions],
@@ -127,8 +128,11 @@
             this.setStorageApiUrl()
             this.getInitialSettings()
         },
-        computed: {},
+        computed: {
+            ...mapState(['userData']),
+        },
         methods: {
+            ...mapActions(['userLogged']),
             clickShowPassword(){
                 this.is_type_password = !this.is_type_password
                 if(this.is_type_password){
@@ -202,6 +206,7 @@
                         if (data.success)
                         {
                             self.saveToken(data.token, data.name, data.email, data.ruc, data.app_logo, data.app_logo_base64)
+                            this.userLogged({username: data.name, email: data.email})
                             self.setStorage('company', data.company, true)
                             if (data.app_configuration) self.setStorage('app_configuration', data.app_configuration, true)
                             self.$f7router.navigate("/")

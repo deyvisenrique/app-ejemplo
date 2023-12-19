@@ -278,7 +278,7 @@
             form: {},
             popupOpened: false,
             popupCustomerOpened: false,
-            title: "Guías de Remisión",
+            title: "Guía de Remisión Remitente",
             all_payment_method_types: [],
             payment_destinations: [],
             series: [],

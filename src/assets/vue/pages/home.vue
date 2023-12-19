@@ -50,6 +50,7 @@
 
 <script>
 
+    import {mapActions} from 'vuex'
     import logoOficial from "assets/images/logo/logo-oficial.svg";
     import logoOficialLight from "assets/images/logo/logo-light.svg";
     import icons from "assets/images/icons-01.svg";
@@ -87,6 +88,8 @@
         },
         async created() {
 
+            this.userLogged({})
+
             await this.setInitialLogo()
             await this.getInitialSettings()
 
@@ -110,6 +113,7 @@
             }
         },
         methods: {
+            ...mapActions(['userLogged']),
             checkDirectPrint()
             {
                 if(this.is_pos_mode)

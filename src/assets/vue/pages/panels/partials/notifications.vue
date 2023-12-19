@@ -1,7 +1,6 @@
 <template>
     <div>
-        <f7-block-title>Notificaciones</f7-block-title>
-        <f7-list v-if="notifications.documents_not_sent > 0 || notifications.documents_regularize_shipping > 0">
+        <f7-list v-if="notifications.documents_not_sent > 0 || notifications.documents_regularize_shipping > 0" class="no-margin-top">
             <template v-show="notifications.documents_not_sent > 0"">
                 <f7-list-item title="Comprobantes pendiente de envío">
                     <template #title>

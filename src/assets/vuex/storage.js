@@ -5,7 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    user: {}
+    userData: {}
   },
 
   actions: {
@@ -16,7 +16,12 @@ export default new Vuex.Store({
 
   mutations: {
     USER_LOGGED (state, user) {
-      state.user = user;
+      let fromStorage = {
+        username: localStorage.getItem('user_name'),
+        email: localStorage.getItem('user_email'),
+        api_url: localStorage.getItem('api_url')
+      }
+      state.userData = fromStorage;
     }
   },
 });
