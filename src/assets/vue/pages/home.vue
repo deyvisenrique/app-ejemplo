@@ -174,6 +174,7 @@
                 await this.setPermissions(data)
                 await this.setAppLogo(data.generals)
                 await this.setGenerals(data)
+                await this.setMultiUser(data.multi_user_enabled)
 
             },
             setAppMode(new_mode){
@@ -185,6 +186,10 @@
                     // this.redirectRoute('/list-items-sale/')
                 }
                 this.$eventHub.$emit('appMode', new_mode)
+            },
+            setMultiUser(multi_user_enabled)
+            {
+                this.setStorage('multi_user_enabled', multi_user_enabled)
             },
             checkCurrentOrientation()
             {

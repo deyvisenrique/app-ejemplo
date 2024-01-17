@@ -58,6 +58,9 @@
         </f7-row>
     </f7-block>
     <header-waves :title="title" v-if="theme.theme_color != 'white'"></header-waves>
+
+    <change-client></change-client>
+
 </div>
 </template>
 
@@ -67,6 +70,7 @@
     import HeaderWaves from "./HeaderWaves.vue"
     import Logo from "./Logo.vue"
     import {general_functions, set_logo} from "mixins_/general_functions"
+    import ChangeClient from '../multi-users/ChangeClient.vue'
 
     export default {
         mixins: [general_functions, set_logo],
@@ -75,7 +79,8 @@
         components: {
             HeaderWaves,
             logoOficialLight,
-            Logo
+            Logo,
+            ChangeClient
         },
         data: function () {
             return {
