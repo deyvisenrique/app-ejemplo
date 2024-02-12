@@ -161,7 +161,7 @@
                                 <td class="numeric-only no-padding-left">{{ row.total }}</td>
                                 <td class="no-padding">
                                     <a @click="clickDelete(index)">
-                                        <f7-icon ios="f7:delete" color="red" aurora="f7:delete" md="material:delete" ></f7-icon>
+                                        <f7-icon ios="material:delete" color="red" aurora="f7:delete" md="material:delete" ></f7-icon>
                                     </a>
                                 </td>
                             </tr>
@@ -177,7 +177,7 @@
             </f7-block>
 
             <f7-fab position="left-bottom" class="margin-right" color="red" @click="clickDeleteItems">
-                <f7-icon ios="f7:delete" aurora="f7:delete" md="material:delete"></f7-icon>
+                <f7-icon ios="material:delete" aurora="f7:delete" md="material:delete"></f7-icon>
             </f7-fab>
 
             <f7-fab position="right-bottom" class="margin-right" color="bluemagenta" @click="clickPayment">
@@ -468,7 +468,9 @@
             calculateDataItem(row)
             {
                 let form_item = this.getFormItem()
-
+                // console.log('row',row)
+                // console.log('form_item',form_item)
+                
                 form_item.item = row
                 // console.log("form_item.item.sale_unit_price", form_item.item.sale_unit_price)
 
@@ -481,7 +483,9 @@
                 // console.log(this.configuration)
                 form_item.igv_31556_percentage = this.configuration.has_igv_31556 ? (this.configuration.igv_31556_percentage * 100) : 18
 
-                const unit_price = this.roundNumber((form_item.has_igv ? form_item.unit_price_value : (form_item.unit_price_value * (1 + form_item.igv_31556_percentage))), 6)
+                const unit_price = form_item.has_igv ? form_item.unit_price_value : (form_item.unit_price_value * (1 + (form_item.igv_31556_percentage / 100)))
+                // console.log('q', unit_price)                
+
 
                 form_item.unit_price = unit_price
                 form_item.item.unit_price = unit_price
@@ -518,6 +522,7 @@
 
                 if(this.list_items_sale)
                 {
+                    // console.log(this.form.items)
                     this.form.items = await this.getTransformDataItem(this.list_items_sale)
 
                     this.calculateTotal()
@@ -540,6 +545,7 @@
             },
             changeUnitPrice(index)
             {
+                // console.log(this.form.items[index].unit_price)
                 const unit_price = parseFloat(this.form.items[index].unit_price)
 
                 if(unit_price <= 0)
@@ -551,6 +557,7 @@
                 item_sale.sale_unit_price = unit_price
 
                 this.form.items[index] = this.calculateDataItem(item_sale)
+                // console.log(this.form.items[index]) 
                 this.calculateTotal()
                 this.saveListItemsSale()
 
@@ -622,7 +629,7 @@
                 this.$eventHub.$emit('eventUpdateDataFormSale', this.form)
             },
             setInputDescription(row){
-                console.log(row)
+                // console.log(row)
                 if(row.input_description != row.item.description)
                 {
                     row.name_product_pdf = row.input_description

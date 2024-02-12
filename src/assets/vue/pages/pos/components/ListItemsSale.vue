@@ -143,7 +143,7 @@
         </f7-card>
 
         <f7-fab position="right-bottom" class="margin-right" :color="theme.name_color_theme" v-if="quantitySelectedRecords() > 0" @click="sendListItems">
-            <f7-icon ios="f7:plus" aurora="f7:plus" md="material:shopping_cart" >
+            <f7-icon ios="f7:shopping_cart" aurora="f7:shopping_cart" md="material:shopping_cart" >
                 <f7-badge class="bg-secondary" :color="theme.name_color_theme">
                     {{ quantitySelectedRecords() }}
                 </f7-badge>

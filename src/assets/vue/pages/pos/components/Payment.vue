@@ -37,9 +37,7 @@
                                     <div class="item-title item-label">Serie</div>
                                     <div class="item-input-wrap input-dropdown-wrap">
                                         <select v-model="form.series_id" placeholder="Please choose...">
-                                            <template v-for="(row, index) in series">
-                                                <option :value="row.id" :key="index">{{row.number}}</option>
-                                            </template>
+                                                <option v-for="(row, index) in series" :value="row.id" :key="index">{{row.number}}</option>
                                         </select>
                                     </div>
                                 </div>
