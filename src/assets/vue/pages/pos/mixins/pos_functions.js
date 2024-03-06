@@ -7,7 +7,8 @@ export const fn_list_items_sale = {
 
     data: function () {
         return {
-            header_title: 'PRODUCTOS'
+            header_title: 'PRODUCTOS',
+            searchTimer: null,
         }
     },
     methods: {
@@ -15,12 +16,16 @@ export const fn_list_items_sale = {
         {
             this.header_title = new_title ? new_title.toUpperCase() : 'PRODUCTOS'
         },
-        async searchRecords()
+        searchRecords()
         {
-            if(this.form_search.input.length > 2)
-            {
-                await this.initDataListItems()
-            }
+            clearTimeout(this.searchTimer);
+            this.searchTimer = setTimeout(() => {
+                this.initDataListItems()
+            }, 500);
+            // if(this.form_search.input.length > 2)
+            // {
+            //     await this.initDataListItems()
+            // }
         },
         events(){
 
