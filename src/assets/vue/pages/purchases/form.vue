@@ -104,7 +104,9 @@
                             <tbody>
                                 <tr v-for="(row, index) in form.items" :key="index">
                                     <td>
-                                        <f7-icon @click.native="deleteItem(index)" color="red" material="cancel"></f7-icon>
+                                        <f7-button @click.native="deleteItem(index)">
+                                            <f7-icon color="red" material="cancel"></f7-icon>
+                                        </f7-button>
                                     </td>
                                     <td class="no-padding label-cell">{{index + 1 }}</td>
                                     <td class="no-padding numeric-cell">{{row.item.description}}</td>
@@ -215,6 +217,7 @@
             },
             deleteItem(index) {
                 this.form.items.splice(index, 1)
+                this.calculateTotal()
                 // this.$refs.form_items_car.delete_parent(id)
             },
             addSupplier(row) {
