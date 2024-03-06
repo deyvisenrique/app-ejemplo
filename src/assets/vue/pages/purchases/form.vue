@@ -442,6 +442,7 @@
                     payments: []
                 }
 
+                this.supplier = null
             },
             getTables() {
                 const self = this
