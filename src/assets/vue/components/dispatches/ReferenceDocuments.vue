@@ -120,19 +120,19 @@ export default {
       this.form.documento.descripcion = selected.description
     },
     validate() {
-      if (!this.numero) {
+      if (!this.form.numero) {
         this.$f7.dialog.alert(`el número es requerido`, "Documento relacionado");
         return false;
       }
-      if (!this.empresa) {
+      if (!this.form.empresa) {
         this.$f7.dialog.alert(`el proveedor es requerido`, "Documento relacionado");
         return false;
       }
-      if (!this.ruc) {
+      if (!this.form.ruc) {
         this.$f7.dialog.alert(`el número de documento es requerido`, "Documento relacionado");
         return false;
       }
-      if (!this.documento.length) {
+      if (!this.form.documento.id) {
         this.$f7.dialog.alert(`el tipo de documento es requerido`, "Documento relacionado");
         return false;
       }
