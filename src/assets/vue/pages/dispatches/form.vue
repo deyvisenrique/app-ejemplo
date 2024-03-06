@@ -163,6 +163,40 @@
               </div>
             </f7-col>
           </f7-row>
+          <li class="padding-vertical">
+            <f7-button @click="popupDocumentOpened = true" class="bg-white-shade text-align-left padding-left">
+              <small>
+                <f7-icon icon="fas fa-plus"></f7-icon>
+                Documento relacionado
+              </small>
+            </f7-button>
+          </li>
+          <f7-col v-show="form.documento_relacionado.length > 0" width="100" class="data-table">
+            <table>
+              <thead>
+                <tr>
+                  <th class="numeric-cell" width="5%"></th>
+                  <th class="label-cell">Documento</th>
+                  <th class="label-cell">Número</th>
+                  <th class="medium-cell">Proveedor</th>
+                  <th class="medium-cell">RUC</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(row, index) in form.documento_relacionado" :key="index">
+                  <td class="no-padding numeric-cell">
+                    <f7-button @click.native="deleteDocument(index)">
+                      <f7-icon color="red" material="cancel"></f7-icon>
+                    </f7-button>
+                  </td>
+                  <td class="no-padding label-cell text-align-center">{{row.documento.descripcion}}</td>
+                  <td class="no-padding numeric-cell text-align-left">{{row.numero}}</td>
+                  <td class="no-padding padding-right numeric-cell">{{row.empresa}}</td>
+                  <td class="no-padding padding-right numeric-cell">{{row.ruc}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </f7-col>
           <li class="no-padding-horizontal margin-top">
             <f7-block class="bg-white-shade block-strong inset no-margin">
               <f7-row @click="popupCustomerOpened = true">
@@ -249,6 +283,10 @@
     <f7-popup class="demo-popup" :opened="popupCustomerOpened" @popup:closed="popupCustomerOpened = false">
       <customer-form :codeType="codeType" :customerId="form.customer_id" :showDialog.sync="popupCustomerOpened" ref="form_customer_car" @addCustomerCar="addCustomer"></customer-form>
     </f7-popup>
+
+    <f7-popup class="demo-document" :opened="popupDocumentOpened" @popup:closed="popupDocumentOpened = false">
+      <reference-document-form :showDialog.sync="popupDocumentOpened" ref="form_document_car" @addDocument="addDocument"></reference-document-form>
+    </f7-popup>
   </f7-page>
 </template>
 
@@ -261,13 +299,15 @@
   import { general_functions } from "mixins_/general_functions"
   import {findGeneralDefaultSerie} from "js_/helpers/functions"
   import HeaderLayout from "components/layout/Header"
+  import ReferenceDocumentForm from "components/dispatches/ReferenceDocuments"
 
   export default {
     name: "FormDispatch",
     components: {
         ItemsForm,
         CustomerForm,
-        HeaderLayout
+        HeaderLayout,
+        ReferenceDocumentForm
     },
     mixins: [auth, general_functions],
     data: function () {
@@ -278,6 +318,7 @@
             form: {},
             popupOpened: false,
             popupCustomerOpened: false,
+            popupDocumentOpened: false,
             title: "Guía de Remisión Remitente",
             all_payment_method_types: [],
             payment_destinations: [],
@@ -302,7 +343,8 @@
             drivers: {},
             transports: {},
             driver: '',
-            transport: ''
+            transport: '',
+            theme: {}
         };
     },
     async created() {
@@ -310,6 +352,7 @@
       await this.getTables()
       await this.initForm()
       await this.getSeries()
+      this.getInitialSettings()
     },
     methods: {
       loadConfiguration(){
@@ -334,6 +377,7 @@
           transportista: [],
           direccion_llegada: [],
           delivery_address: null,
+          documento_relacionado: []
         };
         this.initSeries()
       },
@@ -405,6 +449,13 @@
             context.form.items.push(record)
           });
         });
+      },
+      addDocument(row) {
+        this.popupDocumentOpened = false;
+        this.form.documento_relacionado.push(row)
+      },
+      deleteDocument(index) {
+        this.form.documento_relacionado.splice(index, 1);
       },
       deleteItem(id, index) {
         this.form.items.splice(index, 1);
@@ -608,7 +659,10 @@
           modelo: transport.model,
           marca: transport.brand
         }
-      }
+      },
+      getInitialSettings() {
+        this.theme = this.getThemeSettings()
+      },
     }
   }
 </script>
