@@ -69,6 +69,28 @@
             style="text-transform:capitalize; font-weight: 400;">
             Cotización
         </f7-button>
+        <f7-button
+            :outline="!activeClass.dispatches"
+            small
+            :color="activeClass.dispatches ? theme.name_color_theme : 'gray'"
+            :fill="activeClass.dispatches"
+            href="#tab-dispatches"
+            class="tab-link bg-secondary"
+            @click="show('dispatches')"
+            style="text-transform:capitalize; font-weight: 400;">
+            G.R. Remitente
+        </f7-button>
+        <f7-button
+            :outline="!activeClass.carrier_dispatches"
+            small
+            :color="activeClass.carrier_dispatches ? theme.name_color_theme : 'gray'"
+            :fill="activeClass.carrier_dispatches"
+            href="#tab-carrier-dispatches"
+            class="tab-link bg-secondary"
+            @click="show('carrier_dispatches')"
+            style="text-transform:capitalize; font-weight: 400;">
+            G.R. Transportista
+        </f7-button>
     </f7-block>
 
     <f7-block class="no-padding">
@@ -560,7 +582,6 @@
                         </f7-list-item>
                     </f7-list>
                 </div>
-
                 <div id="tab-quotations" class="page-content tab">
 
 
@@ -632,7 +653,143 @@
                         </f7-list-item>
                     </f7-list>
                 </div>
-
+                <div id="tab-dispatches" class="page-content tab">
+                    <f7-searchbar placeholder="Buscar" :value="search_input" @input="search_input = $event.target.value" :clear-button="true" ></f7-searchbar>
+                    <div class="searchbar-not-found list" style="display: block;" v-if="source_dispatches.length == 0">
+                        <ul>
+                            <li class="padding-left margin-left">
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">No se encontraron resultados</div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <f7-list media-list class="search-list">
+                        <f7-list-item v-for="item in source_dispatches" :key="item.id" class="list-documents margin-bottom">
+                            <span slot="subtitle">
+                                <f7-block class="no-padding no-margin-vertical">
+                                    <f7-row>
+                                        <f7-col width="60" class="text-align-left">
+                                            <div style="word-break: break-all !important; white-space: pre-line !important; margin-top: -25px;" class="note-customer">
+                                                {{ item.customer_name }}
+                                            </div>
+                                            <span class="text-color-gray">
+                                                RUC: <span class="note-customer-number">{{ item.customer_number }}</span><br>
+                                                {{ item.date_of_issue }}
+                                            </span>
+                                        </f7-col>
+                                        <f7-col width="40" class="text-align-right">
+                                            <f7-row>
+                                                <f7-col width="100">
+                                                    <span class="note-number">{{item.number}}</span>
+                                                </f7-col>
+                                                <f7-col width="100">
+                                                    <f7-badge :color="statusColor(item.state_type_description)" style="width: 100%">
+                                                        {{ item.state_type_description }}
+                                                    </f7-badge>
+                                                    <br>
+                                                    <span style="font-size: 16px; font-weight: bold">
+                                                        Entrega:
+                                                        {{ item.date_of_shipping }}
+                                                    </span>
+                                                </f7-col>
+                                            </f7-row>
+                                        </f7-col>
+                                    </f7-row>
+                                    <f7-row>
+                                        <f7-col>
+                                            <f7-button @click="clickDownloadPdf(item, 'dispatch')" color="blue-shade">
+                                                <f7-icon class="icon fas fa-download"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <!-- <f7-col>
+                                            <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_ticket)" color="green">
+                                                <f7-icon class="icon fab fa-whatsapp"></f7-icon>
+                                            </f7-button>
+                                        </f7-col> -->
+                                        <!-- <f7-col>
+                                            <f7-button @click="email(item.id, 'dispatch', item.customer_email)" color="purple">
+                                                <f7-icon class="icon fas fa-envelope"></f7-icon>
+                                            </f7-button>
+                                        </f7-col> -->
+                                    </f7-row>
+                                </f7-block>
+                            </span>
+                        </f7-list-item>
+                    </f7-list>
+                </div>
+                <div id="tab-carrier-dispatches" class="page-content tab">
+                    <f7-searchbar placeholder="Buscar" :value="search_input" @input="search_input = $event.target.value" :clear-button="true" ></f7-searchbar>
+                    <div class="searchbar-not-found list" style="display: block;" v-if="source_carrier_dispatches.length == 0">
+                        <ul>
+                            <li class="padding-left margin-left">
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">No se encontraron resultados</div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <f7-list media-list class="search-list">
+                        <f7-list-item v-for="item in source_carrier_dispatches" :key="item.id" class="list-documents margin-bottom">
+                            <span slot="subtitle">
+                                <f7-block class="no-padding no-margin-vertical">
+                                    <f7-row>
+                                        <f7-col width="60" class="text-align-left">
+                                            <!-- <div style="word-break: break-all !important; white-space: pre-line !important; margin-top: -25px;" class="note-customer">
+                                                Origen: {{item.sender_number}} {{ item.sender_name }}
+                                            </div> -->
+                                            <span class="text-color-gray">
+                                                Origen: <span class="note-customer-number">{{ item.sender_number }}</span>
+                                                {{ item.sender_name }}
+                                                <br>
+                                                Destino: <span class="note-customer-number">{{ item.receiver_number }}</span>
+                                                {{ item.receiver_name }}
+                                            </span>
+                                        </f7-col>
+                                        <f7-col width="40" class="text-align-right">
+                                            <f7-row>
+                                                <f7-col width="100">
+                                                    <span class="note-number">{{item.number}}</span>
+                                                </f7-col>
+                                                <f7-col width="100">
+                                                    <f7-badge :color="statusColor(item.state_type_description)" style="width: 100%">
+                                                        {{ item.state_type_description }}
+                                                    </f7-badge>
+                                                    <br>
+                                                    <span style="font-size: 16px; font-weight: bold">
+                                                        Entrega:
+                                                        {{ item.date_of_shipping }}
+                                                    </span>
+                                                </f7-col>
+                                            </f7-row>
+                                        </f7-col>
+                                    </f7-row>
+                                    <f7-row>
+                                        <f7-col>
+                                            <f7-button @click="clickDownloadPdf(item, 'dispatch')" color="blue-shade">
+                                                <f7-icon class="icon fas fa-download"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <!-- <f7-col>
+                                            <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_ticket)" color="green">
+                                                <f7-icon class="icon fab fa-whatsapp"></f7-icon>
+                                            </f7-button>
+                                        </f7-col> -->
+                                        <!-- <f7-col>
+                                            <f7-button @click="email(item.id, 'quotations', item.customer_email)" color="purple">
+                                                <f7-icon class="icon fas fa-envelope"></f7-icon>
+                                            </f7-button>
+                                        </f7-col> -->
+                                    </f7-row>
+                                </f7-block>
+                            </span>
+                        </f7-list-item>
+                    </f7-list>
+                </div>
             </div>
         </div>
 
@@ -729,6 +886,8 @@
                     orderNotes: false,
                     purchases: false,
                     quotations: false,
+                    dispatches: false,
+                    carrier_dispatches: false,
                 },
                 form_search: {
                     input: null,
@@ -741,6 +900,8 @@
                 showDialogVoided: false,
                 source_quotations: [],
                 theme: {},
+                source_dispatches: [],
+                source_carrier_dispatches: [],
             };
         },
         watch: {
@@ -932,15 +1093,28 @@
                         this.setDataFormSearch('quotations')
                         this.getDataQuotations()
                         break
+                    case 'dispatches':
+                        self.count = self.source_dispatches.length
+                        this.resetActiveClass()
+                        this.activeClass.dispatches = true
+                        this.setDataFormSearch('dispatches')
+                        this.getDataDispatches()
+                        break
+                    case 'carrier_dispatches':
+                        self.count = self.source_carrier_dispatches.length
+                        this.resetActiveClass()
+                        this.activeClass.carrier_dispatches = true
+                        this.setDataFormSearch('carrier_dispatches')
+                        this.getDataCarrierDispatches()
+                        break
                 }
             },
             resetActiveClass(){
-                this.activeClass.invoices = false
-                this.activeClass.tickets = false
-                this.activeClass.notes = false
-                this.activeClass.orderNotes = false
-                this.activeClass.purchases = false
-                this.activeClass.quotations = false
+                for (let prop in this.activeClass) {
+                    if (this.activeClass.hasOwnProperty(prop)) {
+                        this.activeClass[prop] = false;
+                    }
+                }
             },
             initFormEmail() {
                 this.form_email = {
@@ -1252,6 +1426,30 @@
                         this.hideLoading()
                     })
 
+            },
+            async getDataDispatches() {
+                this.showLoading()
+
+                await this.$http.get(`${this.returnBaseUrl()}/dispatches/records?${this.getQueryParameters()}`,  this.getHeaderConfig())
+                    .then(response => {
+                        this.source_dispatches = response.data.data
+                    })
+                    .catch(err => {})
+                    .then(() => {
+                        this.hideLoading()
+                    })
+            },
+            async getDataCarrierDispatches() {
+                this.showLoading()
+
+                await this.$http.get(`${this.returnBaseUrl()}/dispatch-carrier/records?${this.getQueryParameters()}`,  this.getHeaderConfig())
+                    .then(response => {
+                        this.source_carrier_dispatches = response.data.data
+                    })
+                    .catch(err => {})
+                    .then(() => {
+                        this.hideLoading()
+                    })
             },
             statusColor(status) {
                 switch (status) {

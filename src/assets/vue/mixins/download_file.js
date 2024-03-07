@@ -1,7 +1,7 @@
 import moment from "moment"
 
 export const download_file = {
-    
+
     data: function () {
         return {
             general_download_folder_name: 'Download',
@@ -9,7 +9,7 @@ export const download_file = {
 
         }
     },
-    methods: { 
+    methods: {
         getUrlDownload(record, documentType){
 
             let url = null
@@ -19,15 +19,17 @@ export const download_file = {
                 case 'document':
                     url = `${this.getBaseUrl()}/print/${documentType}/${record.external_id}/${this.getPrintFormatPdf()}`
                     break
-            
                 case 'sale_note':
                 case 'order_note':
                 case 'quotation':
                     url = record.print_ticket
                     break
-
                 case 'purchase':
                     url = record.print_a4
+                    break
+                case 'dispatch':
+                    // http://1.prox.oo/downloads/dispatch/pdf/31ce171e-002e-487f-9d00-0cbf459eeaec
+                    url = `${this.getBaseUrl()}/downloads/${documentType}/pdf/${record.external_id}`
                     break
             }
 
@@ -37,7 +39,7 @@ export const download_file = {
         getDownloadAuthorization(authorization){
 
             let options = {}
-            
+
             if(authorization)
             {
                 options.headers = {'Authorization': `Bearer ${this.getStorage('api_token')}`}
@@ -54,16 +56,16 @@ export const download_file = {
             const file_url = `${cordova.file.externalRootDirectory}${this.general_download_folder_name}/${filename}.pdf`
 
             await file_transfer.download(
-                encode_uri, 
-                file_url, 
+                encode_uri,
+                file_url,
                 (entry) => {
                     context.execFileOpener(file_url)
                     // context.generalSuccessNotification('Archivo descargado')
-                },  
+                },
                 (error) => {
                     context.showAlert('Error al descargar'+JSON.stringify(error))
                     console.log('Error status: '+ JSON.stringify(error))
-                }, 
+                },
                 false,
                 this.getDownloadAuthorization(authorization)
             )
@@ -105,28 +107,28 @@ export const download_file = {
             const file_url = `${cordova.file.externalRootDirectory}${this.general_download_folder_name}/${filename}.pdf`
 
             await file_transfer.download(
-                encode_uri, 
-                file_url, 
+                encode_uri,
+                file_url,
                 (entry) => {
                     cordova.plugins.printer.print(file_url)
-                },  
+                },
                 (error) => {
                     context.showAlert('Error al descargar'+JSON.stringify(error))
                     console.log('Error status: '+ JSON.stringify(error))
-                }, 
+                },
                 false,
                 this.getDownloadAuthorization(authorization)
             )
         },
         // alternate download and save file
-        
-        async getBlobFile(url) 
+
+        async getBlobFile(url)
         {
             const response = await this.$http.get(`${url}`,  this.getHttpHeadersDownload())
 
             return new Blob([response.data], { type: 'application/pdf' })
         },
-        async fsSaveFile(dir_entry, url, input_filename, exec_file_opener, append_time = true, extension = 'pdf') 
+        async fsSaveFile(dir_entry, url, input_filename, exec_file_opener, append_time = true, extension = 'pdf')
         {
             const context = this
             const file_data = await context.getBlobFile(url)
@@ -134,19 +136,19 @@ export const download_file = {
             const full_path = `${this.general_external_path_download}/${filename}`
 
             dir_entry.getFile(
-                filename, 
+                filename,
                 { create: true, exclusive: false },
                 (file_entry) => {
                     console.log("device file_entry:"+JSON.stringify(file_entry))
-                    
+
                     context.fsWriteFile(file_entry, file_data, exec_file_opener, full_path)
-                }, 
+                },
                 (error_create_file) => {
                     context.showAlert(`Error al crear archivo: ${JSON.stringify(error_create_file)}`)
                 }
             )
         },
-        fsWriteFile(file_entry, file_data, exec_file_opener, full_path) 
+        fsWriteFile(file_entry, file_data, exec_file_opener, full_path)
         {
             const context = this
 
@@ -198,27 +200,27 @@ export const download_file = {
         {
             const context = this
             // const path = `${cordova.file.externalRootDirectory}${this.general_download_folder_name}`
-            
+
             await this.showLoading()
             await this.generalSleep(300)
 
-            try 
+            try
             {
                 await window.requestFileSystem(
-                    LocalFileSystem.PERSISTENT, 
+                    LocalFileSystem.PERSISTENT,
                     0,
                     (fs) => {
                         window.resolveLocalFileSystemURL(this.general_external_path_download, async (dir_entry) => {
                             await context.fsSaveFile(dir_entry, url, filename, exec_file_opener)
                             await context.hideLoading()
                         })
-                    }, 
+                    },
                     (error_load_fs) => {
                         context.showAlert(`Error al cargar sistema de archivos: ${JSON.stringify(error_load_fs)}`)
                         context.hideLoading()
                     }
                 )
-            } 
+            }
             catch(error)
             {
                 context.hideLoading()
