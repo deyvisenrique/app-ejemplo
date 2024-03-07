@@ -39,13 +39,13 @@
                 </div>
                 <small class="font-w-500" style="line-height: 1;" :class="theme.class_text_color">Cotización</small>
             </f7-col>
-            <f7-col class="text-align-center" v-if="checkPermissions('invoice')">
+            <f7-col class="text-align-center" v-if="checkPermissions('dispatches')">
                 <div @click="go('dispatch')" style="cursor:pointer;">
                     <base-icon nameIcon="file-sale" widthIcon="20" clases="no-padding no-margin"></base-icon>
                 </div>
                 <small class="font-w-500" style="line-height: 1;" :class="theme.class_text_color">G.R.<br> remitente</small>
             </f7-col>
-            <f7-col class="text-align-center" v-if="checkPermissions('invoice')">
+            <f7-col class="text-align-center" v-if="checkPermissions('carrier_dispatches')">
                 <div @click="go('dispatch-carrier')" style="cursor:pointer;">
                     <base-icon nameIcon="file-sale" widthIcon="20" clases="no-padding no-margin"></base-icon>
                 </div>
