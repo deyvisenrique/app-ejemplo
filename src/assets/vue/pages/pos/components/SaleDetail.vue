@@ -92,7 +92,7 @@
 
             <header-layout :title="geTitle" hrefBack="/list-items-sale/" :overwriteBackRoute="true"></header-layout>
 
-            <f7-block>
+            <f7-block class="card-100 padding-top no-shadow card">
 
                 <!-- se mostrara cuando carga los tipos de documentos, y envia como prop all_document_types para no realizar otra consulta en el componente -->
                 <template v-if="all_document_types.length > 0">

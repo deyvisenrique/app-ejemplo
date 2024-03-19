@@ -30,14 +30,14 @@
 
 <style>
 
-.home-icon {
+/* .home-icon {
     border-radius: 35%;
     text-align: center;
     padding: 10px;
 }
 .home-icon-white {
   background: var(--f7-color-teal);
-}
+} */
 /*.home-icon-blue {
   background: var(--f7-color-gray);
 }*/

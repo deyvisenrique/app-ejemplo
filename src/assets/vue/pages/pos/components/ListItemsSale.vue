@@ -82,18 +82,19 @@
 
                                             <div class="card-content card-content-padding">
                                                 <div class="item-input-wrap">
-                                                    <span class="text-align-center"><b>{{row.full_description}}</b></span>
+                                                    <span class="item-description">{{row.full_description}}</span>
 
                                                     <span class="">
-                                                        <div class="item-content no-padding-left">
-                                                            <div class="item-media">{{ row.currency_type_symbol }} {{row.sale_unit_price}}</div>
+                                                        <div class="">
+                                                            <div class="float-left"><b>{{ row.currency_type_symbol }} {{row.sale_unit_price}}</b></div>
+                                                            <template v-if="row.unit_type_id !== 'ZZ'">
+                                                                <div class="float-right stock-item" 
+                                                                :class="{ 'stock-negative': row.stock < 0 }"><i class="fas fa-box"></i> {{row.stock}}</div><br>
+                                                            </template>
                                                             <!-- <input required validate v-model="row.sale_unit_price" type="number" /> -->
                                                         </div>
                                                     </span>
-
-                                                    <template v-if="row.unit_type_id !== 'ZZ'">
-                                                        <span class="text-align-center"><b>Stock: {{row.stock}}</b></span><br>
-                                                    </template>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
