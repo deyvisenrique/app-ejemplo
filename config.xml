@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
     <widget id="com.facturaloperu.appfacturalo" android-packageName="com.facturaloperu.appfacturalo" version="3.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <preference name="android-minSdkVersion" value="31"/>
-    <preference name="android-targetSdkVersion" value="32"/>
-    <preference name="android-compileSdkVersion" value="32"/>
+    <preference name="android-minSdkVersion" value="33"/>
+    <preference name="android-targetSdkVersion" value="33"/>
+    <preference name="android-compileSdkVersion" value="33"/>
     <preference name="DisallowOverscroll" value="true"/>
     <hook src="hooks/hookers.js" type="before_prepare"/>
     <hook src="hooks/beforedep.js" type="before_deploy"/>
@@ -24,8 +24,8 @@
     <platform name="android">
         <allow-intent href="market:*"/>
         <icon src="res/icon/icon.png"/>
-        <preference name="android-targetSdkVersion" value="32"/>
-        <preference name="android-minSdkVersion" value="31"/>
+        <preference name="android-targetSdkVersion" value="33"/>
+        <preference name="android-minSdkVersion" value="33"/>
         <access launch-external="yes" origin="whatsapp//*"/>
     </platform>
     <platform name="ios">

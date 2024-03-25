@@ -110,6 +110,7 @@
                         <table>
                             <thead>
                                 <tr>
+                                    <th class="numeric-cell" width="5%"></th>
                                     <th class="label-cell">#</th>
                                     <th class="numeric-cell">Descripción</th>
                                     <th class="medium-only">Cantidad</th>
@@ -120,6 +121,11 @@
                             </thead>
                             <tbody>
                                 <tr v-for="(row, index) in form.items" :key="index">
+                                    <td class="no-padding numeric-cell">
+                                        <f7-button @click.native="deleteItem(row.item_id, index)">
+                                            <f7-icon color="red" material="cancel"></f7-icon>
+                                        </f7-button>
+                                    </td>
                                     <td class="no-padding label-cell">{{index + 1 }}</td>
                                     <td class="no-padding numeric-cell">{{row.item.description}}</td>
                                     <td class="no-padding numeric-cell">{{row.quantity}}</td>
@@ -647,6 +653,11 @@
             },
             getInitialSettings() {
                 this.theme = this.getThemeSettings()
+            },
+            deleteItem(id, index) {
+                this.form.items.splice(index, 1);
+                this.$refs.form_items_car.delete_parent(id);
+                this.calculateTotal()
             },
         }
     };
