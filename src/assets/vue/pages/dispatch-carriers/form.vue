@@ -268,7 +268,7 @@
     </f7-popup>
 
     <f7-popup class="demo-document" :opened="popupDocumentOpened" @popup:closed="popupDocumentOpened = false">
-      <reference-document-form :showDialog.sync="popupDocumentOpened" ref="form_document_car" @addDocument="addDocument"></reference-document-form>
+      <reference-document-form :showDialog.sync="popupDocumentOpened" ref="form_document_car" @addDocument="addDocument" dispatchType="31"></reference-document-form>
     </f7-popup>
   </f7-page>
 </template>

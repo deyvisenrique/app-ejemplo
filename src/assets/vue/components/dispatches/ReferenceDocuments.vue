@@ -74,19 +74,29 @@ import {general_functions} from "mixins_/general_functions"
 
 export default {
   mixins: [general_functions],
-  props: ["showDialog"],
+  props: ["showDialog","dispatchType"],
   data: function() {
     return {
       form: {},
       theme: {},
-      document_types: [
+      document_types: [],
+      document_types_09: [
         {
           'id': '09',
-          'description': 'Factura Electrónica'
+          'description': 'Factura Electrónica',
+          'conditional': '09'
         },
         {
           'id': '03',
-          'description': 'Boleta Electrónica'
+          'description': 'Boleta Electrónica',
+          'conditional': '09'
+        }
+      ],
+      document_types_31: [
+        {
+          'id': '09',
+          'description': 'Guía de remisión remitente',
+          'conditional': '31'
         }
       ],
       document_type: null,
@@ -101,6 +111,12 @@ export default {
       this.$emit("update:showDialog", false);
     },
     initForm() {
+      if(this.dispatchType == '09') {
+        this.document_types = this.document_types_09
+      } else {
+        this.document_types = this.document_types_31
+      }
+
       this.form = {
         numero: null,
         empresa: null,
@@ -115,6 +131,7 @@ export default {
       this.theme = this.getThemeSettings()
     },
     changeDocumentType() {
+      console.log(this.document_type)
       const selected = this.document_types.find(e => e.id === this.document_type)
       this.form.documento.id = selected.id
       this.form.documento.descripcion = selected.description
