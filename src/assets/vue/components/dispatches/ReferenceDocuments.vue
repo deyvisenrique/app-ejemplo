@@ -82,7 +82,7 @@ export default {
       document_types: [],
       document_types_09: [
         {
-          'id': '09',
+          'id': '01',
           'description': 'Factura Electrónica',
           'conditional': '09'
         },
@@ -126,12 +126,12 @@ export default {
           descripcion: null
         }
       }
+      this.document_type = null;
     },
     getInitialSettings() {
       this.theme = this.getThemeSettings()
     },
     changeDocumentType() {
-      console.log(this.document_type)
       const selected = this.document_types.find(e => e.id === this.document_type)
       this.form.documento.id = selected.id
       this.form.documento.descripcion = selected.description

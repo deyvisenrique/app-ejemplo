@@ -380,6 +380,8 @@
           documento_relacionado: []
         };
         this.initSeries()
+        this.dispatcher = ''
+        this.origin_address = ''
       },
       async getTables() {
         const self = this;
