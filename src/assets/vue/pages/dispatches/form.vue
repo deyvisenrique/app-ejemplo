@@ -382,6 +382,7 @@
         this.initSeries()
         this.dispatcher = ''
         this.origin_address = ''
+        this.driver = ''
       },
       async getTables() {
         const self = this;

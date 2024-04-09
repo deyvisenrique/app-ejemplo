@@ -149,7 +149,7 @@
                 </f7-col>
                 <f7-col width="75" class="text-align-left">
                   <small>REMITENTE</small><br>
-                  <small class="no-margin">{{this.form.datos_remitente ? this.form.datos_remitente.apellidos_y_nombres_o_razon_social : ''}}</small>
+                  <small class="no-margin">{{form.datos_remitente ? form.datos_remitente.apellidos_y_nombres_o_razon_social : ''}}</small>
                 </f7-col>
                 <f7-col width="10" class="align-self-center">
                   <div class="badge bg-color-white text-align-right color-blue">
@@ -181,7 +181,7 @@
                 </f7-col>
                 <f7-col width="75" class="text-align-left">
                   <small>DESTINATARIO</small><br>
-                  <small class="no-margin">{{this.form.datos_destinatario ? this.form.datos_destinatario.apellidos_y_nombres_o_razon_social : ''}}</small>
+                  <small class="no-margin">{{form.datos_destinatario ? form.datos_destinatario.apellidos_y_nombres_o_razon_social : ''}}</small>
                 </f7-col>
                 <f7-col width="10" class="align-self-center">
                   <div class="badge bg-color-white text-align-right color-blue">
@@ -354,9 +354,16 @@
           indicador_de_transbordo: false,
           numero_de_placa: '',
           datos_del_emisor: {},
-          documento_relacionado: []
+          documento_relacionado: [],
+          datos_remitente: {},
+          datos_destinatario: {},
         };
         this.initSeries()
+        this.origin_address = ''
+        this.driver = ''
+        this.transport = ''
+        this.direccion_remitente = ''
+        this.direccion_destinatario = ''
       },
       async getTables() {
         const self = this;

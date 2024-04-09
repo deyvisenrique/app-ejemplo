@@ -230,6 +230,7 @@
                 if(!this.getStorage('api_token')) return
 
                 this.showLoading()
+                this.splash = true
 
                 await this.$http.get(`${this.returnBaseUrl()}/app-configurations/initial-settings`,  this.getHeaderConfig())
                                 .then(response => {
@@ -245,8 +246,9 @@
                                     console.log(error)
                                     this.showAlert(`Ocurrió un error al cargar la configuración inicial: ${error.response.data.message}`)
                                 })
-                                .then(() => {
+                                .finally(() => {
                                     this.hideLoading()
+                                    this.splash = false
                                 })
 
                 this.theme = this.getThemeSettings()
@@ -309,7 +311,7 @@
                     this.splash = false;
                     self.$f7router.navigate("/login/");
                 } else {
-                    this.splash = false;
+                    // this.splash = false;
                 }
             }
         }
