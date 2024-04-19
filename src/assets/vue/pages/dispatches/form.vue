@@ -383,6 +383,7 @@
         this.dispatcher = ''
         this.origin_address = ''
         this.driver = ''
+        this.transport = ''
       },
       async getTables() {
         const self = this;

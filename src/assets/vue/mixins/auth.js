@@ -21,8 +21,8 @@ export const auth = {
     {
       return localStorage.url_logo ? localStorage.url_logo : null
     },
-    
-    getHttpHeadersDownload(response_type = 'blob') 
+
+    getHttpHeadersDownload(response_type = 'blob')
     {
         return {
             headers: {
