@@ -25,7 +25,7 @@
         <allow-intent href="market:*"/>
         <icon src="res/icon/icon.png"/>
         <preference name="android-targetSdkVersion" value="33"/>
-        <preference name="android-minSdkVersion" value="33"/>
+        <preference name="android-minSdkVersion" value="29"/>
         <access launch-external="yes" origin="whatsapp//*"/>
     </platform>
     <platform name="ios">
