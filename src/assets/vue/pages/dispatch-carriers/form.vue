@@ -163,7 +163,15 @@
             <f7-col width="100">
               <div class="item-content item-input no-padding-horizontal">
                 <div class="item-inner no-padding-horizontal">
-                  <div class="item-title item-label">Punto de partida</div>
+                  <div class="item-title item-label flex-container">
+                    <span>Punto de partida</span>
+                    <f7-button v-show="!isObjectEmpty(form.datos_remitente)" @click="addressOpen(true)" class="text-align-left padding-left">
+                      <small>
+                        <f7-icon icon="fas fa-plus"></f7-icon>
+                        Nuevo
+                      </small>
+                    </f7-button>
+                  </div>
                   <div class="item-input-wrap input-dropdown-wrap">
                     <select required validate v-model="direccion_remitente" placeholder="Seleccionar" @change="changeSenderAddress">
                       <option v-for="(row, index) in sender_addresses" :value="row.id" :key="index">{{row.address}}</option>
@@ -195,7 +203,15 @@
             <f7-col width="100">
               <div class="item-content item-input no-padding-horizontal">
                 <div class="item-inner no-padding-horizontal">
-                  <div class="item-title item-label">Punto de llegada</div>
+                  <div class="item-title item-label flex-container">
+                    <span>Punto de llegada</span>
+                    <f7-button v-show="!isObjectEmpty(form.datos_destinatario)" @click="addressOpen(false)" class="text-align-left padding-left">
+                      <small>
+                        <f7-icon icon="fas fa-plus"></f7-icon>
+                        Nuevo
+                      </small>
+                    </f7-button>
+                  </div>
                   <div class="item-input-wrap input-dropdown-wrap">
                     <select required validate v-model="direccion_destinatario" placeholder="Seleccionar" @change="changeReceiverAddress">
                       <option v-for="(row, index) in receiver_addresses" :value="row.id" :key="index">{{row.address}}</option>
@@ -270,6 +286,10 @@
     <f7-popup class="demo-document" :opened="popupDocumentOpened" @popup:closed="popupDocumentOpened = false">
       <reference-document-form :showDialog.sync="popupDocumentOpened" ref="form_document_car" @addDocument="addDocument" dispatchType="31"></reference-document-form>
     </f7-popup>
+    
+    <f7-popup class="demo-popu" :opened="popupAddressOpened" @popup:closed="popupAddressOpened = false">
+      <dispatch-address-form :personId="customer_id" :showDialog.sync="popupAddressOpened" @addAddress="addAddress" ref="dispatch_address_form"></dispatch-address-form>
+    </f7-popup>
   </f7-page>
 </template>
 
@@ -283,6 +303,7 @@
   import {findGeneralDefaultSerie} from "js_/helpers/functions"
   import HeaderLayout from "components/layout/Header"
   import ReferenceDocumentForm from "components/dispatches/ReferenceDocuments"
+  import DispatchAddressForm from "components/dispatches/DispatchAddress"
 
   export default {
     name: "FormDispatch",
@@ -290,7 +311,8 @@
         ItemsForm,
         CustomerForm,
         HeaderLayout,
-        ReferenceDocumentForm
+        ReferenceDocumentForm,
+        DispatchAddressForm
     },
     mixins: [auth, general_functions],
     data: function () {
@@ -303,6 +325,7 @@
             popupRemitenteOpened: false,
             popupDestinatarioOpened: false,
             popupDocumentOpened: false,
+            popupAddressOpened: false,
             title: "Guía de Remisión Transportista",
             all_payment_method_types: [],
             payment_destinations: [],
@@ -328,7 +351,9 @@
             transports: {},
             driver: '',
             transport: '',
-            theme: {}
+            theme: {},
+            customer_id:null,
+            is_remitente: false,
         };
     },
     async created() {
@@ -416,6 +441,7 @@
       addRemitente(row) {
         this.popupRemitenteOpened = false;
         this.form.remitente_id = row.id;
+        this.customer_id = row.id;
         this.form.datos_remitente = {
           codigo_tipo_documento_identidad: row.identity_document_type_id,
           numero_documento: row.number,
@@ -432,6 +458,7 @@
       addDestinatario(row) {
         this.popupDestinatarioOpened = false;
         this.form.destinatario_id = row.id;
+        this.customer_id = row.id;
         this.form.datos_destinatario = {
           codigo_tipo_documento_identidad: row.identity_document_type_id,
           numero_documento: row.number,
@@ -637,6 +664,36 @@
       getInitialSettings() {
         this.theme = this.getThemeSettings()
       },
+      addressOpen(is_remitente){
+        this.popupAddressOpened = true;
+        this.is_remitente = is_remitente;
+        if (this.$refs.dispatch_address_form) {
+          this.$refs.dispatch_address_form.handleIsRemitenteChange(this.is_remitente);
+        }
+      },
+      isObjectEmpty(obj) {
+        return Object.keys(obj).length === 0 && obj.constructor === Object;
+      },
+      addAddress(row) {
+        if(this.is_remitente){
+          this.sender_addresses.push(row);
+          this.direccion_remitente = row.id;
+          this.changeSenderAddress();
+        }else{
+          this.receiver_addresses.push(row);
+          this.direccion_destinatario = row.id;
+          this.changeReceiverAddress();
+        }
+        
+        this.popupAddressOpened = false;
+      },
     }
   }
 </script>
+
+<style scoped>
+.flex-container {
+  display: flex;
+  align-items: center;
+}
+</style>

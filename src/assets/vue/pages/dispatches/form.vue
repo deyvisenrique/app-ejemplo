@@ -219,7 +219,15 @@
             <f7-col width="100">
               <div class="item-content item-input no-padding-horizontal">
                 <div class="item-inner no-padding-horizontal">
-                  <div class="item-title item-label">Punto de llegada</div>
+                  <div class="item-title item-label flex-container">
+                    <span>Punto de llegada</span>
+                    <f7-button v-show="!isObjectEmpty(form.datos_del_cliente_o_receptor)" @click="popupAddressOpened = true" class="text-align-left padding-left">
+                      <small>
+                        <f7-icon icon="fas fa-plus"></f7-icon>
+                        Nuevo
+                      </small>
+                    </f7-button>
+                  </div>
                   <div class="item-input-wrap input-dropdown-wrap">
                     <select required validate v-model="delivery_address" placeholder="Please choose..." @change="changeDeliveryAddress">
                       <option v-for="(row, index) in delivery_addresses" :value="row.id" :key="index">{{row.address}}</option>
@@ -287,6 +295,10 @@
     <f7-popup class="demo-document" :opened="popupDocumentOpened" @popup:closed="popupDocumentOpened = false">
       <reference-document-form :showDialog.sync="popupDocumentOpened" ref="form_document_car" @addDocument="addDocument" dispatchType="09"></reference-document-form>
     </f7-popup>
+
+    <f7-popup class="demo-popu" :opened="popupAddressOpened" @popup:closed="popupAddressOpened = false">
+      <dispatch-address-form :personId="form.customer_id" :showDialog.sync="popupAddressOpened" @addAddress="addAddress" ></dispatch-address-form>
+    </f7-popup>
   </f7-page>
 </template>
 
@@ -300,6 +312,7 @@
   import {findGeneralDefaultSerie} from "js_/helpers/functions"
   import HeaderLayout from "components/layout/Header"
   import ReferenceDocumentForm from "components/dispatches/ReferenceDocuments"
+  import DispatchAddressForm from "components/dispatches/DispatchAddress"
 
   export default {
     name: "FormDispatch",
@@ -307,7 +320,8 @@
         ItemsForm,
         CustomerForm,
         HeaderLayout,
-        ReferenceDocumentForm
+        ReferenceDocumentForm,
+        DispatchAddressForm
     },
     mixins: [auth, general_functions],
     data: function () {
@@ -319,6 +333,7 @@
             popupOpened: false,
             popupCustomerOpened: false,
             popupDocumentOpened: false,
+            popupAddressOpened: false,
             title: "Guía de Remisión Remitente",
             all_payment_method_types: [],
             payment_destinations: [],
@@ -344,7 +359,7 @@
             transports: {},
             driver: '',
             transport: '',
-            theme: {}
+            theme: {},
         };
     },
     async created() {
@@ -377,7 +392,8 @@
           transportista: [],
           direccion_llegada: [],
           delivery_address: null,
-          documento_relacionado: []
+          documento_relacionado: [],
+          customer_id:null,
         };
         this.initSeries()
         this.dispatcher = ''
@@ -487,7 +503,7 @@
           this.form.direccion_llegada = {
             ubigeo: delivery.location_id[2],
             direccion: delivery.address,
-            codigo_del_domicilio_fiscal: '0000'
+            codigo_del_domicilio_fiscal: delivery.code
           }
         } else {
           this.delivery_address = null
@@ -667,6 +683,22 @@
       getInitialSettings() {
         this.theme = this.getThemeSettings()
       },
+      isObjectEmpty(obj) {
+        return Object.keys(obj).length === 0 && obj.constructor === Object;
+      },
+      addAddress(row) {
+        this.delivery_addresses.push(row);
+        this.delivery_address= row.id;
+        this.changeDeliveryAddress();
+        this.popupAddressOpened = false;
+      },
     }
   }
 </script>
+
+<style scoped>
+.flex-container {
+  display: flex;
+  align-items: center;
+}
+</style>
