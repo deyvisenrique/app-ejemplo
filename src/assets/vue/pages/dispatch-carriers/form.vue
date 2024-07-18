@@ -91,7 +91,7 @@
                 <div class="item-inner no-padding-horizontal">
                   <div class="item-title item-label">Peso total</div>
                   <div class="item-input-wrap">
-                    <input required validate v-model="form.peso_total" type="number" min="0"/>
+                    <input required validate v-model="form.peso_total" type="number" min="0.01" step="0.01"/>
                   </div>
                 </div>
               </div>
@@ -353,6 +353,8 @@
             transport: '',
             theme: {},
             customer_id:null,
+            remitente_id: null,
+            destinatario_id:null,
             is_remitente: false,
         };
     },
@@ -441,7 +443,7 @@
       addRemitente(row) {
         this.popupRemitenteOpened = false;
         this.form.remitente_id = row.id;
-        this.customer_id = row.id;
+        this.remitente_id = row.id;
         this.form.datos_remitente = {
           codigo_tipo_documento_identidad: row.identity_document_type_id,
           numero_documento: row.number,
@@ -458,7 +460,7 @@
       addDestinatario(row) {
         this.popupDestinatarioOpened = false;
         this.form.destinatario_id = row.id;
-        this.customer_id = row.id;
+        this.destinatario_id = row.id;
         this.form.datos_destinatario = {
           codigo_tipo_documento_identidad: row.identity_document_type_id,
           numero_documento: row.number,
@@ -665,6 +667,7 @@
         this.theme = this.getThemeSettings()
       },
       addressOpen(is_remitente){
+        this.customer_id = (is_remitente==true)?this.remitente_id:this.destinatario_id;
         this.popupAddressOpened = true;
         this.is_remitente = is_remitente;
         if (this.$refs.dispatch_address_form) {

@@ -127,7 +127,7 @@
                 <div class="item-inner no-padding-horizontal">
                   <div class="item-title item-label">Peso total</div>
                   <div class="item-input-wrap">
-                    <input required validate v-model="form.peso_total" type="number" min="0"/>
+                    <input required validate v-model="form.peso_total" type="number" min="0.01" step="0.01"/>
                   </div>
                 </div>
               </div>
