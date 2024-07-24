@@ -24,7 +24,7 @@
                   <div class="item-title item-label">Establecimiento</div>
                   <div class="item-input-wrap input-dropdown-wrap">
                     <select v-model="origin_address" placeholder="Seleccionar" @change="changeOriginAddress">
-                      <option v-for="(row, index) in establishments" :value="row.id" :key="index">{{row.address}}</option>
+                      <option v-for="(row, index) in establishments" :value="row.id" :key="index">{{row.description}} : {{row.address}}</option>
                     </select>
                   </div>
                 </div>
@@ -330,6 +330,7 @@
             all_payment_method_types: [],
             payment_destinations: [],
             series: [],
+            allSeries:[],
             payment_change: 0,
             form_payment: {},
             form_fee: {},
@@ -411,9 +412,10 @@
       async getSeries() {
         const self = this;
         self.$f7.preloader.show();
-        await this.$http.get(`${this.returnBaseUrl()}/document/series`, this.getHeaderConfig())
+        await this.$http.get(`${this.returnBaseUrl()}/document/series-dispatch`, this.getHeaderConfig())
           .then(response => {
               let all_series = response.data;
+              this.allSeries = response.data;
               this.series = _.filter(all_series, {
                   document_type_id: this.form.codigo_tipo_documento
               })
@@ -497,7 +499,12 @@
           correo_electronico: establishment.email,
           telefono: establishment.telephone,
           codigo_del_domicilio_fiscal: establishment.code
-        }
+        },
+        this.series = _.filter(this.allSeries, {
+            'establishment_id': this.origin_address,
+            'document_type_id': this.form.codigo_tipo_documento
+        });
+        this.initSeries()
       },
       changeSenderAddress() {
         if(this.form.remitente_id) {

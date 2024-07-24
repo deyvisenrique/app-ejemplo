@@ -118,16 +118,16 @@
                         customer_document_type = 'RUC'
                         break;
                 }
-                let document_type_description = 'FACTURA ELECTRÓNICA'
+                let document_type_description = 'FACTURA ELECTRONICA'
                 switch (this.document.document_type_id) {
                     case '03':
-                        customer_document_type = 'BOLETA DE VENTA ELECTRÓNICA'
+                        document_type_description = 'BOLETA DE VENTA ELECTRONICA'
                         break;
                     case '80':
-                        customer_document_type = 'NOTA DE VENTA'
+                        document_type_description = 'NOTA DE VENTA'
                         break;
                     default:
-                        document_type_description = 'FACTURA ELECTRÓNICA'
+                        document_type_description = 'FACTURA ELECTRONICA'
                         break;
                 }
                 // console.log(this.document)
@@ -164,6 +164,7 @@
 
                 // tipo y numero de documento
                 const document_number = `${document_type_description} \n${this.response.number} \n\n`
+                const document_number_encoded = encodeURIComponent(document_number);
                 BTPrinter.printTextSizeAlign(function(data){
                     console.log(data)
                 },function(err){
