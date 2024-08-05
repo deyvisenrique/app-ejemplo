@@ -50,29 +50,83 @@
                 </div>
               </div>
             </f7-col>
-            <f7-col width="50">
+            <f7-col width="100">
               <div class="item-content item-input no-padding-horizontal">
                 <div class="item-inner no-padding-horizontal">
                   <div class="item-title item-label">Datos del conductor</div>
                   <div class="item-input-wrap input-dropdown-wrap">
-                    <select v-model="driver" placeholder="Seleccionar" @change="changeDriver">
-                      <option v-for="(row, index) in drivers" :value="row.id" :key="index">{{row.number}} - {{ row.name }}</option>
+                    <select v-model="selectedDriver" placeholder="Seleccionar" @change="addDriver"
+                    :disabled="selectedDrivers.length >= 3">
+                      <option v-for="(row, index) in drivers" :value="row" :key="index">{{row.number}} - {{ row.name }}</option>
                     </select>
                   </div>
                 </div>
               </div>
             </f7-col>
-            <f7-col width="50">
+            <f7-col v-show="selectedDrivers.length > 0" width="100" class="data-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th class="numeric-cell" width="5%"></th>
+                    <th class="label-cell">Conductor</th>
+                    <th class="label-cell">Número</th>
+                    <th class="label-cell">Nombre</th>
+                    <th class="label-cell">Licencia</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(row, index) in selectedDrivers" :key="index">
+                    <td class="no-padding numeric-cell">
+                      <f7-button @click.native="removeDriver(index)">
+                        <f7-icon color="red" material="cancel"></f7-icon>
+                      </f7-button>
+                    </td>
+                    <td class="no-padding label-cell text-align-center">{{ (index===0)?'Principal':'Secundario' }}</td>
+                    <td class="no-padding label-cell text-align-left">{{row.number}}</td>
+                    <td class="no-padding label-cell">{{row.name}}</td>
+                    <td class="no-padding label-cell">{{row.license}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </f7-col>
+            <f7-col width="100">
               <div class="item-content item-input no-padding-horizontal">
                 <div class="item-inner no-padding-horizontal">
                   <div class="item-title item-label">Datos del vehículo</div>
                   <div class="item-input-wrap input-dropdown-wrap">
-                    <select v-model="transport" placeholder="Seleccionar" @change="changeTransport">
-                      <option v-for="(row, index) in transports" :value="row.plate_number" :key="index">{{row.plate_number}} - {{ row.model }}</option>
+                    <select v-model="selectedTransport" placeholder="Seleccionar" @change="addVehicle"
+                    :disabled="selectedTransports.length >= 3">
+                      <option v-for="(row, index) in transports" :value="row" :key="index">{{row.plate_number}} - {{ row.model }}</option>
                     </select>
                   </div>
                 </div>
               </div>
+            </f7-col>
+            <f7-col v-show="selectedTransports.length > 0" width="100" class="data-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th class="numeric-cell" width="5%"></th>
+                    <th class="label-cell">Vehículo</th>
+                    <th class="label-cell">Placa</th>
+                    <th class="label-cell">Modelo</th>
+                    <th class="label-cell">Marca</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(row, index) in selectedTransports" :key="index">
+                    <td class="no-padding numeric-cell">
+                      <f7-button @click.native="removeVehicle(index)">
+                        <f7-icon color="red" material="cancel"></f7-icon>
+                      </f7-button>
+                    </td>
+                    <td class="no-padding label-cell text-align-center">{{ (index===0)?'Principal':'Secundario' }}</td>
+                    <td class="no-padding label-cell text-align-left">{{row.plate_number}}</td>
+                    <td class="no-padding label-cell">{{row.model}}</td>
+                    <td class="no-padding label-cell">{{row.brand}}</td>
+                  </tr>
+                </tbody>
+              </table>
             </f7-col>
             <f7-col width="50">
               <div class="item-content item-input no-padding-horizontal">
@@ -348,8 +402,8 @@
             direccion_destinatario: '',
             sender_addresses: {},
             receiver_addresses: {},
-            drivers: {},
-            transports: {},
+            drivers: [],
+            transports: [],
             driver: '',
             transport: '',
             theme: {},
@@ -357,6 +411,10 @@
             remitente_id: null,
             destinatario_id:null,
             is_remitente: false,
+            selectedTransport: null,
+            selectedTransports: [],
+            selectedDriver: null,
+            selectedDrivers: [],
         };
     },
     async created() {
@@ -377,7 +435,7 @@
           codigo_tipo_documento: '31',
           fecha_de_emision: moment().format("YYYY-MM-DD"),
           hora_de_emision: moment().format("HH:mm:ss"),
-          unidad_peso_total: this.unit_types[0].id,
+          unidad_peso_total: 'KGM',
           items: [],
           indicador_de_transbordo: false,
           numero_de_placa: '',
@@ -385,6 +443,10 @@
           documento_relacionado: [],
           datos_remitente: {},
           datos_destinatario: {},
+          chofer: [],
+          vehiculo: [],
+          chofer_secundario:null,
+          vehiculo_secundario:null,
         };
         this.initSeries()
         this.origin_address = ''
@@ -523,13 +585,45 @@
         }
       },
       changeDriver() {
-        let driver =  _.find(this.drivers, {id : this.driver})
+        let driver =  _.find(this.drivers, {id :  _.head(this.selectedDrivers).id})
         this.form.chofer = {
           codigo_tipo_documento_identidad: driver.identity_document_type_id,
           numero_documento: driver.number,
           nombres: driver.name,
           apellidos: driver.name,
           numero_licencia: driver.license,
+          telefono: driver.telephone,
+        }
+        if (this.selectedDrivers.length > 1) {
+          this.form.chofer_secundario = this.selectedDrivers.slice(1).map(driver => {
+              return {
+                codigo_tipo_documento_identidad: driver.identity_document_type_id,
+                numero_documento: driver.number,
+                nombres: driver.name,
+                apellidos: driver.name,
+                numero_licencia: driver.license,
+                telefono: driver.telephone,
+              };
+          });
+        }
+      },
+      changeTransport() {
+        let transport =  _.find(this.transports, {id : _.head(this.selectedTransports).id})
+        this.form.vehiculo = {
+          numero_de_placa: transport.plate_number,
+          certificado_habilitacion_vehicular: transport.tuc,
+          modelo: transport.model,
+          marca: transport.brand,
+        }
+        if (this.selectedTransports.length > 1) {
+            this.form.vehiculo_secundario = this.selectedTransports.slice(1).map(transport => {
+                return {
+                    numero_de_placa: transport.plate_number,
+                    modelo: transport.model,
+                    marca: transport.brand,
+                    certificado_habilitacion_vehicular: transport.tuc,
+                };
+            });
         }
       },
       cancel() {
@@ -539,6 +633,13 @@
       send() {
         const self = this
         this.$f7.preloader.show();
+        this.setDataSecondary();
+        if (this.selectedDrivers.length > 0) {
+            this.changeDriver();
+        }
+        if (this.selectedTransports.length > 0) {
+            this.changeTransport();
+        }
         let valid = this.validate()
         if (!valid){
           this.$f7.preloader.hide();
@@ -653,11 +754,11 @@
           this.$f7.dialog.alert(`Debe indicar el peso total.`, "Mensaje")
           return false
         }
-        if (!this.form.chofer) {
+        if (this.form.chofer.length == 0) {
           this.$f7.dialog.alert(`Debe seleccionar un chofer`, "Mensaje")
           return false
         }
-        if (!this.form.numero_de_placa) {
+        if (this.form.vehiculo.length == 0) {
           this.$f7.dialog.alert(`Debe seleccionar un transporte`, "Mensaje")
           return false
         }
@@ -665,10 +766,6 @@
       },
       getFormatter() {
         return this.form
-      },
-      changeTransport() {
-        let transport =  _.find(this.transports, {plate_number : this.transport})
-        this.form.numero_de_placa = transport.plate_number
       },
       getInitialSettings() {
         this.theme = this.getThemeSettings()
@@ -697,6 +794,31 @@
         
         this.popupAddressOpened = false;
       },
+      addVehicle() {
+        if (this.selectedTransport && !this.selectedTransports.includes(this.selectedTransport)) {
+          this.selectedTransports.push(this.selectedTransport);
+        }
+      },
+      removeVehicle(index) {
+        this.selectedTransports.splice(index, 1);
+        this.selectedTransport = null;
+      },
+      addDriver() {
+        if (this.selectedDriver && !this.selectedDrivers.includes(this.selectedDriver)) {
+            this.selectedDrivers.push(this.selectedDriver);
+        }
+      },
+      removeDriver(index) {
+        this.selectedDrivers.splice(index, 1);
+        this.selectedDriver = null;
+      },
+      setDataSecondary(){
+        this.form.chofer = [];
+        this.form.vehiculo = [];
+        this.form.chofer_secundario = null;
+        this.form.vehiculo_secundario = null;
+      },
+
     }
   }
 </script>
