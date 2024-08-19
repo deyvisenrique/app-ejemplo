@@ -29,7 +29,12 @@
 
                         <li class="item-content item-input">
                             <div class="item-inner">
-                                <f7-button fill round class="padding-horizontal" @click="submit">Enviar</f7-button>
+                                <template v-if="!company.qr_api_enable_ws">
+                                    <f7-button fill round class="padding-horizontal" @click="submit">Enviar</f7-button>
+                                </template>
+                                <template v-else>
+                                    <f7-button fill round class="padding-horizontal" @click="submit_message_qr_api">Enviar</f7-button>
+                                </template>
                             </div>
                             <div class="item-inner">
                                 <f7-button type="success" fill round class="padding-horizontal" @click="submit_message">Enviar Url</f7-button>
@@ -50,12 +55,14 @@
     import { auth } from "mixins_/auth"
 
     export default {
-        props: ['showDialog', 'params'],
+        props: ['showDialog', 'params', 'response'],
         mixins: [auth, general_functions],
         data: function () {
             return {
                 form: {},
                 title: null,
+                company: {},
+                form_qr_api: {}
             }
         },
         watch: {
@@ -69,6 +76,8 @@
         },
         created() {
             this.initForm()
+            this.getRecordQrApi()
+            
         },
         methods: {
             validateData()
@@ -88,7 +97,6 @@
 
                 await this.$http.post(`${this.returnBaseUrl()}/documents/send-document-to-whatsapp`, this.form, this.getHeaderConfig())
                             .then(response => {
-                                // console.log(response)
 
                                 if(response.data.success)
                                 {
@@ -121,6 +129,7 @@
             {
                 await this.initForm()
                 await this.setData()
+                
             },
             setData()
             {
@@ -132,6 +141,13 @@
 
                 if(this.params.phone_number) this.form.phone_number = this.params.phone_number
 
+            },
+            getRecordQrApi(){
+                this.$http
+                    .get(`${this.returnBaseUrl()}/record/qrapi`, this.getHeaderConfig())
+                    .then(response => {
+                        this.company = response.data;
+                    });
             },
             close()
             {
@@ -146,7 +162,65 @@
                 let message = `Hola, revisa tu comprobante ingresando a este link ${this.params.url_pdf}`;
                 let message_ = message.split(" ").join("%20");
                 window.open(`https://wa.me/51${this.form.phone_number}/?text=${message_}`, "_system");
+            },
+            submit_message_qr_api(){
+                const validate_data = this.validateData()
+                if(!validate_data.success) return this.showAlert(validate_data.message)
+
+                let response_ws = this.response.data_ws
+
+                this.convertFileToBase64(response_ws.pdf_a4_filename)
+                    .then(file_enode64 => {
+                        this.setForm(file_enode64, response_ws.full_filename)
+
+                        return this.$http.post(`${this.company.qr_api_url_ws}\\api\\message\\send\\pdf`, this.form_qr_api, {
+                             headers: {
+                                "Authorization" : `Bearer ${this.company.qr_api_key_ws}`
+                            }
+                        })
+                        .then(response => {
+                            
+                            if (response.status === 200) {
+                               return this.generalSuccessNotification("Documento enviado con exito") 
+                            }
+                        })
+                        .catch(error => {
+                            return this.generalErrorNotification("No se puedo enviar el documento")
+                        })
+                    })
+
+            },
+             setForm(base64file, full_filename) {
+                let ws = this.response.data_ws
+            this.form_qr_api = {
+                file: base64file,
+                number: `51${this.form.phone_number}`,
+                message: ws.message_text,
+                filename: full_filename 
             }
+        },
+        async convertFileToBase64(url) {
+            try {
+                const response = await fetch(url, this.getHeaderConfig()) 
+                const blob = await response.blob();
+                return await this.blobToBase64(blob);
+            } catch (error) {
+                return this.generalErrorNotification('Error al convertir el archivo a base64:')
+            }
+        },
+        blobToBase64(blob) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    resolve(reader.result.split(',')[1]); // Quitar la parte 'data:*/*;base64,'
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+        },
+
+
+
         }
     }
 </script>

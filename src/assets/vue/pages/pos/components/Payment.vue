@@ -453,6 +453,7 @@
             :showDialog.sync="showDialogSendDocumentWhatsapp"
             :params="params_send_document_whatsapp"
             @closeSendDocumentWhatsapp="closeSendDocumentWhatsapp"
+            :response="response_data_options"
             >
         </send-document-whatsapp>
 
@@ -753,7 +754,7 @@
                 }
                 else if (index === 2)
                 {
-                    this.sendDocumentMessageWhatsapp(data.data.id, this.form.document_type_id, data.links.pdf)
+                    this.sendDocumentMessageWhatsapp(data.data.id, this.form.document_type_id, data.links ? data.links.pdf : null)
                 }
                 else if (index === 3)
                 {
