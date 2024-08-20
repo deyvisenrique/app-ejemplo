@@ -55,7 +55,7 @@
                                         @click="selected(index)"
                                         :class="isSelectedRecord(index) ? 'custom-border-selected-item bg-white-shade' : ''">
                                         <div class="item-media">
-                                            <div :style="'background-image:url('+row.image_url+')'" style="width: 30px;height: 30px;background-size: cover;"></div>
+                                            <div :style="parserUrl(row.image_url)" style="width: 30px;height: 30px;background-size: cover;"></div>
                                         </div>
                                         <div class="item-inner">
                                             <div class="item-title">
@@ -77,7 +77,7 @@
 
                                                 <div @click="selected(index)">
 
-                                                    <div :style="'background-image:url('+row.image_url+')'" class="card-header align-items-flex-end image-max-width"></div>
+                                                    <div :style="parserUrl(row.image_url)" class="card-header align-items-flex-end image-max-width"></div>
 
                                                     <div class="card-content card-content-padding">
                                                         <div class="item-input-wrap">
@@ -313,6 +313,11 @@
             },
             iconGrid() {
                 return this.card_mode ? 'fas fa-grip-horizontal' : 'fas fa-list'
+            },
+            parserUrl(value){
+                let url_parse = new URL(value).href;
+                let class_string = `background-image:url('${url_parse}')`
+                return class_string;
             }
         }
     }

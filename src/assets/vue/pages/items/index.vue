@@ -32,7 +32,7 @@
                         <div class="col-50" v-for="(row, index) in records" :key="index">
                             <div class="card no-margin-horizontal no-padding-horizontal" :class="!row.active ? 'border-disabled':''">
                                 <template v-if="configuration.show_image_item">
-                                    <div :style="'background-image:url('+row.image_url+')'" class="card-header align-items-flex-end image-max-width"></div>
+                                    <div :style="parserUrl(row.image_url)" class="card-header align-items-flex-end image-max-width"></div>
                                 </template>
                                 <div class="card-content card-content-padding">
                                     <div class="item-input-wrap">
@@ -304,6 +304,11 @@
             getInitialSettings() {
                 this.theme = this.getThemeSettings()
             },
+            parserUrl(value){
+                let url_parse = new URL(value).href;
+                let class_string = `background-image:url('${url_parse}')`
+                return class_string;
+            }
         }
     }
 </script>
