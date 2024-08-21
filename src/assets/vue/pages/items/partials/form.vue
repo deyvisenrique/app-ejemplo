@@ -123,6 +123,49 @@
                             </div>
                         </li>
 
+                        <f7-row>
+                            <f7-col width="100">
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-title item-label">
+                                            Precio Unitario de Compra
+                                        </div>
+                                        <div class="item-input-wrap">
+                                            <input v-model="form.purchase_unit_price" validate step="any" type="number" />
+                                            <span class="input-clear-button"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </f7-col>
+                            <f7-col width="50">
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-title item-label">
+                                            Stock
+                                        </div>
+                                        <div class="item-input-wrap">
+                                            <input v-model="form.stock" validate step="any" type="number" />
+                                            <span class="input-clear-button"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </f7-col>
+                            <f7-col width="50">
+
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-title item-label">
+                                            Stock mínimo
+                                        </div>
+                                        <div class="item-input-wrap">
+                                            <input v-model="form.stock_min" validate step="any" type="number" />
+                                            <span class="input-clear-button"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </f7-col>
+                        </f7-row>
+
                         <li class="item-content item-input">
                             <div class="item-inner">
                                 <div class="item-title item-label">
@@ -281,7 +324,7 @@
                     purchase_affectation_igv_type_id: "10",
                     calculate_quantity: false,
                     stock: 0,
-                    stock_min: 0,
+                    stock_min: 1,
                     has_igv: true,
                     has_perception: false,
                     item_unit_types: [],
