@@ -639,51 +639,67 @@
         this.initForm();
         this.$f7router.navigate("/");
       },
-      send() {
-        const self = this
+      async send() {
+        const self = this;
         this.$f7.preloader.show();
-        this.setDataSecondary();
-        if (this.selectedDrivers.length > 0) {
-            this.changeDriver();
-        }
-        if (this.selectedTransports.length > 0) {
-            this.changeTransport();
-        }
-        let valid = this.validate()
-        if (!valid){
-          this.$f7.preloader.hide();
-          return
-        }
+        
+        try {
+          this.setDataSecondary();
+          if (this.selectedDrivers.length > 0) {
+            await this.changeDriver();
+          }
+          if (this.selectedTransports.length > 0) {
+            await this.changeTransport();
+          }
 
-        this.$http.post(`${this.returnBaseUrl()}/dispatches`, this.getFormatter(), this.getHeaderConfig())
-          .then(response => {
-            let data = response.data
-            if (data.success) {
-              this.initForm()
-              this.changeDeliveryAddress()
-              self.$f7.dialog.create({
-                  title: 'Comprobante registrado',
-                  text: data.data.number,
-                  buttons: self.getOptionsButtons(),
-                  onClick: function(dialog, index){
-                    self.clickOptionsButtons(dialog, index, data)
-                  },
-                  verticalButtons: true,
-              }).open()
-            } else {
-              alert("No se registro la Venta")
-            }
-          })
-          .catch(err => {
-            if(err.response.data.message) {
-              self.$f7.dialog.alert(`${err.response.data.message}`, "Error")
-            } else {
-              self.$f7.dialog.alert(`${err.message}`, "Error")
-            }
-          })
-          .then(() => {
+          let valid = this.validate();
+          if (!valid) {
             this.$f7.preloader.hide();
-          })
+            return;
+          }
+
+          let dispatchResponse = await this.$http.post(`${this.returnBaseUrl()}/dispatches`, this.getFormatter(), this.getHeaderConfig());
+          let dispatchData = dispatchResponse.data;
+
+          if (dispatchData.success) {
+            this.initForm();
+            await this.changeDeliveryAddress();
+
+            let formSend = {
+              external_id: dispatchData.data.external_id
+            };
+
+            const dialog = self.$f7.dialog.create({
+              title: 'Comprobante registrado',
+              text: `Número: ${dispatchData.data.number}`,
+              buttons: self.getOptionsButtons(),
+              onClick: function(dialog, index){
+                self.clickOptionsButtons(dialog, index, dispatchData);
+              },
+              verticalButtons: true,
+            }).open();
+
+            let sendResponse = await this.$http.post(`${this.returnBaseUrl()}/dispatches/send`, formSend, this.getHeaderConfig());
+            
+            if (sendResponse.data.success) {
+              dialog.params.text = `Número: ${dispatchData.data.number}<br>Enviando comprobante...`;
+              dialog.$el.find('.dialog-text').html(dialog.params.text);
+
+              let statusResponse = await this.$http.post(`${this.returnBaseUrl()}/dispatches/status_ticket`, formSend, this.getHeaderConfig());
+              dialog.params.text = `Número: ${dispatchData.data.number}<br>Comprobante Enviado<br>Estado : <b>${statusResponse.data.message}</b>`;
+              dialog.$el.find('.dialog-text').html(dialog.params.text);
+            } else {
+              dialog.params.text = `Número: ${dispatchData.data.number}<br>Error al enviar comprobante.`;
+              dialog.$el.find('.dialog-text').html(dialog.params.text);
+            }
+          } else {
+            self.$f7.dialog.alert("No se registró la guía", "Error");
+          }
+        } catch (err) {
+            self.$f7.dialog.alert(`${err.message}`, "Error al registrar guía");
+        } finally {
+          this.$f7.preloader.hide();
+        }
       },
       getOptionsButtons(){
         return [
@@ -739,11 +755,11 @@
           this.$f7.dialog.alert(`Debe seleccionar un cliente.`, "Mensaje")
           return false
         }
-        if (!this.form.direccion_partida) {
+        if (this.form.direccion_partida<3) {
           this.$f7.dialog.alert(`Debe seleccionar direccion de partida.`, "Mensaje")
           return false
         }
-        if (!this.form.direccion_llegada) {
+        if (this.form.direccion_llegada.length<3) {
           this.$f7.dialog.alert(`Debe seleccionar direccion de llegada.`, "Mensaje")
           return false
         }
