@@ -704,6 +704,17 @@
                                                 <f7-icon class="icon fas fa-download"></f7-icon>
                                             </f7-button>
                                         </f7-col>
+                                        <f7-col v-if="item.state_type_id=='01'">
+                                            <f7-button
+                                                 @click="clickSendDispatch(item.external_id,'dispatch')" color="blue-shade">
+                                                <f7-icon class="icon fa fa-paper-plane"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col v-if="item.state_type_id=='03'">
+                                            <f7-button @click="clickStatusDispatch(item.external_id, 'dispatch')" color="blue-shade">
+                                                <f7-icon class="icon fa fa-retweet"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
                                         <!-- <f7-col>
                                             <f7-button @click="whatsap(item.customer_telephone, item.external_id, item.print_ticket)" color="green">
                                                 <f7-icon class="icon fab fa-whatsapp"></f7-icon>
@@ -772,6 +783,17 @@
                                         <f7-col>
                                             <f7-button @click="clickDownloadPdf(item, 'dispatch')" color="blue-shade">
                                                 <f7-icon class="icon fas fa-download"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col v-if="item.state_type_id=='01'">
+                                            <f7-button
+                                                 @click="clickSendDispatch(item.external_id,'dispatch-carrier')" color="blue-shade">
+                                                <f7-icon class="icon fa fa-paper-plane"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col v-if="item.state_type_id=='03'">
+                                            <f7-button @click="clickStatusDispatch(item.external_id, 'dispatch-carrier')" color="blue-shade">
+                                                <f7-icon class="icon fa fa-retweet"></f7-icon>
                                             </f7-button>
                                         </f7-col>
                                         <!-- <f7-col>
@@ -1468,6 +1490,9 @@
                     case 'Rechazado':
                         status = 'black'
                         break;
+                    case 'Enviado':
+                        status = 'blue'
+                        break;
                     default:
                         status = 'green'
                         break;
@@ -1477,6 +1502,46 @@
             },
             getInitialSettings() {
                 this.theme = this.getThemeSettings()
+            },
+
+            async clickSendDispatch(id,type) {
+                this.showLoading()
+                let formSend = {
+                    external_id: id
+                };
+
+                await this.$http.post(`${this.returnBaseUrl()}/dispatches/send`, formSend, this.getHeaderConfig())
+                    .then(response => {
+                        if(type=='dispatch'){
+                            this.getDataDispatches();
+                        }else{
+                            this.getDataCarrierDispatches()
+                        }
+                    })
+                    .catch(err => {})
+                    .then(() => {
+                        this.hideLoading()
+                    })
+            },
+
+            async clickStatusDispatch(id,type) {
+                this.show_send_dispatch = false;
+                this.showLoading()
+                let formSend = {
+                    external_id: id
+                };
+                await this.$http.post(`${this.returnBaseUrl()}/dispatches/status_ticket`, formSend, this.getHeaderConfig())
+                    .then(response => {
+                        if(type=='dispatch'){
+                            this.getDataDispatches()
+                        }else{
+                            this.getDataCarrierDispatches()
+                        }
+                    })
+                    .catch(err => {})
+                    .then(() => {
+                        this.hideLoading()
+                    })
             },
         }
     };
