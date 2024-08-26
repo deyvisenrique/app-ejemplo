@@ -696,7 +696,7 @@
             self.$f7.dialog.alert("No se registró la guía", "Error");
           }
         } catch (err) {
-            self.$f7.dialog.alert(`${err.message}`, "Error al registrar guía");
+            self.$f7.dialog.alert(`${err.message}`, "Inconvenientes al enviar guía");
         } finally {
           this.$f7.preloader.hide();
         }

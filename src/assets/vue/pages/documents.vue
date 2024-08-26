@@ -700,7 +700,7 @@
                                     </f7-row>
                                     <f7-row>
                                         <f7-col>
-                                            <f7-button @click="clickDownloadPdf(item, 'dispatch')" color="blue-shade">
+                                            <f7-button @click="download(item.external_id, 'dispatch','a4')" color="blue-shade">
                                                 <f7-icon class="icon fas fa-download"></f7-icon>
                                             </f7-button>
                                         </f7-col>
@@ -781,7 +781,7 @@
                                     </f7-row>
                                     <f7-row>
                                         <f7-col>
-                                            <f7-button @click="clickDownloadPdf(item, 'dispatch')" color="blue-shade">
+                                            <f7-button @click="download(item.external_id, 'dispatch','a4')" color="blue-shade">
                                                 <f7-icon class="icon fas fa-download"></f7-icon>
                                             </f7-button>
                                         </f7-col>
@@ -1281,7 +1281,16 @@
                 this.$f7router.navigate("/form-document/");
             },
             download(external_id, type = "document", format = null) {
-                if (type == "document") {
+
+
+                if (type == "dispatch") {
+                    let a4 =(format)?format:'a4';
+                        cordova.InAppBrowser.open(
+                            `${localStorage.api_url}/print/${type}/${external_id}/${a4}`,
+                            "_system",
+                            "location=yes"
+                        );
+                }else if (type == "document") {
                     if (format == "a4") {
                         cordova.InAppBrowser.open(
                             `${localStorage.api_url}/print/${type}/${external_id}/a4`,
