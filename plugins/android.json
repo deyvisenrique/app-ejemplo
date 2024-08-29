@@ -8,44 +8,44 @@
   },
   "installed_plugins": {
     "cordova-plugin-android-permissions": {
-      "PACKAGE_NAME": "com.facturaloperu.appfacturalo"
+      "PACKAGE_NAME": "com.facturaloperu.appfacturalo.premium"
     },
     "cordova-plugin-androidx-adapter": {
-      "PACKAGE_NAME": "com.facturaloperu.appfacturalo"
+      "PACKAGE_NAME": "com.facturaloperu.appfacturalo.premium"
     },
     "cordova-plugin-btprinter": {
-      "PACKAGE_NAME": "com.facturaloperu.appfacturalo"
+      "PACKAGE_NAME": "com.facturaloperu.appfacturalo.premium"
     },
     "cordova-plugin-downloadmanager": {
-      "PACKAGE_NAME": "com.facturaloperu.appfacturalo"
+      "PACKAGE_NAME": "com.facturaloperu.appfacturalo.premium"
     },
     "cordova-plugin-file-opener2": {
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
-      "PACKAGE_NAME": "com.facturaloperu.appfacturalo"
+      "PACKAGE_NAME": "com.facturaloperu.appfacturalo.premium"
     },
     "cordova-plugin-file-transfer": {
-      "PACKAGE_NAME": "com.facturaloperu.appfacturalo"
+      "PACKAGE_NAME": "com.facturaloperu.appfacturalo.premium"
     },
     "cordova-plugin-inappbrowser": {
-      "PACKAGE_NAME": "com.facturaloperu.appfacturalo"
+      "PACKAGE_NAME": "com.facturaloperu.appfacturalo.premium"
     },
     "cordova-plugin-printer": {
       "ANDROID_SUPPORT_V4_VERSION": "28.+",
-      "PACKAGE_NAME": "com.facturaloperu.appfacturalo"
+      "PACKAGE_NAME": "com.facturaloperu.appfacturalo.premium"
     },
     "phonegap-plugin-barcodescanner": {
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
-      "PACKAGE_NAME": "com.facturaloperu.appfacturalo"
+      "PACKAGE_NAME": "com.facturaloperu.appfacturalo.premium"
     }
   },
   "dependent_plugins": {
     "cordova-plugin-camera": {
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
-      "PACKAGE_NAME": "com.facturaloperu.appfacturalo"
+      "PACKAGE_NAME": "com.facturaloperu.appfacturalo.premium"
     },
     "cordova-plugin-file": {
       "ANDROIDX_WEBKIT_VERSION": "1.4.0",
-      "PACKAGE_NAME": "com.facturaloperu.appfacturalo"
+      "PACKAGE_NAME": "com.facturaloperu.appfacturalo.premium"
     }
   }
 }
