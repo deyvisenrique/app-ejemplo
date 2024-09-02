@@ -467,6 +467,11 @@
                                     </f7-row>
                                     <f7-row>
                                         <f7-col>
+                                            <f7-button size="35" icon @click="clickToPrint(item, 'orderNote')" color="purple">
+                                                <f7-icon size="18" class="icon fas fa-print"></f7-icon>
+                                            </f7-button>
+                                        </f7-col>
+                                        <f7-col>
                                             <f7-button @click="clickPreviewPdf(item, 'order_note')" color="blue">
                                                 <f7-icon class="icon fas fa-search"></f7-icon>
                                             </f7-button>
@@ -1027,11 +1032,8 @@
             },
             clickToPrint(record, documentType){
 
-                switch (documentType) {
-                    case 'document':
-                        this.printPdfDocument(record.external_id)
-                        break;
-
+                if (record && documentType) {
+                    this.printPdfDocument(record.external_id, documentType)
                 }
 
             },

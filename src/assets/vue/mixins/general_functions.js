@@ -436,13 +436,13 @@ export const print_pdf_document = {
         }
     },
     methods: {
-        async printPdfDocument(external_id)
+        async printPdfDocument(external_id, model)
         {
             let html_pdf = null
             const print_format_pdf = (this.configuration.print_format_pdf) ? this.configuration.print_format_pdf : 'ticket'
             this.showLoading()
 
-            await this.$http.get(`${this.returnBaseUrl()}/document-print-pdf/document/${external_id}/${print_format_pdf}`, this.getHeaderConfig())
+            await this.$http.get(`${this.returnBaseUrl()}/document-print-pdf/${model}/${external_id}/${print_format_pdf}`, this.getHeaderConfig())
                         .then((response)=>{
                             html_pdf=response.data
                         })
